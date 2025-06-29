@@ -1,0 +1,23 @@
+html, body {
+  scroll-behavior: smooth;
+  background-color: #1A202C; /* gray.900 Chakra */
+  color: #EDF2F7;            /* gray.100 Chakra */
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  color: #90CDF4; /* blue.300 Chakra */
+}
+
+button:focus {
+  outline: none;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #4A5568; /* gray.600 Chakra */
+  border-radius: 4px;
+}

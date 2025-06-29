@@ -1,0 +1,6723 @@
+[
+  {
+    "hotelName": "Solaris Hotel Kuta",
+    "stars": "3",
+    "roomType": "Deluxe Room (ada connecting)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 650000,
+      "peak": 850000
+    },
+    "extrabed": "235000",
+    "contractUntil": "31-Mar-26"
+  },
+  {
+    "hotelName": "Grand Livio",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 415000,
+      "high": 615000,
+      "peak": 665000
+    },
+    "extrabed": "200000",
+    "contractUntil": "3/1/2026 0:00"
+  },
+  {
+    "hotelName": "Grand Livio",
+    "stars": "3",
+    "roomType": "Livio Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1100000,
+      "peak": 1150000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Grand Livio",
+    "stars": "3",
+    "roomType": "Family",
+    "photoLink": null,
+    "seasons": {
+      "normal": 675000,
+      "high": 875000,
+      "peak": 925000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Boss Legian",
+    "stars": "3",
+    "roomType": "Superior Room (ada connecting)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 350000,
+      "high": 525000,
+      "peak": 175000
+    },
+    "extrabed": "Campaign 01 April-30 September 2025",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Boss Legian",
+    "stars": "3",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 475000,
+      "high": 650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Boss Legian",
+    "stars": "3",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 575000,
+      "high": 750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Boss Legian",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 375000,
+      "high": 550000,
+      "peak": 200000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Boss Legian",
+    "stars": "3",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 525000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Boss Legian",
+    "stars": "3",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 625000,
+      "high": 800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Zia Kuta Hotel",
+    "stars": "3",
+    "roomType": "Superior Room (ada connecting)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 400000,
+      "high": 575000,
+      "peak": 175000
+    },
+    "extrabed": "Campaign 01 April-30 September 2025",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Zia Kuta Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": 675000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Zia Kuta Hotel",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 425000,
+      "high": 600000,
+      "peak": 200000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Zia Kuta Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 525000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Evitel Resort Ubud",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": null,
+      "peak": "Campaign until    30 June 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Evitel Resort Ubud",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Evitel Resort Ubud",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 900000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Evitel Resort Ubud",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Evitel Resort Ubud",
+    "stars": "3",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1600000,
+      "high": 1700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Stark Boutique Kuta Hotel",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": 750000,
+      "peak": "30 Des 2025 (The above rate is not valid on 24-25 December (Natal Period) and 31st December (New \nYears) "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Stark Boutique Kuta Hotel",
+    "stars": "3",
+    "roomType": "Executive Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Stark Boutique Kuta Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Stark Boutique Kuta Hotel",
+    "stars": "3",
+    "roomType": "Stark Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Stark Boutique Kuta Hotel",
+    "stars": "3",
+    "roomType": "Stark Executive Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Stark Boutique Kuta Hotel",
+    "stars": "3",
+    "roomType": "Stark Grand Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Legian Paradiso",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 350000,
+      "high": 415000,
+      "peak": "30 June 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Legian Paradiso",
+    "stars": "3",
+    "roomType": "Deluxe Pool View Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 400000,
+      "high": 475000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Legian Paradiso",
+    "stars": "3",
+    "roomType": "Super Deluxe Garden View Room     ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 540000,
+      "high": 610000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Legian Paradiso",
+    "stars": "3",
+    "roomType": "Super Deluxe Pool View Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 640000,
+      "high": 705000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kutabex Beach Front Hotel",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 550000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": "9/30/2025 0:00"
+  },
+  {
+    "hotelName": "Kutabex Beach Front Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": "250000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kutabex Beach Front Hotel",
+    "stars": "3",
+    "roomType": "Kutabex Executive Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kutabex Beach Front Hotel",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 900000,
+      "peak": 2700000
+    },
+    "extrabed": null,
+    "contractUntil": "31-Mar-26"
+  },
+  {
+    "hotelName": "Kutabex Beach Front Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1000000,
+      "peak": 2800000
+    },
+    "extrabed": "250000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kutabex Beach Front Hotel",
+    "stars": "3",
+    "roomType": "Kutabex Executive Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1250000,
+      "peak": 3050000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rofa Kuta Hotel",
+    "stars": "3",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 360000,
+      "high": null,
+      "peak": "30 September (Hanya untuk normal season , saat lebaran dan hss juli-agustus harga ini tidak berlaku)"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rofa Kuta Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Room City View  with Balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 400000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rofa Kuta Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Pool View with Balcony ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 425000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rofa Kuta Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Pool Side/Akses Pool ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 485000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rofa Kuta Hotel",
+    "stars": "3",
+    "roomType": "Junior Suite with sofa & bathtub",
+    "photoLink": null,
+    "seasons": {
+      "normal": 525000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rofa Kuta Hotel",
+    "stars": "3",
+    "roomType": "Family Suite with sofa & bathtub ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 775000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bloo Kuta Hotel",
+    "stars": "3",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 650000,
+      "peak": 250000
+    },
+    "extrabed": "30 Desemer 2025",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bloo Kuta Hotel",
+    "stars": "3",
+    "roomType": "Deluxe ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 800000,
+      "peak": null
+    },
+    "extrabed": "31-Mar-26",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bloo Kuta Hotel",
+    "stars": "3",
+    "roomType": "Family",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Siesta Legian",
+    "stars": "3",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": 375000,
+      "high": 600000,
+      "peak": "-"
+    },
+    "extrabed": "9/30/2025 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Siesta Legian",
+    "stars": "3",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": 875000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Siesta Legian",
+    "stars": "3",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1075000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Siesta Legian",
+    "stars": "3",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 675000,
+      "peak": "-"
+    },
+    "extrabed": "31-Mar-26",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Siesta Legian",
+    "stars": "3",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 975000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Siesta Legian",
+    "stars": "3",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1175000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Loft Legian",
+    "stars": "3",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": 350000,
+      "high": 550000,
+      "peak": 200000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Loft Legian",
+    "stars": "3",
+    "roomType": "Deluxe ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Hotel Santika Kuta",
+    "stars": "3",
+    "roomType": "Superior (Domestic)",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Hotel Santika Kuta",
+    "stars": "3",
+    "roomType": "Deluxe (Domestic)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 575000,
+      "high": 1075000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Hotel Santika Kuta",
+    "stars": "3",
+    "roomType": "Superior (All Market)",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Hotel Santika Kuta",
+    "stars": "3",
+    "roomType": "Deluxe (All Market)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 775000,
+      "high": 1375000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rhadana Kuta",
+    "stars": "3",
+    "roomType": "Business Thematic",
+    "photoLink": null,
+    "seasons": {
+      "normal": 350000,
+      "high": 550000,
+      "peak": 200000
+    },
+    "extrabed": "20-Dec-25",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rhadana Kuta",
+    "stars": "3",
+    "roomType": "Premium Thematic with balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 480000,
+      "high": 680000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Rhadana Kuta",
+    "stars": "3",
+    "roomType": "Studio Thematic with balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 670000,
+      "high": 870000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Euphoria Hotel",
+    "stars": "3",
+    "roomType": "Superior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 325000,
+      "high": 525000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Euphoria Hotel",
+    "stars": "3",
+    "roomType": "Deluxe Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Euphoria Hotel",
+    "stars": "3",
+    "roomType": "Family Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Euphoria Hotel",
+    "stars": "3",
+    "roomType": "Studio Room 2BR",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Euphoria Hotel",
+    "stars": "3",
+    "roomType": "Studio Room 3BR",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Fave Sunset Seminyak ",
+    "stars": "3",
+    "roomType": "Superior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 400000,
+      "high": 500000,
+      "peak": 1000000
+    },
+    "extrabed": null,
+    "contractUntil": "12/20/2025 0:00"
+  },
+  {
+    "hotelName": "Fave Sunset Seminyak ",
+    "stars": "3",
+    "roomType": "Deluxe Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 470000,
+      "high": 570000,
+      "peak": 1070000
+    },
+    "extrabed": "220000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Fave Sunset Seminyak ",
+    "stars": "3",
+    "roomType": "Family Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 620000,
+      "high": 720000,
+      "peak": 1220000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Nama Villa",
+    "stars": "Stars",
+    "roomType": "Type Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "Normal Season",
+      "high": "High Season",
+      "peak": "Batas Kontrak"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ecozy Dijiwa Canggu",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1350000,
+      "peak": "1 Apr 2025 – 31 Oct 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ecozy Dijiwa Canggu",
+    "stars": "3",
+    "roomType": "Deluxe Room with Private Garden",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 1600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ecozy Dijiwa Canggu",
+    "stars": "3",
+    "roomType": "Deluxe Room with Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1750000,
+      "high": 2000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ecozy Dijiwa Canggu",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1200000,
+      "high": 1450000,
+      "peak": "1 Nov 2025 – 31 Mar 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ecozy Dijiwa Canggu",
+    "stars": "3",
+    "roomType": "Deluxe Room with Private Garden",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1450000,
+      "high": 1700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ecozy Dijiwa Canggu",
+    "stars": "3",
+    "roomType": "Deluxe Room with Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2000000,
+      "high": 2250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "TAPA AGUNG VIEW RENDANG KARANGASEM",
+    "stars": "3",
+    "roomType": "Standard Room with Garden View (11) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 1150000,
+      "peak": 2250000
+    },
+    "extrabed": "450000",
+    "contractUntil": "3/31/2026 0:00"
+  },
+  {
+    "hotelName": "TAPA AGUNG VIEW RENDANG KARANGASEM",
+    "stars": "3",
+    "roomType": "Deluxe Room with Mountain View  (14) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1085000,
+      "high": 1485000,
+      "peak": 2585000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "TAPA AGUNG VIEW RENDANG KARANGASEM",
+    "stars": "3",
+    "roomType": "One Bedroom Bungalow (5) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1285000,
+      "high": 1685000,
+      "peak": 2785000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Swissbell Express Kuta",
+    "stars": "3",
+    "roomType": "Express Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 650000,
+      "peak": 1010000
+    },
+    "extrabed": null,
+    "contractUntil": "3/31/2026 0:00"
+  },
+  {
+    "hotelName": "Swissbell Express Kuta",
+    "stars": "3",
+    "roomType": "Express Super Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 480000,
+      "high": 680000,
+      "peak": 1040000
+    },
+    "extrabed": "250000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Swissbell Express Kuta",
+    "stars": "3",
+    "roomType": "Express Triple Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": 850000,
+      "peak": 1210000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Three Brother Villa Legian",
+    "stars": "3",
+    "roomType": "Standard Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Three Brother Villa Legian",
+    "stars": "3",
+    "roomType": "Deluxe Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Three Brother Villa Legian",
+    "stars": "3",
+    "roomType": "Deluxe Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Three Brother Villa Legian",
+    "stars": "3",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kubu Sakian Sidemen Karangasem",
+    "stars": "3",
+    "roomType": "Deluxe Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kubu Sakian Sidemen Karangasem",
+    "stars": "3",
+    "roomType": "Deluxe Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1000000,
+      "high": 1100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Dikubu Bali Villa and Suites Seminyak ",
+    "stars": "3",
+    "roomType": "Deluxe room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Dikubu Bali Villa and Suites Seminyak ",
+    "stars": "3",
+    "roomType": "Suite room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 675000,
+      "high": 775000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Nama  Hotel",
+    "stars": "Stars",
+    "roomType": "Type Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "High Season",
+      "high": "Peak Season",
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Standard Tent (Weekdays)  ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": 750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Standard Tent (Weekend) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Deluxe Tent (Weekdays) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Deluxe Tent (Weekend) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1000000,
+      "high": 1100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Deluxe Twin Tent with Share Pool (Weekdays) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Deluxe Twin Tent with Share Pool (Weekend) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Suite Tent Plunge Pool (Weekdays)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1450000,
+      "high": 1550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Suite Tent Plunge Pool  (Weekend) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1600000,
+      "high": 1700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Deluxe Suite Tent with Private Plunge Pool (Weekdays) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Kintamani",
+    "stars": "3",
+    "roomType": "Deluxe Suite Tent with Private Plunge Pool (Weekend)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1700000,
+      "high": 1800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Premier Nusa Penida ",
+    "stars": "3",
+    "roomType": "Terrace",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Premier Nusa Penida ",
+    "stars": "3",
+    "roomType": "Balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Premier Nusa Penida ",
+    "stars": "3",
+    "roomType": "Terrace",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Premier Nusa Penida ",
+    "stars": "3",
+    "roomType": "Balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Premier Nusa Penida ",
+    "stars": "3",
+    "roomType": "Triangle Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1400000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Bedugul ",
+    "stars": "3",
+    "roomType": "Deluxe Tent (Weekdays) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Bedugul ",
+    "stars": "3",
+    "roomType": "Deluxe Tent (Weekend) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Bedugul ",
+    "stars": "3",
+    "roomType": "Deluxe Lake View Tent (Weekdays) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Bedugul ",
+    "stars": "3",
+    "roomType": "Deluxe Lake View Tent  (Weekend) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Bedugul ",
+    "stars": "3",
+    "roomType": "Suite Tent (Weekdays) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Dewi Bedugul ",
+    "stars": "3",
+    "roomType": "Suite Tent (Weekend) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Asri Sari Ubud",
+    "stars": "3",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Asri Sari Ubud",
+    "stars": "3",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": 600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Mora Residence Jimbaran",
+    "stars": "3",
+    "roomType": "Standard Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 400000,
+      "high": 500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Mora Residence Jimbaran",
+    "stars": "3",
+    "roomType": "Superior Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": 600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Mora Residence Jimbaran",
+    "stars": "3",
+    "roomType": "Deluxe Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kubal Villa Seminyak (room only)",
+    "stars": "3",
+    "roomType": "Deluxe room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bale Seminyak (room only)",
+    "stars": "3",
+    "roomType": "Superior room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Anggie Stay Kerobokan (room only)",
+    "stars": "3",
+    "roomType": "Superior room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pondok Bobo Seminyak (room only)",
+    "stars": "3",
+    "roomType": "Superior room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 400000,
+      "high": 500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kampi Hotel Legian",
+    "stars": "3",
+    "roomType": "Champ Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kampi Hotel Legian",
+    "stars": "3",
+    "roomType": "Champ Balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 510000,
+      "high": 710000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kampi Hotel Legian",
+    "stars": "3",
+    "roomType": "Champ Pool Access ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 575000,
+      "high": 775000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kampi Hotel Legian",
+    "stars": "3",
+    "roomType": "Champ Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1050000,
+      "high": 1250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kampi Hotel Legian",
+    "stars": "3",
+    "roomType": "Champ Suite with Balcony ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1150000,
+      "high": 1350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kampi Hotel Legian",
+    "stars": "3",
+    "roomType": "Champ Suite Pool Access ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Tempo Doeloe",
+    "stars": "3",
+    "roomType": "Deluxe ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1100000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Tempo Doeloe",
+    "stars": "3",
+    "roomType": "Deluxe Garden",
+    "photoLink": null,
+    "seasons": {
+      "normal": 965000,
+      "high": 1254000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Tempo Doeloe",
+    "stars": "3",
+    "roomType": "Cottage Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1696000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Tempo Doeloe",
+    "stars": "3",
+    "roomType": "Cottage Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1696000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Tempo Doeloe",
+    "stars": "3",
+    "roomType": "Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1400000,
+      "high": 1843000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Tempo Doeloe",
+    "stars": "3",
+    "roomType": "Cottage Suite Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1400000,
+      "high": 1843000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Tempo Doeloe",
+    "stars": "3",
+    "roomType": "Bungalow One Bedroom",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1400000,
+      "high": 1843000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "\nThe Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 875000,
+      "high": 1075000,
+      "peak": 415000
+    },
+    "extrabed": "Booking window : Immediately – 31 April 2025 & Periods stay :\n01 April – 23 Dec 2025",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "\nThe Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 975000,
+      "high": 1175000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "\nThe Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1450000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "\nThe Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "The Junior Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2400000,
+      "high": 2600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1185500,
+      "high": 1385500,
+      "peak": 415000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1347000,
+      "high": 1547000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 1850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Vira Bali Boutique Hotel & Suite Kuta",
+    "stars": "4",
+    "roomType": "The Junior Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3100000,
+      "high": 3300000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Swissbell Tuban ",
+    "stars": "4",
+    "roomType": "Deluxe no Balcony – 24m2",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": 800000,
+      "peak": 950000
+    },
+    "extrabed": "1450000",
+    "contractUntil": "1550000"
+  },
+  {
+    "hotelName": "Swissbell Tuban ",
+    "stars": "4",
+    "roomType": "Deluxe Balcony City View– 32m2",
+    "photoLink": null,
+    "seasons": {
+      "normal": 730000,
+      "high": 880000,
+      "peak": 1030000
+    },
+    "extrabed": "1530000",
+    "contractUntil": "1630000"
+  },
+  {
+    "hotelName": "Swissbell Tuban ",
+    "stars": "4",
+    "roomType": "Deluxe Balcony Pool View– 27m2",
+    "photoLink": null,
+    "seasons": {
+      "normal": 770000,
+      "high": 920000,
+      "peak": 1070000
+    },
+    "extrabed": "1570000",
+    "contractUntil": "1670000"
+  },
+  {
+    "hotelName": "Swissbell Tuban ",
+    "stars": "4",
+    "roomType": "Grand Deluxe Balcony Pool View – 32m2",
+    "photoLink": null,
+    "seasons": {
+      "normal": 810000,
+      "high": 960000,
+      "peak": 1110000
+    },
+    "extrabed": "1610000",
+    "contractUntil": "1710000"
+  },
+  {
+    "hotelName": "Swissbell Tuban ",
+    "stars": "4",
+    "roomType": "Triple Room - 36 m2",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1050000,
+      "peak": 1200000
+    },
+    "extrabed": "1700000",
+    "contractUntil": "1800000"
+  },
+  {
+    "hotelName": "Swissbell Tuban ",
+    "stars": "4",
+    "roomType": "Grand Deluxe Family - 36 M2",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1010000,
+      "high": 1160000,
+      "peak": 1310000
+    },
+    "extrabed": "1810000",
+    "contractUntil": "1910000"
+  },
+  {
+    "hotelName": "Alam Kulkul Boutique Resort Legian Kuta",
+    "stars": "4",
+    "roomType": "Alam Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1365000,
+      "high": 1417500,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Alam Kulkul Boutique Resort Legian Kuta",
+    "stars": "4",
+    "roomType": "Alam Lanai",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1680000,
+      "high": 1785000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Alam Kulkul Boutique Resort Legian Kuta",
+    "stars": "4",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1942500,
+      "high": 2047500,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Alam Kulkul Boutique Resort Legian Kuta",
+    "stars": "4",
+    "roomType": "Alam Quad Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2058000,
+      "high": 2163000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Sense Canggu Beach",
+    "stars": "4",
+    "roomType": "Suite Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1450000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Risata Bali Resort Kuta",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Risata Bali Resort Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Risata Bali Resort Kuta",
+    "stars": "4",
+    "roomType": "Studio Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1000000,
+      "high": 1150000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Risata Bali Resort Kuta",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1400000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Golden Tulip Jineng Kuta",
+    "stars": "4",
+    "roomType": "Deluxe City View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 800000,
+      "peak": 300000
+    },
+    "extrabed": "12/31/2025 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Golden Tulip Jineng Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 930000,
+      "high": 880000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Golden Tulip Jineng Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Golden Tulip Jineng Kuta",
+    "stars": "4",
+    "roomType": "Suite Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Golden Tulip Jineng Kuta",
+    "stars": "4",
+    "roomType": "Suite Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Grand Ixora Kuta",
+    "stars": "4",
+    "roomType": "Superior  (23 m2) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 800000,
+      "peak": 1600000
+    },
+    "extrabed": "No Extra Bed",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Grand Ixora Kuta",
+    "stars": "4",
+    "roomType": "Pool Access  (25 m2) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 900000,
+      "peak": 1700000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Grand Ixora Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Daybed (28 m2)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 950000,
+      "peak": 1750000
+    },
+    "extrabed": "250000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Grand Ixora Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Balcony (28 m2)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1000000,
+      "peak": 1800000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Grand Ixora Kuta",
+    "stars": "4",
+    "roomType": "Junior Suite (33 m2",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1000000,
+      "high": 1200000,
+      "peak": 2000000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Rivavi Legian",
+    "stars": "4",
+    "roomType": "Deluxe Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 592800,
+      "high": null,
+      "peak": 792800
+    },
+    "extrabed": "200000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Rivavi Legian",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 708000,
+      "high": null,
+      "peak": 908000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Rivavi Legian",
+    "stars": "4",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 768000,
+      "high": null,
+      "peak": 968000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Rivavi Legian",
+    "stars": "4",
+    "roomType": "Suite Room Balcony Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 888000,
+      "high": null,
+      "peak": 1088000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "J4 Hotel",
+    "stars": "4",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 850000,
+      "peak": "No Extra Bed"
+    },
+    "extrabed": "Saat high/ peak harga bisa berubah",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "J4 Hotel",
+    "stars": "4",
+    "roomType": "Grand Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1050000,
+      "peak": 250000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "J4 Hotel",
+    "stars": "4",
+    "roomType": "Grand Superior Balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1100000,
+      "peak": "No Extra Bed"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "J4 Hotel",
+    "stars": "4",
+    "roomType": "Triple",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1200000,
+      "peak": "No Extra Bed"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bedrock",
+    "stars": "4",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": "850.000 / 780.000",
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harper",
+    "stars": "4",
+    "roomType": "Superior ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 785000,
+      "high": 1135000,
+      "peak": 1235000
+    },
+    "extrabed": "3235000",
+    "contractUntil": "300000"
+  },
+  {
+    "hotelName": "Harper",
+    "stars": "4",
+    "roomType": "Superior Premier ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 890000,
+      "high": 1240000,
+      "peak": 1340000
+    },
+    "extrabed": "3340000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harper",
+    "stars": "4",
+    "roomType": "Deluxe Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 925000,
+      "high": 1275000,
+      "peak": 1375000
+    },
+    "extrabed": "3375000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harper",
+    "stars": "4",
+    "roomType": "Deluxe Premier ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 995000,
+      "high": 1345000,
+      "peak": 1445000
+    },
+    "extrabed": "3445000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harper",
+    "stars": "4",
+    "roomType": "Deluxe Pool Access Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1065000,
+      "high": 1415000,
+      "peak": 1515000
+    },
+    "extrabed": "3515000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harper",
+    "stars": "4",
+    "roomType": "Family Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1212000,
+      "high": 1562000,
+      "peak": 1662000
+    },
+    "extrabed": "3662000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harper",
+    "stars": "4",
+    "roomType": "Harper Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1380000,
+      "high": 1730000,
+      "peak": 1830000
+    },
+    "extrabed": "3830000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bliss Surfer Hotel",
+    "stars": "4",
+    "roomType": "Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 550000,
+      "peak": 250000
+    },
+    "extrabed": "30-Sep-25",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bliss Surfer Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Lagoon - Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bliss Surfer Hotel",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bliss Surfer Hotel",
+    "stars": "4",
+    "roomType": "Family Suites",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bliss Surfer Hotel",
+    "stars": "4",
+    "roomType": "Family Lagoon Suites",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1050000,
+      "high": 1150000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harris MBG",
+    "stars": "4",
+    "roomType": "Harris Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harris MBG",
+    "stars": "4",
+    "roomType": "Harris Corner",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Harris MBG",
+    "stars": "4",
+    "roomType": "Harris Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kuta Beach Club",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 730000,
+      "high": 930000,
+      "peak": 980000
+    },
+    "extrabed": "2180000",
+    "contractUntil": "300000"
+  },
+  {
+    "hotelName": "Kuta Beach Club",
+    "stars": "4",
+    "roomType": "Grand Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 830000,
+      "high": 1030000,
+      "peak": 1080000
+    },
+    "extrabed": "2280000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kuta Beach Club",
+    "stars": "4",
+    "roomType": "Premium Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 930000,
+      "high": 1130000,
+      "peak": 1180000
+    },
+    "extrabed": "2380000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kuta Beach Club",
+    "stars": "4",
+    "roomType": "Junior Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1500000,
+      "high": 1700000,
+      "peak": 1750000
+    },
+    "extrabed": "2950000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ubud Raya Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 925000,
+      "peak": "MAY 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ubud Raya Hotel",
+    "stars": "4",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1050000,
+      "high": 1375000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ubud Raya Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1125000,
+      "peak": "June 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ubud Raya Hotel",
+    "stars": "4",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1625000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Brits Legian",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 450000,
+      "high": 550000,
+      "peak": 470000
+    },
+    "extrabed": null,
+    "contractUntil": "12/19/2025 0:00"
+  },
+  {
+    "hotelName": "Brits Legian",
+    "stars": "4",
+    "roomType": "Deluxe Premiere",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 850000,
+      "peak": 700000
+    },
+    "extrabed": "200000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Brits Legian",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1200000,
+      "high": 1350000,
+      "peak": 1200000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": 800000,
+      "peak": 300000
+    },
+    "extrabed": "9/30/2025 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Premier Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Premier Garden",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Premier Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1050000,
+      "high": 1200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Family Garden",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Family Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Family Suite Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1750000,
+      "high": 1900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 1050000,
+      "peak": 350000
+    },
+    "extrabed": "3/31/2025 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1150000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Premier Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Premier Garden",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1000000,
+      "high": 1350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Premier Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1150000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Family Garden",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 2050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Family Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1750000,
+      "high": 2250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Adhi Jaya Hotel Kuta",
+    "stars": "4",
+    "roomType": "Family Suite Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1850000,
+      "high": 2350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Episode Kuta Hotel",
+    "stars": "4",
+    "roomType": "Deluxe ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": 750000,
+      "peak": 280000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Episode Kuta Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Triple (3pax)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Episode Kuta Hotel",
+    "stars": "4",
+    "roomType": "Premier Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Episode Kuta Hotel",
+    "stars": "4",
+    "roomType": "Executive Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Episode Kuta Hotel",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Episode Kuta Hotel",
+    "stars": "4",
+    "roomType": "Family Loft (4pax)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Episode Kuta Hotel",
+    "stars": "4",
+    "roomType": "Family Suite (4pax)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "De Vins Sky Seminyak",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "De Vins Sky Seminyak",
+    "stars": "4",
+    "roomType": "Superior Terrace",
+    "photoLink": null,
+    "seasons": {
+      "normal": 805000,
+      "high": 1005000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "De Vins Sky Seminyak",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1050000,
+      "peak": 250000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "De Vins Sky Seminyak",
+    "stars": "4",
+    "roomType": "Whirlpool Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1300000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bintang Kuta Hotel (Asing)",
+    "stars": "4",
+    "roomType": "Deluxe Room (FIT)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1100000,
+      "peak": 3100000
+    },
+    "extrabed": "350.000 / 400.000 / 450.000 / 950.000 / 1.350.000",
+    "contractUntil": "31-Mar-26"
+  },
+  {
+    "hotelName": "Bintang Kuta Hotel (Asing)",
+    "stars": "4",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1700000,
+      "high": 2100000,
+      "peak": 6100000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bintang Kuta Hotel (Asing)",
+    "stars": "4",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2700000,
+      "high": 3300000,
+      "peak": 5700000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bintang Kuta Hotel (Domestic)",
+    "stars": "4",
+    "roomType": "Deluxe Room (FIT)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1000000,
+      "peak": 3000000
+    },
+    "extrabed": "350.000 / 400.000 / 450.000 / 950.000 / 1.350.000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bintang Kuta Hotel (Domestic)",
+    "stars": "4",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1500000,
+      "high": 1900000,
+      "peak": 5900000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bintang Kuta Hotel (Domestic)",
+    "stars": "4",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2400000,
+      "high": 3000000,
+      "peak": 5400000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Nama  Hotel",
+    "stars": "Stars",
+    "roomType": "Type Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "Normal Season",
+      "high": "High Season",
+      "peak": "Batas Kontrak"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Artotel Haniman Ubud",
+    "stars": "4",
+    "roomType": "Studio 30",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1600000,
+      "high": 1900000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "B Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 675000,
+      "high": 725000,
+      "peak": 1725000
+    },
+    "extrabed": "350000",
+    "contractUntil": "31-Mar-26"
+  },
+  {
+    "hotelName": "B Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Balcony  ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 775000,
+      "high": 825000,
+      "peak": 1825000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "B Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Garden ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 875000,
+      "high": 925000,
+      "peak": 1925000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "B Hotel",
+    "stars": "4",
+    "roomType": "Deluxe pool ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 975000,
+      "high": 1025000,
+      "peak": 2025000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "B Hotel",
+    "stars": "4",
+    "roomType": "Suite Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1525000,
+      "high": 1575000,
+      "peak": 2575000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Premier Resort Ubud",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Premier Resort Ubud",
+    "stars": "4",
+    "roomType": "Deluxe Room With Green View ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1008000,
+      "high": 1233000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Premier Resort Ubud",
+    "stars": "4",
+    "roomType": "Deluxe Room with Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1178000,
+      "high": 1403000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Premier Resort Ubud",
+    "stars": "4",
+    "roomType": "Deluxe Execuitive",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1418000,
+      "high": 1643000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "New Sunari Lovina ",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "New Sunari Lovina ",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "New Sunari Lovina ",
+    "stars": "4",
+    "roomType": "Deluce Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "New Sunari Lovina ",
+    "stars": "4",
+    "roomType": "Premier ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "New Sunari Lovina ",
+    "stars": "4",
+    "roomType": "One Bedroom Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1400000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Giri Kusuma Ubud",
+    "stars": "4",
+    "roomType": "River Suite (6 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2325000,
+      "high": 2325000,
+      "peak": 550000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Giri Kusuma Ubud",
+    "stars": "4",
+    "roomType": "One Bedroom Jungle Villa (4 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3250000,
+      "high": 3250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Giri Kusuma Ubud",
+    "stars": "4",
+    "roomType": "Two Bedroom Jungle Pool (1 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 5950000,
+      "high": 5950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Zahill Kintamani",
+    "stars": "4",
+    "roomType": "Deluxe Garden View (6 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Zahill Kintamani",
+    "stars": "4",
+    "roomType": "Deluxe Room (12 Room)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1050000,
+      "high": 1350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Zahill Kintamani",
+    "stars": "4",
+    "roomType": "Suite Room (6 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1200000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KARDIA GILI TRAWANGAN RESORT \nA PRAMANA EXPERIENCE  ",
+    "stars": "4",
+    "roomType": "SUITE GARDEN VIEW (16 units) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 2850000,
+      "peak": "550,000 / 550,000 / 550,000/ 1,292,500"
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KARDIA GILI TRAWANGAN RESORT \nA PRAMANA EXPERIENCE  ",
+    "stars": "4",
+    "roomType": " SUITE OCEAN VIEW  (10 Units) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1870000,
+      "high": 3070000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KARDIA GILI TRAWANGAN RESORT \nA PRAMANA EXPERIENCE  ",
+    "stars": "4",
+    "roomType": " SUITE POOL ACCESS  (22 Units) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2735000,
+      "high": 3935000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KARDIA GILI TRAWANGAN RESORT \nA PRAMANA EXPERIENCE  ",
+    "stars": "4",
+    "roomType": "ONE BEDROOM POOL VILLA (2UNITS) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3630000,
+      "high": 4830000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Daun Bali Seminyak Hotel",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 695000,
+      "high": 1045000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Daun Bali Seminyak Hotel",
+    "stars": "4",
+    "roomType": "Superior Premium",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 1100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Daun Bali Seminyak Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Daun Bali Seminyak Hotel",
+    "stars": "4",
+    "roomType": "Junior Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1200000,
+      "high": 1550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Daun Bali Seminyak Hotel",
+    "stars": "4",
+    "roomType": "Suite Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1500000,
+      "high": 1850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Grand Deluxe Room Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1350000,
+      "peak": "01 Apr - 30 Sep 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Grand Deluxe Room Ocean View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1210000,
+      "high": 1460000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Suite Room with Ocean View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1430000,
+      "high": 1680000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Suite Room with Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1430000,
+      "high": 1680000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Two Bedroom Viila with Private Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3520000,
+      "high": 3770000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Grand Deluxe Room Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1265000,
+      "high": 1515000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Grand Deluxe Room Ocean View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1391500,
+      "high": 1641500,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Suite Room with Ocean View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1518000,
+      "high": 1768000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Suite Room with Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1644500,
+      "high": 1894500,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Semabu Hills Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Two Bedroom Viila with Private Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4427500,
+      "high": 4677500,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "STAR Semabu Resort",
+    "stars": "4",
+    "roomType": "Deluxe Bungalow",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": 600000,
+      "peak": "01 Apr - 30 Sep 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "STAR Semabu Resort",
+    "stars": "4",
+    "roomType": "Deluxe Bungalow Room Ocean View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Swissbell Rainforest",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 560000,
+      "high": 760000,
+      "peak": "20 Dec 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Swissbell Rainforest",
+    "stars": "4",
+    "roomType": "Grand Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 660000,
+      "high": 860000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Swissbell Rainforest",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1150000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Swissbell Rainforest",
+    "stars": "4",
+    "roomType": "Executive Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1300000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wina Holiday Villa Kuta",
+    "stars": "4",
+    "roomType": "Superior Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 800000,
+      "peak": 1850000
+    },
+    "extrabed": "275000",
+    "contractUntil": "31-Mar-26"
+  },
+  {
+    "hotelName": "Wina Holiday Villa Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 900000,
+      "peak": 1950000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wina Holiday Villa Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool Terrace",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1050000,
+      "peak": 2100000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The One Legian",
+    "stars": "4",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": 525000,
+      "high": 775000,
+      "peak": 1625000
+    },
+    "extrabed": "-",
+    "contractUntil": "31-Mar-25"
+  },
+  {
+    "hotelName": "The One Legian",
+    "stars": "4",
+    "roomType": "Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 625000,
+      "high": 875000,
+      "peak": 1725000
+    },
+    "extrabed": "250000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The One Legian",
+    "stars": "4",
+    "roomType": "Deluxe Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 725000,
+      "high": 975000,
+      "peak": 1825000
+    },
+    "extrabed": "250000",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Solia Legian",
+    "stars": "4",
+    "roomType": "Solia Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 625000,
+      "high": 725000,
+      "peak": 250000
+    },
+    "extrabed": "30-Sep-25",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Solia Legian",
+    "stars": "4",
+    "roomType": "Solia Premier",
+    "photoLink": null,
+    "seasons": {
+      "normal": 725000,
+      "high": 825000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Solia Legian",
+    "stars": "4",
+    "roomType": "Solia Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1150000,
+      "high": 1250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Solia Legian",
+    "stars": "4",
+    "roomType": "Solia Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": 1000000,
+      "peak": 300000
+    },
+    "extrabed": "31-Mar-26",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Solia Legian",
+    "stars": "4",
+    "roomType": "Solia Premier",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Solia Legian",
+    "stars": "4",
+    "roomType": "Solia Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1400000,
+      "high": 1600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "PAASHA ATELIER BALI KUTA",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "PAASHA ATELIER BALI KUTA",
+    "stars": "4",
+    "roomType": "Superior Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "PAASHA ATELIER BALI KUTA",
+    "stars": "4",
+    "roomType": "Duplex Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "PAASHA ATELIER BALI KUTA",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1050000,
+      "high": 120000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "PAASHA ATELIER BALI KUTA",
+    "stars": "4",
+    "roomType": "Deluxe Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1125000,
+      "high": 1425000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "PAASHA ATELIER BALI KUTA",
+    "stars": "4",
+    "roomType": "Deluxe Pool Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 1650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wyndham Garden Kuta Beach Bali",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1000000,
+      "peak": "20 Dec 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wyndham Garden Kuta Beach Bali",
+    "stars": "4",
+    "roomType": "Executive Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1280000,
+      "high": 1430000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Beehouse Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2200000,
+      "high": 2700000,
+      "peak": "1 Apr 2025 – 31 Oct 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Beehouse Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Duplex Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2750000,
+      "high": 3250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Beehouse Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2350000,
+      "high": 2850000,
+      "peak": "1 Nov 2025 – 31 Mar 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Beehouse Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Duplex Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2950000,
+      "high": 3450000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Nama Resort",
+    "stars": "Stars",
+    "roomType": "Type Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "Normal Season",
+      "high": "High Season",
+      "peak": "Batas Kontrak"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Artini Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Premier Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1450000,
+      "peak": "1 Apr 2025 – 31 Oct 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Artini Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Premier Rice Field",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Artini Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1500000,
+      "high": 1850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Artini Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Premier Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1200000,
+      "high": 1550000,
+      "peak": "1 Nov 2025 – 31 Mar 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Artini Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Premier Rice Field",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 1700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Artini Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 2000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Nama Villa",
+    "stars": "Stars",
+    "roomType": "Type Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "Normal Season",
+      "high": "High Season",
+      "peak": "Batas Kontrak"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Grand Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 350000,
+      "peak": "1 Apr 2025 – 31 Oct 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Tirta Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1450000,
+      "high": 1600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Koru Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 1800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Wooden Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2000000,
+      "high": 2000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Wooden Private Pool Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 350000,
+      "high": 2350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Grand Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 700000,
+      "peak": "1 Nov 2025 – 31 Mar 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Tirta Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Koru Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1750000,
+      "high": 1900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Wooden Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2150000,
+      "high": 2100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Korurua Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Wooden Private Pool Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3750000,
+      "high": 2500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Grand Deluxe ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1450000,
+      "peak": "1 Apr 2025 – 31 Oct 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Saraswati Classic ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1450000,
+      "high": 1800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Saraswati Royal",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1750000,
+      "high": 2100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Saraswati Family",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2530000,
+      "high": 2880000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Grand Deluxe ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1150000,
+      "high": 1500000,
+      "peak": "1 Nov 2025 – 31 Mar 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Saraswati Classic ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Saraswati Royal",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1850000,
+      "high": 2200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Puri Saraswati Dijiwa Ubud",
+    "stars": "4",
+    "roomType": "Saraswati Family",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2650000,
+      "high": 3000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Blue Karma Village",
+    "stars": "4",
+    "roomType": "Deluxe Joglo",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2750000,
+      "high": 3250000,
+      "peak": "1 Apr 2025 – 31 Oct 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Blue Karma Village",
+    "stars": "4",
+    "roomType": "Suite Joglo",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3250000,
+      "high": 3750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Blue Karma Village",
+    "stars": "4",
+    "roomType": "Deluxe Joglo",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2950000,
+      "high": 3450000,
+      "peak": "1 Nov 2025 – 31 Mar 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Blue Karma Village",
+    "stars": "4",
+    "roomType": "Suite Joglo",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3500000,
+      "high": 4000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 1550000,
+      "peak": 600000
+    },
+    "extrabed": "31-Mar-26",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Grand Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1450000,
+      "high": 1650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Sea View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool Side",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1640000,
+      "high": 1840000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Grand Deluxe Pool Side",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1850000,
+      "high": 2050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2150000,
+      "high": 2350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2350000,
+      "high": 2550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Executive Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2850000,
+      "high": 3050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Truntum Kuta",
+    "stars": "4",
+    "roomType": "Grand Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4350000,
+      "high": 4550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Sankara Resort & Spa",
+    "stars": "4",
+    "roomType": "Deluxe Room (16 Room)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1860000,
+      "high": 2260000,
+      "peak": 450000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Sankara Resort & Spa",
+    "stars": "4",
+    "roomType": "Deluxe Pool Villa (8 Room)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3100000,
+      "high": 3500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Hava Ubud",
+    "stars": "4",
+    "roomType": "Deluxe Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1750000,
+      "high": 2200000,
+      "peak": 3850000
+    },
+    "extrabed": "550000",
+    "contractUntil": "3/31/2026 0:00"
+  },
+  {
+    "hotelName": "The Hava Ubud",
+    "stars": "4",
+    "roomType": "Hava Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1975000,
+      "high": 2425000,
+      "peak": 4075000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Hava Ubud",
+    "stars": "4",
+    "roomType": "Suite Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2550000,
+      "high": 3000000,
+      "peak": 4650000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Hava Ubud",
+    "stars": "4",
+    "roomType": "Suite Room with Pool ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3100000,
+      "high": 3550000,
+      "peak": 5200000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KAWI RESORT A PRAMANA EXPERIENCE",
+    "stars": "4",
+    "roomType": "Deluxe Valley View ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1325000,
+      "high": 1725000,
+      "peak": 2475000
+    },
+    "extrabed": "500000",
+    "contractUntil": "3/31/2026 0:00"
+  },
+  {
+    "hotelName": "KAWI RESORT A PRAMANA EXPERIENCE",
+    "stars": "4",
+    "roomType": "Suite Pool Access ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 2050000,
+      "peak": 2800000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Thewakanda A Pramana Experience ",
+    "stars": "4",
+    "roomType": "Junior Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Thewakanda A Pramana Experience ",
+    "stars": "4",
+    "roomType": "Premiere Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2140000,
+      "high": 2540000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Thewakanda A Pramana Experience ",
+    "stars": "4",
+    "roomType": "Royal Wakanda room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3980000,
+      "high": 4380000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Thewakanda A Pramana Experience ",
+    "stars": "4",
+    "roomType": "One Bedroom Pool Villa ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4300000,
+      "high": 4700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KUWARASAN A PRAMANA EXPERIENCE ",
+    "stars": "4",
+    "roomType": "Suite Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2100000,
+      "high": 2600000,
+      "peak": 6000000
+    },
+    "extrabed": "650000",
+    "contractUntil": "3/31/2026 0:00"
+  },
+  {
+    "hotelName": "KUWARASAN A PRAMANA EXPERIENCE ",
+    "stars": "4",
+    "roomType": "Suite Paddies View ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2500000,
+      "high": 3000000,
+      "peak": 6400000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KUWARASAN A PRAMANA EXPERIENCE ",
+    "stars": "4",
+    "roomType": "One Bedroom Pool Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4000000,
+      "high": 4500000,
+      "peak": 7900000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "KUWARASAN A PRAMANA EXPERIENCE ",
+    "stars": "4",
+    "roomType": "Presidential Suite ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 9000000,
+      "high": 9500000,
+      "peak": 12900000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "SWAN PARADISE  \nA PRAMANA EXPERIENCE ",
+    "stars": "4",
+    "roomType": "Superior – (12 units)  ",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "SWAN PARADISE  \nA PRAMANA EXPERIENCE ",
+    "stars": "4",
+    "roomType": "Deluxe -  ( 14 Units) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1545000,
+      "high": 1945000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Sovereign Bali Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 550000,
+      "high": 750000,
+      "peak": "Maret – Mei 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Sovereign Bali Hotel",
+    "stars": "4",
+    "roomType": "Premier Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Sovereign Bali Hotel",
+    "stars": "4",
+    "roomType": "Club Premier Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 825000,
+      "high": 1025000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Sovereign Bali Hotel",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1450000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Sovereign Bali Hotel",
+    "stars": "4",
+    "roomType": "Executive Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1500000,
+      "high": 1700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Crystal Kuta Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Room (ada connecting) 22 sqm",
+    "photoLink": null,
+    "seasons": {
+      "normal": 475000,
+      "high": 725000,
+      "peak": 250000
+    },
+    "extrabed": "30-Jun-25",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Crystal Kuta Hotel",
+    "stars": "4",
+    "roomType": "Super Deluxe Room 22 sqm",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Crystal Kuta Hotel",
+    "stars": "4",
+    "roomType": "Junior Suite 44 sqm",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1400000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Crystal Kuta Hotel",
+    "stars": "4",
+    "roomType": "Suite 32 sqm",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1100000,
+      "high": 1600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Unagi Wooden Villas by Emana",
+    "stars": "4",
+    "roomType": "Deluxe Wooden Room ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 945000,
+      "high": 1245000,
+      "peak": "30 June 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Unagi Wooden Villas by Emana",
+    "stars": "4",
+    "roomType": "Suite Jungle View ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1230000,
+      "high": 1530000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Unagi Wooden Villas by Emana",
+    "stars": "4",
+    "roomType": "Emana Wooden Villas ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 2150000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": "untuk juli agutus bisa pakai harga campaign tanpa hss ",
+      "peak": "Campaign until June 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Garden View  Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool View Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Junior Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1150000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 600000,
+      "high": "HSS JULI-AGUSTUS WAIVE",
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Garden View  Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 700000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool View Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Deluxe Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Resort Kuta",
+    "stars": "4",
+    "roomType": "Junior Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Kuta Villa",
+    "stars": "4",
+    "roomType": "Superior (Lt.2)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 475000,
+      "high": 725000,
+      "peak": "Campaign until 20 December 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Kuta Villa",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 500000,
+      "high": 750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Kuta Villa",
+    "stars": "4",
+    "roomType": "Superior Premier (Lt.2)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 550000,
+      "high": 800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Kuta Villa",
+    "stars": "4",
+    "roomType": "Deluxe Plunge Pool ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 650000,
+      "high": 900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Best Western Kuta Villa",
+    "stars": "4",
+    "roomType": "Semi Villa Plunge Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 1000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramada Encore Seminyak",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 625000,
+      "high": 975000,
+      "peak": "31 Des 2025                (Except India)"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramada Encore Seminyak",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 675000,
+      "high": 1025000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramada Encore Seminyak",
+    "stars": "4",
+    "roomType": "Premier Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 1200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "TAPA TEPI KALI ECHO BEACH CANGGU  ",
+    "stars": "4",
+    "roomType": "Deluxe Pool View (12) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1250000,
+      "peak": 400000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "TAPA TEPI KALI ECHO BEACH CANGGU  ",
+    "stars": "4",
+    "roomType": "Deluxe Pool Access  (6) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1370000,
+      "high": 1370000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "TAPA TEPI KALI ECHO BEACH CANGGU  ",
+    "stars": "4",
+    "roomType": "Deluxe Riverside Garden (1) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1575000,
+      "high": 1575000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aston Sunset Beach Gili Trawangan",
+    "stars": "4",
+    "roomType": "Deluxe Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 830420,
+      "high": 1280420,
+      "peak": "30 June 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aston Sunset Beach Gili Trawangan",
+    "stars": "4",
+    "roomType": "Deluxe Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 953700,
+      "high": 1403700,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aston Sunset Beach Gili Trawangan",
+    "stars": "4",
+    "roomType": "One Bedroom Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1634420,
+      "high": 2084420,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Lovina Haven Boutique Resort ",
+    "stars": "4",
+    "roomType": "Deluxe Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": "JULY AGUSTUS HSS WAIVE",
+      "peak": "BOOKING PERIOD / WINDOW : Immediately – August 30 ‘ 2025 , TRAVELLING PERIOD :  Immediately  - December 22 ‘ 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Lovina Haven Boutique Resort ",
+    "stars": "4",
+    "roomType": "Deluxe Garden Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 800000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Lovina Haven Boutique Resort ",
+    "stars": "4",
+    "roomType": "Junior Suite Garden Access Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1750000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Lovina Haven Boutique Resort ",
+    "stars": "4",
+    "roomType": " Executive Suite Beach Access Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2250000,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "NIRWANA BEACH RESORT CANDIDASA",
+    "stars": "4",
+    "roomType": "Premier Garden Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1175000,
+      "high": 1425000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "NIRWANA BEACH RESORT CANDIDASA",
+    "stars": "4",
+    "roomType": "Grand Premier Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1375000,
+      "high": 1625000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "NIRWANA BEACH RESORT CANDIDASA",
+    "stars": "4",
+    "roomType": "Grand Premier Ocean View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1600000,
+      "high": 1850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "NIRWANA BEACH RESORT CANDIDASA",
+    "stars": "4",
+    "roomType": "One Bedroom Premier Private Pool Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2650000,
+      "high": 2900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "LOVINA BEACH CLUB & RESORT",
+    "stars": "4",
+    "roomType": "Deluxe Garden Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 900000,
+      "high": 1150000,
+      "peak": "31 March 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "LOVINA BEACH CLUB & RESORT",
+    "stars": "4",
+    "roomType": "Premier Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1080000,
+      "high": 1350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "LOVINA BEACH CLUB & RESORT",
+    "stars": "4",
+    "roomType": "Grand Premier Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1260000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "LOVINA BEACH CLUB & RESORT",
+    "stars": "4",
+    "roomType": "Deluxe Ocean Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1620000,
+      "high": 1800000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Tri Dewi Residence Ubud",
+    "stars": "4",
+    "roomType": "Standard Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 821000,
+      "high": 821000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Tri Dewi Residence Ubud",
+    "stars": "4",
+    "roomType": "Suite Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 880000,
+      "high": 880000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Tri Dewi Residence Ubud",
+    "stars": "4",
+    "roomType": "Suite Jungle View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 949000,
+      "high": 949000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kailash Suites Ubud",
+    "stars": "4",
+    "roomType": "Suite Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 942000,
+      "high": 942000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kailash Suites Ubud",
+    "stars": "4",
+    "roomType": "Suite Pool Acces",
+    "photoLink": null,
+    "seasons": {
+      "normal": 975000,
+      "high": 975000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kailash Suites Ubud",
+    "stars": "4",
+    "roomType": "Suite Balcony",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1028000,
+      "high": 1028000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Manah Shanti suite Ubud",
+    "stars": "4",
+    "roomType": "Bungalow",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1105000,
+      "high": 1105000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Manah Shanti suite Ubud",
+    "stars": "4",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1220000,
+      "high": 1220000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Tebesaya Cottage Ubud",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 965000,
+      "high": 965000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Tebesaya Cottage Ubud",
+    "stars": "4",
+    "roomType": "Super Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1155000,
+      "high": 1155000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kesari Glory Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Standard Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 560000,
+      "high": 560000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kesari Glory Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 610000,
+      "high": 610000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kesari Glory Hotel Nusa Penida",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 680000,
+      "high": 680000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Four Star by Trans Hotel",
+    "stars": "4",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 750000,
+      "high": 850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Four Star by Trans Hotel",
+    "stars": "4",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 850000,
+      "high": 950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Four Star by Trans Hotel",
+    "stars": "4",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 1450000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Four Star by Trans Hotel",
+    "stars": "4",
+    "roomType": "Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 1750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wyndham Jivva Klungkung",
+    "stars": "5",
+    "roomType": "Superior Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wyndham Jivva Klungkung",
+    "stars": "5",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1375000,
+      "high": 1625000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wyndham Jivva Klungkung",
+    "stars": "5",
+    "roomType": "Studio Suite Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 1900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Wyndham Jivva Klungkung",
+    "stars": "5",
+    "roomType": "Studio Suite Ocean View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2050000,
+      "high": 2300000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Grand Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1150000,
+      "high": 1400000,
+      "peak": "30 Sept 2025"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Premier",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1350000,
+      "high": 1600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1500000,
+      "high": 1750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Resort Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1900000,
+      "high": 2150000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Lumbung Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2350000,
+      "high": 2600000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "One Bedroom Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2500000,
+      "high": 2750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Sita Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4150000,
+      "high": 4400000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2200000,
+      "high": 2450000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Family Deluxe Inter Connecting",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2450000,
+      "high": 2700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Family suite ( One Bedroom)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2800000,
+      "high": 3050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Family Suite (Interconnecting)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3500000,
+      "high": 3750000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Ramayana Suite & Resort",
+    "stars": "5",
+    "roomType": "Two Bedroom Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3800000,
+      "high": 4050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Deluxe Room (D/T)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Romantic Room (D/T) 1 king isi kelambu",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Family Room (D&T) 1 king 2 single",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1700000,
+      "high": 1900000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Deluxe Suite Room ( 1 king tp ada living room bisa tambah 2 eb)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2200000,
+      "high": 2400000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Baan Lanna Residence (2 BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4500000,
+      "high": 4700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Batik Residence (2 BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4500000,
+      "high": 4700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Suite (4BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 8500000,
+      "high": 8700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Villa (1BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3500000,
+      "high": 3700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Villa (2BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 6500000,
+      "high": 6700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Villa (3BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 9500000,
+      "high": 9700000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1500000,
+      "high": null,
+      "peak": 1850000
+    },
+    "extrabed": "1850000",
+    "contractUntil": "2100000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Romantic Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1600000,
+      "high": null,
+      "peak": 1950000
+    },
+    "extrabed": "1950000",
+    "contractUntil": "2200000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1800000,
+      "high": null,
+      "peak": 2150000
+    },
+    "extrabed": "2150000",
+    "contractUntil": "2400000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Deluxe Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2500000,
+      "high": null,
+      "peak": 2850000
+    },
+    "extrabed": "2850000",
+    "contractUntil": "3100000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Baan Lanna Residence (2 BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 5500000,
+      "high": null,
+      "peak": 5850000
+    },
+    "extrabed": "5850000",
+    "contractUntil": "6100000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Batik Residence (2 BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 5500000,
+      "high": null,
+      "peak": 5850000
+    },
+    "extrabed": "5850000",
+    "contractUntil": "6100000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Suite (4BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 10500000,
+      "high": null,
+      "peak": 10850000
+    },
+    "extrabed": "10850000",
+    "contractUntil": "11100000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Villa (1BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4500000,
+      "high": null,
+      "peak": 4850000
+    },
+    "extrabed": "4850000",
+    "contractUntil": "5100000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Villa (2BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 9000000,
+      "high": null,
+      "peak": 9350000
+    },
+    "extrabed": "9350000",
+    "contractUntil": "9600000"
+  },
+  {
+    "hotelName": "Bali Bintang Resort",
+    "stars": "5",
+    "roomType": "Bintang Bali Villa (3BR)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 11500000,
+      "high": null,
+      "peak": 11850000
+    },
+    "extrabed": "11850000",
+    "contractUntil": "12100000"
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Superior",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1575000,
+      "high": 1875000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Grand Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 1950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Premier",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1800000,
+      "high": 2100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Arya Club",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2175000,
+      "high": 2475000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Family Studio 3A/2A+2C",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2075000,
+      "high": 2375000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Arya Club Studio",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2875000,
+      "high": 3175000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Ambassador Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3175000,
+      "high": 3475000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Aryaduta",
+    "stars": "5",
+    "roomType": "Family Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3075000,
+      "high": 3375000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kuta Paradiso Hotel",
+    "stars": "5",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 950000,
+      "high": 1100000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kuta Paradiso Hotel",
+    "stars": "5",
+    "roomType": "Deluxe Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1050000,
+      "high": 1200000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kuta Paradiso Hotel",
+    "stars": "5",
+    "roomType": "Super Deluxe Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1250000,
+      "high": 1400000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Kuta Paradiso Hotel",
+    "stars": "5",
+    "roomType": "Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1700000,
+      "high": 1850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Nama Resort",
+    "stars": "Stars",
+    "roomType": "Type Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "Link Additional",
+      "high": "Normal Season",
+      "peak": "Peak Season"
+    },
+    "extrabed": "3D2N HONEYMOON PACKAGE NORMAL SEASON",
+    "contractUntil": "Extrabed"
+  },
+  {
+    "hotelName": "Suara Alam Ubud",
+    "stars": "*****",
+    "roomType": "Paddies Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "https://bit.ly/ListDecorationAgent ",
+      "high": 850000,
+      "peak": 1450000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Suara Alam Ubud",
+    "stars": "*****",
+    "roomType": "Grand Paddies Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": 900000,
+      "peak": 1500000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Suara Alam Ubud",
+    "stars": "*****",
+    "roomType": "Ubud Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": 1300000,
+      "peak": 1900000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Suara Alam Ubud",
+    "stars": "*****",
+    "roomType": "Grand Suite with Jungle View",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": 1500000,
+      "peak": 2100000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Suara Alam Ubud",
+    "stars": "*****",
+    "roomType": "Jungle Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": 1500000,
+      "peak": 2100000
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Visesa Ubud Resort",
+    "stars": "5",
+    "roomType": "Jungle Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Visesa Ubud Resort",
+    "stars": "5",
+    "roomType": "River Valley Suite with Jacuzzi",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2900000,
+      "high": 3350000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Visesa Ubud Resort",
+    "stars": "5",
+    "roomType": "One Bedroom Pool Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3350000,
+      "high": 4300000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Visesa Ubud Resort",
+    "stars": "5",
+    "roomType": "Two Bedroom Pool Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 4370000,
+      "high": 5550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Visesa Ubud Resort",
+    "stars": "5",
+    "roomType": "Two Bedroom Lagoon Infinity Pool Villa",
+    "photoLink": null,
+    "seasons": {
+      "normal": 5500000,
+      "high": 6950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Visesa Ubud Resort",
+    "stars": "5",
+    "roomType": "Two Bedroom Sky Infinity",
+    "photoLink": null,
+    "seasons": {
+      "normal": 6350000,
+      "high": 8000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Watu Kurung",
+    "stars": "5",
+    "roomType": "Pramana Suite (6 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Watu Kurung",
+    "stars": "5",
+    "roomType": "Ayung Valley Suite (3 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2600000,
+      "high": 3050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Watu Kurung",
+    "stars": "5",
+    "roomType": "Wooden Pool Villa ( 6 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3800000,
+      "high": 4250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Watu Kurung",
+    "stars": "5",
+    "roomType": "Artist Pool Villa (11 Unit) ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3800000,
+      "high": 4250000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Pramana Watu Kurung",
+    "stars": "5",
+    "roomType": "Royal Agung Pool Villa ( 2 Unit)",
+    "photoLink": null,
+    "seasons": {
+      "normal": 6100000,
+      "high": 6550000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": null,
+      "high": null,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Deluxe Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1950000,
+      "high": 2230000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Deluxe Family Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2160000,
+      "high": 2450000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Deluxe Interconnecting",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3460000,
+      "high": 4030000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Family Garden View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2520000,
+      "high": 2810000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Family Studio",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2950000,
+      "high": 3240000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Kids Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3100000,
+      "high": 3380000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Family Pool View",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3600000,
+      "high": 3890000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Bali Dynasty Resort",
+    "stars": "5",
+    "roomType": "Family Lagoon Pool Access",
+    "photoLink": null,
+    "seasons": {
+      "normal": 3670000,
+      "high": 3960000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Kuta Beach Heritage Hotel Managed by ACCOR",
+    "stars": "5",
+    "roomType": "Classic ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1300000,
+      "high": 1700000,
+      "peak": "23 December 2025."
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Kuta Beach Heritage Hotel Managed by ACCOR",
+    "stars": "5",
+    "roomType": "Deluxe",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 1950000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Kuta Beach Heritage Hotel Managed by ACCOR",
+    "stars": "5",
+    "roomType": "Deluxe Pool",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 2050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Kuta Beach Heritage Hotel Managed by ACCOR",
+    "stars": "5",
+    "roomType": "Executive",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1650000,
+      "high": 2050000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Kuta Beach Heritage Hotel Managed by ACCOR",
+    "stars": "5",
+    "roomType": "Junior Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2000000,
+      "high": 2400000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Kuta Beach Heritage Hotel Managed by ACCOR",
+    "stars": "5",
+    "roomType": "Deluxe Suite",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2600000,
+      "high": 3000000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Nama Villa",
+    "stars": "Stars",
+    "roomType": "Type Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": "Normal Season",
+      "high": "High Season",
+      "peak": "Batas Kontrak"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Arkamara Dijiwa Ubud",
+    "stars": "5",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1900000,
+      "high": 2400000,
+      "peak": "1 Apr 2025 – 31 Oct 2025 "
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Arkamara Dijiwa Ubud",
+    "stars": "5",
+    "roomType": "Akamara Suite Jungle",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2000000,
+      "high": 2500000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Arkamara Dijiwa Ubud",
+    "stars": "5",
+    "roomType": "Arkamara Suite Pool Terrace ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2150000,
+      "high": 2650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Arkamara Dijiwa Ubud",
+    "stars": "5",
+    "roomType": "Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2050000,
+      "high": 2550000,
+      "peak": "1 Nov 2025 – 31 Mar 2026"
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Arkamara Dijiwa Ubud",
+    "stars": "5",
+    "roomType": "Akamara Suite Jungle",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2150000,
+      "high": 2650000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "Arkamara Dijiwa Ubud",
+    "stars": "5",
+    "roomType": "Arkamara Suite Pool Terrace ",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2350000,
+      "high": 2850000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Alena Resort",
+    "stars": "5",
+    "roomType": "Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1550000,
+      "high": 2000000,
+      "peak": 600000
+    },
+    "extrabed": "3/31/2026 0:00",
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Alena Resort",
+    "stars": "5",
+    "roomType": "Super Deluxe Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 1925000,
+      "high": 2375000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  },
+  {
+    "hotelName": "The Alena Resort",
+    "stars": "5",
+    "roomType": "Luxury Suite Room",
+    "photoLink": null,
+    "seasons": {
+      "normal": 2475000,
+      "high": 2925000,
+      "peak": null
+    },
+    "extrabed": null,
+    "contractUntil": null
+  }
+]

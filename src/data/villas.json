@@ -1,0 +1,3908 @@
+[
+  {
+    "villaName":"Alam KulKul Villa Legian Kuta",
+    "stars":5.0,
+    "roomType":"Alam Villa",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1xxFzVVxiuEAWO0Ox6jFvP3fD5rdtvNz1",
+    "seasons":{
+      "normal":1680000,
+      "high":1995000,
+      "peak":2047500
+    },
+    "extrabed":400000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Alam KulKul Villa Legian Kuta",
+    "stars":5.0,
+    "roomType":"Alam Java Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2336250,
+      "high":2651250,
+      "peak":2756250
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool ",
+    "photoLink":"https:\/\/bit.ly\/Aksari_Resort_Ubud",
+    "seasons":{
+      "normal":null,
+      "high":5100000,
+      "peak":5700000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":12150000.0,
+    "contractUntil":5900000
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":5100000,
+      "peak":5700000
+    },
+    "extrabed":5800000.0,
+    "honeymoonPackage":12150000.0,
+    "contractUntil":5900000
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom River View Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":5600000,
+      "peak":6200000
+    },
+    "extrabed":6300000.0,
+    "honeymoonPackage":13150000.0,
+    "contractUntil":6400000
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom by The River Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":5600000,
+      "peak":6200000
+    },
+    "extrabed":6300000.0,
+    "honeymoonPackage":13150000.0,
+    "contractUntil":6400000
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"Grand Two Bedroom River View Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":7100000,
+      "peak":7700000
+    },
+    "extrabed":7800000.0,
+    "honeymoonPackage":7100000.0,
+    "contractUntil":7900000
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"Grand Aksari Suite ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2300000,
+      "peak":2750000
+    },
+    "extrabed":2750000.0,
+    "honeymoonPackage":2700000.0,
+    "contractUntil":2900000
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"Aksari Suite",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2100000,
+      "peak":2550000
+    },
+    "extrabed":2550000.0,
+    "honeymoonPackage":2400000.0,
+    "contractUntil":2700000
+  },
+  {
+    "villaName":"Aksari Resort Ubud",
+    "stars":5.0,
+    "roomType":"Suite Forest View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2350000
+    },
+    "extrabed":2350000.0,
+    "honeymoonPackage":2100000.0,
+    "contractUntil":2500000
+  },
+  {
+    "villaName":"Kaamala Luxury Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool ",
+    "photoLink":"https:\/\/bit.ly\/KaamalaResortUbud",
+    "seasons":{
+      "normal":null,
+      "high":3200000,
+      "peak":3800000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":8350000.0,
+    "contractUntil":4000000
+  },
+  {
+    "villaName":"Kaamala Luxury Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Rice field View Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3600000,
+      "peak":4200000
+    },
+    "extrabed":4300000.0,
+    "honeymoonPackage":9150000.0,
+    "contractUntil":4400000
+  },
+  {
+    "villaName":"Kaamala Luxury Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Grand Two Bedroom Rice Field View Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":5100000,
+      "peak":5700000
+    },
+    "extrabed":5800000.0,
+    "honeymoonPackage":null,
+    "contractUntil":5900000
+  },
+  {
+    "villaName":"Kaamala Luxury Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Presidential Two Bedroom Private Pool Villa with Ricefield View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":6000000,
+      "peak":6600000
+    },
+    "extrabed":6700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":6800000
+  },
+  {
+    "villaName":"Kaamala Luxury Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Grand Suite Forest View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2650000
+    },
+    "extrabed":6700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Kaamala Luxury Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Suite Forest View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2350000
+    },
+    "extrabed":2350000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2500000
+  },
+  {
+    "villaName":"Asvara Villa Ubud",
+    "stars":5.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool and Jacuzzi",
+    "photoLink":"https:\/\/bit.ly\/AsvaraVillaUbud",
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2500000
+    },
+    "extrabed":600000.0,
+    "honeymoonPackage":5750000.0,
+    "contractUntil":2700000
+  },
+  {
+    "villaName":"Asvara Villa Ubud",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Rice field View Villa with Private Pool and Jacuzzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2800000
+    },
+    "extrabed":2900000.0,
+    "honeymoonPackage":6350000.0,
+    "contractUntil":3000000
+  },
+  {
+    "villaName":"Asvara Villa Ubud",
+    "stars":5.0,
+    "roomType":"Royal Two Bedroom Villa with Private Pool and Jacuzzi ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3600000,
+      "peak":4200000
+    },
+    "extrabed":4300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":4400000
+  },
+  {
+    "villaName":"Dedary Resort & Spa Ubud",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Bathtub ",
+    "photoLink":"https:\/\/bit.ly\/DedaryResortUbud",
+    "seasons":{
+      "normal":null,
+      "high":1750000,
+      "peak":2350000
+    },
+    "extrabed":600000.0,
+    "honeymoonPackage":5450000.0,
+    "contractUntil":2550000
+  },
+  {
+    "villaName":"Dedary Resort & Spa Ubud",
+    "stars":4.0,
+    "roomType":"One Bedroom Garden View Villa with Private Pool and Bathtub ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1850000,
+      "peak":2450000
+    },
+    "extrabed":2550000.0,
+    "honeymoonPackage":5650000.0,
+    "contractUntil":2650000
+  },
+  {
+    "villaName":"Dedary Resort & Spa Ubud",
+    "stars":4.0,
+    "roomType":"One Bedroom Forest View Villa with Private Pool and Bathtub ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2100000,
+      "peak":2700000
+    },
+    "extrabed":2800000.0,
+    "honeymoonPackage":6150000.0,
+    "contractUntil":2900000
+  },
+  {
+    "villaName":"Dedary Resort & Spa Ubud",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Bathtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3100000,
+      "peak":3700000
+    },
+    "extrabed":3800000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3900000
+  },
+  {
+    "villaName":"Dedary Resort & Spa Ubud",
+    "stars":4.0,
+    "roomType":"Two Bedroom Forest View Villa with Private Pool and Bathtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3300000,
+      "peak":3900000
+    },
+    "extrabed":4000000.0,
+    "honeymoonPackage":null,
+    "contractUntil":4100000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Ubud Room",
+    "photoLink":"https:\/\/bit.ly\/AmareaUbud",
+    "seasons":{
+      "normal":null,
+      "high":850000,
+      "peak":1300000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1450000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Ubud Suite with Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":1450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Ubud Cottage with Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1200000,
+      "peak":1650000
+    },
+    "extrabed":1650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1800000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Grand Cottage",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1350000,
+      "peak":1800000
+    },
+    "extrabed":1800000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1950000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Cottage Room with Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1700000,
+      "peak":2300000
+    },
+    "extrabed":2150000.0,
+    "honeymoonPackage":5350000.0,
+    "contractUntil":2300000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Smart One Bedroom Villa with Private Pool & Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2000000,
+      "peak":2600000
+    },
+    "extrabed":2700000.0,
+    "honeymoonPackage":5950000.0,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2800000
+    },
+    "extrabed":2900000.0,
+    "honeymoonPackage":6350000.0,
+    "contractUntil":3000000
+  },
+  {
+    "villaName":"Amarea Resort & Spa Ubud",
+    "stars":5.0,
+    "roomType":"Grand Two Bedroom Loft Forest View Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3000000,
+      "peak":3600000
+    },
+    "extrabed":3700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3800000
+  },
+  {
+    "villaName":"Sini Vie Luxury",
+    "stars":5.0,
+    "roomType":"Grand Smart One Bedroom Villa with Private Pool Jaccuzi with Lagoon Access",
+    "photoLink":"https:\/\/bit.ly\/SiniVieVilla",
+    "seasons":{
+      "normal":null,
+      "high":2300000,
+      "peak":2900000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":6550000.0,
+    "contractUntil":3100000
+  },
+  {
+    "villaName":"Sini Vie Luxury",
+    "stars":5.0,
+    "roomType":"Grand Smart One Bedroom Villa with Private Pool and Jaccuzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2000000,
+      "peak":2600000
+    },
+    "extrabed":2600000.0,
+    "honeymoonPackage":5950000.0,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Sini Vie Luxury",
+    "stars":5.0,
+    "roomType":"Smart One Bedroom Villa with Private Pool and Jaccuzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2400000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Sini Vie Luxury",
+    "stars":5.0,
+    "roomType":"Grand Smart Suite Double with Bathtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":1450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Sini Vie Luxury",
+    "stars":5.0,
+    "roomType":"Grand Smart Suite Twin with Bathtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":1450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Sini Vie Luxury",
+    "stars":5.0,
+    "roomType":"Smart Suite Room",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":1450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Monolocale Luxury Resort & Spa Seminyak",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool",
+    "photoLink":"https:\/\/bit.ly\/MonolocaleResort",
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2500000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2700000
+  },
+  {
+    "villaName":"Monolocale Luxury Resort & Spa Seminyak",
+    "stars":5.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2600000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Monolocale Luxury Resort & Spa Seminyak",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2800000
+    },
+    "extrabed":3000000.0,
+    "honeymoonPackage":5950000.0,
+    "contractUntil":3000000
+  },
+  {
+    "villaName":"Monolocale Luxury Resort & Spa Seminyak",
+    "stars":5.0,
+    "roomType":"Seminyak Suite Double",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":750000,
+      "peak":1200000
+    },
+    "extrabed":1400000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1350000
+  },
+  {
+    "villaName":"Monolocale Luxury Resort & Spa Seminyak",
+    "stars":5.0,
+    "roomType":"Seminyak Suite Twin",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":750000,
+      "peak":1200000
+    },
+    "extrabed":1400000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1350000
+  },
+  {
+    "villaName":"Aksari Seminyak",
+    "stars":5.0,
+    "roomType":"Royal Smart One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/AksariSeminyakVilla",
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Astera Seminyak",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/AsteraSeminyakVilla",
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Sana Vie Villa",
+    "stars":5.0,
+    "roomType":"Smart One Bedroom Villa with Private Pool and Bathtub",
+    "photoLink":"https:\/\/bit.ly\/SanaVieVilla",
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Sana Vie Villa",
+    "stars":5.0,
+    "roomType":"Royal Smart One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2500000
+    },
+    "extrabed":2600000.0,
+    "honeymoonPackage":5750000.0,
+    "contractUntil":2700000
+  },
+  {
+    "villaName":"Sana Vie Villa",
+    "stars":5.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2600000,
+      "peak":3200000
+    },
+    "extrabed":3300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3400000
+  },
+  {
+    "villaName":"Aleva Villa",
+    "stars":4.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/AlevaVilla",
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Ayona Villa",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/AyonaVilla",
+    "seasons":{
+      "normal":null,
+      "high":2000000,
+      "peak":2600000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5950000.0,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Ayona Villa",
+    "stars":4.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2100000,
+      "peak":2700000
+    },
+    "extrabed":2800000.0,
+    "honeymoonPackage":6150000.0,
+    "contractUntil":2900000
+  },
+  {
+    "villaName":"Cyrus Villa",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/CyrusVilla",
+    "seasons":{
+      "normal":null,
+      "high":2900000,
+      "peak":3500000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":7750000.0,
+    "contractUntil":3700000
+  },
+  {
+    "villaName":"Cyrus Villa",
+    "stars":4.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3150000,
+      "peak":3750000
+    },
+    "extrabed":3850000.0,
+    "honeymoonPackage":8250000.0,
+    "contractUntil":3950000
+  },
+  {
+    "villaName":"La Vie Villa",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/LaVieVilla_",
+    "seasons":{
+      "normal":null,
+      "high":1500000,
+      "peak":2100000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":4950000.0,
+    "contractUntil":2300000
+  },
+  {
+    "villaName":"La Vie Villa",
+    "stars":4.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1600000,
+      "peak":2200000
+    },
+    "extrabed":2300000.0,
+    "honeymoonPackage":5150000.0,
+    "contractUntil":2400000
+  },
+  {
+    "villaName":"Seminyak Sanctuary",
+    "stars":4.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool and Bathtub",
+    "photoLink":"bit.ly\/SeminyakSanctuary",
+    "seasons":{
+      "normal":null,
+      "high":1500000,
+      "peak":2100000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":4950000.0,
+    "contractUntil":2300000
+  },
+  {
+    "villaName":"Ini Vie Villa",
+    "stars":4.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool and Jacuzzi",
+    "photoLink":"https:\/\/bit.ly\/IniVieVilla",
+    "seasons":{
+      "normal":null,
+      "high":1500000,
+      "peak":2100000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":4950000.0,
+    "contractUntil":2300000
+  },
+  {
+    "villaName":"Ini Vie Villa",
+    "stars":4.0,
+    "roomType":"Royal Two Bedroom Villa with Private Pool and Jacuzzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2800000
+    },
+    "extrabed":2900000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3000000
+  },
+  {
+    "villaName":"Astera Luxury Resort & Spa Canggu",
+    "stars":5.0,
+    "roomType":"Loft Suite Room",
+    "photoLink":"https:\/\/bit.ly\/AsteraSeminyakVilla",
+    "seasons":{
+      "normal":null,
+      "high":950000,
+      "peak":1400000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1550000
+  },
+  {
+    "villaName":"Astera Luxury Resort & Spa Canggu",
+    "stars":5.0,
+    "roomType":"Smart Loft One Bedroom Villa with Private Pool Villa and Jacuzzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2500000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Astera Luxury Resort & Spa Canggu",
+    "stars":5.0,
+    "roomType":"Smart One Bedroom Villa with Private Pool Villa and Jacuzzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2500000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Astera Luxury Resort & Spa Canggu",
+    "stars":5.0,
+    "roomType":"Smart Royal One Bedroom Villa with Private Pool Villa and Jacuzzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2000000,
+      "peak":2600000
+    },
+    "extrabed":2700000.0,
+    "honeymoonPackage":5950000.0,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Teratai Villa Canggu",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool and Bathtub",
+    "photoLink":"https:\/\/bit.ly\/TerataiCangguVilla",
+    "seasons":{
+      "normal":null,
+      "high":1700000,
+      "peak":2300000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5350000.0,
+    "contractUntil":2500000
+  },
+  {
+    "villaName":"Teratai Villa Canggu",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool and Bathtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2500000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Teratai Villa Canggu",
+    "stars":5.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Bathtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2800000
+    },
+    "extrabed":2800000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3000000
+  },
+  {
+    "villaName":"Teratai Villa Canggu",
+    "stars":5.0,
+    "roomType":"Grand Two Bedroom Villa with private pool and bathtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2400000,
+      "peak":3000000
+    },
+    "extrabed":3200000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3200000
+  },
+  {
+    "villaName":"Aeera Villa",
+    "stars":4.0,
+    "roomType":"Royal Smart One Bedroom Villa with Private Pool Villa and Bathtub",
+    "photoLink":"https:\/\/bit.ly\/AeeraVilla",
+    "seasons":{
+      "normal":null,
+      "high":1200000,
+      "peak":1800000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2000000
+  },
+  {
+    "villaName":"Aeera Villa",
+    "stars":4.0,
+    "roomType":"Suite Room",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":650000,
+      "peak":1100000
+    },
+    "extrabed":1100000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1250000
+  },
+  {
+    "villaName":"Canggu Cabana Resort & Spa",
+    "stars":5.0,
+    "roomType":"Suite Garden View",
+    "photoLink":"https:\/\/bit.ly\/CangguCabana",
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Canggu Cabana Resort & Spa",
+    "stars":5.0,
+    "roomType":"Suite Double",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":1450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Canggu Cabana Resort & Spa",
+    "stars":5.0,
+    "roomType":"Suite Twin",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":1450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Canggu Cabana Resort & Spa",
+    "stars":5.0,
+    "roomType":"Suite Plunge Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1250000,
+      "peak":1700000
+    },
+    "extrabed":1700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1850000
+  },
+  {
+    "villaName":"Canggu Cabana Resort & Spa",
+    "stars":5.0,
+    "roomType":"Cabana Ocean View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2250000
+    },
+    "extrabed":2250000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2400000
+  },
+  {
+    "villaName":"Canggu Cabana Resort & Spa",
+    "stars":5.0,
+    "roomType":"Grand Cabana Ocean View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2350000
+    },
+    "extrabed":2350000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2500000
+  },
+  {
+    "villaName":"Canggu Cabana Resort & Spa",
+    "stars":5.0,
+    "roomType":"Two Bedroom Loft",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2650000
+    },
+    "extrabed":2650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Ayona Canggu",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/AyonaCanggu",
+    "seasons":{
+      "normal":null,
+      "high":1700000,
+      "peak":2300000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":5350000.0,
+    "contractUntil":2500000
+  },
+  {
+    "villaName":"Ayona Canggu",
+    "stars":4.0,
+    "roomType":"Grand One Bedroom Private Pool Villa with Forest View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2500000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Ayona Canggu",
+    "stars":4.0,
+    "roomType":"Sky One Bedroom Private Pool Villa with Forest View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2100000,
+      "peak":2700000
+    },
+    "extrabed":2800000.0,
+    "honeymoonPackage":6150000.0,
+    "contractUntil":2900000
+  },
+  {
+    "villaName":"Manca Villa",
+    "stars":4.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/MancaVIlla",
+    "seasons":{
+      "normal":null,
+      "high":1200000,
+      "peak":1800000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2000000
+  },
+  {
+    "villaName":"Manca Villa",
+    "stars":4.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1300000,
+      "peak":1900000
+    },
+    "extrabed":2000000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2100000
+  },
+  {
+    "villaName":"Atap Resort Canggu",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/AtapResortCanggu",
+    "seasons":{
+      "normal":null,
+      "high":1700000,
+      "peak":2300000
+    },
+    "extrabed":2400000.0,
+    "honeymoonPackage":5950000.0,
+    "contractUntil":2500000
+  },
+  {
+    "villaName":"Atap Resort Canggu",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1600000,
+      "peak":2200000
+    },
+    "extrabed":2300000.0,
+    "honeymoonPackage":5550000.0,
+    "contractUntil":2400000
+  },
+  {
+    "villaName":"Atap Resort Canggu",
+    "stars":5.0,
+    "roomType":"Suite Room",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1000000,
+      "peak":1450000
+    },
+    "extrabed":1450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1600000
+  },
+  {
+    "villaName":"Roomates Surf Camp Canggu",
+    "stars":3.0,
+    "roomType":"Canggu Double Room",
+    "photoLink":"https:\/\/bit.ly\/RoomatesCanggu",
+    "seasons":{
+      "normal":null,
+      "high":750000,
+      "peak":1200000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1350000
+  },
+  {
+    "villaName":"Roomates Surf Camp Canggu",
+    "stars":3.0,
+    "roomType":"Canggu Twin Room",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":750000,
+      "peak":1200000
+    },
+    "extrabed":1200000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1350000
+  },
+  {
+    "villaName":"Roomates Surf Camp Canggu",
+    "stars":3.0,
+    "roomType":"Bunk Bed Female Dormitory",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":175000,
+      "peak":625000
+    },
+    "extrabed":625000.0,
+    "honeymoonPackage":null,
+    "contractUntil":775000
+  },
+  {
+    "villaName":"Roomates Surf Camp Canggu",
+    "stars":3.0,
+    "roomType":"Bunk Mix Dormitory",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":175000,
+      "peak":625000
+    },
+    "extrabed":625000.0,
+    "honeymoonPackage":null,
+    "contractUntil":775000
+  },
+  {
+    "villaName":"Earth Villa",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Bathtub (ROOM ONLY)",
+    "photoLink":"https:\/\/bit.ly\/EarthVilla",
+    "seasons":{
+      "normal":null,
+      "high":1600000,
+      "peak":2200000
+    },
+    "extrabed":2300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2400000
+  },
+  {
+    "villaName":"Earth Villa",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Bathtub (ROOM ONLY)",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2500000
+    },
+    "extrabed":2600000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2700000
+  },
+  {
+    "villaName":"Cabana Kedungu",
+    "stars":4.0,
+    "roomType":"Four Bedroom Private Pool Villa \n",
+    "photoLink":"https:\/\/bit.ly\/CabanaKedungu",
+    "seasons":{
+      "normal":null,
+      "high":2400000,
+      "peak":3000000
+    },
+    "extrabed":3100000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3200000
+  },
+  {
+    "villaName":"Cabana Kedungu",
+    "stars":4.0,
+    "roomType":"Five Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2700000,
+      "peak":3300000
+    },
+    "extrabed":3400000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3500000
+  },
+  {
+    "villaName":"Sanora Villa Sanur",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/SanoraVillaSanur",
+    "seasons":{
+      "normal":null,
+      "high":1700000,
+      "peak":2300000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2500000
+  },
+  {
+    "villaName":"Sanora Villa Sanur",
+    "stars":5.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2200000,
+      "peak":2800000
+    },
+    "extrabed":2900000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3000000
+  },
+  {
+    "villaName":"Sanora Villa Sanur",
+    "stars":5.0,
+    "roomType":"Grand Two Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2500000,
+      "peak":3100000
+    },
+    "extrabed":3200000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3300000
+  },
+  {
+    "villaName":"Seascape Luxury Resort & Spa",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool ",
+    "photoLink":"https:\/\/bit.ly\/SeaescapeSanur",
+    "seasons":{
+      "normal":null,
+      "high":2500000,
+      "peak":3100000
+    },
+    "extrabed":3200000.0,
+    "honeymoonPackage":6950000.0,
+    "contractUntil":3300000
+  },
+  {
+    "villaName":"Seascape Luxury Resort & Spa",
+    "stars":5.0,
+    "roomType":"Grand One Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2700000,
+      "peak":3300000
+    },
+    "extrabed":3400000.0,
+    "honeymoonPackage":7350000.0,
+    "contractUntil":3500000
+  },
+  {
+    "villaName":"Seascape Luxury Resort & Spa",
+    "stars":5.0,
+    "roomType":"Suite Ocean View",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1300000,
+      "peak":1750000
+    },
+    "extrabed":1850000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1900000
+  },
+  {
+    "villaName":"Seascape Luxury Resort & Spa",
+    "stars":5.0,
+    "roomType":"Suite Room",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1100000,
+      "peak":1550000
+    },
+    "extrabed":1650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1700000
+  },
+  {
+    "villaName":"The Jimbaran Villa",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/TheJimbaranVilla",
+    "seasons":{
+      "normal":null,
+      "high":1250000,
+      "peak":1850000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":9250000
+  },
+  {
+    "villaName":"Eight Palms",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/EightPalmsVilla",
+    "seasons":{
+      "normal":null,
+      "high":2300000,
+      "peak":2900000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3100000
+  },
+  {
+    "villaName":"Eight Palms",
+    "stars":4.0,
+    "roomType":"Three Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2500000,
+      "peak":3100000
+    },
+    "extrabed":3200000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3300000
+  },
+  {
+    "villaName":"Eight Palms",
+    "stars":4.0,
+    "roomType":"Royal Three Bedroom Villa with Private Pool and Jacuzzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3000000,
+      "peak":3600000
+    },
+    "extrabed":3700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3800000
+  },
+  {
+    "villaName":"Eight Palms",
+    "stars":4.0,
+    "roomType":"Royal Three Bedroom Waterslide Villa with Private Pool and Jacuzzi",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3700000,
+      "peak":4300000
+    },
+    "extrabed":4400000.0,
+    "honeymoonPackage":null,
+    "contractUntil":4500000
+  },
+  {
+    "villaName":"La Mira Villa",
+    "stars":4.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool and Waterslide",
+    "photoLink":"https:\/\/bit.ly\/LaMiraVilla",
+    "seasons":{
+      "normal":null,
+      "high":1500000,
+      "peak":2100000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2300000
+  },
+  {
+    "villaName":"La Mira Villa",
+    "stars":4.0,
+    "roomType":"Royal Two Bedroom Waterslide Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2500000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"La Mira Villa",
+    "stars":4.0,
+    "roomType":"Royal Three Bedroom Waterslide Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2500000,
+      "peak":3100000
+    },
+    "extrabed":3200000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3300000
+  },
+  {
+    "villaName":"Kecapi Villa",
+    "stars":4.0,
+    "roomType":"Royal One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/KecapiVilla",
+    "seasons":{
+      "normal":null,
+      "high":1500000,
+      "peak":2100000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2300000
+  },
+  {
+    "villaName":"Kecapi Villa",
+    "stars":4.0,
+    "roomType":"Royal Two Bedroom Villa with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1900000,
+      "peak":2500000
+    },
+    "extrabed":2600000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2700000
+  },
+  {
+    "villaName":"Kecapi Villa",
+    "stars":4.0,
+    "roomType":"Royal Three Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2600000,
+      "peak":3200000
+    },
+    "extrabed":3300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3400000
+  },
+  {
+    "villaName":"Kolila Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/KolilaVilla",
+    "seasons":{
+      "normal":null,
+      "high":2000000,
+      "peak":2600000
+    },
+    "extrabed":2700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Kolila Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Three Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2600000,
+      "peak":3200000
+    },
+    "extrabed":3300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3400000
+  },
+  {
+    "villaName":"Canggu Circle",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/CangguCircle",
+    "seasons":{
+      "normal":null,
+      "high":1100000,
+      "peak":1700000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1900000
+  },
+  {
+    "villaName":"Canggu Circle",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1350000,
+      "peak":1950000
+    },
+    "extrabed":2050000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2150000
+  },
+  {
+    "villaName":"Canggu Circle",
+    "stars":4.0,
+    "roomType":"Three  Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2000000,
+      "peak":2600000
+    },
+    "extrabed":2700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Nara Villa Canggu",
+    "stars":5.0,
+    "roomType":"Three  Bedroom Villa with Private Pool ",
+    "photoLink":"https:\/\/bit.ly\/NaraVillaCanggu",
+    "seasons":{
+      "normal":null,
+      "high":2700000,
+      "peak":3300000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":3500000
+  },
+  {
+    "villaName":"Nara Villa Canggu",
+    "stars":5.0,
+    "roomType":"Four Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3400000,
+      "peak":4000000
+    },
+    "extrabed":4100000.0,
+    "honeymoonPackage":null,
+    "contractUntil":4200000
+  },
+  {
+    "villaName":"Nara Villa Canggu",
+    "stars":5.0,
+    "roomType":"Five Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":3800000,
+      "peak":4400000
+    },
+    "extrabed":4500000.0,
+    "honeymoonPackage":null,
+    "contractUntil":4600000
+  },
+  {
+    "villaName":"Kanadea Villa",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool  (ROOM ONLY)",
+    "photoLink":"https:\/\/bit.ly\/KanadeaVilla",
+    "seasons":{
+      "normal":null,
+      "high":1600000,
+      "peak":2200000
+    },
+    "extrabed":2300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2400000
+  },
+  {
+    "villaName":"Kanadea Villa",
+    "stars":4.0,
+    "roomType":"Three  Bedroom Villa with Private Pool (ROOM ONLY)",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":2000000,
+      "peak":2600000
+    },
+    "extrabed":2700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2800000
+  },
+  {
+    "villaName":"Nyanyi Sanctuary",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":"https:\/\/bit.ly\/NyanyiSanctuary",
+    "seasons":{
+      "normal":null,
+      "high":900000,
+      "peak":1500000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1700000
+  },
+  {
+    "villaName":"Nyanyi Sanctuary",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1200000,
+      "peak":1800000
+    },
+    "extrabed":1900000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2000000
+  },
+  {
+    "villaName":"Nyanyi Sanctuary",
+    "stars":4.0,
+    "roomType":"Three  Bedroom Villa with Private Pool and Buthtub",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":2500000.0,
+    "honeymoonPackage":null,
+    "contractUntil":2600000
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Superior One Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":1600000,
+      "high":1925000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":1746057600000
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Deluxe One Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":1800000,
+      "high":2125000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Two Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2800000,
+      "high":3125000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3900000,
+      "high":4225000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Superior One Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":1600000,
+      "high":1925000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":1748736000000
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Deluxe One Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":1800000,
+      "high":2125000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Two Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2800000,
+      "high":3125000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Ubud Raya Villa",
+    "stars":4.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3900000,
+      "high":4225000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool ",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1ORwTnhb0U3POBl9Ws0pglBxB70tz1znh",
+    "seasons":{
+      "normal":2315000,
+      "high":2515000,
+      "peak":2615000
+    },
+    "extrabed":2715000.0,
+    "honeymoonPackage":null,
+    "contractUntil":490000
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":3515000,
+      "high":3715000,
+      "peak":3815000
+    },
+    "extrabed":3915000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Three  Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4715000,
+      "high":4915000,
+      "peak":5015000
+    },
+    "extrabed":5115000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Four Bedroom Villla with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":5915000,
+      "high":6115000,
+      "peak":6215000
+    },
+    "extrabed":6315000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"One Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":2315000,
+      "high":2515000,
+      "peak":2615000
+    },
+    "extrabed":2715000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Two Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":3515000,
+      "high":3715000,
+      "peak":3815000
+    },
+    "extrabed":3915000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Three  Bedroom Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4715000,
+      "high":4915000,
+      "peak":5015000
+    },
+    "extrabed":5115000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Bali Dream Villa Seminyak",
+    "stars":4.0,
+    "roomType":"Four Bedroom Villla with Private Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":5915000,
+      "high":6115000,
+      "peak":6215000
+    },
+    "extrabed":6315000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"S18 Bali Villa",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":1850000,
+      "high":2100000,
+      "peak":2050000
+    },
+    "extrabed":2200000.0,
+    "honeymoonPackage":null,
+    "contractUntil":350000
+  },
+  {
+    "villaName":"S18 Bali Villa",
+    "stars":5.0,
+    "roomType":"Two Bedroom Villa with Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3350000,
+      "high":3600000,
+      "peak":3550000
+    },
+    "extrabed":3700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"S18 Bali Villa",
+    "stars":5.0,
+    "roomType":"Three  Bedroom Villa with Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":4350000,
+      "high":4600000,
+      "peak":4550000
+    },
+    "extrabed":4700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Alam Puisi Villa Ubud",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa Private Pool",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1upOxy1YsY2--5Ppg2eXiPumR5QHrMjWC?usp=sharing",
+    "seasons":{
+      "normal":1350000,
+      "high":1700000,
+      "peak":1700000
+    },
+    "extrabed":350000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1680220800000
+  },
+  {
+    "villaName":"The Sakaye ",
+    "stars":5.0,
+    "roomType":"One Bedroom Villa with Private Pool Villa",
+    "photoLink":"https:\/\/bit.ly\/sakyephotos",
+    "seasons":{
+      "normal":1400000,
+      "high":1900000,
+      "peak":1900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":1761868800000
+  },
+  {
+    "villaName":"The Sakaye ",
+    "stars":5.0,
+    "roomType":"Two Bedroom Villa with Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2400000,
+      "high":3150000,
+      "peak":3150000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Sakaye ",
+    "stars":5.0,
+    "roomType":"Three  Bedroom Villa with Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3300000,
+      "high":4300000,
+      "peak":4300000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Pramana Zahill Kintamani",
+    "stars":5.0,
+    "roomType":"1 Bedroom Private Pool Villa (3 Unit)",
+    "photoLink":2100000,
+    "seasons":{
+      "normal":2400000,
+      "high":2400000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Pramana Zahill Kintamani",
+    "stars":5.0,
+    "roomType":"3 Bedroom Private Pool Villa ( 1 Unit)",
+    "photoLink":3200000,
+    "seasons":{
+      "normal":3500000,
+      "high":3500000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Pramana Natura Nusa Penida",
+    "stars":null,
+    "roomType":"Suite Ocean View (27 Unit)",
+    "photoLink":2300000,
+    "seasons":{
+      "normal":2850000,
+      "high":2850000,
+      "peak":6650000
+    },
+    "extrabed":4750000.0,
+    "honeymoonPackage":null,
+    "contractUntil":700000
+  },
+  {
+    "villaName":"Pramana Natura Nusa Penida",
+    "stars":null,
+    "roomType":"One Bedroom Villa Ocean View ( 3 Unit)",
+    "photoLink":4500000,
+    "seasons":{
+      "normal":5050000,
+      "high":5050000,
+      "peak":8850000
+    },
+    "extrabed":6950000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Pramana Natura Nusa Penida",
+    "stars":null,
+    "roomType":"One Bedroom Royal Pool Villa Ocean View (2 Unit)",
+    "photoLink":7500000,
+    "seasons":{
+      "normal":8050000,
+      "high":8050000,
+      "peak":11850000
+    },
+    "extrabed":9950000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Pramana Giri Kusuma Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Jungle Villa (4 Unit)",
+    "photoLink":2800000,
+    "seasons":{
+      "normal":3250000,
+      "high":3250000,
+      "peak":4550000
+    },
+    "extrabed":4950000.0,
+    "honeymoonPackage":null,
+    "contractUntil":550000
+  },
+  {
+    "villaName":"Pramana Giri Kusuma Ubud",
+    "stars":null,
+    "roomType":"Two Bedroom Jungle Pool (1 Unit)",
+    "photoLink":5500000,
+    "seasons":{
+      "normal":5950000,
+      "high":5950000,
+      "peak":7250000
+    },
+    "extrabed":7650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Beehouse Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Villa ",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/17JIeBk1AzjtK05JF8Iss23_zmz7nyBMc",
+    "seasons":{
+      "normal":3750000,
+      "high":4250000,
+      "peak":4250000
+    },
+    "extrabed":600000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Apr 2025 \u00e2\u20ac\u201c 31 Oct 2025 "
+  },
+  {
+    "villaName":"Beehouse Dijiwa Ubud",
+    "stars":null,
+    "roomType":"Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4100000,
+      "high":4600000,
+      "peak":4600000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Beehouse Dijiwa Ubud",
+    "stars":null,
+    "roomType":"Duplex Private Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4400000,
+      "high":4900000,
+      "peak":4900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Beehouse Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":3750000,
+      "high":4250000,
+      "peak":4250000
+    },
+    "extrabed":600000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Nov 2025 \u00e2\u20ac\u201c 31 Mar 2026"
+  },
+  {
+    "villaName":"Beehouse Dijiwa Ubud",
+    "stars":null,
+    "roomType":"Villa with Private Pool ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4100000,
+      "high":4600000,
+      "peak":4600000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Beehouse Dijiwa Ubud",
+    "stars":null,
+    "roomType":"Duplex Private Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4400000,
+      "high":4900000,
+      "peak":4900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Mathis Retreat Ubud",
+    "stars":null,
+    "roomType":"Deluxe",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1_peT2D882M5ERFStp_2vsjAZOj4IDoxo",
+    "seasons":{
+      "normal":1200000,
+      "high":1800000,
+      "peak":2400000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1772323200000
+  },
+  {
+    "villaName":"Mathis Retreat Ubud",
+    "stars":null,
+    "roomType":"Bungalow",
+    "photoLink":null,
+    "seasons":{
+      "normal":1400000,
+      "high":2000000,
+      "peak":2700000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Mathis Retreat Ubud",
+    "stars":null,
+    "roomType":"Grand Deluxe Rice Field",
+    "photoLink":null,
+    "seasons":{
+      "normal":1500000,
+      "high":2100000,
+      "peak":2900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Mathis Retreat Ubud",
+    "stars":null,
+    "roomType":"Grand Deluxe Connecting",
+    "photoLink":null,
+    "seasons":{
+      "normal":3150000,
+      "high":4300000,
+      "peak":6000000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Mathis Retreat Amed",
+    "stars":null,
+    "roomType":"Deluxe Lodge ",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1YIJoY83XgYVGlvUpBRCLtps6-l2gcMJD",
+    "seasons":{
+      "normal":1700000,
+      "high":2100000,
+      "peak":2900000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1772323200000
+  },
+  {
+    "villaName":"Mathis Retreat Amed",
+    "stars":null,
+    "roomType":"Jacuzzi Lodge ",
+    "photoLink":null,
+    "seasons":{
+      "normal":2100000,
+      "high":2500000,
+      "peak":3400000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Mathis Retreat Amed",
+    "stars":null,
+    "roomType":"Pool Lodge ",
+    "photoLink":null,
+    "seasons":{
+      "normal":3500000,
+      "high":4200000,
+      "peak":5200000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Mathis Retreat Amed",
+    "stars":null,
+    "roomType":"Family Lodge ",
+    "photoLink":null,
+    "seasons":{
+      "normal":2200000,
+      "high":2600000,
+      "peak":3400000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Mathis Retreat Amed",
+    "stars":null,
+    "roomType":"Family Pool Lodge ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4000000,
+      "high":4700000,
+      "peak":5700000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Suite",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1HVQqhdEaSBD8bjU_oUl9jiblUQY9VEp2",
+    "seasons":{
+      "normal":2150000,
+      "high":2650000,
+      "peak":2650000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Apr 2025 \u00e2\u20ac\u201c 31 Oct 2025 "
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Villa Garden View",
+    "photoLink":null,
+    "seasons":{
+      "normal":2550000,
+      "high":3050000,
+      "peak":3050000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Villa Hammock Jungle View",
+    "photoLink":null,
+    "seasons":{
+      "normal":3550000,
+      "high":4050000,
+      "peak":4050000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":4350000,
+      "high":4850000,
+      "peak":4850000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Suite",
+    "photoLink":null,
+    "seasons":{
+      "normal":2150000,
+      "high":2650000,
+      "peak":2650000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Nov 2025 \u00e2\u20ac\u201c 31 Mar 2026"
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Villa Garden View",
+    "photoLink":null,
+    "seasons":{
+      "normal":2550000,
+      "high":3050000,
+      "peak":3050000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Villa Hammock Jungle View",
+    "photoLink":null,
+    "seasons":{
+      "normal":3550000,
+      "high":4050000,
+      "peak":4050000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Ubud",
+    "stars":null,
+    "roomType":"One Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":4350000,
+      "high":4850000,
+      "peak":4850000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Seminyak",
+    "stars":null,
+    "roomType":"One Bedroom Suite",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1tD-vIfD6Xe3V6JfsIQSD1BHEMy6TKhXS",
+    "seasons":{
+      "normal":2150000,
+      "high":2650000,
+      "peak":2650000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Apr 2025 \u00e2\u20ac\u201c 31 Oct 2025 "
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Seminyak",
+    "stars":null,
+    "roomType":"One Bedroom Suite with Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":3050000,
+      "high":3550000,
+      "peak":3550000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Seminyak",
+    "stars":null,
+    "roomType":"Two Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":4850000,
+      "high":5350000,
+      "peak":5350000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Seminyak",
+    "stars":null,
+    "roomType":"One Bedroom Suite",
+    "photoLink":null,
+    "seasons":{
+      "normal":2150000,
+      "high":2650000,
+      "peak":2650000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Nov 2025 \u00e2\u20ac\u201c 31 Mar 2026"
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Seminyak",
+    "stars":null,
+    "roomType":"One Bedroom Suite with Pool",
+    "photoLink":null,
+    "seasons":{
+      "normal":3050000,
+      "high":3550000,
+      "peak":3550000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Dijiwa Seminyak",
+    "stars":null,
+    "roomType":"Two Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":4850000,
+      "high":5350000,
+      "peak":5350000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Village",
+    "stars":null,
+    "roomType":"One Bedroom Private Pool Joglo",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1zKwu-4b5S8p_LO27Vlv2kHXTt_gdLY_I",
+    "seasons":{
+      "normal":4250000,
+      "high":4750000,
+      "peak":4750000
+    },
+    "extrabed":700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Apr 2025 \u00e2\u20ac\u201c 31 Oct 2025 "
+  },
+  {
+    "villaName":"Blue Karma Village",
+    "stars":null,
+    "roomType":"Two Bedroom Suite",
+    "photoLink":null,
+    "seasons":{
+      "normal":5500000,
+      "high":6000000,
+      "peak":6000000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Village",
+    "stars":null,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":11500000,
+      "high":12000000,
+      "peak":12000000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Village",
+    "stars":null,
+    "roomType":"One Bedroom Private Pool Joglo",
+    "photoLink":null,
+    "seasons":{
+      "normal":4250000,
+      "high":4750000,
+      "peak":4750000
+    },
+    "extrabed":700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":"1 Nov 2025 \u00e2\u20ac\u201c 31 Mar 2026"
+  },
+  {
+    "villaName":"Blue Karma Village",
+    "stars":null,
+    "roomType":"Two Bedroom Suite",
+    "photoLink":null,
+    "seasons":{
+      "normal":5500000,
+      "high":6000000,
+      "peak":6000000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Blue Karma Village",
+    "stars":null,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":11500000,
+      "high":12000000,
+      "peak":12000000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Sankara Resort & Spa",
+    "stars":null,
+    "roomType":"One Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":3600000,
+      "high":4000000,
+      "peak":4000000
+    },
+    "extrabed":6000000.0,
+    "honeymoonPackage":null,
+    "contractUntil":450000
+  },
+  {
+    "villaName":"The Sankara Resort & Spa",
+    "stars":null,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4100000,
+      "high":4500000,
+      "peak":4500000
+    },
+    "extrabed":6500000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SUMITRA LUXURY VILLAS A PRAMANA EXPERINCE",
+    "stars":null,
+    "roomType":"Beach Front Luxury  One Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":8500000,
+      "high":9600000,
+      "peak":9820000
+    },
+    "extrabed":9600000.0,
+    "honeymoonPackage":2750000.0,
+    "contractUntil":10200000
+  },
+  {
+    "villaName":"SUMITRA LUXURY VILLAS A PRAMANA EXPERINCE",
+    "stars":null,
+    "roomType":"Beach Front Luxury  Two Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":15100000,
+      "high":16200000,
+      "peak":16420000
+    },
+    "extrabed":16200000.0,
+    "honeymoonPackage":null,
+    "contractUntil":16800000
+  },
+  {
+    "villaName":"The Alena Resort",
+    "stars":null,
+    "roomType":"Classic One Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3325000,
+      "high":3775000,
+      "peak":3775000
+    },
+    "extrabed":5475000.0,
+    "honeymoonPackage":null,
+    "contractUntil":600000
+  },
+  {
+    "villaName":"The Alena Resort",
+    "stars":null,
+    "roomType":"Luxury One Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3975000,
+      "high":4425000,
+      "peak":4425000
+    },
+    "extrabed":6125000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Alena Resort",
+    "stars":null,
+    "roomType":"Royal",
+    "photoLink":null,
+    "seasons":{
+      "normal":12000000,
+      "high":12450000,
+      "peak":12450000
+    },
+    "extrabed":14150000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"KAWI RESORT A PRAMANA EXPERIENCE",
+    "stars":null,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2575000,
+      "high":2975000,
+      "peak":2975000
+    },
+    "extrabed":3525000.0,
+    "honeymoonPackage":500000.0,
+    "contractUntil":3725000
+  },
+  {
+    "villaName":"Thewakanda A Pramana Experience ",
+    "stars":null,
+    "roomType":"One Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4300000,
+      "high":4700000,
+      "peak":4700000
+    },
+    "extrabed":650000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1774915200000
+  },
+  {
+    "villaName":"KUWARASAN A PRAMANA EXPERIENCE ",
+    "stars":null,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":4000000,
+      "high":4500000,
+      "peak":4500000
+    },
+    "extrabed":6900000.0,
+    "honeymoonPackage":650000.0,
+    "contractUntil":7900000
+  },
+  {
+    "villaName":"KUWARASAN A PRAMANA EXPERIENCE ",
+    "stars":null,
+    "roomType":"Presidential Suite ",
+    "photoLink":null,
+    "seasons":{
+      "normal":9000000,
+      "high":9500000,
+      "peak":9500000
+    },
+    "extrabed":11900000.0,
+    "honeymoonPackage":null,
+    "contractUntil":12900000
+  },
+  {
+    "villaName":"SANNA UBUD A PRAMANA EXPERIENCE ",
+    "stars":null,
+    "roomType":"Jungle Terrace Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":5500000,
+      "high":6050000,
+      "peak":6050000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SANNA UBUD A PRAMANA EXPERIENCE ",
+    "stars":null,
+    "roomType":"Jungle Suite Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":5830000,
+      "high":6380000,
+      "peak":6380000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SANNA UBUD A PRAMANA EXPERIENCE ",
+    "stars":null,
+    "roomType":"Buttler Valley Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":7260000,
+      "high":7810000,
+      "peak":7810000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SANNA UBUD A PRAMANA EXPERIENCE ",
+    "stars":null,
+    "roomType":"Two Storey Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":12320000,
+      "high":12870000,
+      "peak":12870000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SWAN PARADISE A PRAMANA EXPERIENCE",
+    "stars":null,
+    "roomType":"One Bedroom Garden Suite -  ( 30 Units) ",
+    "photoLink":null,
+    "seasons":{
+      "normal":2100000,
+      "high":2500000,
+      "peak":2500000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SWAN PARADISE A PRAMANA EXPERIENCE",
+    "stars":null,
+    "roomType":"Two Bedroom Garden Villa \u00e2\u20ac\u201c ( 5 units)  ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SWAN PARADISE A PRAMANA EXPERIENCE",
+    "stars":null,
+    "roomType":"Three Bedroom Garden Villa w\/Pool Access \u00e2\u20ac\u201c ( 14 units )  ",
+    "photoLink":null,
+    "seasons":{
+      "normal":null,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"SWAN PARADISE A PRAMANA EXPERIENCE",
+    "stars":null,
+    "roomType":"Three Bedroom Private Pool Villa - (5 Units) ",
+    "photoLink":null,
+    "seasons":{
+      "normal":6730000,
+      "high":7130000,
+      "peak":7130000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"TAPA TEPI KALI ECHO BEACH CANGGU",
+    "stars":null,
+    "roomType":"One Bedroom Villa (1) ",
+    "photoLink":1525000,
+    "seasons":{
+      "normal":1900000,
+      "high":1900000,
+      "peak":2900000
+    },
+    "extrabed":3700000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"TAPA TEPI KALI ECHO BEACH CANGGU",
+    "stars":null,
+    "roomType":"Two Bedroom Pool Villa (1) ",
+    "photoLink":2675000,
+    "seasons":{
+      "normal":3050000,
+      "high":3050000,
+      "peak":4050000
+    },
+    "extrabed":4850000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"TAPA TEPI KALI ECHO BEACH CANGGU",
+    "stars":null,
+    "roomType":"Three Bedroom Pool Villa  (1)",
+    "photoLink":3725000,
+    "seasons":{
+      "normal":4100000,
+      "high":4100000,
+      "peak":5100000
+    },
+    "extrabed":5900000.0,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Three Brother Villa Legian",
+    "stars":null,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":1850000,
+    "seasons":{
+      "normal":2050000,
+      "high":2250000,
+      "peak":300000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Three Brother Villa Legian",
+    "stars":null,
+    "roomType":"One Bedroom Pool Villa with Jacuzzi",
+    "photoLink":2150000,
+    "seasons":{
+      "normal":2350000,
+      "high":2550000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Three Brother Villa Legian",
+    "stars":null,
+    "roomType":"Two Bedroom Pool Villa",
+    "photoLink":2500000,
+    "seasons":{
+      "normal":2700000,
+      "high":2900000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Three Brother Villa Legian",
+    "stars":null,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":3750000,
+    "seasons":{
+      "normal":3950000,
+      "high":4150000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Nama  Villa",
+    "stars":0.0,
+    "roomType":"Type Room",
+    "photoLink":"Normal Season",
+    "seasons":{
+      "normal":null,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Sithala Villa Seminyak",
+    "stars":null,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":1800000,
+    "seasons":{
+      "normal":2000000,
+      "high":2200000,
+      "peak":450000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Sithala Villa Seminyak",
+    "stars":null,
+    "roomType":"One Bedroom Sweet Pool Villa",
+    "photoLink":2200000,
+    "seasons":{
+      "normal":2400000,
+      "high":2600000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Sithala Villa Seminyak",
+    "stars":null,
+    "roomType":"Two Bedroom Sweet Villa",
+    "photoLink":4200000,
+    "seasons":{
+      "normal":4400000,
+      "high":4600000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Nama  Villa",
+    "stars":0.0,
+    "roomType":"Type Room",
+    "photoLink":"Normal Season",
+    "seasons":{
+      "normal":null,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Bajra Bali Villa Seminyak",
+    "stars":0.0,
+    "roomType":"One Bedroom Mono Pool Villa",
+    "photoLink":1600000,
+    "seasons":{
+      "normal":1800000,
+      "high":2000000,
+      "peak":300000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Bajra Bali Villa Seminyak",
+    "stars":0.0,
+    "roomType":"Two Bedroom Stereo Pool Villa",
+    "photoLink":3100000,
+    "seasons":{
+      "normal":3300000,
+      "high":3500000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Nama  Villa",
+    "stars":0.0,
+    "roomType":"Type Room",
+    "photoLink":"Normal Season",
+    "seasons":{
+      "normal":null,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Bale Gede Luxury Villa Seminyak",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":1900000,
+    "seasons":{
+      "normal":2100000,
+      "high":2300000,
+      "peak":450000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Bale Gede Luxury Villa Seminyak",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa",
+    "photoLink":2800000,
+    "seasons":{
+      "normal":3000000,
+      "high":3200000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Bale Gede Luxury Villa Seminyak",
+    "stars":0.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":3900000,
+    "seasons":{
+      "normal":4100000,
+      "high":4300000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Kubu Sakian Sidemen",
+    "stars":0.0,
+    "roomType":"One Bedroom Villa",
+    "photoLink":1050000,
+    "seasons":{
+      "normal":1250000,
+      "high":1450000,
+      "peak":350000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Canda Villa \nLembongan ",
+    "stars":0.0,
+    "roomType":"One Bedroom Villa",
+    "photoLink":400000,
+    "seasons":{
+      "normal":600000,
+      "high":800000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Canda Villa \nLembongan ",
+    "stars":0.0,
+    "roomType":"Family Villa",
+    "photoLink":550000,
+    "seasons":{
+      "normal":750000,
+      "high":950000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Dikubu Bali Villa and Suites Seminyak ",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":1550000,
+    "seasons":{
+      "normal":1750000,
+      "high":1950000,
+      "peak":550000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Dikubu Bali Villa and Suites Seminyak ",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":2600000,
+    "seasons":{
+      "normal":2800000,
+      "high":3000000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Damarya Villa Canggu ",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":1300000,
+    "seasons":{
+      "normal":1500000,
+      "high":1700000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Kusuma Villa  Seminyak",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1zRrPZA4sFgHPveDGxbIlXfSmQq1BKuCR?usp=drive_link",
+    "seasons":{
+      "normal":1000000,
+      "high":1200000,
+      "peak":1400000
+    },
+    "extrabed":350000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1772323200000
+  },
+  {
+    "villaName":"Kusuma Villa  Seminyak",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1zRrPZA4sFgHPveDGxbIlXfSmQq1BKuCR?usp=drive_link",
+    "seasons":{
+      "normal":1500000,
+      "high":1700000,
+      "peak":1900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Kusuma Villa  Seminyak",
+    "stars":0.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/10Qh096zOkoPIBHjY_6uuDojesLbNQYIq?usp=drive_link",
+    "seasons":{
+      "normal":2500000,
+      "high":2700000,
+      "peak":2900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":1772323200000
+  },
+  {
+    "villaName":"Kusuma Villa  Seminyak",
+    "stars":0.0,
+    "roomType":"Six Bedroom Pool Villa ",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1QMu_konjijksyIvVGZXC0FGw4qQbBqo4?usp=drive_link",
+    "seasons":{
+      "normal":4500000,
+      "high":4700000,
+      "peak":4900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Dewi Canggu",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":900000,
+    "seasons":{
+      "normal":1100000,
+      "high":1300000,
+      "peak":350000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Dewi Canggu",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":1300000,
+    "seasons":{
+      "normal":1500000,
+      "high":1700000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Dewi Canggu",
+    "stars":0.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":2000000,
+    "seasons":{
+      "normal":2200000,
+      "high":2400000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Dewi Eco Bamboo Villa Pinggan-Kintamani ",
+    "stars":0.0,
+    "roomType":"One Bedroom Eco Villa with Hill View ",
+    "photoLink":1750000,
+    "seasons":{
+      "normal":1950000,
+      "high":2150000,
+      "peak":450000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"The Dewi Eco Bamboo Villa Pinggan-Kintamani ",
+    "stars":0.0,
+    "roomType":"One Bedroom Eco Villa with Lake View ",
+    "photoLink":1950000,
+    "seasons":{
+      "normal":2150000,
+      "high":2350000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Asri Sari Ubud",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":850000,
+    "seasons":{
+      "normal":1050000,
+      "high":1250000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Asri Sari Ubud",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa",
+    "photoLink":1600000,
+    "seasons":{
+      "normal":1800000,
+      "high":2000000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Kubal Villa Seminyak ",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":1300000,
+    "seasons":{
+      "normal":1500000,
+      "high":1700000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Kubal Villa Seminyak ",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":1950000,
+    "seasons":{
+      "normal":2150000,
+      "high":2350000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Tiga Pantai Legian ",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":1300000,
+    "seasons":{
+      "normal":1500000,
+      "high":1700000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Tiga Pantai Legian ",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":1800000,
+    "seasons":{
+      "normal":2000000,
+      "high":2200000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Honeybee HUT Lembongan ",
+    "stars":0.0,
+    "roomType":"One Bedroom HUT ",
+    "photoLink":450000,
+    "seasons":{
+      "normal":650000,
+      "high":850000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Starfish Lembongan ",
+    "stars":0.0,
+    "roomType":"One Bedroom Villa",
+    "photoLink":350000,
+    "seasons":{
+      "normal":550000,
+      "high":750000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Cemara Green Hills Sidemen ",
+    "stars":0.0,
+    "roomType":"Deluxe Room ",
+    "photoLink":700000,
+    "seasons":{
+      "normal":900000,
+      "high":1100000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Ayo Hill Villa Sidemen ",
+    "stars":0.0,
+    "roomType":"Deluxe Room ",
+    "photoLink":850000,
+    "seasons":{
+      "normal":1050000,
+      "high":1250000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Unagi Mas Villas by Emana Ubud",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":"https:\/\/www.dropbox.com\/scl\/fo\/odyj6fy80znw4n7r0y1a9\/AK0qfaQYOwcsgUrylCApHKU?rlkey=uvm7tdqndgf4hti65aum9u25r&e=1&st=zatdy0i0&dl=0",
+    "seasons":{
+      "normal":1000000,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":"bookings available until April 30, 2025 , stays until June 30, 2025."
+  },
+  {
+    "villaName":"Unagi Mas Villas by Emana Ubud",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":1500000,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Unagi Mas Villas by Emana Ubud",
+    "stars":0.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3200000,
+      "high":null,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"CROSS BALI BREAKERS RESORT BALANGAN JIMBARAN",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2700000,
+      "high":3295000,
+      "peak":6215000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":"30 SEPT 2025 - INDIA MARKET ONLY"
+  },
+  {
+    "villaName":"CROSS BALI BREAKERS RESORT BALANGAN JIMBARAN",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4050000,
+      "high":4645000,
+      "peak":7565000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"CROSS BALI BREAKERS RESORT BALANGAN JIMBARAN",
+    "stars":0.0,
+    "roomType":"One Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2700000,
+      "high":3295000,
+      "peak":6215000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":1774915200000
+  },
+  {
+    "villaName":"CROSS BALI BREAKERS RESORT BALANGAN JIMBARAN",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa ",
+    "photoLink":null,
+    "seasons":{
+      "normal":4050000,
+      "high":4645000,
+      "peak":7565000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Puri Tempo Doeloe Sanur",
+    "stars":0.0,
+    "roomType":"Two Bedroom Pool Villa",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1TJ_ym0ahYoR42be3etrIrfBw9y_6e12y?usp=drive_link",
+    "seasons":{
+      "normal":2700000,
+      "high":3539000,
+      "peak":4084000
+    },
+    "extrabed":450000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1774915200000
+  },
+  {
+    "villaName":"Puri Tempo Doeloe Sanur",
+    "stars":0.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3500000,
+      "high":4645000,
+      "peak":5359000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Reillo Villa Canggu",
+    "stars":0.0,
+    "roomType":"Three Bedroom Pool Villa",
+    "photoLink":"https:\/\/drive.google.com\/drive\/folders\/1ukEXMq8_fH6ZLzMp3UILLBAY7HugFBKz?usp=drive_link",
+    "seasons":{
+      "normal":5500000,
+      "high":7150000,
+      "peak":8250000
+    },
+    "extrabed":550000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1774915200000
+  },
+  {
+    "villaName":"Reillo Villa Canggu",
+    "stars":0.0,
+    "roomType":"Five Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":11000000,
+      "high":14300000,
+      "peak":17000000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Reillo Villa Canggu",
+    "stars":0.0,
+    "roomType":"Ten Bedroom Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":22000000,
+      "high":27500000,
+      "peak":33000000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"THE CLUB VILLAS SEMINYAK",
+    "stars":0.0,
+    "roomType":"One Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2160000,
+      "high":2410000,
+      "peak":2560000
+    },
+    "extrabed":300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1774915200000
+  },
+  {
+    "villaName":"THE CLUB VILLAS SEMINYAK",
+    "stars":0.0,
+    "roomType":"One Bedroom Honeymoon Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2400000,
+      "high":2650000,
+      "peak":2800000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"THE CLUB VILLAS SEMINYAK",
+    "stars":0.0,
+    "roomType":"Two Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3000000,
+      "high":3250000,
+      "peak":3400000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"LEMBONGAN BEACH CLUB & RESORT",
+    "stars":0.0,
+    "roomType":"One Bedroom Garden Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2166000,
+      "high":2416000,
+      "peak":2566000
+    },
+    "extrabed":300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1774915200000
+  },
+  {
+    "villaName":"LEMBONGAN BEACH CLUB & RESORT",
+    "stars":0.0,
+    "roomType":"One Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2394000,
+      "high":2644000,
+      "peak":2794000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"LEMBONGAN BEACH CLUB & RESORT",
+    "stars":0.0,
+    "roomType":"One Bedroom Premiere Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2622000,
+      "high":2872000,
+      "peak":3022000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"LEMBONGAN BEACH CLUB & RESORT",
+    "stars":0.0,
+    "roomType":"One Bedroom Grand Premier Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2850000,
+      "high":3100000,
+      "peak":3250000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"LEMBONGAN BEACH CLUB & RESORT",
+    "stars":0.0,
+    "roomType":"Two Bedroom Premier Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":4332000,
+      "high":4582000,
+      "peak":4732000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"KANAKA VILLAS UBUD",
+    "stars":0.0,
+    "roomType":"One Bedroom Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":1500000,
+      "high":1750000,
+      "peak":1900000
+    },
+    "extrabed":300000.0,
+    "honeymoonPackage":null,
+    "contractUntil":1774915200000
+  },
+  {
+    "villaName":"KANAKA VILLAS UBUD",
+    "stars":0.0,
+    "roomType":"Two Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":2500000,
+      "high":2750000,
+      "peak":2900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"KANAKA VILLAS UBUD",
+    "stars":0.0,
+    "roomType":"Three Bedroom Private Pool Villa",
+    "photoLink":null,
+    "seasons":{
+      "normal":3500000,
+      "high":3750000,
+      "peak":3900000
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Candy Villa Ubud",
+    "stars":0.0,
+    "roomType":"One Bedroom Private Pool",
+    "photoLink":1331000,
+    "seasons":{
+      "normal":1631000,
+      "high":1631000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Candy Villa Ubud",
+    "stars":0.0,
+    "roomType":"Wooden One Bedroom Private Pool",
+    "photoLink":1485000,
+    "seasons":{
+      "normal":1785000,
+      "high":1785000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Candy Villa Ubud",
+    "stars":0.0,
+    "roomType":"Joglo One Bedroom Private Pool",
+    "photoLink":1650000,
+    "seasons":{
+      "normal":1950000,
+      "high":1950000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Candy Villa Ubud",
+    "stars":0.0,
+    "roomType":"Two Bedroom Private Pool",
+    "photoLink":2365000,
+    "seasons":{
+      "normal":2665000,
+      "high":2665000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Candy Villa Ubud",
+    "stars":0.0,
+    "roomType":"Three Bedroom Private Pool",
+    "photoLink":2882000,
+    "seasons":{
+      "normal":3182000,
+      "high":3182000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Tri Dewi Residence Ubud",
+    "stars":0.0,
+    "roomType":"One Bedroom Triangle",
+    "photoLink":891000,
+    "seasons":{
+      "normal":1091000,
+      "high":1091000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  },
+  {
+    "villaName":"Tri Dewi Residence Ubud",
+    "stars":0.0,
+    "roomType":"Two Bedrooms Private Pool ",
+    "photoLink":1890000,
+    "seasons":{
+      "normal":2090000,
+      "high":2090000,
+      "peak":null
+    },
+    "extrabed":null,
+    "honeymoonPackage":null,
+    "contractUntil":null
+  }
+]

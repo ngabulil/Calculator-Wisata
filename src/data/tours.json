@@ -1,0 +1,974 @@
+[
+  {
+    "name": "Alas Harum",
+    "foreign": {
+      "adult": 40000,
+      "child": 40000
+    },
+    "domestic": {
+      "adult": 40000,
+      "child": 40000
+    },
+    "note": ""
+  },
+  {
+    "name": "Alas Kedaton",
+    "foreign": {
+      "adult": 50000,
+      "child": 30000
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": 20000
+    },
+    "note": ""
+  },
+  {
+    "name": "Aling-aling waterfall",
+    "foreign": {
+      "adult": 30000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Bajra Sandhi Monument",
+    "foreign": {
+      "adult": 100000,
+      "child": 50000
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": 25000
+    },
+    "note": ""
+  },
+  {
+    "name": "Banyumala Waterfall",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 20000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Barong & Kris Dance",
+    "foreign": {
+      "adult": 150000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 75000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Batuan Temple",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Batubulan Art Village",
+    "foreign": {
+      "adult": null,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Batukaru Temple",
+    "foreign": {
+      "adult": 40000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 40000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Batur Natural Hot Spring",
+    "foreign": {
+      "adult": 90000,
+      "child": 50000
+    },
+    "domestic": {
+      "adult": 60000,
+      "child": 30000
+    },
+    "note": "anak 4-10 tahun"
+  },
+  {
+    "name": "Besakih",
+    "foreign": {
+      "adult": 150000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 150000,
+      "child": null
+    },
+    "note": "1x shuttle"
+  },
+  {
+    "name": "Blooms Garden",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 20000,
+      "child": 10000
+    },
+    "note": ""
+  },
+  {
+    "name": "Big Garden Corner",
+    "foreign": {
+      "adult": 150000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 70000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Candi Gunung Kawi",
+    "foreign": {
+      "adult": 50000,
+      "child": 25000
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": 15000
+    },
+    "note": ""
+  },
+  {
+    "name": "Cepung Waterfall",
+    "foreign": {
+      "adult": 30000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 15000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Coffee Club Bali",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Dtukad River Club",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Foto Adat Bali (Bale Kulkul)",
+    "foreign": {
+      "adult": 300000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Foto Adat Bali (Bale Kulkul)",
+    "foreign": {
+      "adult": null,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Garuda Wisnu Kencana (GWK)",
+    "foreign": {
+      "adult": 100000,
+      "child": 100000
+    },
+    "domestic": {
+      "adult": 100000,
+      "child": 100000
+    },
+    "note": ""
+  },
+  {
+    "name": "Git Git Waterfall",
+    "foreign": {
+      "adult": 45000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 45000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Goa Gajah",
+    "foreign": {
+      "adult": 75000,
+      "child": 50000
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": 15000
+    },
+    "note": ""
+  },
+  {
+    "name": "Goa Lawah",
+    "foreign": {
+      "adult": 50000,
+      "child": 25000
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": 20000
+    },
+    "note": "anak usia 5-10 tahun"
+  },
+  {
+    "name": "Gunung Kawi",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "GWK + Lunch Beranda Resto",
+    "foreign": {
+      "adult": 200000,
+      "child": 200000
+    },
+    "domestic": {
+      "adult": 200000,
+      "child": 200000
+    },
+    "note": ""
+  },
+  {
+    "name": "Handara Gate",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Happy Swing",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Jatiluwih Rice Terrace",
+    "foreign": {
+      "adult": 75000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 75000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Jeep dari Lempuyang ke Lahangan",
+    "foreign": {
+      "adult": 500000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 500000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Kecak Karang Boma (Senin Rabu Jumat Sabtu)",
+    "foreign": {
+      "adult": 150000,
+      "child": 75000
+    },
+    "domestic": {
+      "adult": 150000,
+      "child": 75000
+    },
+    "note": ""
+  },
+  {
+    "name": "Kecak Uluwatu (Selasa Kamis Minggu)",
+    "foreign": {
+      "adult": 150000,
+      "child": 75000
+    },
+    "domestic": {
+      "adult": 150000,
+      "child": 75000
+    },
+    "note": ""
+  },
+  {
+    "name": "Kecak Melasti",
+    "foreign": {
+      "adult": 150000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 150000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Kedisan Pier",
+    "foreign": {
+      "adult": 15000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 15000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Keraban Langit",
+    "foreign": {
+      "adult": 270000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Kerta Gosa",
+    "foreign": {
+      "adult": 50000,
+      "child": 25000
+    },
+    "domestic": {
+      "adult": 25000,
+      "child": 15000
+    },
+    "note": "anak usia 5-10 tahun"
+  },
+  {
+    "name": "Kintamani /batur Volkano",
+    "foreign": {
+      "adult": 50000,
+      "child": 25000
+    },
+    "domestic": {
+      "adult": 20000,
+      "child": 10000
+    },
+    "note": ""
+  },
+  {
+    "name": "Lahangan Sweet + Jeep",
+    "foreign": {
+      "adult": 100000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 100000,
+      "child": null
+    },
+    "note": "anak usia 10 tahun kebawah"
+  },
+  {
+    "name": "Lake - Lake Waterfall",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 35000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Lempuyang",
+    "foreign": {
+      "adult": 120000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 120000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Melasti Beach",
+    "foreign": {
+      "adult": 15000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 8000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Monkey Forest Ubud",
+    "foreign": {
+      "adult": 120000,
+      "child": 100000
+    },
+    "domestic": {
+      "adult": 100000,
+      "child": 80000
+    },
+    "note": ""
+  },
+  {
+    "name": "Maha Kencana Lempuyang (Spot Foto)",
+    "foreign": {
+      "adult": 25000,
+      "child": 25000
+    },
+    "domestic": {
+      "adult": 20000,
+      "child": 20000
+    },
+    "note": ""
+  },
+  {
+    "name": "Nusa Dua Beach",
+    "foreign": {
+      "adult": 15000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 10000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Pantai Dreamland",
+    "foreign": {
+      "adult": 10000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 10000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Pantai Jerman",
+    "foreign": {
+      "adult": 10000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 10000,
+      "child": null
+    },
+    "note": "sudah iclude parkir"
+  },
+  {
+    "name": "Pantai Pandawa  & Tanah Barak",
+    "foreign": {
+      "adult": 15000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 8000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Pantai Suluban",
+    "foreign": {
+      "adult": 30000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Pantai Gunung Payung",
+    "foreign": {
+      "adult": 20000,
+      "child": 10000
+    },
+    "domestic": {
+      "adult": 10000,
+      "child": 5000
+    },
+    "note": ""
+  },
+  {
+    "name": "Penglipuran",
+    "foreign": {
+      "adult": 50000,
+      "child": 30000
+    },
+    "domestic": {
+      "adult": 25000,
+      "child": 15000
+    },
+    "note": ""
+  },
+  {
+    "name": "Pod Chocolate Factory",
+    "foreign": {
+      "adult": null,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Pondanu",
+    "foreign": {
+      "adult": 25000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 25000,
+      "child": null
+    },
+    "note": "Tiket Masuk saja"
+  },
+  {
+    "name": "Pura Batuan",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Sangeh",
+    "foreign": {
+      "adult": 75000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Saraswati Temple",
+    "foreign": {
+      "adult": 75000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Sari Timbul 1",
+    "foreign": {
+      "adult": 100000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Sari Timbul 2",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Secret Garden Village",
+    "foreign": {
+      "adult": 70000,
+      "child": 50000
+    },
+    "domestic": {
+      "adult": 35000,
+      "child": 25000
+    },
+    "note": ""
+  },
+  {
+    "name": "Shuttle GWK",
+    "foreign": {
+      "adult": 40000,
+      "child": 40000
+    },
+    "domestic": {
+      "adult": 40000,
+      "child": 40000
+    },
+    "note": ""
+  },
+  {
+    "name": "Shuttle Tanah Barak",
+    "foreign": {
+      "adult": 30000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Taman Ayun",
+    "foreign": {
+      "adult": 30000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 15000,
+      "child": 10000
+    },
+    "note": ""
+  },
+  {
+    "name": "Taman Dedari",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": 50000
+    },
+    "note": "Include Welcome Drink"
+  },
+  {
+    "name": "Taman Ujung",
+    "foreign": {
+      "adult": 100000,
+      "child": 75000
+    },
+    "domestic": {
+      "adult": 35000,
+      "child": 30000
+    },
+    "note": "anak usia 5-12 tahun"
+  },
+  {
+    "name": "Tanah Barak",
+    "foreign": {
+      "adult": 15000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 8000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Taman Nasional Bali Barat",
+    "foreign": {
+      "adult": 250000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Tanah Lot",
+    "foreign": {
+      "adult": 75000,
+      "child": 50000
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": 20000
+    },
+    "note": "anak usia 6-12 tahun"
+  },
+  {
+    "name": "Tegalalang Rice Terrace",
+    "foreign": {
+      "adult": 40000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 40000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Tegenungan Waterfall",
+    "foreign": {
+      "adult": 30000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Tiket Tol",
+    "foreign": {
+      "adult": 15000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 15000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Tirta Empul Tampak Siring",
+    "foreign": {
+      "adult": 75000,
+      "child": 50000
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": 30000
+    },
+    "note": "anak usia 5-11 tahun"
+  },
+  {
+    "name": "Tirta Gangga",
+    "foreign": {
+      "adult": 90000,
+      "child": 45000
+    },
+    "domestic": {
+      "adult": 45000,
+      "child": 25000
+    },
+    "note": "anak usia 5-12 tahun"
+  },
+  {
+    "name": "Ubud Palace",
+    "foreign": {
+      "adult": null,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Ulundanu Temple",
+    "foreign": {
+      "adult": 75000,
+      "child": 50000
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": 30000
+    },
+    "note": "anak usia 5-10 tahun"
+  },
+  {
+    "name": "Uluwatu",
+    "foreign": {
+      "adult": 50000,
+      "child": 30000
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": 20000
+    },
+    "note": "anak usia 6-12 tahun"
+  },
+  {
+    "name": "Virgin Beach",
+    "foreign": {
+      "adult": 20000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 10000,
+      "child": null
+    },
+    "note": "sudah include parkir"
+  },
+  {
+    "name": "Wanagiri",
+    "foreign": {
+      "adult": 75000,
+      "child": 45000
+    },
+    "domestic": {
+      "adult": 75000,
+      "child": 45000
+    },
+    "note": ""
+  },
+  {
+    "name": "Gitgit Waterfall",
+    "foreign": {
+      "adult": 45000,
+      "child": 45000
+    },
+    "domestic": {
+      "adult": 15000,
+      "child": 15000
+    },
+    "note": "Sudah include parkir"
+  },
+  {
+    "name": "Pantai Suluban",
+    "foreign": {
+      "adult": 30000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 15000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Rumah Gemuk Bali",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 50000,
+      "child": 50000
+    },
+    "note": ""
+  },
+  {
+    "name": "Kanto Lampo",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": 30000,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Fast Boat Wijaya Padang Bai - GILI",
+    "foreign": {
+      "adult": 250000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  },
+  {
+    "name": "Leke leke",
+    "foreign": {
+      "adult": 50000,
+      "child": null
+    },
+    "domestic": {
+      "adult": null,
+      "child": null
+    },
+    "note": ""
+  }
+]
