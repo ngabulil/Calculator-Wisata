@@ -4,11 +4,48 @@ import AkomodasiPage from "./pages/AkomodasiPage";
 import CheckoutPage from "./pages/CheckoutPage"; // <- jika sudah punya
 import Layout from "./components/Layout";
 import TransportPage from "./pages/TransportPage";
+// admin 
+import LayoutAdmin from "./components/Admin/Layout"; 
+import AdminPage from "./pages/admin/AdminPage"; 
+import AdminTourPackagesPage from "./pages/admin/AdminTourPackages";
+import AdminTransportPage from "./pages/admin/AdminTransportPage";
+import AdminAcomodationPage from "./pages/admin/AdminAkomodasiPage";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/calculator" />} />
+      <Route
+        path="/admin"
+        element={
+          <LayoutAdmin>
+            <AdminPage />
+          </LayoutAdmin>
+        }
+      />
+      <Route
+        path="/admin/tour-packages"
+        element={
+          <LayoutAdmin>
+            <AdminTourPackagesPage />
+          </LayoutAdmin>
+        }/>
+      <Route
+        path="/admin/transport"
+        element={
+          <LayoutAdmin>
+            <AdminTransportPage />
+          </LayoutAdmin>
+        }/>
+      <Route
+        path="/admin/acomodation"
+        element={
+          <LayoutAdmin>
+            <AdminAcomodationPage />
+          </LayoutAdmin>
+        }/>
+
+
       <Route
         path="/calculator"
         element={
