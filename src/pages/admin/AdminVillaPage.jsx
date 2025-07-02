@@ -9,10 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
-import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
+import VillaCard from "../../components/Admin/Villa/VillaCard/VillaCard";
+import VillaForm from "../../components/Admin/Villa/VillaForm/VillaForm";
+import villas from "../../data/villas.json";
 
-const AdminPage = () => {
+const AdminVillaPage = () => {
   const [formActive, setFormActive] = useState(false);
 
   return (
@@ -24,12 +25,21 @@ const AdminPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <PackageFormPage />
+          <VillaForm />
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
-            {Array.from({ length: 8 }).map((_, index) => {
-              return <PackageCard key={index} />;
-            })}
+            {villas.map((villa, index) => (
+              <VillaCard
+                key={index}
+                photoLink={`https://picsum.photos/1${index + 10}/300`}
+                name={villa.villaName}
+                stars={villa.stars}
+                honeymoonPackage={villa.honeymoonPackage}
+                seasons={villa.seasons}
+                roomType={villa.roomType}
+                contractUntil={villa.contractUntil}
+              />
+            ))}
           </Flex>
         )}
       </Flex>
@@ -37,4 +47,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default AdminVillaPage;

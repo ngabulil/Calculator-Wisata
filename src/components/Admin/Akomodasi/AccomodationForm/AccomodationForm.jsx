@@ -17,22 +17,36 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
-import MobilCard from "../../../../components/Transport/MobilCard";
-import InfoCard from "../../../../components/Transport/InfoCard";
-import { useTransportContext } from "../../../../context/TransportContext";
+import HotelCard from "../../../Akomodasi/HotelCard";
+import VillaCard from "../../../Akomodasi/VillaCard";
+import InfoCard from "../../../Akomodasi/InfoCard";
+import { useAkomodasiContext } from "../../../../context/AkomodasiContext";
 import { useCheckoutContext } from "../../../../context/CheckoutContext";
 
-const TransportForm = () => {
+const AccomodationForm = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { getMobils, getAdditionalMobil, days, setDays } =
-    useTransportContext();
-  const { setTransportTotal } = useCheckoutContext();
+  const { getHotels, getVillas, getAdditional, days, setDays } =
+    useAkomodasiContext();
+  const { setAkomodasiTotal } = useCheckoutContext();
 
-  const hitungTotalMobil = (mobils) =>
-    mobils.reduce((total, m) => {
-      const harga = m.harga || 0;
-      const jumlah = m.jumlah || 1;
-      return total + harga * jumlah;
+  const hitungTotalHotel = (hotels) =>
+    hotels.reduce((total, h) => {
+      const kamar = h.jumlahKamar || 0;
+      const harga = h.hargaPerKamar || 0;
+      const extrabed = h.useExtrabed
+        ? (h.jumlahExtrabed || 0) * (h.hargaExtrabed || 0)
+        : 0;
+      return total + kamar * harga + extrabed;
+    }, 0);
+
+  const hitungTotalVilla = (villas) =>
+    villas.reduce((total, v) => {
+      const kamar = v.jumlahKamar || 0;
+      const harga = v.hargaPerKamar || 0;
+      const extrabed = v.useExtrabed
+        ? (v.jumlahExtrabed || 0) * (v.hargaExtrabed || 0)
+        : 0;
+      return total + kamar * harga + extrabed;
     }, 0);
 
   const hitungTotalAdditional = (additional) =>
@@ -47,7 +61,8 @@ const TransportForm = () => {
       {
         id: prev.length + 1,
         description: "",
-        mobils: [],
+        hotels: [],
+        villas: [],
         additionalInfo: [],
         markup: { type: "percent", value: 0 },
       },
@@ -69,8 +84,9 @@ const TransportForm = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await getMobils();
-      await getAdditionalMobil();
+      await getHotels();
+      await getVillas();
+      await getAdditional();
     };
     fetchData();
   }, []);
@@ -78,7 +94,8 @@ const TransportForm = () => {
   useEffect(() => {
     const total = days.reduce((sum, day) => {
       const subtotal =
-        hitungTotalMobil(day.mobils) +
+        hitungTotalHotel(day.hotels) +
+        hitungTotalVilla(day.villas) +
         hitungTotalAdditional(day.additionalInfo);
 
       const markup = day.markup || { type: "percent", value: 0 };
@@ -90,14 +107,14 @@ const TransportForm = () => {
       return sum + subtotal + markupAmount;
     }, 0);
 
-    setTransportTotal(total);
+    setAkomodasiTotal(total);
   }, [days]);
 
   return (
-    <Container maxW="7xl" py={6} px={0}>
-      <Box rounded="lg" boxShadow="lg" color={textColor}>
+    <Container maxW="7xl" py={6}>
+      <Box bg={cardBg} rounded="lg" p={6} boxShadow="lg" color={textColor}>
         <Text fontSize="xl" fontWeight="bold" mb={4}>
-          Transportasi
+          Akomodasi
         </Text>
 
         <Tabs
@@ -149,7 +166,7 @@ const TransportForm = () => {
                     _placeholder={{ color: "gray.400" }}
                   />
 
-                  {/* Mobil Section */}
+                  {/* Hotel dan Villa */}
                   <Box
                     border="1px solid"
                     borderColor="gray.600"
@@ -157,23 +174,23 @@ const TransportForm = () => {
                     rounded="md"
                   >
                     <Text fontSize="xl" fontWeight="bold" mb={2}>
-                      Mobil
+                      Hotel / Villa
                     </Text>
 
                     <VStack spacing={2} align="stretch">
-                      {day.mobils.map((mobil, i) => (
-                        <MobilCard
+                      {day.hotels.map((hotel, i) => (
+                        <HotelCard
                           key={i}
                           index={i}
-                          data={mobil}
-                          onChange={(newMobil) => {
+                          data={hotel}
+                          onChange={(newHotel) => {
                             const updated = [...days];
-                            updated[index].mobils[i] = newMobil;
+                            updated[index].hotels[i] = newHotel;
                             setDays(updated);
                           }}
                           onDelete={() => {
                             const updated = [...days];
-                            updated[index].mobils.splice(i, 1);
+                            updated[index].hotels.splice(i, 1);
                             setDays(updated);
                           }}
                         />
@@ -183,16 +200,45 @@ const TransportForm = () => {
                         colorScheme="teal"
                         onClick={() => {
                           const updated = [...days];
-                          updated[index].mobils.push({});
+                          updated[index].hotels.push({});
                           setDays(updated);
                         }}
                       >
-                        Tambah Mobil
+                        Tambah Hotel
+                      </Button>
+
+                      {day.villas.map((villa, i) => (
+                        <VillaCard
+                          key={i}
+                          index={i}
+                          data={villa}
+                          onChange={(newVilla) => {
+                            const updated = [...days];
+                            updated[index].villas[i] = newVilla;
+                            setDays(updated);
+                          }}
+                          onDelete={() => {
+                            const updated = [...days];
+                            updated[index].villas.splice(i, 1);
+                            setDays(updated);
+                          }}
+                        />
+                      ))}
+                      <Button
+                        variant="outline"
+                        colorScheme="purple"
+                        onClick={() => {
+                          const updated = [...days];
+                          updated[index].villas.push({});
+                          setDays(updated);
+                        }}
+                      >
+                        Tambah Villa
                       </Button>
                     </VStack>
                   </Box>
 
-                  {/* Additional Info */}
+                  {/* Additional */}
                   <Box
                     border="1px solid"
                     borderColor="gray.600"
@@ -235,103 +281,17 @@ const TransportForm = () => {
                     </VStack>
                   </Box>
 
-                  {/* Markup Section */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
-                    p={4}
-                    rounded="md"
-                  >
-                    <Text fontWeight="bold" mb={2}>
-                      Markup
-                    </Text>
-                    <HStack spacing={4}>
-                      <Box w="30%">
-                        <select
-                          value={day.markup?.type || "percent"}
-                          onChange={(e) => {
-                            const updated = [...days];
-                            if (!updated[index].markup) {
-                              updated[index].markup = {
-                                type: "percent",
-                                value: 0,
-                              };
-                            }
-                            updated[index].markup.type = e.target.value;
-                            setDays(updated);
-                          }}
-                          style={{
-                            width: "100%",
-                            padding: "8px",
-                            backgroundColor: "#2D3748",
-                            color: "white",
-                            border: "1px solid #4A5568",
-                            borderRadius: "6px",
-                          }}
-                        >
-                          <option value="percent">Percent</option>
-                          <option value="amount">Amount</option>
-                        </select>
-                      </Box>
-                      <Box w="70%">
-                        <input
-                          value={day.markup?.value ?? ""}
-                          onChange={(e) => {
-                            const updated = [...days];
-                            if (!updated[index].markup) {
-                              updated[index].markup = {
-                                type: "percent",
-                                value: 0,
-                              };
-                            }
-                            updated[index].markup.value = Number(
-                              e.target.value
-                            );
-                            setDays(updated);
-                          }}
-                          placeholder="Masukkan nilai markup"
-                          style={{
-                            width: "100%",
-                            padding: "8px",
-                            backgroundColor: "#2D3748",
-                            color: "white",
-                            border: "1px solid #4A5568",
-                            borderRadius: "6px",
-                          }}
-                        />
-                      </Box>
-                    </HStack>
-
-                    <Box mt={3}>
-                      <Text fontSize="sm" color="green.300">
-                        Jumlah markup: Rp{" "}
-                        {(() => {
-                          const subtotal =
-                            hitungTotalMobil(day.mobils) +
-                            hitungTotalAdditional(day.additionalInfo);
-                          const markup = day.markup || {
-                            type: "percent",
-                            value: 0,
-                          };
-                          const markupAmount =
-                            markup.type === "amount"
-                              ? markup.value
-                              : (markup.value / 100) * subtotal;
-                          return Math.round(markupAmount).toLocaleString(
-                            "id-ID"
-                          );
-                        })()}
-                      </Text>
-                    </Box>
-                  </Box>
+                  {/* Markup */}
                 </VStack>
               </TabPanel>
             ))}
           </TabPanels>
         </Tabs>
       </Box>
+
+      {/* TOTAL */}
     </Container>
   );
 };
 
-export default TransportForm;
+export default AccomodationForm;

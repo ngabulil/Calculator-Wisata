@@ -1,34 +1,38 @@
-import { Box, 
-  
-    Link,
-    Menu,
-    MenuButton,
-    MenuList,
-    MenuItem,
-    Button,
- } from "@chakra-ui/react";
+import {
+  Box,
+  Link,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
+  Button,
+  VStack,
+} from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
+const SubNavbarPackage = () => {
+  return (
+    <Popover placement="bottom-start" trigger="hover" isLazy>
+      <PopoverTrigger>
+        <Button rightIcon={<ChevronDownIcon />} variant="ghost" p="2">
+          Packages
+        </Button>
+      </PopoverTrigger>
 
-
-const SubNavbarPackage  = () => {
-    return(
-
-        <Box>
-            <Menu>
-                <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                    Packages
-                </MenuButton>
-                <MenuList>
-                    <MenuItem as={Link} href="/packages/hotel">Hotel</MenuItem>
-                    <MenuItem as={Link} href="/packages/villa">Villa</MenuItem>
-                    <MenuItem as={Link} href="/packages/additional">Additional</MenuItem>
-                </MenuList>
-            </Menu>
-        </Box>
-       
-    );
-    
-}
+      <PopoverContent width="200px" p={0}>
+        <PopoverArrow />
+        <PopoverBody>
+          <VStack align="start" spacing={2}>
+            <Link href="/admin">Package</Link>
+            <Link href="/admin/packages/hotel">Hotel</Link>
+            <Link href="/admin/packages/villa">Villa</Link>
+            <Link href="/admin/packages/additional">Additional</Link>
+          </VStack>
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 export default SubNavbarPackage;

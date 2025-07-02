@@ -9,10 +9,11 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
-import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
+import HotelCard from "../../components/Admin/Hotel/HotelCard/HotelCard";
+import HotelForm from "../../components/Admin/Hotel/HotelForm/HotelForm";
+import hotels from "../../data/hotels.json";
 
-const AdminPage = () => {
+const AdminHotelPage = () => {
   const [formActive, setFormActive] = useState(false);
 
   return (
@@ -24,12 +25,20 @@ const AdminPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <PackageFormPage />
+          <HotelForm />
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
-            {Array.from({ length: 8 }).map((_, index) => {
-              return <PackageCard key={index} />;
-            })}
+            {hotels.map((hotel, index) => (
+              <HotelCard
+                key={index}
+                photoLink={`https://picsum.photos/id/2${index}/200/300`}
+                name={hotel.hotelName}
+                stars={hotel.stars}
+                seasons={hotel.seasons}
+                roomType={hotel.roomType}
+                contractUntil={hotel.contractUntil}
+              />
+            ))}
           </Flex>
         )}
       </Flex>
@@ -37,4 +46,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default AdminHotelPage;

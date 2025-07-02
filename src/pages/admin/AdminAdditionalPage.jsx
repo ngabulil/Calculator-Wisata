@@ -9,10 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
-import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
 
-const AdminPage = () => {
+const AdminAdditionalPage = () => {
   const [formActive, setFormActive] = useState(false);
 
   return (
@@ -24,12 +22,13 @@ const AdminPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <PackageFormPage />
+          //   <PackageFormPage />
+          <p>Additional FORM</p>
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
-            {Array.from({ length: 8 }).map((_, index) => {
-              return <PackageCard key={index} />;
-            })}
+            {/* {Array.from({ length: 8 }).map((_, index) => {
+                return <PackageCard key={index} />;
+              })} */}
           </Flex>
         )}
       </Flex>
@@ -37,4 +36,4 @@ const AdminPage = () => {
   );
 };
 
-export default AdminPage;
+export default AdminAdditionalPage;
