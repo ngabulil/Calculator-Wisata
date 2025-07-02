@@ -6,8 +6,11 @@ import {
   Input,
   Text,
   VStack,
+  Button,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useAdminHotelContext } from "../../../../context/Admin/AdminHotelContext";
 
 const predefinedStars = [
   { label: "1", value: 1 },
@@ -18,11 +21,14 @@ const predefinedStars = [
 ];
 
 const HotelForm = () => {
+  const location = useLocation();
+  const { hotelData } = useAdminHotelContext();
+  const [editFormActive, setEditFormActive] = useState(false);
   const [stars, setStars] = useState(1);
   const [contractUntil, setContractUntil] = useState("");
-  const [extraBed, setExtraBed] = useState("false");
-
-  // Harga untuk masing-masing musim
+  const [extraBed, setExtraBed] = useState(false);
+  const [hotelName, setHotelName] = useState("");
+  const [roomType, setRoomType] = useState("");
   const [seasonPrices, setSeasonPrices] = useState({
     normal: "",
     high: "",
@@ -36,15 +42,89 @@ const HotelForm = () => {
     }));
   };
 
+  const handleHotelSetValue = () => {
+    setHotelName(hotelData.hotelName || "");
+    setStars(hotelData.stars || 1);
+    setRoomType(hotelData.roomType || "");
+    setSeasonPrices({
+      normal: hotelData.seasons?.normal || "",
+      high: hotelData.seasons?.high || "",
+      peak: hotelData.seasons?.peak || "",
+    });
+    setExtraBed(hotelData.extraBed ? "true" : "false");
+    setContractUntil(hotelData.contractUntil || "");
+  };
+
+  const handleHotelCreate = () => {
+    const data = {
+      hotelName: hotelName,
+      stars: stars,
+      roomType: roomType,
+      seasons: {
+        normal: seasonPrices.normal,
+        high: seasonPrices.high,
+        peak: seasonPrices.peak,
+      },
+
+      extraBed: extraBed,
+      contractUntil: contractUntil,
+    };
+    console.log(data);
+  };
+
+  const handleHotelUpdate = () => {
+    const data = {
+      hotelName: hotelName,
+      stars: stars,
+      roomType: roomType,
+      seasons: {
+        normal: seasonPrices.normal,
+        high: seasonPrices.high,
+        peak: seasonPrices.peak,
+      },
+
+      extraBed: extraBed,
+      contractUntil: contractUntil,
+    };
+  };
+
+  useEffect(() => {
+    if (location.pathname.includes("edit")) {
+      setEditFormActive(true);
+      handleHotelSetValue();
+    }
+  }, [location.pathname, hotelData]);
+
   return (
-    <Container maxW="5xl" py={10}>
+    <Container
+      maxW="5xl"
+      p={6}
+      bg={"gray.700"}
+      rounded={"12px"}
+      display={"flex"}
+      flexDirection={"column"}
+      gap={2}
+    >
+      <Text fontSize="24px" fontWeight={"bold"}>
+        Buat Hotel
+      </Text>
       <Box mb={4}>
         <FormLabel>Hotel Name</FormLabel>
         <Input
           placeholder="Contoh: Hotel Bintang Bali"
-          value={"HotelName"}
+          value={hotelName}
           onChange={(e) => {
-            console.log(e.target.value);
+            setHotelName(e.target.value);
+          }}
+        />
+      </Box>
+      <Box mb={4}>
+        <FormLabel>Room Type</FormLabel>
+        <Input
+          placeholder="Contoh: Livio Suite"
+          value={roomType}
+          onChange={(e) => {
+            setRoomType(e.target.value);
           }}
         />
       </Box>
@@ -123,6 +203,13 @@ const HotelForm = () => {
           <option value="false">No</option>
         </Select>
       </Box>
+      <Button
+        w={"full"}
+        bg={"blue.500"}
+        onClick={editFormActive ? handleHotelUpdate : handleHotelCreate}
+      >
+        {editFormActive ? "Update Hotel" : "Create Hotel"}
+      </Button>
     </Container>
   );
 };

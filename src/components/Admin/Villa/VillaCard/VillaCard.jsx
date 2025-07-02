@@ -7,7 +7,7 @@ const VillaCard = (props) => {
     <Flex
       direction="column"
       gap={3}
-      w="20%"
+      w="30%"
       flexGrow="1"
       bg="gray.800"
       p="15px"
@@ -66,7 +66,7 @@ const VillaInfoCard = (props) => {
             w={"full"}
             fontSize={"10px"}
           >
-            <Text w={"50%"} fontSize="12px" fontWeight="bold">
+            <Text w={"60%"} fontSize="14px" fontWeight="bold">
               {props.name}
             </Text>
             <Flex>
@@ -113,13 +113,13 @@ const VillaInfoCard = (props) => {
             w={"full"}
           >
             <Text
-              fontSize={"10px"}
+              fontSize={"12px"}
               fontWeight="bold"
               textTransform="capitalize"
             >
               {season}
             </Text>
-            <Text fontSize={"9px"} color="gray.300">
+            <Text fontSize={"11px"} color="gray.300">
               Rp {price}
             </Text>
           </Flex>

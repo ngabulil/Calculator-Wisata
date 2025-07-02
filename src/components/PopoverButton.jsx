@@ -18,7 +18,6 @@ export const PopoverButton = (props) => {
         <Icon icon={"mage:dots"} className="text-white text-[20px]" />
       </PopoverTrigger>
       <PopoverContent w={"100%"}>
-        <PopoverHeader>Settings</PopoverHeader>
         <PopoverBody onClick={props.onEditButton}>Edit</PopoverBody>
         <PopoverBody onClick={props.onDeleteButton}>Delete</PopoverBody>
       </PopoverContent>

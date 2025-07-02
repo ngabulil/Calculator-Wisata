@@ -1,8 +1,10 @@
 import { Flex, Text, Box, VStack } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { PopoverButton } from "../../../PopoverButton";
+import { useNavigate } from "react-router-dom";
 
 const HotelCard = (props) => {
+  const navigate = useNavigate();
   return (
     <Flex
       direction="column"
@@ -22,7 +24,13 @@ const HotelCard = (props) => {
         <Text fontSize="18px" noOfLines={3} fontWeight="semibold">
           Hotel
         </Text>
-        <PopoverButton onEditButton={() => {}} onDeleteButton={() => {}} />
+        <PopoverButton
+          onEditButton={() => {
+            navigate(`/admin/packages/hotel/edit`);
+            props.onEditButton();
+          }}
+          onDeleteButton={() => {}}
+        />
       </Flex>
 
       <Flex direction="column" gap={2}>

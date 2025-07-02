@@ -28,6 +28,8 @@ const VillaForm = () => {
     peak: "",
   });
 
+  const [honeymoonPackagePrice, setHoneymoonPackagePrice] = useState("");
+
   const handleSeasonPriceChange = (season, value) => {
     setSeasonPrices((prev) => ({
       ...prev,
@@ -38,10 +40,10 @@ const VillaForm = () => {
   return (
     <Container maxW="5xl" py={10}>
       <Box mb={4}>
-        <FormLabel>Hotel Name</FormLabel>
+        <FormLabel>Villa Name</FormLabel>
         <Input
-          placeholder="Contoh: Hotel Bintang Bali"
-          value={"HotelName"}
+          placeholder="Contoh: Villa Bintang Bali"
+          value={"Villa"}
           onChange={(e) => {
             console.log(e.target.value);
           }}
@@ -104,6 +106,16 @@ const VillaForm = () => {
             />
           </Box>
         </VStack>
+      </Box>
+
+      <Box mb={4}>
+        <FormLabel>Honeymoon Package Price</FormLabel>
+        <Input
+          type="number"
+          placeholder="e.g. 1500000"
+          value={honeymoonPackagePrice}
+          onChange={(e) => setHoneymoonPackagePrice(e.target.value)}
+        />
       </Box>
 
       <Box mb={4}>

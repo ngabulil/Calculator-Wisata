@@ -9,6 +9,7 @@ import "./styles/global.css";
 import AkomodasiContextProvider from "./context/AkomodasiContext";
 import CheckoutContextProvider from "./context/CheckoutContext";
 import TransportContextProvider from "./context/TransportContext";
+import AdminProviderContext from "./context/Admin/AdminProviderContext";
 const config = {
   initialColorMode: "dark", // dark default
   useSystemColorMode: false,
@@ -22,9 +23,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <CheckoutContextProvider>
         <AkomodasiContextProvider>
           <TransportContextProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <AdminProviderContext>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </AdminProviderContext>
           </TransportContextProvider>
         </AkomodasiContextProvider>
       </CheckoutContextProvider>

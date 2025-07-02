@@ -7,7 +7,7 @@ import {
   Textarea,
   Input,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import VillaCard from "../../components/Admin/Villa/VillaCard/VillaCard";
 import VillaForm from "../../components/Admin/Villa/VillaForm/VillaForm";
@@ -19,9 +19,37 @@ const AdminVillaPage = () => {
   return (
     <Container maxW="container.xl" p={0} borderRadius="lg">
       <Flex direction={"column"} gap="12px">
-        <Flex direction={"row"} justifyContent={"flex-end"} w="full" gap={2}>
+        <Flex
+          direction={"row"}
+          justifyContent={formActive ? "flex-end" : "space-between"}
+          w="full"
+          gap={2}
+        >
+          {!formActive && (
+            <Box display={"flex"} gap={2}>
+              <Input
+                placeholder="Search Villa"
+                value={""}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                }}
+              />
+
+              <Button
+                bg={"gray.700"}
+                onClick={() => setFormActive(!formActive)}
+              >
+                Search
+              </Button>
+            </Box>
+          )}
           <Button bg={"blue.500"} onClick={() => setFormActive(!formActive)}>
-            <AddIcon pr={"5px"} /> {formActive ? "Back" : "Create"}
+            {formActive ? (
+              <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
+            ) : (
+              <AddIcon pr={"5px"} />
+            )}{" "}
+            {formActive ? "Back" : "Create"}
           </Button>
         </Flex>
         {formActive ? (

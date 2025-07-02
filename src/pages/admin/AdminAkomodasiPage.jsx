@@ -1,6 +1,6 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex, Input } from "@chakra-ui/react";
 import { useState } from "react";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import AccomodationCard from "../../components/Admin/Akomodasi/AccomodationCard/AccomodationCard";
 import AccomodationForm from "../../components/Admin/Akomodasi/AccomodationForm/AccomodationForm";
 
@@ -9,9 +9,37 @@ const AdminAccomodationPage = () => {
   return (
     <Box>
       <Flex direction={"column"} gap={4}>
-        <Flex direction={"row"} w={"full"} justifyContent={"flex-end"} gap={2}>
+        <Flex
+          direction={"row"}
+          justifyContent={formActive ? "flex-end" : "space-between"}
+          w="full"
+          gap={2}
+        >
+          {!formActive && (
+            <Box display={"flex"} gap={2}>
+              <Input
+                placeholder="Search Packages"
+                value={""}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                }}
+              />
+
+              <Button
+                bg={"gray.700"}
+                onClick={() => setFormActive(!formActive)}
+              >
+                Search
+              </Button>
+            </Box>
+          )}
           <Button bg={"blue.500"} onClick={() => setFormActive(!formActive)}>
-            <AddIcon pr={"5px"} /> {formActive ? "Back" : "Create"}
+            {formActive ? (
+              <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
+            ) : (
+              <AddIcon pr={"5px"} />
+            )}{" "}
+            {formActive ? "Back" : "Create"}
           </Button>
         </Flex>
         {formActive ? (
