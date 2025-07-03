@@ -15,6 +15,7 @@ import villasJson from "../../data/villas.json";
 import { useAdminVillaContext } from "../../context/Admin/AdminVillaContext";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import SearchBar from "../../components/searchBar";
 
 const ITEMS_PER_PAGE = 6;
 
@@ -35,7 +36,7 @@ const AdminVillaPage = () => {
     setRecentVillas(villasJson);
   };
 
-  const filteredVillas = (value) => {
+  const handleVillaSearch = (value) => {
     if (value.toLowerCase() == "") {
       setVillas(recentVillas);
     } else {
@@ -52,7 +53,7 @@ const AdminVillaPage = () => {
 
   const offset = currentPage * ITEMS_PER_PAGE;
   const currentVillas = villas.slice(offset, offset + ITEMS_PER_PAGE);
-  const pageCount = Math.ceil(filteredVillas.length / ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(villas.length / ITEMS_PER_PAGE);
 
   useEffect(() => {
     handleGetVillas();
@@ -68,14 +69,12 @@ const AdminVillaPage = () => {
           gap={2}
         >
           {!formActive && (
-            <Box display={"flex"} gap={2}>
-              <Input
-                placeholder="Search Villa"
-                onChange={(e) => {
-                  filteredVillas(e.target.value);
-                }}
-              />
-            </Box>
+            <SearchBar
+              placeholder="Search Villa"
+              onChange={(e) => {
+                handleVillaSearch(e.target.value);
+              }}
+            />
           )}
           <Button
             bg={"blue.500"}

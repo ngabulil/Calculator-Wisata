@@ -7,6 +7,7 @@ import hotelsJson from "../../data/hotels.json";
 import { useAdminHotelContext } from "../../context/Admin/AdminHotelContext";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import SearchBar from "../../components/searchBar";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -60,15 +61,12 @@ const AdminHotelPage = () => {
           gap={2}
         >
           {!formActive && (
-            <Box display={"flex"} gap={2}>
-              <Input
-                placeholder="Search Hotel"
-                value={""}
-                onChange={(e) => {
-                  handleSearchHotels(e.target.value);
-                }}
-              />
-            </Box>
+            <SearchBar
+              placeholder="Search Hotel"
+              onChange={(e) => {
+                handleSearchHotels(e.target.value);
+              }}
+            />
           )}
           <Button
             bg={"blue.500"}

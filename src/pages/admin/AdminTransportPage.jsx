@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import TransportCard from "../../components/Admin/Transport/TransportCard/TransportCard";
 import TransportForm from "../../components/Admin/Transport/TransportForm/TransportForm";
+import SearchBar from "../../components/searchBar";
 
 const AdminTourPackagesPage = () => {
   const [formActive, setFormActive] = useState(false);
@@ -16,15 +17,13 @@ const AdminTourPackagesPage = () => {
           gap={2}
         >
           {!formActive && (
-            <Box display={"flex"} gap={2}>
-              <Input
-                placeholder="Search Packages"
-                value={""}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                }}
-              />
-            </Box>
+            <SearchBar
+              placeholder="Search Packages"
+              value={""}
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
+            />
           )}
           <Button bg={"blue.500"} onClick={() => setFormActive(!formActive)}>
             {formActive ? (

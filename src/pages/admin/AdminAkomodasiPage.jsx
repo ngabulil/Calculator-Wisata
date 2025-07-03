@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import AccomodationCard from "../../components/Admin/Akomodasi/AccomodationCard/AccomodationCard";
 import AccomodationForm from "../../components/Admin/Akomodasi/AccomodationForm/AccomodationForm";
+import SearchBar from "../../components/searchBar";
 
 const AdminAccomodationPage = () => {
   const [formActive, setFormActive] = useState(false);
@@ -16,15 +17,13 @@ const AdminAccomodationPage = () => {
           gap={2}
         >
           {!formActive && (
-            <Box display={"flex"} gap={2}>
-              <Input
-                placeholder="Search Packages"
-                value={""}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                }}
-              />
-            </Box>
+            <SearchBar
+              placeholder="Search Packages"
+              value={""}
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
+            />
           )}
           <Button bg={"blue.500"} onClick={() => setFormActive(!formActive)}>
             {formActive ? (

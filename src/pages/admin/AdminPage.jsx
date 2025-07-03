@@ -12,6 +12,7 @@ import { useState } from "react";
 import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
 import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
 import PackageRead from "../../components/Admin/packages/PackageRead/PackageRead";
+import SearchBar from "../../components/searchBar";
 
 const AdminPage = () => {
   const [formActive, setFormActive] = useState(false);
@@ -27,15 +28,13 @@ const AdminPage = () => {
           gap={2}
         >
           {!formActive && (
-            <Box display={"flex"} gap={2}>
-              <Input
-                placeholder="Search Packages"
-                value={""}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                }}
-              />
-            </Box>
+            <SearchBar
+              placeholder="Search Packages"
+              value={""}
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
+            />
           )}
           <Button
             bg={"blue.500"}
