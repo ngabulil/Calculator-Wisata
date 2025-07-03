@@ -2,9 +2,12 @@ import { Flex, Text, Box, VStack } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { PopoverButton } from "../../../PopoverButton";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import formatRupiah from "../../../../utils/rupiahFormat";
 
 const HotelCard = (props) => {
   const navigate = useNavigate();
+
   return (
     <Flex
       direction="column"
@@ -12,41 +15,39 @@ const HotelCard = (props) => {
       w="20%"
       flexGrow="1"
       bg="gray.800"
-      p="15px"
       rounded="12px"
     >
-      <Flex
-        direction="row"
-        alignItems="center"
-        w="full"
-        justifyContent="space-between"
-      >
-        <Text fontSize="18px" noOfLines={3} fontWeight="semibold">
-          Hotel
-        </Text>
-        <PopoverButton
-          onEditButton={() => {
-            navigate(`/admin/packages/hotel/edit`);
-            props.onEditButton();
-          }}
-          onDeleteButton={() => {}}
-        />
-      </Flex>
-
-      <Flex direction="column" gap={2}>
-        <Box>
+      <Flex direction="column" h={"full"} gap={2}>
+        <Box w={"full"} h={"full"} position={"relative"}>
           <img
             src={props.photoLink}
             alt="hotel-photos"
-            className="object-cover w-full h-[200px] rounded-[8px] "
+            className="object-cover w-full h-[200px] rounded-t-[8px] relative "
           />
+          <Flex
+            direction="row"
+            alignItems="center"
+            w="full"
+            justifyContent="flex-end"
+            position={"absolute"}
+            top={1}
+            right={1}
+          >
+            <PopoverButton
+              onEditButton={() => {
+                navigate(`/admin/packages/hotel/edit`);
+                props.onEditButton();
+              }}
+              onDeleteButton={() => {}}
+            />
+          </Flex>
         </Box>
         <HotelInfoCard
           name={props.name}
           stars={props.stars}
           roomType={props.roomType}
           contractUntil={props.contractUntil}
-          extraBed={props.extrabed}
+          extraBed={props.extraBed}
           seasons={props.seasons}
         />
       </Flex>
@@ -55,45 +56,55 @@ const HotelCard = (props) => {
 };
 
 const HotelInfoCard = (props) => {
+  const [seasonPrice, setSeasonPrice] = useState(props.seasons.normal);
   return (
     <Flex
       direction="column"
-      gap={2}
+      gap={3}
+      p={"14px"}
       alignItems="start"
       w="full"
-      bg="gray.900"
-      rounded="12px"
-      p="10px"
+      h={"full"}
+      shadow={"xl"}
+      justifyContent={"space-between"}
     >
-      <Flex alignItems={"center"} gap={2} w={"full"}>
-        <Icon
-          icon="mdi:hotel"
-          className="text-white text-[38px] rounded-full p-[8px] border-1 border-white"
-        />
-        <Flex direction={"column"} w={"full"}>
-          <Text fontSize="12px" fontWeight="bold">
-            {props.name}
-          </Text>
-          <Flex
-            direction={"row"}
-            justifyContent={"space-between"}
-            w={"full"}
-            fontSize={"10px"}
+      <Flex direction={"column"} w={"full"} gap={1}>
+        {props.extraBed && (
+          <Text
+            bg={"gray.600"}
+            py={1}
+            px={3}
+            rounded={"full"}
+            w={"max"}
+            fontSize="10px"
           >
-            <Text> {props.roomType} </Text>
-            <Flex>
-              {Array.from({ length: parseInt(props.stars) }, (_, i) => {
-                return (
-                  <Icon
-                    key={i}
-                    icon="mdi:star"
-                    className="text-yellow-400 text-[14px]"
-                  />
-                );
-              })}
-            </Flex>
+            Extra Bed
+          </Text>
+        )}
+
+        <Flex
+          direction={"row"}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          w={"full"}
+          fontSize={"20px"}
+          fontWeight="bold"
+        >
+          <Text>{props.name} </Text>
+          <Flex>
+            {Array.from({ length: parseInt(props.stars) }, (_, i) => {
+              return (
+                <Icon
+                  key={i}
+                  icon="mdi:star"
+                  color="orange"
+                  className="text-[14px]"
+                />
+              );
+            })}
           </Flex>
         </Flex>
+        <Text fontSize="12px">{props.roomType}</Text>
       </Flex>
 
       <Flex
@@ -102,12 +113,13 @@ const HotelInfoCard = (props) => {
         gap={1}
         fontSize="10px"
         color="gray.300"
-      ></Flex>
-      <Text fontSize="10px">
-        Extra Bed: {props.extraBed ? "Available" : "Not Available"}
-      </Text>
-      <Text fontSize="10px">Contract Until: {props.contractUntil}</Text>
-      <Flex direction={"column"} alignItems="stretch" gap={2} w={"full"}>
+      >
+        {props.contractUntil && (
+          <Text alignSelf={"end"} fontSize="10px">
+            {props.contractUntil}
+          </Text>
+        )}
+        {/* <Flex direction={"column"} alignItems="stretch" gap={2} w={"full"}>
         {Object.entries(props.seasons).map(([season, price]) => (
           <Flex
             key={season}
@@ -130,8 +142,47 @@ const HotelInfoCard = (props) => {
             </Text>
           </Flex>
         ))}
+      </Flex> */}
+        <Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
+          <SeasonSelect
+            seasons={props.seasons}
+            onChange={(price) => setSeasonPrice(price)}
+          />
+          <Text fontSize={18} fontWeight={"bold"}>
+            {formatRupiah(
+              seasonPrice + (props.extraBed && parseInt(props.extraBed))
+            )}
+          </Text>
+        </Flex>
       </Flex>
     </Flex>
+  );
+};
+
+const SeasonSelect = (props) => {
+  const [select, setSelect] = useState(0);
+
+  return (
+    <div className="flex items-center text-white text-[12px] gap-[6px] flex-shrink">
+      {Object.entries(props.seasons).map(([season, price], index) => {
+        return (
+          <p
+            style={{
+              background: index == select ? "white" : "black",
+              color: index == select ? "black" : "white",
+              fontWeight: "bold",
+            }}
+            className="w-[25px] h-[25px] flex text-[10px] items-center justify-center bg-black rounded-full leading-none cursor-pointer"
+            onClick={() => {
+              setSelect(index);
+              props.onChange(price);
+            }}
+          >
+            {season.charAt(0).toUpperCase()}
+          </p>
+        );
+      })}
+    </div>
   );
 };
 

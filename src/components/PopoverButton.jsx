@@ -15,7 +15,14 @@ export const PopoverButton = (props) => {
   return (
     <Popover placement="bottom-end">
       <PopoverTrigger>
-        <Icon icon={"mage:dots"} className="text-white text-[20px]" />
+        <Icon
+          icon={"mage:dots"}
+          className="text-white text-[24px] p-[4px] cursor-pointer "
+          style={{
+            background: "#1A202C",
+            borderRadius: "6px",
+          }}
+        />
       </PopoverTrigger>
       <PopoverContent w={"100%"}>
         {props.isOpenButton && (

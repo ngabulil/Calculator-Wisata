@@ -94,7 +94,15 @@ const TransportForm = () => {
   }, [days]);
 
   return (
-    <Container maxW="7xl" py={6} px={0}>
+    <Container
+      maxW="7xl"
+      p={6}
+      bg={"gray.800"}
+      rounded={"12px"}
+      display={"flex"}
+      flexDirection={"column"}
+      gap={2}
+    >
       <Box rounded="lg" boxShadow="lg" color={textColor}>
         <Text fontSize="xl" fontWeight="bold" mb={4}>
           Transportasi
@@ -241,6 +249,11 @@ const TransportForm = () => {
             ))}
           </TabPanels>
         </Tabs>
+      </Box>
+      <Box w={"full"}>
+        <Button w={"full"} colorScheme="blue">
+          Simpan Paket Tour
+        </Button>
       </Box>
     </Container>
   );

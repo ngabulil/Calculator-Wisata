@@ -100,6 +100,7 @@ const AdminHotelPage = () => {
                   stars={hotel.stars}
                   seasons={hotel.seasons}
                   roomType={hotel.roomType}
+                  extraBed={hotel.extrabed}
                   contractUntil={hotel.contractUntil}
                   onEditButton={() => {
                     updateHotelData(hotel);

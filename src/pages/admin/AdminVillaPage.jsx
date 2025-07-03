@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import SearchBar from "../../components/searchBar";
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 8;
 
 const AdminVillaPage = () => {
   const [formActive, setFormActive] = useState(false);
@@ -102,10 +102,11 @@ const AdminVillaPage = () => {
             {currentVillas.map((villa, index) => (
               <VillaCard
                 key={index}
-                photoLink={`https://picsum.photos/1${index + 10}/300`}
+                photoLink={`https://picsum.photos/2${index + 6}1/300`}
                 name={villa.villaName}
                 stars={villa.stars}
                 honeymoonPackage={villa.honeymoonPackage}
+                extraBed={villa.extrabed}
                 seasons={villa.seasons}
                 roomType={villa.roomType}
                 contractUntil={villa.contractUntil}
