@@ -1,6 +1,12 @@
 // components/Navbar.jsx
-import { Box, Flex, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Box, Flex, Text, Link as ChakraLink } from "@chakra-ui/react";
+import { NavLink } from "react-router-dom";
+
+const linkStyle = ({ isActive }) => ({
+  fontWeight: isActive ? "bold" : "normal",
+  borderBottom: isActive ? "2px solid white" : "none",
+  paddingBottom: "2px",
+});
 
 const Navbar = () => {
   return (
@@ -8,10 +14,21 @@ const Navbar = () => {
       <Flex align="center" justify="space-between">
         <Text fontWeight="bold">Calculator Wisata</Text>
         <Flex gap={6}>
-          <Link to="/calculator">Akomodasi</Link>
-          <Link to="/tour-packages">Tour Packages</Link>
-          <Link to="/transport">Transport</Link>
-          <Link to="/checkout">Checkout</Link>
+          <NavLink to="/calculator" style={linkStyle}>
+            Akomodasi
+          </NavLink>
+          <NavLink to="/tour-packages" style={linkStyle}>
+            Tour Packages
+          </NavLink>
+          <NavLink to="/transport" style={linkStyle}>
+            Transport
+          </NavLink>
+          <NavLink to="/checkout" style={linkStyle}>
+            Checkout
+          </NavLink>
+          <NavLink to="/admin" style={linkStyle}>
+            Admin
+          </NavLink>
         </Flex>
       </Flex>
     </Box>

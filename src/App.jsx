@@ -46,7 +46,7 @@ function App() {
   return (
     <Routes>
       {/* Redirect from root to calculator */}
-      <Route path="/" element={<Navigate to="/calculator" />} />
+      <Route path="/" element={<Navigate to="/admin" />} />
 
       {/* Admin Routes */}
       {adminRoutes.map(({ path, element }) => (

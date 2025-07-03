@@ -1,7 +1,13 @@
 // components/Navbar.jsx
 import { Box, Flex, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import SubNavbarPackage from "../Admin/packages/SubNavbarPackage/SubNavbarPackage";
+
+const linkStyle = ({ isActive }) => ({
+  fontWeight: isActive ? "bold" : "normal",
+  borderBottom: isActive ? "2px solid white" : "none",
+  paddingBottom: "2px",
+});
 
 const Navbar = () => {
   return (
@@ -10,9 +16,18 @@ const Navbar = () => {
         <Text fontWeight="bold">Admin</Text>
         <Flex gap={6} alignItems="center">
           <SubNavbarPackage />
-          <Link to="/admin/tour-packages">Tour Packages</Link>
-          <Link to="/admin/transport">Transport</Link>
-          <Link to="/admin/acomodation">Akomodasi</Link>
+          <NavLink to="/admin/tour-packages" style={linkStyle}>
+            Tour Packages
+          </NavLink>
+          <NavLink to="/admin/transport" style={linkStyle}>
+            Transport
+          </NavLink>
+          <NavLink to="/admin/acomodation" style={linkStyle}>
+            Akomodasi
+          </NavLink>
+          <NavLink to="/calculator" style={linkStyle}>
+            Calculator
+          </NavLink>
         </Flex>
       </Flex>
     </Box>
