@@ -25,6 +25,7 @@ const HotelForm = () => {
   const { hotelData } = useAdminHotelContext();
   const [editFormActive, setEditFormActive] = useState(false);
   const [stars, setStars] = useState(1);
+  const [photoLink, setPhotoLink] = useState("");
   const [contractUntil, setContractUntil] = useState("");
   const [extraBed, setExtraBed] = useState(false);
   const [hotelName, setHotelName] = useState("");
@@ -53,12 +54,14 @@ const HotelForm = () => {
     });
     setExtraBed(hotelData.extraBed ? "true" : "false");
     setContractUntil(hotelData.contractUntil || "");
+    setPhotoLink(hotelData.photoLink || "");
   };
 
   const handleHotelCreate = () => {
     const data = {
       hotelName: hotelName,
       stars: stars,
+      photoLink: photoLink,
       roomType: roomType,
       seasons: {
         normal: seasonPrices.normal,
@@ -77,6 +80,7 @@ const HotelForm = () => {
       hotelName: hotelName,
       stars: stars,
       roomType: roomType,
+      photoLink: photoLink,
       seasons: {
         normal: seasonPrices.normal,
         high: seasonPrices.high,
@@ -86,6 +90,8 @@ const HotelForm = () => {
       extraBed: extraBed,
       contractUntil: contractUntil,
     };
+
+    console.log(data);
   };
 
   useEffect(() => {
@@ -106,7 +112,7 @@ const HotelForm = () => {
       gap={2}
     >
       <Text fontSize="24px" fontWeight={"bold"}>
-        Buat Hotel
+        {editFormActive ? "Edit Hotel" : "Create Hotel"}
       </Text>
       <Box mb={4}>
         <FormLabel>Hotel Name</FormLabel>
@@ -123,6 +129,16 @@ const HotelForm = () => {
         <Input
           placeholder="Contoh: Livio Suite"
           value={roomType}
+          onChange={(e) => {
+            setRoomType(e.target.value);
+          }}
+        />
+      </Box>
+      <Box mb={4}>
+        <FormLabel>Link Hotel Photos</FormLabel>
+        <Input
+          placeholder="Contoh: https://picsum.photos/id/237/200/300 "
+          value={photoLink}
           onChange={(e) => {
             setRoomType(e.target.value);
           }}

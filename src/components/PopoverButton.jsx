@@ -18,8 +18,12 @@ export const PopoverButton = (props) => {
         <Icon icon={"mage:dots"} className="text-white text-[20px]" />
       </PopoverTrigger>
       <PopoverContent w={"100%"}>
-        <PopoverBody onClick={props.onEditButton}>Edit</PopoverBody>
-        <PopoverBody onClick={props.onDeleteButton}>Delete</PopoverBody>
+        <PopoverBody className="cursor-pointer" onClick={props.onEditButton}>
+          Edit
+        </PopoverBody>
+        <PopoverBody className="cursor-pointer" onClick={props.onDeleteButton}>
+          Delete
+        </PopoverBody>
       </PopoverContent>
     </Popover>
   );

@@ -8,13 +8,55 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VillaCard from "../../components/Admin/Villa/VillaCard/VillaCard";
 import VillaForm from "../../components/Admin/Villa/VillaForm/VillaForm";
-import villas from "../../data/villas.json";
+import villasJson from "../../data/villas.json";
+import { useAdminVillaContext } from "../../context/Admin/AdminVillaContext";
+import { useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+
+const ITEMS_PER_PAGE = 6;
 
 const AdminVillaPage = () => {
   const [formActive, setFormActive] = useState(false);
+  const { updateVillaData } = useAdminVillaContext();
+  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [villas, setVillas] = useState([]);
+  const [recentVillas, setRecentVillas] = useState([]);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
+  const handleGetVillas = () => {
+    setVillas(villasJson);
+    setRecentVillas(villasJson);
+  };
+
+  const filteredVillas = (value) => {
+    if (value.toLowerCase() == "") {
+      setVillas(recentVillas);
+    } else {
+      const villaFiltered = villas.filter((villa) => {
+        const query = value.toLowerCase();
+        return (
+          villa.villaName.toLowerCase().includes(query) ||
+          villa.roomType.toLowerCase().includes(query)
+        );
+      });
+      setVillas(villaFiltered);
+    }
+  };
+
+  const offset = currentPage * ITEMS_PER_PAGE;
+  const currentVillas = villas.slice(offset, offset + ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(filteredVillas.length / ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    handleGetVillas();
+  }, []);
 
   return (
     <Container maxW="container.xl" p={0} borderRadius="lg">
@@ -29,21 +71,22 @@ const AdminVillaPage = () => {
             <Box display={"flex"} gap={2}>
               <Input
                 placeholder="Search Villa"
-                value={""}
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  filteredVillas(e.target.value);
                 }}
               />
-
-              <Button
-                bg={"gray.700"}
-                onClick={() => setFormActive(!formActive)}
-              >
-                Search
-              </Button>
             </Box>
           )}
-          <Button bg={"blue.500"} onClick={() => setFormActive(!formActive)}>
+          <Button
+            bg={"blue.500"}
+            onClick={() => {
+              setFormActive(!formActive);
+              if (formActive) {
+                updateVillaData(null);
+                navigate("/admin/packages/villa");
+              }
+            }}
+          >
             {formActive ? (
               <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
             ) : (
@@ -52,11 +95,12 @@ const AdminVillaPage = () => {
             {formActive ? "Back" : "Create"}
           </Button>
         </Flex>
+
         {formActive ? (
           <VillaForm />
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
-            {villas.map((villa, index) => (
+            {currentVillas.map((villa, index) => (
               <VillaCard
                 key={index}
                 photoLink={`https://picsum.photos/1${index + 10}/300`}
@@ -66,9 +110,28 @@ const AdminVillaPage = () => {
                 seasons={villa.seasons}
                 roomType={villa.roomType}
                 contractUntil={villa.contractUntil}
+                onEditButton={() => {
+                  updateVillaData(villa);
+                  setFormActive(true);
+                }}
               />
             ))}
           </Flex>
+        )}
+
+        {!formActive && (
+          <Box mt={6} display="flex" justifyContent="center">
+            <ReactPaginate
+              pageCount={pageCount}
+              onPageChange={handlePageChange}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={1}
+              previousLabel="<"
+              nextLabel=">"
+              breakLabel="..."
+              containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none"
+            />
+          </Box>
         )}
       </Flex>
     </Container>

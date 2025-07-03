@@ -16,7 +16,7 @@ import {
 } from "../../services/akomodasiService";
 import { MainSelectCreatableWithDelete } from "../MainSelect";
 
-const InfoCard = ({ index, onDelete, data, onChange }) => {
+const InfoCard = ({ index, onDelete, data, onChange, isAdmin }) => {
   const { additional, setAdditional } = useAkomodasiContext();
 
   const infoOptions = useMemo(
@@ -115,21 +115,23 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
         </Box>
 
         {/* Harga */}
-        <Box w="25%">
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Harga
-          </Text>
-          <Input
-            value={harga}
-            onChange={(e) => setHarga(Number(e.target.value))}
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
+        {!isAdmin && (
+          <Box w="25%">
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Harga
+            </Text>
+            <Input
+              value={harga}
+              onChange={(e) => setHarga(Number(e.target.value))}
+              bg={inputBg}
+              color={textColor}
+              borderColor={borderColor}
+            />
+          </Box>
+        )}
 
         {/* Jumlah */}
-        <Box w="25%">
+        <Box w={isAdmin ? "50%" : "25%"}>
           <Text mb={1} fontSize="sm" color="gray.300">
             Jumlah
           </Text>
@@ -144,11 +146,13 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
       </HStack>
 
       {/* Total */}
-      <Box mt={2}>
-        <Text fontWeight="semibold" color="green.300">
-          Total Harga: Rp {total.toLocaleString("id-ID")}
-        </Text>
-      </Box>
+      {!isAdmin && (
+        <Box mt={2}>
+          <Text fontWeight="semibold" color="green.300">
+            Total Harga: Rp {total.toLocaleString("id-ID")}
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

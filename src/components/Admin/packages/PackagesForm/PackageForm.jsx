@@ -28,13 +28,21 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import HotelCard from "../../../Akomodasi/HotelCard";
 import VillaCard from "../../../Akomodasi/VillaCard";
 import InfoCard from "../../../Akomodasi/InfoCard";
+import MobilCard from "../../../Transport/MobilCard";
 import { useAkomodasiContext } from "../../../../context/AkomodasiContext";
 import { useCheckoutContext } from "../../../../context/CheckoutContext";
+import { useTransportContext } from "../../../../context/TransportContext";
 
 const PackageCreateForm = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const { getHotels, getVillas, getAdditional, days, setDays } =
     useAkomodasiContext();
+  const {
+    getMobils,
+    getAdditionalMobil,
+    days: transportDays,
+    setDays: setTransportDays,
+  } = useTransportContext();
   const { setAkomodasiTotal } = useCheckoutContext();
 
   const hitungTotalHotel = (hotels) =>
@@ -72,6 +80,7 @@ const PackageCreateForm = () => {
         hotels: [],
         villas: [],
         additionalInfo: [],
+        mobils: [],
         markup: { type: "percent", value: 0 },
       },
     ]);
@@ -95,6 +104,8 @@ const PackageCreateForm = () => {
       await getHotels();
       await getVillas();
       await getAdditional();
+      await getMobils();
+      await getAdditionalMobil();
     };
     fetchData();
   }, []);
@@ -120,7 +131,7 @@ const PackageCreateForm = () => {
 
   return (
     <Container maxW="7xl" py={2} px={0}>
-      <Box bg={cardBg} rounded="lg"  color={textColor}>
+      <Box bg={cardBg} rounded="lg" color={textColor}>
         <Tabs
           index={activeIndex}
           onChange={setActiveIndex}
@@ -185,6 +196,7 @@ const PackageCreateForm = () => {
                       {day.hotels.map((hotel, i) => (
                         <HotelCard
                           key={i}
+                          isAdmin={true}
                           index={i}
                           data={hotel}
                           onChange={(newHotel) => {
@@ -213,6 +225,7 @@ const PackageCreateForm = () => {
 
                       {day.villas.map((villa, i) => (
                         <VillaCard
+                          isAdmin={true}
                           key={i}
                           index={i}
                           data={villa}
@@ -242,50 +255,6 @@ const PackageCreateForm = () => {
                     </VStack>
                   </Box>
 
-                  {/* Additional */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
-                    p={4}
-                    rounded="md"
-                  >
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                      Additional Info
-                    </Text>
-
-                    <VStack spacing={2} align="stretch">
-                      {day.additionalInfo.map((info, i) => (
-                        <InfoCard
-                          key={i}
-                          index={i}
-                          data={info}
-                          onChange={(newInfo) => {
-                            const updated = [...days];
-                            updated[index].additionalInfo[i] = newInfo;
-                            setDays(updated);
-                          }}
-                          onDelete={() => {
-                            const updated = [...days];
-                            updated[index].additionalInfo.splice(i, 1);
-                            setDays(updated);
-                          }}
-                        />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="orange"
-                        onClick={() => {
-                          const updated = [...days];
-                          updated[index].additionalInfo.push({});
-                          setDays(updated);
-                        }}
-                      >
-                        Tambah Info
-                      </Button>
-                    </VStack>
-                  </Box>
-
-
                   {/* Tambah tour packages  */}
                   <Box
                     border="1px solid"
@@ -300,6 +269,7 @@ const PackageCreateForm = () => {
                     <VStack spacing={2} align="stretch">
                       {day.additionalInfo.map((info, i) => (
                         <InfoCard
+                          isAdmin={true}
                           key={i}
                           index={i}
                           data={info}
@@ -341,8 +311,54 @@ const PackageCreateForm = () => {
                     </Text>
 
                     <VStack spacing={2} align="stretch">
+                      {transportDays[0].mobils.map((mobil, i) => (
+                        <MobilCard
+                          isAdmin={true}
+                          key={i}
+                          index={i}
+                          data={mobil}
+                          onChange={(newMobil) => {
+                            const updated = [...transportDays];
+                            updated[0].mobils[i] = newMobil;
+
+                            setTransportDays(updated);
+                          }}
+                          onDelete={() => {
+                            const updated = [...transportDays];
+                            updated[0].mobils.splice(i, 1);
+
+                            setTransportDays(updated);
+                          }}
+                        />
+                      ))}
+                      <Button
+                        variant="outline"
+                        colorScheme="red"
+                        onClick={() => {
+                          const updated = [...transportDays];
+                          updated[0].mobils.push({});
+                          setTransportDays(updated);
+                        }}
+                      >
+                        Tambah Transport
+                      </Button>
+                    </VStack>
+                  </Box>
+                  {/* Additional */}
+                  <Box
+                    border="1px solid"
+                    borderColor="gray.600"
+                    p={4}
+                    rounded="md"
+                  >
+                    <Text fontSize="xl" fontWeight="bold" mb={2}>
+                      Additional Info
+                    </Text>
+
+                    <VStack spacing={2} align="stretch">
                       {day.additionalInfo.map((info, i) => (
                         <InfoCard
+                          isAdmin={true}
                           key={i}
                           index={i}
                           data={info}
@@ -360,20 +376,19 @@ const PackageCreateForm = () => {
                       ))}
                       <Button
                         variant="outline"
-                        colorScheme="red"
+                        colorScheme="orange"
                         onClick={() => {
                           const updated = [...days];
                           updated[index].additionalInfo.push({});
                           setDays(updated);
                         }}
                       >
-                        Tambah Transport
+                        Tambah Info
                       </Button>
                     </VStack>
                   </Box>
 
                   {/* Markup */}
-            
                 </VStack>
               </TabPanel>
             ))}
@@ -382,50 +397,45 @@ const PackageCreateForm = () => {
       </Box>
 
       {/* TOTAL */}
-     
     </Container>
   );
 };
 
-
-
 const PackageFormPage = () => {
-  return(
-    <Flex direction={'column'} gap={5}>
- 
-      <Box p={4} bg={'gray.800'} borderRadius={'12px'} >
-          <Text fontWeight="bold" fontSize={'2xl'}>
-              Buat Paket
-          </Text>
-          <Flex direction={"column"} gap={5} py={5} >
-              <Text fontWeight="semibold">
-                  Nama Paket
-              </Text>
-              <Input
-                  placeholder="Contoh: Tiket Tour Bali 3 Hari"
-                  value={''}
-                  onChange={(e) => {console.log(e.target.value)}}
-                  />
-              <Text fontWeight="semibold">
-                  Deskripsi untuk Paket
-              </Text>
-              <Textarea
-                  value={''}
-                  onChange={(e) => {
-                      console.log(e.target.value)
-                  }}
-                  placeholder="Deskripsi Paket..."
-                  bg="gray.700"
-                  color="white"
-                  _placeholder={{ color: "gray.400" }}
-              />
-          </Flex>
-          <PackageCreateForm/>
-          <Button colorScheme="blue" onClick={()=>{}}>Simpan Paket</Button>
+  return (
+    <Flex direction={"column"} gap={5}>
+      <Box p={4} bg={"gray.800"} borderRadius={"12px"}>
+        <Text fontWeight="bold" fontSize={"2xl"}>
+          Buat Paket
+        </Text>
+        <Flex direction={"column"} gap={5} py={5}>
+          <Text fontWeight="semibold">Nama Paket</Text>
+          <Input
+            placeholder="Contoh: Tiket Tour Bali 3 Hari"
+            value={""}
+            onChange={(e) => {
+              console.log(e.target.value);
+            }}
+          />
+          <Text fontWeight="semibold">Deskripsi untuk Paket</Text>
+          <Textarea
+            value={""}
+            onChange={(e) => {
+              console.log(e.target.value);
+            }}
+            placeholder="Deskripsi Paket..."
+            bg="gray.700"
+            color="white"
+            _placeholder={{ color: "gray.400" }}
+          />
+        </Flex>
+        <PackageCreateForm />
+        <Button w={"full"} colorScheme="blue" onClick={() => {}}>
+          Buat Paket
+        </Button>
       </Box>
-  </Flex>
-  )
-}
+    </Flex>
+  );
+};
 
-export default PackageFormPage
-
+export default PackageFormPage;

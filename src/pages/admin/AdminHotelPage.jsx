@@ -1,9 +1,9 @@
 import { Box, Text, Flex, Button, Container, Input } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HotelCard from "../../components/Admin/Hotel/HotelCard/HotelCard";
 import HotelForm from "../../components/Admin/Hotel/HotelForm/HotelForm";
-import hotels from "../../data/hotels.json";
+import hotelsJson from "../../data/hotels.json";
 import { useAdminHotelContext } from "../../context/Admin/AdminHotelContext";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
@@ -15,17 +15,43 @@ const AdminHotelPage = () => {
   const { updateHotelData } = useAdminHotelContext();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
+  const [hotels, setHotels] = useState([]);
+  const [recentHotels, setRecentHotels] = useState([]);
 
   const handlePageChange = (selectedItem) => {
     setCurrentPage(selectedItem.selected);
   };
+
+  const handleGetHotels = () => {
+    setHotels(hotelsJson);
+    setRecentHotels(hotelsJson);
+  };
+
+  const handleSearchHotels = (value) => {
+    if (value.toLowerCase() == "") {
+      setHotels(recentHotels);
+    } else {
+      const villaFiltered = hotels.filter((hotel) => {
+        const query = value.toLowerCase();
+        return (
+          hotel.hotelName.toLowerCase().includes(query) ||
+          hotel.roomType.toLowerCase().includes(query)
+        );
+      });
+      setHotels(villaFiltered);
+    }
+  };
+
+  useEffect(() => {
+    handleGetHotels();
+  }, []);
 
   const offset = currentPage * ITEMS_PER_PAGE;
   const currentHotels = hotels.slice(offset, offset + ITEMS_PER_PAGE);
   const pageCount = Math.ceil(hotels.length / ITEMS_PER_PAGE);
 
   return (
-    <Container maxW="container.xl" p={0} borderRadius="lg">
+    <Container maxW="container.xl" p={0} pb={10} borderRadius="lg">
       <Flex direction={"column"} gap="12px">
         <Flex
           direction={"row"}
@@ -39,12 +65,9 @@ const AdminHotelPage = () => {
                 placeholder="Search Hotel"
                 value={""}
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  handleSearchHotels(e.target.value);
                 }}
               />
-              <Button bg={"gray.700"} onClick={() => {}}>
-                Search
-              </Button>
             </Box>
           )}
           <Button
@@ -89,23 +112,25 @@ const AdminHotelPage = () => {
             </Flex>
 
             {/* Pagination */}
-            <Box
-              mt={6}
-              display="flex"
-              flexDirection={"row"}
-              justifyContent="center"
-            >
-              <ReactPaginate
-                pageCount={pageCount}
-                onPageChange={handlePageChange}
-                pageRangeDisplayed={3}
-                marginPagesDisplayed={1}
-                previousLabel="<"
-                nextLabel=">"
-                breakLabel="..."
-                containerClassName="flex items-center justify-center !gap-[10px] p-2 mt-4 list-none "
-              />
-            </Box>
+            {!formActive && (
+              <Box
+                mt={6}
+                display="flex"
+                flexDirection={"row"}
+                justifyContent="center"
+              >
+                <ReactPaginate
+                  pageCount={pageCount}
+                  onPageChange={handlePageChange}
+                  pageRangeDisplayed={3}
+                  marginPagesDisplayed={1}
+                  previousLabel="<"
+                  nextLabel=">"
+                  breakLabel="..."
+                  containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+                />
+              </Box>
+            )}
           </>
         )}
       </Flex>

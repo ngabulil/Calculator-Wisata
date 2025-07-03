@@ -13,7 +13,7 @@ import { useMemo, useEffect, useState } from "react";
 import MainSelect from "../MainSelect";
 import { useAkomodasiContext } from "../../context/AkomodasiContext";
 
-const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
+const TourCard = ({ index, onDelete, data, onChange, isAdmin }) => {
   const { hotels } = useAkomodasiContext();
   const [jumlahKamar, setJumlahKamar] = useState(1);
   const [jumlahExtrabed, setJumlahExtrabed] = useState(1);
@@ -101,10 +101,6 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
         ?.price || 0
     );
   }, [selectedHotelData, data.roomType]);
-
-  const totalHarga =
-    jumlahKamar * hargaPerKamar +
-    (data.useExtrabed ? jumlahExtrabed * hargaExtrabed : 0);
 
   useEffect(() => {
     let delayTimer = null;
@@ -211,114 +207,9 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
             placeholder="Pilih Musim"
           />
         </Box>
-
-        {!isAdmin && (
-          <Box w="50%">
-            <Text mb={1} fontSize="sm" color="gray.300">
-              Harga per Kamar
-            </Text>
-            <Input
-              value={hargaPerKamar}
-              isReadOnly
-              bg={inputBg}
-              color={textColor}
-              borderColor={borderColor}
-            />{" "}
-          </Box>
-        )}
-
-        {isAdmin && (
-          <Box w="50%">
-            <Text mb={1} fontSize="sm" color="gray.300">
-              Jumlah Kamar
-            </Text>
-            <Input
-              value={jumlahKamar}
-              onChange={(e) => setJumlahKamar(Number(e.target.value))}
-              bg={inputBg}
-              color={textColor}
-              borderColor={borderColor}
-            />
-          </Box>
-        )}
       </HStack>
-
-      {!isAdmin && (
-        <HStack spacing={4} mb={3}>
-          <Box w="50%">
-            <Text mb={1} fontSize="sm" color="gray.300">
-              Jumlah Kamar
-            </Text>
-            <Input
-              value={jumlahKamar}
-              onChange={(e) => setJumlahKamar(Number(e.target.value))}
-              bg={inputBg}
-              color={textColor}
-              borderColor={borderColor}
-            />
-          </Box>
-        </HStack>
-      )}
-
-      <VStack align="start" spacing={2} mb={3}>
-        <HStack align="center" spacing={3}>
-          <Checkbox
-            colorScheme="teal"
-            isChecked={data.useExtrabed || false}
-            onChange={(e) =>
-              onChange({ ...data, useExtrabed: e.target.checked })
-            }
-            isDisabled={hargaExtrabed === 0}
-          >
-            Extrabed?
-          </Checkbox>
-          {hargaExtrabed === 0 && (
-            <Text fontSize="sm" color="orange.300">
-              Tidak tersedia, silahkan tambah di additional
-            </Text>
-          )}
-        </HStack>
-
-        {data.useExtrabed && (
-          <HStack spacing={4} w="100%">
-            <Box w="50%">
-              <Text mb={1} fontSize="sm" color="gray.300">
-                Jumlah Extrabed
-              </Text>
-              <Input
-                value={jumlahExtrabed}
-                onChange={(e) => setJumlahExtrabed(Number(e.target.value))}
-                bg={inputBg}
-                color={textColor}
-                borderColor={borderColor}
-              />
-            </Box>
-
-            <Box w="50%">
-              <Text mb={1} fontSize="sm" color="gray.300">
-                Harga per Extrabed
-              </Text>
-              <Input
-                value={hargaExtrabed}
-                isReadOnly
-                bg={inputBg}
-                color={textColor}
-                borderColor={borderColor}
-              />
-            </Box>
-          </HStack>
-        )}
-      </VStack>
-
-      {!isAdmin && (
-        <Box mt={4}>
-          <Text fontWeight="semibold" color="green.300">
-            Total Harga: Rp {totalHarga.toLocaleString("id-ID")}
-          </Text>
-        </Box>
-      )}
     </Box>
   );
 };
 
-export default HotelCard;
+export default TourCard;

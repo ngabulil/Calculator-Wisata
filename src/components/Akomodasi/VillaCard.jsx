@@ -13,7 +13,7 @@ import { useMemo, useEffect, useState } from "react";
 import MainSelect from "../MainSelect";
 import { useAkomodasiContext } from "../../context/AkomodasiContext";
 
-const VillaCard = ({ index, onDelete, data, onChange }) => {
+const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
   const { villas } = useAkomodasiContext();
 
   const [jumlahKamar, setJumlahKamar] = useState(1);
@@ -213,34 +213,53 @@ const VillaCard = ({ index, onDelete, data, onChange }) => {
           />
         </Box>
 
-        <Box w="50%">
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Harga per Kamar
-          </Text>
-          <Input
-            value={hargaPerKamar}
-            isReadOnly
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
+        {isAdmin && (
+          <Box w="50%">
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Jumlah Kamar
+            </Text>
+            <Input
+              value={jumlahKamar}
+              onChange={(e) => setJumlahKamar(Number(e.target.value))}
+              bg={inputBg}
+              color={textColor}
+              borderColor={borderColor}
+            />
+          </Box>
+        )}
+
+        {!isAdmin && (
+          <Box w="50%">
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Harga per Kamar
+            </Text>
+            <Input
+              value={hargaPerKamar}
+              isReadOnly
+              bg={inputBg}
+              color={textColor}
+              borderColor={borderColor}
+            />
+          </Box>
+        )}
       </HStack>
 
-      <HStack spacing={4} mb={3}>
-        <Box w="50%">
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Jumlah Kamar
-          </Text>
-          <Input
-            value={jumlahKamar}
-            onChange={(e) => setJumlahKamar(Number(e.target.value))}
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
-      </HStack>
+      {!isAdmin && (
+        <HStack spacing={4} mb={3}>
+          <Box w="50%">
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Jumlah Kamar
+            </Text>
+            <Input
+              value={jumlahKamar}
+              onChange={(e) => setJumlahKamar(Number(e.target.value))}
+              bg={inputBg}
+              color={textColor}
+              borderColor={borderColor}
+            />
+          </Box>
+        </HStack>
+      )}
 
       <VStack align="start" spacing={2} mb={3}>
         <HStack spacing={3}>
@@ -292,11 +311,13 @@ const VillaCard = ({ index, onDelete, data, onChange }) => {
         )}
       </VStack>
 
-      <Box mt={4}>
-        <Text fontWeight="semibold" color="green.300">
-          Total Harga: Rp {totalHarga.toLocaleString("id-ID")}
-        </Text>
-      </Box>
+      {!isAdmin && (
+        <Box mt={4}>
+          <Text fontWeight="semibold" color="green.300">
+            Total Harga: Rp {totalHarga.toLocaleString("id-ID")}
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };
