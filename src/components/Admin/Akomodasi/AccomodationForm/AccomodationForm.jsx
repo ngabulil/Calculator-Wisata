@@ -110,11 +110,15 @@ const AccomodationForm = () => {
     setAkomodasiTotal(total);
   }, [days]);
 
+  const handleCreateAccomodation = () => {
+    console.log(days);
+  };
+
   return (
     <Container maxW="7xl" py={6}>
       <Box bg={cardBg} rounded="lg" p={6} boxShadow="lg" color={textColor}>
-        <Text fontSize="xl" fontWeight="bold" mb={4}>
-          Akomodasi
+        <Text fontSize="24px" fontWeight="bold" mb={4}>
+          Buat Akomodasi
         </Text>
 
         <Tabs
@@ -289,7 +293,9 @@ const AccomodationForm = () => {
         </Tabs>
       </Box>
 
-      {/* TOTAL */}
+      <Button w={"full"} bg={"blue.500"} onClick={handleCreateAccomodation}>
+        Buat Akomodasi
+      </Button>
     </Container>
   );
 };

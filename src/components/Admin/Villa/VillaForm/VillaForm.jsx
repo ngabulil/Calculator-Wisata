@@ -105,7 +105,7 @@ const VillaForm = () => {
     <Container
       maxW="5xl"
       p={6}
-      bg={"gray.700"}
+      bg={"gray.800"}
       rounded={"12px"}
       display={"flex"}
       flexDirection={"column"}

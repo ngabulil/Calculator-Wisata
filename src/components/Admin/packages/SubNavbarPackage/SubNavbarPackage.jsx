@@ -27,7 +27,6 @@ const SubNavbarPackage = () => {
             <Link href="/admin">Package</Link>
             <Link href="/admin/packages/hotel">Hotel</Link>
             <Link href="/admin/packages/villa">Villa</Link>
-            <Link href="/admin/packages/additional">Additional</Link>
           </VStack>
         </PopoverBody>
       </PopoverContent>

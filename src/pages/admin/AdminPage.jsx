@@ -11,9 +11,11 @@ import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
 import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
+import PackageRead from "../../components/Admin/packages/PackageRead/PackageRead";
 
 const AdminPage = () => {
   const [formActive, setFormActive] = useState(false);
+  const [readPackageActive, setReadPackageActive] = useState(false);
 
   return (
     <Container maxW="container.xl" p={0} borderRadius="lg">
@@ -33,31 +35,41 @@ const AdminPage = () => {
                   console.log(e.target.value);
                 }}
               />
-
-              <Button
-                bg={"gray.700"}
-                onClick={() => setFormActive(!formActive)}
-              >
-                Search
-              </Button>
             </Box>
           )}
-          <Button bg={"blue.500"} onClick={() => setFormActive(!formActive)}>
-            {formActive ? (
+          <Button
+            bg={"blue.500"}
+            onClick={() => {
+              if (formActive) setFormActive(!formActive);
+              if (readPackageActive) setReadPackageActive(false);
+            }}
+          >
+            {formActive || readPackageActive ? (
               <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
             ) : (
               <AddIcon pr={"5px"} />
             )}{" "}
-            {formActive ? "Back" : "Create"}
+            {formActive || readPackageActive ? "Back" : "Create"}
           </Button>
         </Flex>
         {formActive ? (
           <PackageFormPage />
+        ) : readPackageActive ? (
+          <PackageRead />
         ) : (
-          <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
-            {Array.from({ length: 8 }).map((_, index) => {
-              return <PackageCard key={index} />;
-            })}
+          <Flex gap={6}>
+            <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
+              {Array.from({ length: 8 }).map((_, index) => {
+                return (
+                  <PackageCard
+                    key={index}
+                    onOpenButton={() => {
+                      setReadPackageActive(true);
+                    }}
+                  />
+                );
+              })}
+            </Flex>
           </Flex>
         )}
       </Flex>

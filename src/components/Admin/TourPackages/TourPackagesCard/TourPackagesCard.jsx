@@ -1,6 +1,7 @@
 import { Flex, Text, Box } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { PopoverButton } from "../../../PopoverButton";
+import Carousel from "../../../Carousel";
 
 const TourPackagesCard = () => {
   return (
@@ -11,6 +12,7 @@ const TourPackagesCard = () => {
       flexGrow="1"
       bg={"gray.800"}
       p={"15px"}
+      pb={"20px"}
       rounded={"12px"}
     >
       <Flex
@@ -50,18 +52,30 @@ const TourPackagesCard = () => {
             {/* traveler Card */}
             <AppTravelerCard title="Traveler" subtitle="2 Adults, 1 Child" />
             {/* day description */}
-            {Array.from({ length: 3 }).map((_, index) => {
-              return (
-                <Box bg={"gray.900"} p={2} rounded={10}>
-                  <Text fontSize={"10px"}>
-                    {index + 1}. Lorem Ipsum is simply dummy text of the
-                    printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an
-                    unknown printer took a galley of type and scrambled it
-                  </Text>
-                </Box>
-              );
-            })}
+            <Box w="full" h="full" p={1.5} className="border-1 rounded-[12px]">
+              <Carousel>
+                {Array.from({ length: 3 }).map((_, index) => {
+                  return (
+                    <Box
+                      key={index}
+                      bg={"gray.700"}
+                      p={2}
+                      rounded={10}
+                      h={"full"}
+                      w={"full"}
+                    >
+                      <Text fontSize={"12px"}>
+                        {index + 1}. Lorem Ipsum is simply dummy text of the
+                        printing and typesetting industry. Lorem Ipsum has been
+                        the industry's standard dummy text ever since the 1500s,
+                        when an unknown printer took a galley of type and
+                        scrambled it
+                      </Text>
+                    </Box>
+                  );
+                })}
+              </Carousel>
+            </Box>
           </Flex>
         </Flex>
       </Flex>
@@ -76,7 +90,7 @@ const AppRestaurantCard = (props) => {
       gap={2}
       alignItems={"center"}
       w={"full"}
-      bg={"gray.900"}
+      bg={"gray.700"}
       rounded={"12px"}
       p={"10px"}
     >
@@ -113,7 +127,7 @@ const AppTravelerCard = (props) => {
       gap={2}
       alignItems={"center"}
       w={"full"}
-      bg={"gray.900"}
+      bg={"gray.700"}
       rounded={"12px"}
       p={"10px"}
     >

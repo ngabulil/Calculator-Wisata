@@ -47,6 +47,11 @@ const TransportCard = () => {
           <TabPanels>
             <TabPanel py={4} px={0}>
               <Flex direction={"column"} gap={3}>
+                <Text fontSize={12}>
+                  Neque sint id. Dolores a deserunt vitae asperiores atque ut
+                  totam non dolorem. Est rerum aliquam. Facilis dolor voluptatem
+                  totam.
+                </Text>
                 {Array.from({ length: 2 }).map((_, index) => {
                   return (
                     <AppTransport
@@ -86,30 +91,43 @@ const AppTransport = (props) => {
     <Flex
       direction={"row"}
       gap={2}
-      alignItems={"center"}
+      alignItems={"start"}
       w={"full"}
-      bg={"gray.900"}
+      bg={"gray.700"}
       rounded={"12px"}
       p={"12px"}
     >
-      <Icon
-        icon="mingcute:car-fill"
-        className="text-white text-[32px] rounded-full p-[8px] border-1 border-white"
-      />
-      <Flex direction={"column"} gap={0} w={"full"}>
-        <Text fontSize={"12px"} fontWeight={"bold"}>
-          {props.title}
-        </Text>
-        <Flex
-          direction={"row"}
-          w={"full"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize={"10px"}>Jumlah</Text>
-          <Text fontSize={"10px"}>{props.count}</Text>
+      <Flex direction={"column"} gap={1} w={"full"}>
+        <Flex alignItems={"center"} gap={2}>
+          {" "}
+          <Icon icon="mingcute:car-fill" className="text-white text-[16px] " />
+          <Text fontSize={"14px"} fontWeight={"bold"}>
+            {props.title}
+          </Text>
         </Flex>
+        <AppTextLine title={"Jumlah"} subtitle={"1"} />
+        <AppTextLine title={"Area"} subtitle={"Kintamani, Ubud"} />
+        <AppTextLine title={"Harga"} subtitle={"Rp 500.000"} />
       </Flex>
+    </Flex>
+  );
+};
+
+const AppTextLine = (props) => {
+  return (
+    <Flex
+      direction={"row"}
+      w={"full"}
+      justifyContent={"space-between"}
+      alignItems={"center"}
+      bg={"gray.800"}
+      p={2}
+      color={"white"}
+      fontWeight={"semibold"}
+      rounded={"6px"}
+    >
+      <Text fontSize={"10px"}>{props.title}</Text>
+      <Text fontSize={"10px"}>{props.subtitle}</Text>
     </Flex>
   );
 };

@@ -24,13 +24,6 @@ const AdminAccomodationPage = () => {
                   console.log(e.target.value);
                 }}
               />
-
-              <Button
-                bg={"gray.700"}
-                onClick={() => setFormActive(!formActive)}
-              >
-                Search
-              </Button>
             </Box>
           )}
           <Button bg={"blue.500"} onClick={() => setFormActive(!formActive)}>

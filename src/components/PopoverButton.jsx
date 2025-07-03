@@ -18,6 +18,11 @@ export const PopoverButton = (props) => {
         <Icon icon={"mage:dots"} className="text-white text-[20px]" />
       </PopoverTrigger>
       <PopoverContent w={"100%"}>
+        {props.isOpenButton && (
+          <PopoverBody className="cursor-pointer" onClick={props.onOpenButton}>
+            Open
+          </PopoverBody>
+        )}
         <PopoverBody className="cursor-pointer" onClick={props.onEditButton}>
           Edit
         </PopoverBody>

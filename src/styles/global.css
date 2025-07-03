@@ -1,12 +1,13 @@
-html, body {
+html,
+body {
   scroll-behavior: smooth;
-  background-color: #1A202C; /* gray.900 Chakra */
-  color: #EDF2F7;            /* gray.100 Chakra */
-  font-family: 'Inter', sans-serif;
+  background-color: #1a202c; /* gray.900 Chakra */
+  color: #edf2f7; /* gray.100 Chakra */
+  font-family: "Inter", sans-serif;
 }
 
 a {
-  color: #90CDF4; /* blue.300 Chakra */
+  color: #90cdf4; /* blue.300 Chakra */
 }
 
 button:focus {
@@ -18,6 +19,23 @@ button:focus {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #4A5568; /* gray.600 Chakra */
+  background-color: #4a5568; /* gray.600 Chakra */
   border-radius: 4px;
+}
+
+.slick-slider .slick-slide {
+  padding: 0px 2px;
+}
+
+.swiper-slide {
+  transform-origin: center bottom;
+  perspective: 1000px;
+}
+
+.slick-dots .slick-active button:before {
+  color: white !important;
+}
+.slick-dots li button:before {
+  opacity: 0.55;
+  color: white !important;
 }
