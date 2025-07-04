@@ -29,61 +29,33 @@ import HotelCard from "../../../Akomodasi/HotelCard";
 import VillaCard from "../../../Akomodasi/VillaCard";
 import InfoCard from "../../../Akomodasi/InfoCard";
 import MobilCard from "../../../Transport/MobilCard";
-import { useAkomodasiContext } from "../../../../context/AkomodasiContext";
-import { useCheckoutContext } from "../../../../context/CheckoutContext";
-import { useTransportContext } from "../../../../context/TransportContext";
 
-const PackageCreateForm = () => {
+import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+
+import DestinationCard from "../../TourPackages/TourPackagesFormCard/DestinationCard";
+import ActivityCard from "../../TourPackages/TourPackagesFormCard/ActivitiesCard";
+import RestaurantCard from "../../TourPackages/TourPackagesFormCard/RestaurantCard";
+
+const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { getHotels, getVillas, getAdditional, days, setDays } =
-    useAkomodasiContext();
   const {
+    getHotels,
+    getVillas,
+    getAkomodasiAdditional,
     getMobils,
-    getAdditionalMobil,
-    days: transportDays,
-    setDays: setTransportDays,
-  } = useTransportContext();
-  const { setAkomodasiTotal } = useCheckoutContext();
-
-  const hitungTotalHotel = (hotels) =>
-    hotels.reduce((total, h) => {
-      const kamar = h.jumlahKamar || 0;
-      const harga = h.hargaPerKamar || 0;
-      const extrabed = h.useExtrabed
-        ? (h.jumlahExtrabed || 0) * (h.hargaExtrabed || 0)
-        : 0;
-      return total + kamar * harga + extrabed;
-    }, 0);
-
-  const hitungTotalVilla = (villas) =>
-    villas.reduce((total, v) => {
-      const kamar = v.jumlahKamar || 0;
-      const harga = v.hargaPerKamar || 0;
-      const extrabed = v.useExtrabed
-        ? (v.jumlahExtrabed || 0) * (v.hargaExtrabed || 0)
-        : 0;
-      return total + kamar * harga + extrabed;
-    }, 0);
-
-  const hitungTotalAdditional = (additional) =>
-    additional.reduce(
-      (total, a) => total + (a.harga || 0) * (a.jumlah || 0),
-      0
-    );
+    getTransportAdditional,
+    days,
+    setDays,
+  } = useAdminPackageContext();
 
   const handleAddDay = () => {
     setDays((prev) => [
       ...prev,
       {
-        id: prev.length + 1,
-        description: "",
-        hotels: [],
-        villas: [],
-        additionalInfo: [],
-        mobils: [],
-        markup: { type: "percent", value: 0 },
+        ...days[0],
       },
     ]);
+
     setActiveIndex(days.length);
   };
 
@@ -103,34 +75,38 @@ const PackageCreateForm = () => {
     const fetchData = async () => {
       await getHotels();
       await getVillas();
-      await getAdditional();
+      await getAkomodasiAdditional();
       await getMobils();
-      await getAdditionalMobil();
+      await getTransportAdditional();
     };
     fetchData();
   }, []);
 
+  // useEffect(() => {
+  //   const total = days.reduce((sum, day) => {
+  //     const subtotal =
+  //       hitungTotalHotel(day.hotels) +
+  //       hitungTotalVilla(day.villas) +
+  //       hitungTotalAdditional(day.additionalInfo);
+
+  //     const markup = day.markup || { type: "percent", value: 0 };
+  //     const markupAmount =
+  //       markup.type === "amount"
+  //         ? markup.value
+  //         : (markup.value / 100) * subtotal;
+
+  //     return sum + subtotal + markupAmount;
+  //   }, 0);
+
+  //   setAkomodasiTotal(total);
+  // }, [days]);
+
   useEffect(() => {
-    const total = days.reduce((sum, day) => {
-      const subtotal =
-        hitungTotalHotel(day.hotels) +
-        hitungTotalVilla(day.villas) +
-        hitungTotalAdditional(day.additionalInfo);
-
-      const markup = day.markup || { type: "percent", value: 0 };
-      const markupAmount =
-        markup.type === "amount"
-          ? markup.value
-          : (markup.value / 100) * subtotal;
-
-      return sum + subtotal + markupAmount;
-    }, 0);
-
-    setAkomodasiTotal(total);
+    props.onChange?.(days);
   }, [days]);
 
   return (
-    <Container maxW="7xl" py={2} px={0}>
+    <Container maxW="7xl" px="0">
       <Box bg={cardBg} rounded="lg" color={textColor}>
         <Tabs
           index={activeIndex}
@@ -148,260 +124,449 @@ const PackageCreateForm = () => {
               Tambah Day
             </Button>
           </HStack>
-
           <TabPanels>
             {days.map((day, index) => (
               <TabPanel key={index} px={0}>
                 <VStack spacing={6} align="stretch">
-                  <HStack justify="space-between">
+                  <Text fontWeight="bold" fontSize={"22px"}>
+                    Akomodasi
+                  </Text>
+                  <Flex
+                    direction={"column"}
+                    gap={4}
+                    p={4}
+                    bg={"gray.900"}
+                    rounded={"12px"}
+                  >
                     <Text fontWeight="semibold">
-                      Deskripsi untuk Day {index + 1}
+                      Nama untuk Day {index + 1}
                     </Text>
-                    {days.length > 1 && (
-                      <IconButton
-                        icon={<DeleteIcon />}
-                        size="sm"
-                        colorScheme="red"
-                        variant="ghost"
-                        onClick={() => handleRemoveDay(index)}
-                      />
-                    )}
-                  </HStack>
-
-                  <Textarea
-                    value={day.description}
-                    onChange={(e) => {
-                      const updated = [...days];
-                      updated[index].description = e.target.value;
-                      setDays(updated);
-                    }}
-                    placeholder="Deskripsi hari..."
-                    bg="gray.700"
-                    color="white"
-                    _placeholder={{ color: "gray.400" }}
-                  />
-
-                  {/* Hotel dan Villa */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
-                    p={4}
-                    rounded="md"
-                  >
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                      Hotel / Villa
-                    </Text>
-
-                    <VStack spacing={2} align="stretch">
-                      {day.hotels.map((hotel, i) => (
-                        <HotelCard
-                          key={i}
-                          isAdmin={true}
-                          index={i}
-                          data={hotel}
-                          onChange={(newHotel) => {
-                            const updated = [...days];
-                            updated[index].hotels[i] = newHotel;
-                            setDays(updated);
-                          }}
-                          onDelete={() => {
-                            const updated = [...days];
-                            updated[index].hotels.splice(i, 1);
-                            setDays(updated);
-                          }}
+                    <Input
+                      placeholder="Contoh: Livio Suite"
+                      onChange={(e) => {
+                        const updated = [...days];
+                        updated[index].name = e.target.value;
+                        setDays(updated);
+                      }}
+                    />
+                    <HStack justify="space-between">
+                      <Text fontWeight="semibold">
+                        Deskripsi untuk Day {index + 1}
+                      </Text>
+                      {days.length > 1 && (
+                        <IconButton
+                          icon={<DeleteIcon />}
+                          size="sm"
+                          colorScheme="red"
+                          variant="ghost"
+                          onClick={() => handleRemoveDay(index)}
                         />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="teal"
-                        onClick={() => {
-                          const updated = [...days];
-                          updated[index].hotels.push({});
-                          setDays(updated);
-                        }}
-                      >
-                        Tambah Hotel
-                      </Button>
+                      )}
+                    </HStack>
+                    <Textarea
+                      value={day.description_day}
+                      onChange={(e) => {
+                        const updated = [...days];
+                        updated[index].description_day = e.target.value;
+                        setDays(updated);
+                      }}
+                      placeholder="Deskripsi hari..."
+                      bg="gray.700"
+                      color="white"
+                      _placeholder={{ color: "gray.400" }}
+                    />
+                    {/* Hotel dan Villa */}
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Hotel / Villa
+                      </Text>
 
-                      {day.villas.map((villa, i) => (
-                        <VillaCard
-                          isAdmin={true}
-                          key={i}
-                          index={i}
-                          data={villa}
-                          onChange={(newVilla) => {
+                      <VStack spacing={2} align="stretch">
+                        {day.data.akomodasi.hotels.map((hotel, i) => (
+                          <HotelCard
+                            key={i}
+                            isAdmin={true}
+                            index={i}
+                            data={hotel}
+                            onChange={(newHotel) => {
+                              const updated = [...days];
+                              updated[index].data.akomodasi.hotels[i] =
+                                newHotel;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.akomodasi.hotels.splice(i, 1);
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="teal"
+                          onClick={() => {
                             const updated = [...days];
-                            updated[index].villas[i] = newVilla;
+                            updated[index].data.akomodasi.hotels.push({});
                             setDays(updated);
                           }}
-                          onDelete={() => {
+                        >
+                          Tambah Hotel
+                        </Button>
+
+                        {day.data.akomodasi.villas.map((villa, i) => (
+                          <VillaCard
+                            isAdmin={true}
+                            key={i}
+                            index={i}
+                            data={villa}
+                            onChange={(newVilla) => {
+                              const updated = [...days];
+                              updated[index].data.akomodasi.villas[i] =
+                                newVilla;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.akomodasi.villas.splice(i, 1);
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="purple"
+                          onClick={() => {
                             const updated = [...days];
-                            updated[index].villas.splice(i, 1);
+                            updated[index].data.akomodasi.villas.push({});
                             setDays(updated);
                           }}
-                        />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="purple"
-                        onClick={() => {
-                          const updated = [...days];
-                          updated[index].villas.push({});
-                          setDays(updated);
-                        }}
-                      >
-                        Tambah Villa
-                      </Button>
-                    </VStack>
-                  </Box>
+                        >
+                          Tambah Villa
+                        </Button>
+                      </VStack>
+                    </Box>
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Additional Info
+                      </Text>
 
+                      <VStack spacing={2} align="stretch">
+                        {day.data.akomodasi.additional.map((info, i) => (
+                          <InfoCard
+                            isAdmin={true}
+                            key={i}
+                            index={i}
+                            data={info}
+                            onChange={(newInfo) => {
+                              const updated = [...days];
+                              updated[index].data.akomodasi.additional[i] =
+                                newInfo;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.akomodasi.additional.splice(
+                                i,
+                                1
+                              );
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="orange"
+                          onClick={() => {
+                            const updated = [...days];
+                            updated[index].data.akomodasi.additional.push({});
+                            setDays(updated);
+                          }}
+                        >
+                          Tambah Info
+                        </Button>
+                      </VStack>
+                    </Box>
+                  </Flex>
                   {/* Tambah tour packages  */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
+                  <Flex
+                    direction={"column"}
+                    gap={4}
                     p={4}
-                    rounded="md"
+                    bg={"gray.900"}
+                    rounded={"12px"}
                   >
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                      Tour packages
+                    <Text fontWeight="bold" fontSize={"22px"}>
+                      Tour
                     </Text>
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Tour Destination
+                      </Text>
 
-                    <VStack spacing={2} align="stretch">
-                      {day.additionalInfo.map((info, i) => (
-                        <InfoCard
-                          isAdmin={true}
-                          key={i}
-                          index={i}
-                          data={info}
-                          onChange={(newInfo) => {
+                      <VStack spacing={2} align="stretch">
+                        {day.data.tour.destinations.map((tours, i) => (
+                          <DestinationCard
+                            key={i}
+                            index={i}
+                            data={tours}
+                            onChange={(newInfo) => {
+                              const updated = [...days];
+                              updated[index].data.tour.destinations[i] =
+                                newInfo;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.tour.destinations.splice(
+                                i,
+                                1
+                              );
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="blue"
+                          onClick={() => {
                             const updated = [...days];
-                            updated[index].additionalInfo[i] = newInfo;
+                            updated[index].data.tour.destinations.push({});
                             setDays(updated);
                           }}
-                          onDelete={() => {
+                        >
+                          Tambah Destinasi
+                        </Button>
+                      </VStack>
+                    </Box>
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Tour Restaurant
+                      </Text>
+
+                      <VStack spacing={2} align="stretch">
+                        {day.data.tour.restaurants.map((tours, i) => (
+                          <RestaurantCard
+                            key={i}
+                            index={i}
+                            data={tours}
+                            onChange={(newInfo) => {
+                              const updated = [...days];
+                              updated[index].data.tour.restaurants[i] = newInfo;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.tour.restaurants.splice(i, 1);
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="purple"
+                          onClick={() => {
                             const updated = [...days];
-                            updated[index].additionalInfo.splice(i, 1);
+                            updated[index].data.tour.restaurants.push({});
                             setDays(updated);
                           }}
-                        />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="blue"
-                        onClick={() => {
-                          const updated = [...days];
-                          updated[index].additionalInfo.push({});
-                          setDays(updated);
-                        }}
-                      >
-                        Tambah Tour Packages
-                      </Button>
-                    </VStack>
-                  </Box>
+                        >
+                          Tambah Restaurant
+                        </Button>
+                      </VStack>
+                    </Box>
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Tour Activity
+                      </Text>
 
+                      <VStack spacing={2} align="stretch">
+                        {day.data.tour.activities.map((tours, i) => (
+                          <ActivityCard
+                            key={i}
+                            index={i}
+                            data={tours}
+                            onChange={(newInfo) => {
+                              const updated = [...days];
+                              updated[index].data.tour.activities[i] = newInfo;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.tour.activities.splice(i, 1);
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="red"
+                          onClick={() => {
+                            const updated = [...days];
+                            updated[index].data.tour.activities.push({});
+                            setDays(updated);
+                          }}
+                        >
+                          Tambah Aktivitas
+                        </Button>
+                      </VStack>
+                    </Box>
+                  </Flex>
                   {/* Transport */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
+                  <Flex
+                    direction={"column"}
+                    gap={4}
                     p={4}
-                    rounded="md"
+                    bg={"gray.900"}
+                    rounded={"12px"}
                   >
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
+                    <Text fontWeight="bold" fontSize={"22px"}>
                       Transport
                     </Text>
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Mobil
+                      </Text>
 
-                    <VStack spacing={2} align="stretch">
-                      {transportDays[0].mobils.map((mobil, i) => (
-                        <MobilCard
-                          isAdmin={true}
-                          key={i}
-                          index={i}
-                          data={mobil}
-                          onChange={(newMobil) => {
-                            const updated = [...transportDays];
-                            updated[0].mobils[i] = newMobil;
-
-                            setTransportDays(updated);
-                          }}
-                          onDelete={() => {
-                            const updated = [...transportDays];
-                            updated[0].mobils.splice(i, 1);
-
-                            setTransportDays(updated);
-                          }}
-                        />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="red"
-                        onClick={() => {
-                          const updated = [...transportDays];
-                          updated[0].mobils.push({});
-                          setTransportDays(updated);
-                        }}
-                      >
-                        Tambah Transport
-                      </Button>
-                    </VStack>
-                  </Box>
-                  {/* Additional */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
-                    p={4}
-                    rounded="md"
-                  >
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                      Additional Info
-                    </Text>
-
-                    <VStack spacing={2} align="stretch">
-                      {day.additionalInfo.map((info, i) => (
-                        <InfoCard
-                          isAdmin={true}
-                          key={i}
-                          index={i}
-                          data={info}
-                          onChange={(newInfo) => {
+                      <VStack spacing={2} align="stretch">
+                        {day.data.transport.mobils.map((mobil, i) => (
+                          <MobilCard
+                            isAdmin={true}
+                            key={i}
+                            index={i}
+                            data={mobil}
+                            onChange={(newMobil) => {
+                              const updated = [...days];
+                              updated[index].data.transport.mobils[i] =
+                                newMobil;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.transport.mobils.splice(i, 1);
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="teal"
+                          onClick={() => {
                             const updated = [...days];
-                            updated[index].additionalInfo[i] = newInfo;
+                            updated[index].data.transport.mobils.push({});
                             setDays(updated);
                           }}
-                          onDelete={() => {
+                        >
+                          Tambah Mobil
+                        </Button>
+                      </VStack>
+                    </Box>
+
+                    {/* Additional Info */}
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Additional Info
+                      </Text>
+
+                      <VStack spacing={2} align="stretch">
+                        {day.data.transport.additional.map((info, i) => (
+                          <InfoCard
+                            key={i}
+                            isAdmin={true}
+                            index={i}
+                            data={info}
+                            onChange={(newInfo) => {
+                              const updated = [...days];
+                              updated[index].data.transport.additional[i] =
+                                newInfo;
+                              setDays(updated);
+                            }}
+                            onDelete={() => {
+                              const updated = [...days];
+                              updated[index].data.transport.additional.splice(
+                                i,
+                                1
+                              );
+                              setDays(updated);
+                            }}
+                          />
+                        ))}
+                        <Button
+                          variant="outline"
+                          colorScheme="orange"
+                          onClick={() => {
                             const updated = [...days];
-                            updated[index].additionalInfo.splice(i, 1);
+                            updated[index].data.transport.additional.push({});
                             setDays(updated);
                           }}
-                        />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="orange"
-                        onClick={() => {
-                          const updated = [...days];
-                          updated[index].additionalInfo.push({});
-                          setDays(updated);
-                        }}
-                      >
-                        Tambah Info
-                      </Button>
-                    </VStack>
-                  </Box>
-
-                  {/* Markup */}
+                        >
+                          Tambah Info
+                        </Button>
+                      </VStack>
+                    </Box>
+                  </Flex>
                 </VStack>
               </TabPanel>
             ))}
           </TabPanels>
         </Tabs>
       </Box>
-
-      {/* TOTAL */}
     </Container>
   );
 };
 
 const PackageFormPage = () => {
+  const [primaryData, setPrimaryData] = useState([]);
+  const [namePackages, setNamePackages] = useState("");
+  const [desctiptionPackages, setDescriptionPackages] = useState("");
+
+  const handleonChangeData = (data) => {
+    setPrimaryData(data);
+  };
+  const handleCreatePackage = () => {
+    const data = {
+      name: namePackages,
+      description: desctiptionPackages,
+      days: [...primaryData],
+    };
+
+    console.log(data);
+  };
+
   return (
     <Flex direction={"column"} gap={5}>
       <Box p={4} bg={"gray.800"} borderRadius={"12px"}>
@@ -412,16 +577,14 @@ const PackageFormPage = () => {
           <Text fontWeight="semibold">Nama Paket</Text>
           <Input
             placeholder="Contoh: Tiket Tour Bali 3 Hari"
-            value={""}
             onChange={(e) => {
-              console.log(e.target.value);
+              setNamePackages(e.target.value);
             }}
           />
           <Text fontWeight="semibold">Deskripsi untuk Paket</Text>
           <Textarea
-            value={""}
             onChange={(e) => {
-              console.log(e.target.value);
+              setDescriptionPackages(e.target.value);
             }}
             placeholder="Deskripsi Paket..."
             bg="gray.700"
@@ -429,8 +592,8 @@ const PackageFormPage = () => {
             _placeholder={{ color: "gray.400" }}
           />
         </Flex>
-        <PackageCreateForm />
-        <Button w={"full"} colorScheme="blue" onClick={() => {}}>
+        <PackageCreateForm onChange={handleonChangeData} />
+        <Button w={"full"} colorScheme="blue" onClick={handleCreatePackage}>
           Buat Paket
         </Button>
       </Box>

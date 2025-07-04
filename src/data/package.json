@@ -1,124 +1,96 @@
 {
-    "package_name": "Explore Bali 3 Hari",
-    "description": "Paket wisata 3 hari menjelajahi keindahan Bali, lengkap dengan penginapan, transportasi, dan tour guide.",
-    "days": [
-      {
-        "id": 1,
-        "name": "Day 1",
-        "description": "Penjemputan di bandara dan wisata ke pantai Kuta.",
+  "name": "Paket Liburan Bali 3 Hari",
+  "description": "Paket wisata lengkap untuk menikmati keindahan Bali selama 3 hari.",
+  "days": [
+    {
+      "name": "Hari 1 - Kedatangan dan Check-in",
+      "description_day": "Tiba di Bandara Ngurah Rai, check-in hotel, dan menikmati makan malam.",
+      "data": {
         "akomodasi": {
           "hotels": [
             {
-              "id": 1,
-              "hotel_name": "Hotel Kuta Seaview",
-              "location": "Kuta, Bali",
-              "rating": 4.5,
-              "check_in": "14:00",
-              "check_out": "12:00"
+              "id_hotel": 101,
+              "id_tipe_kamar": 1,
+              "season": {
+                "type": "normal",
+                "id_musim": 1
+              }
             }
           ],
-          "villa": [],
-          "additional": [
+          "villas": [
             {
-              "id": 1,
-              "name": "Welcome Drink",
-              "description": "Minuman selamat datang saat check-in hotel"
-            }
-          ]
-        },
-        "tour_packages": [
-          {
-            "id": 1,
-            "name": "Kuta Beach Tour",
-            "time": "15:00 - 18:00",
-            "guide": "Made Sudiarta"
-          }
-        ],
-        "transport": {
-          "id": 1,
-          "type": "Shuttle Bus",
-          "provider": "Bali Trans",
-          "pickup_time": "13:00",
-          "pickup_location": "Bandara Ngurah Rai"
-        }
-      },
-      {
-        "id": 2,
-        "name": "Day 2",
-        "description": "Wisata budaya dan alam di Ubud.",
-        "akomodasi": {
-          "hotels": [],
-          "villa": [
-            {
-              "id": 1,
-              "villa_name": "Villa Tegal Sari",
-              "location": "Ubud, Bali",
-              "rating": 4.8,
-              "check_in": "14:00",
-              "check_out": "12:00"
+              "id_villa": 201,
+              "id_tipe_kamar": 2,
+              "season": {
+                "type": "honeymoon",
+                "id_musim": 3
+              }
             }
           ],
           "additional": [
             {
-              "id": 2,
-              "name": "Traditional Lunch",
-              "description": "Makan siang khas Bali di restoran lokal"
+              "id_additional": 301
+            },
+            {
+              "id_additional": 302
             }
           ]
         },
-        "tour_packages": [
-          {
-            "id": 2,
-            "name": "Tegallalang Rice Terrace",
-            "time": "09:00 - 11:00",
-            "guide": "Komang Raka"
-          },
-          {
-            "id": 3,
-            "name": "Monkey Forest Ubud",
-            "time": "11:30 - 13:00",
-            "guide": "Komang Raka"
-          }
-        ],
+        "tour": {
+          "destinations": [
+            {
+              "id_destinasi": 401,
+              "type_wisata": "domestik"
+            },
+            {
+              "id_destinasi": 402,
+              "type_wisata": "asing"
+            }
+          ],
+          "activities": [
+            {
+              "id_vendor": 501,
+              "id_activity": 601,
+              "type_wisate": "domestik"
+            },
+            {
+              "id_vendor": 502,
+              "id_activity": 602,
+              "type_wisate": "asing"
+            }
+          ],
+          "restaurants": [
+            {
+              "id_resto": 701,
+              "id_menu": 801
+            },
+            {
+              "id_resto": 702,
+              "id_menu": 802
+            }
+          ]
+        },
         "transport": {
-          "id": 2,
-          "type": "Private Car",
-          "provider": "Ubud Transport",
-          "pickup_time": "08:00",
-          "pickup_location": "Hotel Kuta Seaview"
-        }
-      },
-      {
-        "id": 3,
-        "name": "Day 3",
-        "description": "Belanja oleh-oleh dan perjalanan pulang.",
-        "akomodasi": {
-          "hotels": [],
-          "villa": [],
+          "mobils": [
+            {
+              "id_mobil": 901,
+              "keterangan": "fullday"
+            },
+            {
+              "id_mobil": 902,
+              "keterangan": "inout"
+            }
+          ],
           "additional": [
             {
-              "id": 3,
-              "name": "Airport Transfer",
-              "description": "Transportasi menuju bandara"
+              "id_additional": 1001
+            },
+            {
+              "id_additional": 1002
             }
           ]
-        },
-        "tour_packages": [
-          {
-            "id": 4,
-            "name": "Krisna Oleh-oleh",
-            "time": "09:00 - 10:30",
-            "guide": "Ayu Lestari"
-          }
-        ],
-        "transport": {
-          "id": 3,
-          "type": "Shuttle Bus",
-          "provider": "Bali Trans",
-          "pickup_time": "11:00",
-          "pickup_location": "Villa Tegal Sari"
         }
       }
-    ]
-  }
-  
+    }
+  ]
+}

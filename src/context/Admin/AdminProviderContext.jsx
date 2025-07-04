@@ -1,10 +1,13 @@
 import AdminHotelContextProvider from "./AdminHotelContext";
 import AdminVillaContextProvider from "./AdminVillaContext";
+import AdminPackageContextProvider from "./AdminPackageContext";
 
 const AdminProviderContext = ({ children }) => {
   return (
     <AdminVillaContextProvider>
-      <AdminHotelContextProvider>{children}</AdminHotelContextProvider>
+      <AdminPackageContextProvider>
+        <AdminHotelContextProvider>{children}</AdminHotelContextProvider>
+      </AdminPackageContextProvider>
     </AdminVillaContextProvider>
   );
 };

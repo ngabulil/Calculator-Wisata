@@ -42,7 +42,7 @@ const AppTitleDescription = (props) => {
       <img
         alt="photo-detail"
         src="https://picsum.photos/200/300"
-        className="w-full h-[180px] rounded-[8px] object-center"
+        className="w-full h-[180px] rounded-[8px] object-cover"
       />
       <Flex direction={"column"} gap={2}>
         <Flex

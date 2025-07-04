@@ -7,18 +7,19 @@ import {
   TabPanels,
   Text,
   TabPanel,
+  Container,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { PopoverButton } from "../../../PopoverButton";
 
 const PackageRead = () => {
   return (
-    <Box
+    <Container
       bg={"gray.700"}
       p={4}
-      w={"full"}
       flexGrow="1"
       rounded={12}
+      maxW="4xl"
       display={"flex"}
     >
       <Flex direction={"column"} gap={4} w={"full"}>
@@ -65,7 +66,7 @@ const PackageRead = () => {
           </TabPanels>
         </Tabs>
       </Flex>
-    </Box>
+    </Container>
   );
 };
 
@@ -78,7 +79,7 @@ const AppTitleDescription = (props) => {
         <img
           alt="photo-detail"
           src="https://picsum.photos/200/300"
-          className="w-[30%] h-[300px] rounded-[12px] object-center"
+          className="w-[40%] h-[300px] rounded-[12px] object-center"
         />
         <Flex direction={"column"} gap={"15px"} w={"60%"} flexShrink={"1"}>
           <Text fontSize={"32px"} fontWeight={"bold"}>
@@ -233,7 +234,7 @@ const AppTourPackages = () => {
         <Flex direction={"column"} w={"full"} gap={2}>
           <Flex
             direction={"column"}
-            gap={2}
+            gap={4}
             alignItems={"center"}
             w={"full"}
             bg={"gray.800"}
@@ -246,35 +247,108 @@ const AppTourPackages = () => {
               w={"full"}
               justifyContent={"space-between"}
             >
-              <Text fontSize={"14px"} fontWeight={"semibold"}>
+              <Text fontSize={"16px"} fontWeight={"semibold"}>
                 Tour Bali 3 Hari
               </Text>
-              <Text fontSize={"14px"}>Paket 3</Text>
+              <Text fontSize={"16px"}>Paket 3</Text>
             </Flex>
-            <Flex gap={2}>
-              {Array.from({ length: 3 }).map((_, index) => {
-                return (
-                  <Box
-                    bg={"gray.700"}
-                    p={2}
-                    rounded={10}
-                    w={"full"}
-                    display={"flex"}
-                  >
-                    <Text fontSize={"12px"}>
-                      {index + 1}. Lorem Ipsum is simply dummy text of the
-                      printing and typesetting industry. Lorem Ipsum has been
-                      the industry's standard dummy text ever since the 1500s,
-                      when an unknown printer took a galley of type and
-                      scrambled it
-                    </Text>
-                  </Box>
-                );
-              })}
+            <Flex gap={2} direction={"column"} gap={4}>
+              <Flex rounded={10} w={"full"} direction={"column"} gap={2}>
+                <Text fontSize={"12px"} fontWeight="bold">
+                  {1}. Lorem Ipsum is simply dummy text of the
+                </Text>
+                <Text fontSize={"12px"}>
+                  {2}. Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s, when an unknown
+                  printer took a galley of type and scrambled it
+                </Text>
+              </Flex>
+              <Flex gap={3}>
+                <AppRestaurantCard
+                  title="Restoran Bali"
+                  subtitle="Buffet Lunch"
+                />
+                {/* traveler Card */}
+                <AppTravelerCard
+                  title="Traveler"
+                  subtitle="2 Adults, 1 Child"
+                />
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
       </Flex>
+    </Flex>
+  );
+};
+
+const AppRestaurantCard = (props) => {
+  return (
+    <Flex
+      direction={"row"}
+      gap={2}
+      alignItems={"center"}
+      w={"30%"}
+      bg={"gray.700"}
+      rounded={"12px"}
+      p={"10px"}
+    >
+      <Icon
+        icon="famicons:restaurant-sharp"
+        className="text-white text-[38px] rounded-full p-[8px] border-1 border-white"
+      />
+      <Flex direction={"column"} gap={0} w={"full"}>
+        <Text fontSize={"12px"} fontWeight={"bold"}>
+          {props.title}
+        </Text>
+        <Flex
+          w={"full"}
+          direction={"row"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
+          <Text fontSize={"10px"}>{props.subtitle}</Text>
+          <Flex gap={1} alignItems={"center"}>
+            <Icon icon="mdi:people" className="text-white text-[14px]" />
+            <Text fontSize={"12px"}>2</Text>
+          </Flex>
+        </Flex>
+      </Flex>
+      {/*  */}
+    </Flex>
+  );
+};
+
+const AppTravelerCard = (props) => {
+  return (
+    <Flex
+      direction={"row"}
+      gap={2}
+      alignItems={"center"}
+      w={"30%"}
+      bg={"gray.700"}
+      rounded={"12px"}
+      p={"10px"}
+    >
+      <Icon
+        icon="fluent:people-queue-32-filled"
+        className="text-white text-[38px] rounded-full p-[8px] border-1 border-white"
+      />
+      <Flex direction={"column"} gap={0} w={"full"}>
+        <Text fontSize={"12px"} fontWeight={"bold"}>
+          {props.title}
+        </Text>
+        <Flex
+          w={"full"}
+          direction={"row"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        >
+          <Text fontSize={"10px"}>{props.subtitle}</Text>
+        </Flex>
+      </Flex>
+      {/*  */}
     </Flex>
   );
 };

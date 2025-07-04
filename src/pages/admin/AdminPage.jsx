@@ -39,7 +39,7 @@ const AdminPage = () => {
           <Button
             bg={"blue.500"}
             onClick={() => {
-              if (formActive) setFormActive(!formActive);
+              setFormActive(!formActive);
               if (readPackageActive) setReadPackageActive(false);
             }}
           >
