@@ -10,13 +10,22 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { useLocation } from "react-router-dom";
 
 const SubNavbarPackage = () => {
+  const location = useLocation();
+
+  const buttonLabel = location.pathname.includes("hotel")
+    ? "Hotel"
+    : location.pathname.includes("villa")
+    ? "Villa"
+    : "Package";
+
   return (
     <Popover placement="bottom-start" trigger="hover" isLazy>
       <PopoverTrigger>
         <Button rightIcon={<ChevronDownIcon />} variant="ghost" p="2">
-          Packages
+          {buttonLabel}
         </Button>
       </PopoverTrigger>
 
