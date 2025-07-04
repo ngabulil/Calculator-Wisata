@@ -1,50 +1,61 @@
 import {
-  Box, Button, FormLabel, HStack, IconButton, Input,
-  NumberInput, NumberInputField, Select, Text, VStack
-} from "@chakra-ui/react"
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons"
-import { useEffect, useState } from "react"
+  Box,
+  Button,
+  FormLabel,
+  HStack,
+  IconButton,
+  Input,
+  NumberInput,
+  NumberInputField,
+  Select,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
 
 const menuOptions = [
   "Buffet Lunch",
   "Set Menu Lunch",
   "Seafood Dinner",
   "Traditional Balinese",
-  "Vegan Menu"
-]
+  "Vegan Menu",
+];
 
-const RestaurantForm = ({ onChange }) => {
-  const [restaurantName, setRestaurantName] = useState("")
-  const [menu, setMenu] = useState("")
-  const [visitorCount, setVisitorCount] = useState(1)
-  const [list, setList] = useState([])
+const RestaurantForm = ({ onChange, isAdmin }) => {
+  const [restaurantName, setRestaurantName] = useState("");
+  const [menu, setMenu] = useState("");
+  const [visitorCount, setVisitorCount] = useState(1);
+  const [list, setList] = useState([]);
 
   useEffect(() => {
-    onChange?.(list)
-  }, [list, onChange])
+    onChange?.(list);
+  }, [list, onChange]);
 
   const handleAddRestaurant = () => {
-    if (!restaurantName || !menu || visitorCount <= 0) return
+    if (!restaurantName || !menu || visitorCount <= 0) return;
 
     const newItem = {
       restaurantName,
       menu,
-      visitorCount
-    }
+      visitorCount,
+    };
 
-    setList([...list, newItem])
-    setRestaurantName("")
-    setMenu("")
-    setVisitorCount(1)
-  }
+    setList([...list, newItem]);
+    setRestaurantName("");
+    setMenu("");
+    setVisitorCount(1);
+  };
 
   const handleDelete = (index) => {
-    setList(list.filter((_, i) => i !== index))
-  }
+    setList(list.filter((_, i) => i !== index));
+  };
 
   return (
     <Box>
-      <Text fontWeight="bold" fontSize="lg" mb={2}>🍽️ Restaurant & Menu</Text>
+      <Text fontWeight="bold" fontSize="lg" mb={2}>
+        🍽️ Restaurant & Menu
+      </Text>
       <VStack spacing={4} align="stretch">
         <Box>
           <FormLabel>Nama Restaurant</FormLabel>
@@ -63,7 +74,9 @@ const RestaurantForm = ({ onChange }) => {
             onChange={(e) => setMenu(e.target.value)}
           >
             {menuOptions.map((m, idx) => (
-              <option key={idx} value={m}>{m}</option>
+              <option key={idx} value={m}>
+                {m}
+              </option>
             ))}
           </Select>
         </Box>
@@ -79,7 +92,12 @@ const RestaurantForm = ({ onChange }) => {
           </NumberInput>
         </Box>
 
-        <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={handleAddRestaurant}>
+        <Button
+          leftIcon={<AddIcon />}
+          colorScheme="blue"
+          onClick={handleAddRestaurant}
+          variant={isAdmin ? "outline" : "solid"}
+        >
           Tambah Restaurant
         </Button>
 
@@ -110,7 +128,7 @@ const RestaurantForm = ({ onChange }) => {
         )}
       </VStack>
     </Box>
-  )
-}
+  );
+};
 
-export default RestaurantForm
+export default RestaurantForm;

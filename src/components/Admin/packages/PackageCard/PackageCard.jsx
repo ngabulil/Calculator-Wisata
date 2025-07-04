@@ -14,8 +14,9 @@ import { PopoverButton } from "../../../PopoverButton";
 const PackageCard = (props) => {
   return (
     <Box
-      bg={"gray.700"}
+      bg={"gray.800"}
       p={3}
+      shadow={"xl"}
       w={"20%"}
       flexGrow="1"
       rounded={8}

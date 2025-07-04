@@ -19,13 +19,13 @@ const TourPackagePage = () => {
   const toast = useToast();
 
   const handleSubmit = () => {
-    toast({
-      title: "Paket Tour Disimpan.",
-      description: "Data berhasil disubmit.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
+    // toast({
+    //   title: "Paket Tour Disimpan.",
+    //   description: "Data berhasil disubmit.",
+    //   status: "success",
+    //   duration: 3000,
+    //   isClosable: true,
+    // });
     console.log({ tourInfo, restaurants, visitorData });
   };
 
@@ -42,11 +42,11 @@ const TourPackagePage = () => {
       <Heading mb={6}>Buat Paket Tour</Heading>
       <VStack spacing={8} align="stretch">
         <TourHeaderForm onChange={setTourInfo} />
-        <RestaurantForm onChange={setRestaurants} />
+        <RestaurantForm isAdmin onChange={setRestaurants} />
         <VisitorCategoryForm onChange={setVisitorData} />
         <Box w={"full"}>
           <Button w={"full"} colorScheme="blue" onClick={handleSubmit}>
-            Simpan Paket Tour
+            Buat Paket Tour
           </Button>
         </Box>
       </VStack>

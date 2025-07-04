@@ -64,8 +64,11 @@ const TransportForm = () => {
     );
   };
 
-  const cardBg = useColorModeValue("gray.700", "gray.800");
   const textColor = useColorModeValue("white", "white");
+
+  const handleCreateTransport = () => {
+    console.log(days);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -251,8 +254,8 @@ const TransportForm = () => {
         </Tabs>
       </Box>
       <Box w={"full"}>
-        <Button w={"full"} colorScheme="blue">
-          Simpan Paket Tour
+        <Button w={"full"} colorScheme="blue" onClick={handleCreateTransport}>
+          Buat Transportasi
         </Button>
       </Box>
     </Container>
