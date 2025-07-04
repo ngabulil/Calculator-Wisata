@@ -19,6 +19,7 @@ const TransportCard = () => {
       flexGrow="1"
       bg={"gray.800"}
       p={"15px"}
+      shadow={"xl"}
       rounded={"12px"}
     >
       <Flex direction={"column"} gap={3}>
@@ -93,11 +94,11 @@ const AppTransport = (props) => {
       gap={2}
       alignItems={"start"}
       w={"full"}
-      bg={"gray.700"}
-      rounded={"12px"}
-      p={"12px"}
+      bg={"gray.900"}
+      rounded={"6px"}
+      p={"8px"}
     >
-      <Flex direction={"column"} gap={1} w={"full"}>
+      <Flex direction={"column"} gap={2} w={"full"}>
         <Flex alignItems={"center"} gap={2}>
           {" "}
           <Icon icon="mingcute:car-fill" className="text-white text-[16px] " />
@@ -105,9 +106,11 @@ const AppTransport = (props) => {
             {props.title}
           </Text>
         </Flex>
-        <AppTextLine title={"Jumlah"} subtitle={"1"} />
-        <AppTextLine title={"Area"} subtitle={"Kintamani, Ubud"} />
-        <AppTextLine title={"Harga"} subtitle={"Rp 500.000"} />
+        <Flex direction={"column"} gap={1}>
+          <AppTextLine title={"Jumlah"} subtitle={"1"} />
+          <AppTextLine title={"Area"} subtitle={"Kintamani, Ubud"} />
+          <AppTextLine title={"Harga"} subtitle={"Rp 500.000"} />
+        </Flex>
       </Flex>
     </Flex>
   );
@@ -120,7 +123,7 @@ const AppTextLine = (props) => {
       w={"full"}
       justifyContent={"space-between"}
       alignItems={"center"}
-      bg={"gray.800"}
+      bg={"gray.700"}
       p={2}
       color={"white"}
       fontWeight={"semibold"}

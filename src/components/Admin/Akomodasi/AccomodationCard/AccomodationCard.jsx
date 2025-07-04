@@ -20,6 +20,7 @@ const AccomodationCard = () => {
       rounded={12}
       w={"20%"}
       flexGrow={"1"}
+      shadow={"xl"}
     >
       <Flex
         direction={"row"}

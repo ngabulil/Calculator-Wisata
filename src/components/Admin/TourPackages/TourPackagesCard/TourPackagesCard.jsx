@@ -14,6 +14,7 @@ const TourPackagesCard = () => {
       p={"15px"}
       pb={"20px"}
       rounded={"12px"}
+      shadow={"xl"}
     >
       <Flex
         direction={"row"}
@@ -52,13 +53,20 @@ const TourPackagesCard = () => {
             {/* traveler Card */}
             <AppTravelerCard title="Traveler" subtitle="2 Adults, 1 Child" />
             {/* day description */}
-            <Box w="full" h="full" p={1.5} className="border-1 rounded-[12px]">
+            <Box
+              w="full"
+              h="full"
+              className=" rounded-[10px]"
+              border={1}
+              borderColor={"gray.900"}
+              position={"relative"}
+            >
               <Carousel>
                 {Array.from({ length: 3 }).map((_, index) => {
                   return (
                     <Box
                       key={index}
-                      bg={"gray.700"}
+                      bg={"gray.900"}
                       p={2}
                       rounded={10}
                       h={"full"}
@@ -90,8 +98,8 @@ const AppRestaurantCard = (props) => {
       gap={2}
       alignItems={"center"}
       w={"full"}
-      bg={"gray.700"}
-      rounded={"12px"}
+      bg={"gray.900"}
+      rounded={"10px"}
       p={"10px"}
     >
       <Icon
@@ -127,8 +135,8 @@ const AppTravelerCard = (props) => {
       gap={2}
       alignItems={"center"}
       w={"full"}
-      bg={"gray.700"}
-      rounded={"12px"}
+      bg={"gray.900"}
+      rounded={"10px"}
       p={"10px"}
     >
       <Icon
