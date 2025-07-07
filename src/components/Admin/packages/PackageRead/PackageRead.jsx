@@ -252,7 +252,7 @@ const AppTourPackages = () => {
               </Text>
               <Text fontSize={"16px"}>Paket 3</Text>
             </Flex>
-            <Flex gap={2} direction={"column"} gap={4}>
+            <Flex direction={"column"} gap={4}>
               <Flex rounded={10} w={"full"} direction={"column"} gap={2}>
                 <Text fontSize={"12px"} fontWeight="bold">
                   {1}. Lorem Ipsum is simply dummy text of the

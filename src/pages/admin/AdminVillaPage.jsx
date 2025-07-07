@@ -11,17 +11,21 @@ import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import VillaCard from "../../components/Admin/Villa/VillaCard/VillaCard";
 import VillaForm from "../../components/Admin/Villa/VillaForm/VillaForm";
-import villasJson from "../../data/villas.json";
+
 import { useAdminVillaContext } from "../../context/Admin/AdminVillaContext";
 import { useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import SearchBar from "../../components/searchBar";
+import { apiDeleteVilla } from "../../services/villaService";
+import toastConfig from "../../utils/toastConfig";
+import { useToast } from "@chakra-ui/react";
 
 const ITEMS_PER_PAGE = 8;
 
 const AdminVillaPage = () => {
+  const toast = useToast();
   const [formActive, setFormActive] = useState(false);
-  const { updateVillaData } = useAdminVillaContext();
+  const { updateVillaData, getAllVilla } = useAdminVillaContext();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
   const [villas, setVillas] = useState([]);
@@ -31,9 +35,13 @@ const AdminVillaPage = () => {
     setCurrentPage(selectedItem.selected);
   };
 
-  const handleGetVillas = () => {
-    setVillas(villasJson);
-    setRecentVillas(villasJson);
+  const handleGetVillas = async () => {
+    await getAllVilla().then((value) => {
+      if (value.length != 0) {
+        setVillas(value);
+        setRecentVillas(value);
+      }
+    });
   };
 
   const handleVillaSearch = (value) => {
@@ -48,6 +56,23 @@ const AdminVillaPage = () => {
         );
       });
       setVillas(villaFiltered);
+    }
+  };
+
+  const handleDeleteVilla = async (id) => {
+    try {
+      const res = await apiDeleteVilla(id);
+
+      console.log(res);
+      if (res.status == 200) {
+        toast(toastConfig("Hapus Sukses", "Villa Berhasil Dihapus", "success"));
+        handleGetVillas();
+      } else {
+        toast(toastConfig("Hapus Gagal", "Villa Gagal Dihapus", "error"));
+      }
+    } catch (error) {
+      console.log(error);
+      toast(toastConfig("Hapus Gagal", "Villa Gagal Dihapus", "error"));
     }
   };
 
@@ -102,6 +127,7 @@ const AdminVillaPage = () => {
             {currentVillas.map((villa, index) => (
               <VillaCard
                 key={index}
+                flexGrow={currentVillas >= 4 ? "1" : "0"}
                 photoLink={`https://picsum.photos/2${index + 6}1/300`}
                 name={villa.villaName}
                 stars={villa.stars}
@@ -113,6 +139,9 @@ const AdminVillaPage = () => {
                 onEditButton={() => {
                   updateVillaData(villa);
                   setFormActive(true);
+                }}
+                onDeleteButton={() => {
+                  handleDeleteVilla(villa.id);
                 }}
               />
             ))}

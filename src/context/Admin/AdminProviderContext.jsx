@@ -4,11 +4,11 @@ import AdminPackageContextProvider from "./AdminPackageContext";
 
 const AdminProviderContext = ({ children }) => {
   return (
-    <AdminVillaContextProvider>
-      <AdminPackageContextProvider>
+    <AdminPackageContextProvider>
+      <AdminVillaContextProvider>
         <AdminHotelContextProvider>{children}</AdminHotelContextProvider>
-      </AdminPackageContextProvider>
-    </AdminVillaContextProvider>
+      </AdminVillaContextProvider>
+    </AdminPackageContextProvider>
   );
 };
 

@@ -6,47 +6,54 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
-
-// Dummy restoran & menu
-const dummyRestaurants = [
-  { value: 701, label: "Bebek Tepi Sawah" },
-  { value: 702, label: "Warung Made" },
-];
-
-const dummyMenus = {
-  701: [
-    { value: 801, label: "Bebek Goreng" },
-    { value: 802, label: "Ayam Bakar" },
-  ],
-  702: [
-    { value: 803, label: "Nasi Campur Bali" },
-    { value: 804, label: "Ikan Bakar" },
-  ],
-};
+import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 
 const RestaurantCard = ({ index, data, onChange, onDelete }) => {
+  const { restaurant } = useAdminPackageContext();
+
   const [selectedResto, setSelectedResto] = useState(
     data.selectedResto || null
   );
-  const [selectedMenu, setSelectedMenu] = useState(data.selectedMenu || null);
+  const [selectedPackage, setSelectedPackage] = useState(
+    data.selectedPackage || null
+  );
 
   const textColor = useColorModeValue("white", "white");
 
+  // Daftar opsi restoran
+  const restaurantOptions = useMemo(() => {
+    return restaurant.map((r) => ({
+      value: r.id,
+      label: r.resto_name,
+    }));
+  }, [restaurant]);
+
+  // Daftar paket berdasarkan restoran terpilih
+  const packageOptions = useMemo(() => {
+    if (!selectedResto) return [];
+
+    const resto = restaurant.find((r) => r.id === selectedResto.value);
+    return (
+      resto?.packages.map((p) => ({
+        value: p.id_package,
+        label: p.package_name,
+        fullData: p,
+      })) || []
+    );
+  }, [selectedResto, restaurant]);
+
+  // Sinkronisasi ke parent
   useEffect(() => {
     onChange({
       ...data,
       selectedResto,
-      selectedMenu,
+      selectedPackage,
       id_resto: selectedResto?.value,
-      id_menu: selectedMenu?.value,
+      id_package: selectedPackage?.value,
     });
-  }, [selectedResto, selectedMenu]);
-
-  const availableMenus = selectedResto
-    ? dummyMenus[selectedResto.value] || []
-    : [];
+  }, [selectedResto, selectedPackage]);
 
   return (
     <Box bg="gray.600" p={4} rounded="md">
@@ -70,27 +77,27 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
           Pilih Restoran
         </Text>
         <MainSelectCreatableWithDelete
-          options={dummyRestaurants}
+          options={restaurantOptions}
           value={selectedResto}
           onChange={(val) => {
             setSelectedResto(val);
-            setSelectedMenu(null); // reset menu saat ganti restoran
+            setSelectedPackage(null); // reset package saat ganti resto
           }}
           placeholder="Pilih restoran"
         />
       </Box>
 
-      {/* Pilih Menu */}
+      {/* Pilih Paket Menu */}
       {selectedResto && (
         <Box>
           <Text fontSize="sm" color="gray.300" mb={1}>
-            Pilih Menu
+            Pilih Paket Menu
           </Text>
           <MainSelectCreatableWithDelete
-            options={availableMenus}
-            value={selectedMenu}
-            onChange={setSelectedMenu}
-            placeholder="Pilih menu"
+            options={packageOptions}
+            value={selectedPackage}
+            onChange={setSelectedPackage}
+            placeholder="Pilih paket"
           />
         </Box>
       )}

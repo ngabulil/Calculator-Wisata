@@ -121,6 +121,10 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
     return () => clearTimeout(delayTimer);
   }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed]);
 
+  useEffect(() => {
+    console.log(hotels);
+  }, []);
+
   return (
     <Box bg="gray.600" p={4} rounded="md">
       <HStack justify="space-between" mb={3}>

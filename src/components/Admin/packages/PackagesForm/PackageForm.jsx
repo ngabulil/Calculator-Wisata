@@ -31,6 +31,8 @@ import InfoCard from "../../../Akomodasi/InfoCard";
 import MobilCard from "../../../Transport/MobilCard";
 
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import { useAkomodasiContext } from "../../../../context/AkomodasiContext";
+import { useTransportContext } from "../../../../context/TransportContext";
 
 import DestinationCard from "../../TourPackages/TourPackagesFormCard/DestinationCard";
 import ActivityCard from "../../TourPackages/TourPackagesFormCard/ActivitiesCard";
@@ -38,15 +40,10 @@ import RestaurantCard from "../../TourPackages/TourPackagesFormCard/RestaurantCa
 
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const {
-    getHotels,
-    getVillas,
-    getAkomodasiAdditional,
-    getMobils,
-    getTransportAdditional,
-    days,
-    setDays,
-  } = useAdminPackageContext();
+  const { getAllActivities, getAllRestaurant, days, setDays } =
+    useAdminPackageContext();
+  const { getMobils, getAdditionalMobil } = useTransportContext();
+  const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
 
   const handleAddDay = () => {
     setDays((prev) => [
@@ -75,31 +72,14 @@ const PackageCreateForm = (props) => {
     const fetchData = async () => {
       await getHotels();
       await getVillas();
-      await getAkomodasiAdditional();
+      await getAdditional();
       await getMobils();
-      await getTransportAdditional();
+      await getAdditionalMobil();
+      await getAllActivities();
+      await getAllRestaurant();
     };
     fetchData();
   }, []);
-
-  // useEffect(() => {
-  //   const total = days.reduce((sum, day) => {
-  //     const subtotal =
-  //       hitungTotalHotel(day.hotels) +
-  //       hitungTotalVilla(day.villas) +
-  //       hitungTotalAdditional(day.additionalInfo);
-
-  //     const markup = day.markup || { type: "percent", value: 0 };
-  //     const markupAmount =
-  //       markup.type === "amount"
-  //         ? markup.value
-  //         : (markup.value / 100) * subtotal;
-
-  //     return sum + subtotal + markupAmount;
-  //   }, 0);
-
-  //   setAkomodasiTotal(total);
-  // }, [days]);
 
   useEffect(() => {
     props.onChange?.(days);

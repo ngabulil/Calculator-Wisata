@@ -2,7 +2,7 @@ import { Flex, Text, Box, VStack } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { PopoverButton } from "../../../PopoverButton";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import formatRupiah from "../../../../utils/rupiahFormat";
 
 const HotelCard = (props) => {
@@ -12,8 +12,8 @@ const HotelCard = (props) => {
     <Flex
       direction="column"
       gap={3}
-      w="20%"
-      flexGrow="1"
+      w={"25%"}
+      flexGrow={props.flexGrow || "1"}
       bg="gray.800"
       rounded="12px"
     >
@@ -38,7 +38,9 @@ const HotelCard = (props) => {
                 navigate(`/admin/packages/hotel/edit`);
                 props.onEditButton();
               }}
-              onDeleteButton={() => {}}
+              onDeleteButton={() => {
+                props.onDeleteButton();
+              }}
             />
           </Flex>
         </Box>
@@ -56,7 +58,24 @@ const HotelCard = (props) => {
 };
 
 const HotelInfoCard = (props) => {
-  const [seasonPrice, setSeasonPrice] = useState(props.seasons.normal);
+  const [seasonPrice, setSeasonPrice] = useState(0);
+  const totalSeasons = Object.fromEntries(
+    Object.entries(props.seasons).map(([season, rooms]) => {
+      const totalPrice = rooms.reduce((sum, room) => sum + room.price, 0);
+      return [season, totalPrice];
+    })
+  );
+
+  let countExtrabed = 0;
+
+  for (let i = 0; i < props.extraBed.length; i++) {
+    countExtrabed += props.extraBed[i].price;
+  }
+
+  useEffect(() => {
+    setSeasonPrice(totalSeasons.normal);
+  }, []);
+
   return (
     <Flex
       direction="column"
@@ -69,7 +88,7 @@ const HotelInfoCard = (props) => {
       justifyContent={"space-between"}
     >
       <Flex direction={"column"} w={"full"} gap={1}>
-        {props.extraBed && (
+        {props.extraBed.length > 0 && (
           <Text
             bg={"gray.600"}
             py={1}
@@ -78,7 +97,7 @@ const HotelInfoCard = (props) => {
             w={"max"}
             fontSize="10px"
           >
-            Extra Bed
+            {props.extraBed.length} Extra Bed
           </Text>
         )}
 
@@ -104,7 +123,17 @@ const HotelInfoCard = (props) => {
             })}
           </Flex>
         </Flex>
-        <Text fontSize="12px">{props.roomType}</Text>
+        {props.roomType.length > 0 && (
+          <Flex gap={2}>
+            {props.roomType.map((room, index) => {
+              return (
+                <Text key={index} fontSize="12px" rounded={"4px"}>
+                  {room.label}
+                </Text>
+              );
+            })}
+          </Flex>
+        )}
       </Flex>
 
       <Flex
@@ -114,43 +143,47 @@ const HotelInfoCard = (props) => {
         fontSize="10px"
         color="gray.300"
       >
-        {props.contractUntil && (
-          <Text alignSelf={"end"} fontSize="10px">
-            {props.contractUntil}
-          </Text>
-        )}
         {/* <Flex direction={"column"} alignItems="stretch" gap={2} w={"full"}>
-        {Object.entries(props.seasons).map(([season, price]) => (
-          <Flex
-            key={season}
-            p={"10px"}
-            bg="gray.700"
-            rounded="10px"
-            direction={"row"}
-            justifyContent={"space-between"}
-            w={"full"}
-          >
-            <Text
-              fontSize={"10px"}
-              fontWeight="bold"
-              textTransform="capitalize"
-            >
-              {season}
-            </Text>
-            <Text fontSize={"9px"} color="gray.300">
-              Rp {price}
-            </Text>
-          </Flex>
-        ))}
-      </Flex> */}
+          {Object.entries(props.seasons).map(([season, rooms]) => (
+            <Box key={season} mb={4}>
+              <Text
+                fontSize={"10px"}
+                fontWeight="bold"
+                textTransform="capitalize"
+                mb={1}
+              >
+                {season}
+              </Text>
+
+              {rooms.map((room, index) => (
+                <Flex
+                  key={index}
+                  p="8px"
+                  bg="gray.700"
+                  rounded="10px"
+                  direction="row"
+                  justifyContent="space-between"
+                  mb={1}
+                >
+                  <Text fontSize="9px" color="gray.200">
+                    Room ID: {room.idRoom}
+                  </Text>
+                  <Text fontSize="9px" color="gray.300">
+                    Rp {room.price.toLocaleString("id-ID")}
+                  </Text>
+                </Flex>
+              ))}
+            </Box>
+          ))}
+        </Flex> */}
         <Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
           <SeasonSelect
-            seasons={props.seasons}
+            seasons={totalSeasons}
             onChange={(price) => setSeasonPrice(price)}
           />
           <Text fontSize={18} fontWeight={"bold"}>
             {formatRupiah(
-              seasonPrice + (props.extraBed && parseInt(props.extraBed))
+              seasonPrice + (props.extraBed.length > 0 && countExtrabed)
             )}
           </Text>
         </Flex>

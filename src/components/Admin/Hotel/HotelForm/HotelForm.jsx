@@ -11,6 +11,11 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAdminHotelContext } from "../../../../context/Admin/AdminHotelContext";
+import { apiPostHotel } from "../../../../services/hotelService";
+import toastConfig from "../../../../utils/toastConfig";
+import { useToast } from "@chakra-ui/react";
+import AddRoomTypeCard from "../HotelFormCard/AddRoomTypeCard";
+import AddSeasonCard from "../HotelFormCard/AddSeasonCard";
 
 const predefinedStars = [
   { label: "1", value: 1 },
@@ -21,13 +26,14 @@ const predefinedStars = [
 ];
 
 const HotelForm = () => {
+  const toast = useToast();
   const location = useLocation();
   const { hotelData } = useAdminHotelContext();
-  const [editFormActive, setEditFormActive] = useState(false);
   const [stars, setStars] = useState(1);
   const [photoLink, setPhotoLink] = useState("");
   const [contractUntil, setContractUntil] = useState("");
   const [extraBed, setExtraBed] = useState(false);
+  //
   const [hotelName, setHotelName] = useState("");
   const [roomType, setRoomType] = useState("");
   const [seasonPrices, setSeasonPrices] = useState({
@@ -35,13 +41,17 @@ const HotelForm = () => {
     high: "",
     peak: "",
   });
-
-  const handleSeasonPriceChange = (season, value) => {
-    setSeasonPrices((prev) => ({
-      ...prev,
-      [season]: value,
-    }));
-  };
+  // fetch create
+  const [editFormActive, setEditFormActive] = useState(false);
+  const [hotelAvailable, setHotelAvailable] = useState(false);
+  const [hotelCreateId, setHotelCreateId] = useState(null);
+  //
+  // const handleSeasonPriceChange = (season, value) => {
+  //   setSeasonPrices((prev) => ({
+  //     ...prev,
+  //     [season]: value,
+  //   }));
+  // };
 
   const handleHotelSetValue = () => {
     setHotelName(hotelData.hotelName || "");
@@ -57,22 +67,31 @@ const HotelForm = () => {
     setPhotoLink(hotelData.photoLink || "");
   };
 
-  const handleHotelCreate = () => {
+  const handleHotelCreate = async () => {
     const data = {
-      hotelName: hotelName,
-      stars: stars,
-      photoLink: photoLink,
-      roomType: roomType,
-      seasons: {
-        normal: seasonPrices.normal,
-        high: seasonPrices.high,
-        peak: seasonPrices.peak,
-      },
-
-      extraBed: extraBed,
-      contractUntil: contractUntil,
+      name: hotelName,
+      star: stars,
+      link_photo: photoLink,
     };
-    console.log(data);
+
+    try {
+      const res = await apiPostHotel(data);
+
+      if (res.status == 201) {
+        toast(
+          toastConfig("Hotel Created", "Hotel Berhasil Ditambahkan!", "success")
+        );
+
+        setHotelAvailable(true);
+        setHotelCreateId(res.result.id);
+      } else {
+        toast(toastConfig("Hotel Failed", "Hotel Gagal Ditambahkan", "error"));
+        setHotelAvailable(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setHotelAvailable(false);
+    }
   };
 
   const handleHotelUpdate = () => {
@@ -124,23 +143,13 @@ const HotelForm = () => {
           }}
         />
       </Box>
-      <Box mb={4}>
-        <FormLabel>Room Type</FormLabel>
-        <Input
-          placeholder="Contoh: Livio Suite"
-          value={roomType}
-          onChange={(e) => {
-            setRoomType(e.target.value);
-          }}
-        />
-      </Box>
+
       <Box mb={4}>
         <FormLabel>Link Hotel Photos</FormLabel>
         <Input
           placeholder="Contoh: https://picsum.photos/id/237/200/300 "
-          value={photoLink}
           onChange={(e) => {
-            setRoomType(e.target.value);
+            setPhotoLink(e.target.value);
           }}
         />
       </Box>
@@ -156,7 +165,7 @@ const HotelForm = () => {
         </Select>
       </Box>
 
-      <Box mb={4}>
+      {/* <Box mb={4}>
         <FormLabel>Season Prices</FormLabel>
         <VStack
           spacing={3}
@@ -201,24 +210,10 @@ const HotelForm = () => {
             />
           </Box>
         </VStack>
-      </Box>
+      </Box> */}
+      {hotelAvailable && <AddRoomTypeCard id_hotel={hotelCreateId} />}
+      {hotelAvailable && <AddSeasonCard id_hotel={hotelCreateId} />}
 
-      <Box mb={4}>
-        <FormLabel>Contract Until</FormLabel>
-        <Input
-          type="date"
-          value={contractUntil}
-          onChange={(e) => setContractUntil(e.target.value)}
-        />
-      </Box>
-
-      <Box mb={4}>
-        <FormLabel>Extra Bed Available</FormLabel>
-        <Select value={extraBed} onChange={(e) => setExtraBed(e.target.value)}>
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </Select>
-      </Box>
       <Button
         w={"full"}
         bg={"blue.500"}

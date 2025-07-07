@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
+import { apiGetAllVilla } from "../../services/akomodasiService";
+import { apiGetAllVillaRooms } from "../../services/villaService";
 
 const AdminVillaContext = createContext();
 
@@ -7,6 +9,7 @@ export const useAdminVillaContext = () => {
 };
 
 const AdminVillaContextProvider = ({ children }) => {
+  const [roomTypeSelect, SetRoomTypeSelect] = useState([]);
   const [villaData, setVillaData] = useState({
     villaName: "",
     stars: "",
@@ -22,6 +25,31 @@ const AdminVillaContextProvider = ({ children }) => {
     contractUntil: "",
   });
 
+  const getAllVilla = async () => {
+    try {
+      const response = await apiGetAllVilla();
+
+      return response.result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRoomTypeSelect = async (id_villa) => {
+    try {
+      const response = await apiGetAllVillaRooms();
+
+      const roomType = response.result.filter(
+        (room) => room.id_villa === id_villa
+      );
+
+      SetRoomTypeSelect(roomType);
+      return response.result;
+    } catch (error) {
+      console.log(error); // Added error logging
+    }
+  };
+
   const updateVillaData = (partial) => {
     setVillaData((prev) => ({
       ...prev,
@@ -31,8 +59,11 @@ const AdminVillaContextProvider = ({ children }) => {
 
   const value = {
     villaData,
+    roomTypeSelect,
     setVillaData,
     updateVillaData,
+    getRoomTypeSelect,
+    getAllVilla,
   };
 
   return (

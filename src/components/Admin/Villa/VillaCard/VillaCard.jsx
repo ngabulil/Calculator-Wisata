@@ -4,6 +4,7 @@ import { PopoverButton } from "../../../PopoverButton";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import formatRupiah from "../../../../utils/rupiahFormat";
+import { useEffect } from "react";
 
 const VillaCard = (props) => {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ const VillaCard = (props) => {
     <Flex
       direction="column"
       gap={3}
-      w="20%"
-      flexGrow="1"
+      w={"25%"}
+      flexGrow={props.flexGrow || "1"}
       bg="gray.800"
       rounded="12px"
     >
@@ -38,7 +39,7 @@ const VillaCard = (props) => {
                 navigate(`/admin/packages/Villa/edit`);
                 props.onEditButton();
               }}
-              onDeleteButton={() => {}}
+              onDeleteButton={props.onDeleteButton}
             />
           </Flex>
         </Box>
@@ -47,7 +48,6 @@ const VillaCard = (props) => {
           stars={props.stars}
           roomType={props.roomType}
           contractUntil={props.contractUntil}
-          honeymoonPackage={props.honeymoonPackage}
           extraBed={props.extraBed}
           seasons={props.seasons}
         />
@@ -57,7 +57,25 @@ const VillaCard = (props) => {
 };
 
 const VillaInfoCard = (props) => {
-  const [seasonPrice, setSeasonPrice] = useState(props.seasons.normal);
+  const [seasonPrice, setSeasonPrice] = useState(0);
+
+  const totalSeasons = Object.fromEntries(
+    Object.entries(props.seasons).map(([season, rooms]) => {
+      const totalPrice = rooms.reduce((sum, room) => sum + room.price, 0);
+      return [season, totalPrice];
+    })
+  );
+
+  let countExtrabed = 0;
+
+  for (let i = 0; i < props.extraBed.length; i++) {
+    countExtrabed += props.extraBed[i].price;
+  }
+
+  useEffect(() => {
+    setSeasonPrice(totalSeasons.normal);
+  }, []);
+
   return (
     <Flex
       direction="column"
@@ -71,7 +89,7 @@ const VillaInfoCard = (props) => {
     >
       <Flex direction={"column"} w={"full"} gap={1}>
         <Flex gap={2}>
-          {props.extraBed && (
+          {props.extraBed.length > 0 && (
             <Text
               bg={"gray.600"}
               py={1}
@@ -80,19 +98,7 @@ const VillaInfoCard = (props) => {
               w={"max"}
               fontSize="10px"
             >
-              Extra Bed
-            </Text>
-          )}
-          {props.honeymoonPackage && (
-            <Text
-              bg={"gray.600"}
-              py={1}
-              px={3}
-              rounded={"full"}
-              w={"max"}
-              fontSize="10px"
-            >
-              Honey Moon
+              {props.extraBed.length} Extra Bed
             </Text>
           )}
         </Flex>
@@ -119,7 +125,17 @@ const VillaInfoCard = (props) => {
             })}
           </Flex>
         </Flex>
-        <Text fontSize="12px">{props.roomType}</Text>
+        {props.roomType.length > 0 && (
+          <Flex gap={2}>
+            {props.roomType.map((room, index) => {
+              return (
+                <Text key={index} fontSize="12px" rounded={"4px"}>
+                  {room.label}
+                </Text>
+              );
+            })}
+          </Flex>
+        )}
       </Flex>
 
       <Flex
@@ -129,11 +145,6 @@ const VillaInfoCard = (props) => {
         fontSize="10px"
         color="gray.300"
       >
-        {props.contractUntil && (
-          <Text alignSelf={"end"} fontSize="10px">
-            {props.contractUntil}
-          </Text>
-        )}
         {/* <Flex direction={"column"} alignItems="stretch" gap={2} w={"full"}>
         {Object.entries(props.seasons).map(([season, price]) => (
           <Flex
@@ -160,12 +171,12 @@ const VillaInfoCard = (props) => {
       </Flex> */}
         <Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
           <SeasonSelect
-            seasons={props.seasons}
+            seasons={totalSeasons}
             onChange={(price) => setSeasonPrice(price)}
           />
           <Text fontSize={18} fontWeight={"bold"}>
             {formatRupiah(
-              seasonPrice + (props.extraBed && parseInt(props.extraBed))
+              seasonPrice + (props.extraBed.length > 0 && countExtrabed)
             )}
           </Text>
         </Flex>

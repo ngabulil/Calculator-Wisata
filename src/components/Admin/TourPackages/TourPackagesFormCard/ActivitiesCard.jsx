@@ -6,65 +6,50 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
-
-// Dummy data aktivitas dan vendor
-const dummyVendors = [
-  { value: 501, label: "Bali Dive Center" },
-  { value: 502, label: "Sky Adventure Club" },
-];
-
-const dummyActivities = [
-  { value: 601, label: "Snorkeling", id_vendor: 501, type_wisate: "domestik" },
-  { value: 602, label: "Paragliding", id_vendor: 502, type_wisate: "asing" },
-];
-
-const typeWisataOptions = [
-  { value: "domestik", label: "Domestik" },
-  { value: "asing", label: "Asing" },
-];
+import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 
 const ActivityCard = ({ index, data, onChange, onDelete }) => {
-  const [selectedActivity, setSelectedActivity] = useState(
-    data.selectedActivity || null
-  );
+  const { activities } = useAdminPackageContext();
+
   const [selectedVendor, setSelectedVendor] = useState(
     data.selectedVendor || null
   );
-  const [selectedTypeWisata, setSelectedTypeWisata] = useState(
-    data.selectedTypeWisata || null
+  const [selectedActivity, setSelectedActivity] = useState(
+    data.selectedActivity || null
   );
 
   const textColor = useColorModeValue("white", "white");
 
-  // Sinkronisasi data ke parent
+  const vendorOptions = useMemo(() => {
+    return activities.map((v) => ({
+      value: v.id,
+      label: v.name_vendor,
+    }));
+  }, [activities]);
+
+  const activityOptions = useMemo(() => {
+    if (!selectedVendor) return [];
+    const vendor = activities.find((v) => v.id === selectedVendor.value);
+    return (
+      vendor?.activities.map((a) => ({
+        value: a.activity_id,
+        label: a.name,
+        fullData: a,
+      })) || []
+    );
+  }, [activities, selectedVendor]);
+
   useEffect(() => {
     onChange({
       ...data,
-      selectedActivity,
       selectedVendor,
-      selectedTypeWisata,
-      id_activity: selectedActivity?.value,
+      selectedActivity,
       id_vendor: selectedVendor?.value,
-      type_wisate: selectedTypeWisata?.value,
+      id_activity: selectedActivity?.value,
     });
-  }, [selectedActivity, selectedVendor, selectedTypeWisata]);
-
-  // Auto-set vendor dan type_wisate saat activity dipilih
-  useEffect(() => {
-    if (selectedActivity) {
-      const act = dummyActivities.find(
-        (a) => a.value === selectedActivity.value
-      );
-      if (act) {
-        const vendor = dummyVendors.find((v) => v.value === act.id_vendor);
-        const type = typeWisataOptions.find((t) => t.value === act.type_wisate);
-        setSelectedVendor(vendor || null);
-        setSelectedTypeWisata(type || null);
-      }
-    }
-  }, [selectedActivity]);
+  }, [selectedVendor, selectedActivity]);
 
   return (
     <Box bg="gray.600" p={4} rounded="md">
@@ -82,44 +67,33 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
         />
       </HStack>
 
+      {/* Pilih Vendor */}
+      <Box mb={3}>
+        <Text fontSize="sm" color="gray.300" mb={1}>
+          Pilih Vendor
+        </Text>
+        <MainSelectCreatableWithDelete
+          options={vendorOptions}
+          value={selectedVendor}
+          onChange={(val) => {
+            setSelectedVendor(val);
+            setSelectedActivity(null); // Reset activity ketika vendor diganti
+          }}
+          placeholder="Pilih vendor"
+        />
+      </Box>
+
       {/* Pilih Aktivitas */}
       <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Pilih Aktivitas
         </Text>
         <MainSelectCreatableWithDelete
-          options={dummyActivities}
+          options={activityOptions}
           value={selectedActivity}
           onChange={setSelectedActivity}
+          isDisabled={!selectedVendor}
           placeholder="Pilih aktivitas"
-        />
-      </Box>
-
-      {/* Pilih Vendor */}
-      <Box mb={3}>
-        <Text fontSize="sm" color="gray.300" mb={1}>
-          Vendor
-        </Text>
-        <MainSelectCreatableWithDelete
-          options={dummyVendors}
-          value={selectedVendor}
-          onChange={setSelectedVendor}
-          placeholder="Pilih vendor"
-          isDisabled
-        />
-      </Box>
-
-      {/* Tipe Wisata */}
-      <Box>
-        <Text fontSize="sm" color="gray.300" mb={1}>
-          Tipe Wisata
-        </Text>
-        <MainSelectCreatableWithDelete
-          options={typeWisataOptions}
-          value={selectedTypeWisata}
-          onChange={setSelectedTypeWisata}
-          placeholder="Pilih tipe wisata"
-          isDisabled
         />
       </Box>
     </Box>

@@ -11,6 +11,11 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAdminVillaContext } from "../../../../context/Admin/AdminVillaContext";
+import toastConfig from "../../../../utils/toastConfig";
+import { useToast } from "@chakra-ui/react";
+import { apiPostVilla } from "../../../../services/villaService";
+import AddRoomTypeCard from "../VillaFormCard/AddRoomTypeCard";
+import AddSeasonCard from "../VillaFormCard/AddSeasonsCard";
 
 const predefinedStars = [
   { label: "1", value: 1 },
@@ -23,7 +28,12 @@ const predefinedStars = [
 const VillaForm = () => {
   const location = useLocation();
   const { villaData } = useAdminVillaContext();
+  const toast = useToast();
+  //
   const [editFormActive, setEditFormActive] = useState(false);
+  const [villaAvailable, setVillaAvailable] = useState(false);
+  const [villaCreateId, setVillaCreateId] = useState(null);
+  //
   const [stars, setStars] = useState(1);
   const [contractUntil, setContractUntil] = useState("");
   const [extraBed, setExtraBed] = useState("false");
@@ -58,22 +68,30 @@ const VillaForm = () => {
     setPhotoLink(villaData.photoLink || "");
   };
 
-  const handleVillaCreate = () => {
+  const handleVillaCreate = async () => {
     const data = {
-      hotelName: villaName,
-      stars: stars,
-      photoLink: photoLink,
-      roomType: roomType,
-      seasons: {
-        normal: seasonPrices.normal,
-        high: seasonPrices.high,
-        peak: seasonPrices.peak,
-      },
-
-      extraBed: extraBed,
-      contractUntil: contractUntil,
+      name: villaName,
+      star: stars,
+      link_photo: photoLink,
     };
-    console.log(data);
+    try {
+      const res = await apiPostVilla(data);
+
+      if (res.status == 201) {
+        toast(
+          toastConfig("Hotel Created", "Hotel Berhasil Ditambahkan!", "success")
+        );
+
+        setVillaAvailable(true);
+        setVillaCreateId(res.result.id);
+      } else {
+        toast(toastConfig("Villa Failed", "Villa Gagal Ditambahkan", "error"));
+        setVillaAvailable(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setVillaAvailable(false);
+    }
   };
 
   const handleVillaUpdate = () => {
@@ -118,19 +136,9 @@ const VillaForm = () => {
         <FormLabel>Villa Name</FormLabel>
         <Input
           placeholder="Contoh: Villa Bintang Bali"
-          value={"Villa"}
+          value={villaName}
           onChange={(e) => {
-            console.log(e.target.value);
-          }}
-        />
-      </Box>
-      <Box mb={4}>
-        <FormLabel>Room Type</FormLabel>
-        <Input
-          placeholder="Contoh: Livio Suite"
-          value={roomType}
-          onChange={(e) => {
-            setRoomType(e.target.value);
+            setVillaName(e.target.value);
           }}
         />
       </Box>
@@ -138,13 +146,11 @@ const VillaForm = () => {
         <FormLabel>Link Hotel Photos</FormLabel>
         <Input
           placeholder="Contoh: https://picsum.photos/id/237/200/300 "
-          value={photoLink}
           onChange={(e) => {
             setRoomType(e.target.value);
           }}
         />
       </Box>
-
       <Box mb={4}>
         <FormLabel>Stars</FormLabel>
         <Select value={stars} onChange={(e) => setStars(e.target.value)}>
@@ -155,8 +161,7 @@ const VillaForm = () => {
           ))}
         </Select>
       </Box>
-
-      <Box mb={4}>
+      {/* <Box mb={4}>
         <FormLabel>Season Prices</FormLabel>
         <VStack
           spacing={3}
@@ -201,40 +206,15 @@ const VillaForm = () => {
             />
           </Box>
         </VStack>
-      </Box>
-
-      <Box mb={4}>
-        <FormLabel>Honeymoon Package Price</FormLabel>
-        <Input
-          type="number"
-          placeholder="e.g. 1500000"
-          value={honeymoonPackagePrice}
-          onChange={(e) => setHoneymoonPackagePrice(e.target.value)}
-        />
-      </Box>
-
-      <Box mb={4}>
-        <FormLabel>Contract Until</FormLabel>
-        <Input
-          type="date"
-          value={contractUntil}
-          onChange={(e) => setContractUntil(e.target.value)}
-        />
-      </Box>
-
-      <Box mb={4}>
-        <FormLabel>Extra Bed Available</FormLabel>
-        <Select value={extraBed} onChange={(e) => setExtraBed(e.target.value)}>
-          <option value="true">Yes</option>
-          <option value="false">No</option>
-        </Select>
-      </Box>
+      </Box> */}
+      {villaAvailable && <AddRoomTypeCard id_villa={villaCreateId} />}
+      {villaAvailable && <AddSeasonCard id_villa={villaCreateId} />}
       <Button
         w={"full"}
         bg={"blue.500"}
         onClick={editFormActive ? handleVillaUpdate : handleVillaCreate}
       >
-        {editFormActive ? "Update Hotel" : "Create Hotel"}
+        {editFormActive ? "Update Villa" : "Create Villa"}
       </Button>
     </Container>
   );

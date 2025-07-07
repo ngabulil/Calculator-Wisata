@@ -12,6 +12,7 @@ import AkomodasiContextProvider from "./context/AkomodasiContext";
 import CheckoutContextProvider from "./context/CheckoutContext";
 import TransportContextProvider from "./context/TransportContext";
 import AdminProviderContext from "./context/Admin/AdminProviderContext";
+
 const config = {
   initialColorMode: "dark", // dark default
   useSystemColorMode: false,

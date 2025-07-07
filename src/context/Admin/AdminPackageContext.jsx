@@ -1,13 +1,9 @@
 import React from "react";
+
 import {
-  apiGetAllMobil,
-  apiGetAllAdditionalMobil,
-} from "../../services/transport";
-import {
-  apiGetAllHotel,
-  apiGetAllVilla,
-  apiGetAdditionalAkomodasi,
-} from "../../services/akomodasiService";
+  apiGetAllActivityVendor,
+  apiGetAllRestaurant,
+} from "../../services/packageService";
 
 const AdminPackageContext = React.createContext();
 
@@ -16,12 +12,8 @@ export const useAdminPackageContext = () => {
 };
 
 const AdminPackageContextProvider = ({ children }) => {
-  const [hotels, setHotels] = React.useState([]);
-  const [villas, setVillas] = React.useState([]);
-  const [akomodasiAdditional, setAkomodasiAdditional] = React.useState([]);
-  const [mobils, setMobils] = React.useState([]);
-  const [transportAdditional, setTransportAdditional] = React.useState([]);
-
+  const [activities, setActivities] = React.useState([]);
+  const [restaurant, setRestaurant] = React.useState([]);
   const [days, setDays] = React.useState([
     {
       name: "Hari 1 - Kedatangan dan Check-in",
@@ -61,71 +53,33 @@ const AdminPackageContextProvider = ({ children }) => {
     });
   };
 
-  // Fetch functions
-  const getHotels = async () => {
+  // fetch functions
+
+  const getAllActivities = async () => {
     try {
-      const res = await apiGetAllHotel();
-      setHotels(res.result);
-    } catch (err) {
-      console.error(err);
+      const response = await apiGetAllActivityVendor();
+      setActivities(response.result);
+    } catch (error) {
+      console.log(error);
     }
   };
-
-  const getVillas = async () => {
+  const getAllRestaurant = async () => {
     try {
-      const res = await apiGetAllVilla();
-      setVillas(res.result);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const getAkomodasiAdditional = async () => {
-    try {
-      const res = await apiGetAdditionalAkomodasi();
-      setAkomodasiAdditional(res.result);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const getMobils = async () => {
-    try {
-      const res = await apiGetAllMobil();
-      setMobils(res.result);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const getTransportAdditional = async () => {
-    try {
-      const res = await apiGetAllAdditionalMobil();
-      setTransportAdditional(res.result);
-    } catch (err) {
-      console.error(err);
+      const response = await apiGetAllRestaurant();
+      setRestaurant(response.result);
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const value = {
-    hotels,
-    villas,
-    akomodasiAdditional,
-    mobils,
-    transportAdditional,
     days,
     updateDay,
     setDays,
-    setHotels,
-    setVillas,
-    setAkomodasiAdditional,
-    setMobils,
-    setTransportAdditional,
-    getHotels,
-    getVillas,
-    getAkomodasiAdditional,
-    getMobils,
-    getTransportAdditional,
+    activities,
+    restaurant,
+    getAllActivities,
+    getAllRestaurant,
   };
 
   return (
