@@ -9,6 +9,9 @@ import TourPackagePage from "./pages/TourPackages";
 import AkomodasiPage from "./pages/AkomodasiPage";
 import TransportPage from "./pages/TransportPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import InvoicePDF from "./pages/InvoicePDF";
+import ExpensesPage from "./pages/ExpensesPage";
+import ItineraryPage from "./pages/ItineraryPDF";
 
 // Admin Pages
 import AdminPage from "./pages/admin/AdminPage";
@@ -41,12 +44,15 @@ function App() {
     { path: "/tour-packages", element: <TourPackagePage /> },
     { path: "/transport", element: <TransportPage /> },
     { path: "/checkout", element: <CheckoutPage /> },
+    { path: "/pdf-invoice", element: <InvoicePDF /> },
+    { path: "/expenses", element: <ExpensesPage /> },
+    { path: "/pdf-itinerary", element: <ItineraryPage /> },
   ];
 
   return (
     <Routes>
       {/* Redirect from root to calculator */}
-      <Route path="/" element={<Navigate to="/admin" />} />
+      <Route path="/" element={<Navigate to="/calculator" />} />
 
       {/* Admin Routes */}
       {adminRoutes.map(({ path, element }) => (
