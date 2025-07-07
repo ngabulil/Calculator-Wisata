@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick-theme.css";
 import AkomodasiContextProvider from "./context/AkomodasiContext";
 import CheckoutContextProvider from "./context/CheckoutContext";
 import TransportContextProvider from "./context/TransportContext";
+import ExpensesContextProvider from "./context/ExpensesContext";
 import AdminProviderContext from "./context/Admin/AdminProviderContext";
 
 const config = {
@@ -26,11 +27,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <CheckoutContextProvider>
         <AkomodasiContextProvider>
           <TransportContextProvider>
+            <ExpensesContextProvider>
             <AdminProviderContext>
               <BrowserRouter>
                 <App />
               </BrowserRouter>
             </AdminProviderContext>
+            </ExpensesContextProvider>
           </TransportContextProvider>
         </AkomodasiContextProvider>
       </CheckoutContextProvider>
