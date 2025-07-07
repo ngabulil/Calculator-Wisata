@@ -12,7 +12,7 @@ export const apiGetAllHotel = async () => {
 
 export const apiGetHotel = async (id) => {
   try {
-    const response = await apiGet(`/hotels/full/${id}`);
+    const response = await apiGet(`/hotels/${id}`);
     return response;
   } catch (error) {
     console.error(error);

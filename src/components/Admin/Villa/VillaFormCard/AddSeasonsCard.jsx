@@ -8,8 +8,10 @@ import {
   VStack,
   Text,
   useToast,
+  IconButton,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { AddIcon, DeleteIcon, CloseIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
 import toastConfig from "../../../../utils/toastConfig";
 
 import {
@@ -17,23 +19,29 @@ import {
   apiPostNormalSeasons,
   apiPostPeakSeasons,
   apiPostHoneySeasons,
+  apiPutHighSeasons,
+  apiPutNormalSeasons,
+  apiPutPeakSeasons,
+  apiPutHoneySeasons,
+  apiDeleteNormalSeasons,
+  apiDeleteHighSeasons,
+  apiDeletePeakSeasons,
+  apiDeleteHoneySeasons,
 } from "../../../../services/villaService";
 import { useAdminVillaContext } from "../../../../context/Admin/AdminVillaContext";
 
 const AddSeasonCard = (props) => {
   const toast = useToast();
 
-  const { roomTypeSelect } = useAdminVillaContext();
+  const { roomTypeSelect, villaData, getVilla } = useAdminVillaContext();
 
-  const [seasonData, setSeasonData] = useState({
-    normal: [],
-    high: [],
-    peak: [],
-    honeymoon: [],
-  });
+  const [seasonData, setSeasonData] = useState(villaData.seasons);
+  const [openCreateForm, setOpenCreateForm] = useState(
+    props.isEdit ? false : true
+  );
 
   const [form, setForm] = useState({
-    season: "normal", // normal | high | peak
+    season: "normal",
     id: "",
     label: "",
     price: "",
@@ -56,6 +64,8 @@ const AddSeasonCard = (props) => {
       price: parseInt(price),
     };
 
+    console.log(normalPayload);
+
     try {
       let res;
 
@@ -65,6 +75,7 @@ const AddSeasonCard = (props) => {
       if (season == "honeymoon") res = await apiPostHoneySeasons(normalPayload);
 
       if (res.status == 201) {
+        getVilla(props.id_villa);
         toast(
           toastConfig(
             "Sukses",
@@ -82,54 +93,287 @@ const AddSeasonCard = (props) => {
     }
   };
 
+  useEffect(() => {
+    setSeasonData(villaData.seasons);
+  }, [villaData]);
+
   return (
-    <Box bg="gray.700" p={4} rounded="md">
-      <Text mb={3} fontWeight="bold" color="white">
-        Tambah Harga per Musim
-      </Text>
-      <VStack spacing={3} align="stretch">
-        <Select
-          value={form.season}
-          onChange={(e) => setForm({ ...form, season: e.target.value })}
-        >
-          <option value="normal">Normal</option>
-          <option value="high">High</option>
-          <option value="peak">Peak</option>
-          <option value="honeymoon">Honeymoon</option>
-        </Select>
-
-        <Select
-          placeholder="Pilih Room Type"
-          value={form.id}
-          onChange={(e) => setForm({ ...form, id: e.target.value })}
-        >
-          {roomTypeSelect.map((room) => (
-            <option key={room.id} value={room.id}>
-              {room.name}
-            </option>
-          ))}
-        </Select>
-
-        {form.season != "honeymoon" && form.season != "normal" && (
-          <Input
-            placeholder="Label musim (cth: Lebaran, New Year)"
-            value={form.label}
-            onChange={(e) => setForm({ ...form, label: e.target.value })}
+    <Box
+      bg="gray.700"
+      p={4}
+      rounded="md"
+      display={"flex"}
+      flexDirection={"column"}
+      gap={4}
+    >
+      <Box display={"flex"} justifyContent={"space-between"} w={"full"}>
+        <Text mb={3} fontWeight="bold" color="white">
+          {props.isEdit ? "Edit Musim" : "Tambah Musim"}
+        </Text>
+        {props.isEdit && (
+          <IconButton
+            icon={<AddIcon />}
+            aria-label="Tambah Tipe Kamar"
+            size="sm"
+            colorScheme="red"
+            onClick={() => setOpenCreateForm(!openCreateForm)}
           />
         )}
+      </Box>
+      {props.isEdit
+        ? openCreateForm && (
+            <VStack spacing={3} align="stretch">
+              <Box display={"flex"} justifyContent={"space-between"}>
+                <Text fontWeight="bold" color="white">
+                  Tambah
+                </Text>
+                <IconButton
+                  icon={<CloseIcon />}
+                  aria-label="Hapus"
+                  size="sm"
+                  color="white"
+                  variant={"unstyled"}
+                  background={"red.300"}
+                  onClick={() => setOpenCreateForm(!openCreateForm)}
+                />
+              </Box>
+              <Select
+                value={form.season}
+                onChange={(e) => setForm({ ...form, season: e.target.value })}
+              >
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="peak">Peak</option>
+                <option value="honeymoon">Honeymoon</option>
+              </Select>
 
-        <NumberInput
-          value={form.price}
-          onChange={(val) => setForm({ ...form, price: val })}
-        >
-          <NumberInputField placeholder="Harga" />
-        </NumberInput>
+              <Select
+                placeholder="Pilih Room Type"
+                value={form.id}
+                onChange={(e) => setForm({ ...form, id: e.target.value })}
+              >
+                {roomTypeSelect.map((room) => (
+                  <option key={room.id} value={room.id}>
+                    {room.name}
+                  </option>
+                ))}
+              </Select>
 
-        <Button colorScheme="teal" onClick={handleAddSeasonPrice}>
-          Tambah ke Musim
-        </Button>
-      </VStack>
+              {form.season != "normal" && form.season != "honeymoon" && (
+                <Input
+                  placeholder="Label musim (cth: Lebaran, New Year)"
+                  value={form.label}
+                  onChange={(e) => setForm({ ...form, label: e.target.value })}
+                />
+              )}
+
+              <NumberInput
+                value={form.price}
+                onChange={(val) => setForm({ ...form, price: val })}
+              >
+                <NumberInputField placeholder="Harga" />
+              </NumberInput>
+
+              <Button colorScheme="yellow" onClick={handleAddSeasonPrice}>
+                Tambah ke Musim
+              </Button>
+            </VStack>
+          )
+        : null}
+      {props.isEdit &&
+        seasonData.normal.map((data) => {
+          return (
+            <FormEditSeasons
+              id_villa={props.id_villa}
+              roomTypeSelect={roomTypeSelect}
+              typeSeason={"normal"}
+              seasonData={data}
+              onChange={() => getVilla(props.id_villa)}
+            />
+          );
+        })}
+      {props.isEdit &&
+        seasonData.high.map((data) => {
+          return (
+            <FormEditSeasons
+              id_villa={props.id_villa}
+              roomTypeSelect={roomTypeSelect}
+              typeSeason={"high"}
+              seasonData={data}
+              onChange={() => getVilla(props.id_villa)}
+            />
+          );
+        })}
+      {props.isEdit &&
+        seasonData.peak.map((data) => {
+          return (
+            <FormEditSeasons
+              id_villa={props.id_villa}
+              roomTypeSelect={roomTypeSelect}
+              typeSeason={"peak"}
+              seasonData={data}
+              onChange={() => getVilla(props.id_villa)}
+            />
+          );
+        })}
+      {props.isEdit &&
+        seasonData.honeymoon.map((data) => {
+          return (
+            <FormEditSeasons
+              id_villa={props.id_villa}
+              roomTypeSelect={roomTypeSelect}
+              typeSeason={"honeymoon"}
+              seasonData={data}
+              onChange={() => getVilla(props.id_villa)}
+            />
+          );
+        })}
     </Box>
+  );
+};
+
+const FormEditSeasons = ({
+  id_villa,
+  roomTypeSelect,
+  typeSeason = "normal",
+  seasonData,
+  onChange,
+}) => {
+  const [form, setForm] = useState({
+    season: typeSeason,
+    idRoom: seasonData.idRoom,
+    label: seasonData.label || "",
+    price: seasonData.price,
+  });
+
+  const toast = useToast();
+
+  const handleEditForm = async () => {
+    const { season, idRoom, label, price } = form;
+
+    const room = roomTypeSelect.find((r) => r.id === parseInt(idRoom));
+
+    const normalPayload = {
+      id_villa: id_villa,
+      id_tipe_room_villa: room.id,
+      price: parseInt(price),
+    };
+    const wLabelPayload = {
+      id_villa: id_villa,
+      id_tipe_room_villa: room.id,
+      name: label,
+      price: parseInt(price),
+    };
+
+    try {
+      let res;
+
+      if (season == "normal")
+        res = await apiPutNormalSeasons(seasonData.idMusim, normalPayload);
+      if (season == "honeymoon")
+        res = await apiPutHoneySeasons(seasonData.idMusim, normalPayload);
+      if (season == "high")
+        res = await apiPutHighSeasons(seasonData.idMusim, wLabelPayload);
+      if (season == "peak")
+        res = await apiPutPeakSeasons(seasonData.idMusim, wLabelPayload);
+
+      if (res.status == 200) {
+        toast(
+          toastConfig("Sukses", "Harga per Musim Berhasil Dirubah", "success")
+        );
+        onChange();
+      } else {
+        toast(toastConfig("Gagal", "Harga per Musim Gagal Dirubah", "error"));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteForm = async () => {
+    try {
+      let res;
+
+      if (typeSeason == "normal")
+        res = await apiDeleteNormalSeasons(seasonData.idMusim);
+      if (typeSeason == "honeymoon")
+        res = await apiDeleteHoneySeasons(seasonData.idMusim);
+      if (typeSeason == "high")
+        res = await apiDeleteHighSeasons(seasonData.idMusim);
+      if (typeSeason == "peak")
+        res = await apiDeletePeakSeasons(seasonData.idMusim);
+
+      if (res.status == 200) {
+        toast(
+          toastConfig("Sukses", "Harga per Musim Berhasil Dihapus", "success")
+        );
+        onChange();
+      } else {
+        toast(toastConfig("Gagal", "Harga per Musim Gagal Dihapus", "error"));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <VStack spacing={3} align="stretch" bg={"gray.600"} p={3} rounded={"12px"}>
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Text fontWeight="bold" color="white">
+          Edit {typeSeason} musim
+        </Text>
+        <IconButton
+          icon={<DeleteIcon />}
+          aria-label="Hapus"
+          size="sm"
+          color="white"
+          variant={"unstyled"}
+          background={"red.300"}
+          onClick={handleDeleteForm}
+        />
+      </Box>
+      <Select
+        value={form.season}
+        isDisabled
+        onChange={(e) => setForm({ ...form, season: e.target.value })}
+      >
+        <option value="normal">Normal</option>
+        <option value="high">High</option>
+        <option value="peak">Peak</option>
+        <option value="honeymoon">Honeymoon</option>
+      </Select>
+
+      <Select
+        placeholder="Pilih Room Type"
+        value={form.idRoom}
+        onChange={(e) => setForm({ ...form, idRoom: e.target.value })}
+      >
+        {roomTypeSelect.map((room) => (
+          <option key={room.id} value={room.id}>
+            {room.name}
+          </option>
+        ))}
+      </Select>
+
+      {form.season != "normal" && form.season != "honeymoon" && (
+        <Input
+          placeholder="Label musim (cth: Lebaran, New Year)"
+          value={form.label}
+          onChange={(e) => setForm({ ...form, label: e.target.value })}
+        />
+      )}
+
+      <NumberInput
+        value={form.price}
+        onChange={(val) => setForm({ ...form, price: val })}
+      >
+        <NumberInputField placeholder="Harga" />
+      </NumberInput>
+
+      <Button colorScheme="red" onClick={handleEditForm}>
+        Edit Musim
+      </Button>
+    </VStack>
   );
 };
 

@@ -50,6 +50,19 @@ const AdminVillaContextProvider = ({ children }) => {
     }
   };
 
+  const getVilla = async (id_villa) => {
+    try {
+      const response = await apiGetAllVilla();
+
+      const villa = response.result.find((villa) => villa.id === id_villa);
+
+      setVillaData(villa);
+      return response.result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const updateVillaData = (partial) => {
     setVillaData((prev) => ({
       ...prev,
@@ -59,6 +72,7 @@ const AdminVillaContextProvider = ({ children }) => {
 
   const value = {
     villaData,
+    getVilla,
     roomTypeSelect,
     setVillaData,
     updateVillaData,

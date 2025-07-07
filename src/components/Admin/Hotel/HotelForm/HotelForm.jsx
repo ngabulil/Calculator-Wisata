@@ -151,7 +151,13 @@ const HotelForm = () => {
           ))}
         </Select>
       </Box>
-
+      <Button
+        w={"full"}
+        bg={"blue.500"}
+        onClick={editFormActive ? handleHotelUpdate : handleHotelCreate}
+      >
+        {editFormActive ? "Update Hotel" : "Create Hotel"}
+      </Button>
       {hotelAvailable && (
         <AddRoomTypeCard
           id_hotel={hotelCreateId}
@@ -162,14 +168,6 @@ const HotelForm = () => {
       {hotelAvailable && (
         <AddSeasonCard id_hotel={hotelCreateId} isEdit={editFormActive} />
       )}
-
-      <Button
-        w={"full"}
-        bg={"blue.500"}
-        onClick={editFormActive ? handleHotelUpdate : handleHotelCreate}
-      >
-        {editFormActive ? "Update Hotel" : "Create Hotel"}
-      </Button>
     </Container>
   );
 };
