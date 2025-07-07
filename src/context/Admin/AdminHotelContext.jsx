@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import {
   apiGetAllHotel,
   apiGetAllHotelRooms,
+  apiGetHotel,
 } from "../../services/hotelService";
 
 const AdminHotelContext = createContext();
@@ -38,6 +39,19 @@ const AdminHotelContextProvider = ({ children }) => {
     }
   };
 
+  const getHotel = async (id_hotel) => {
+    try {
+      const response = await apiGetAllHotel();
+
+      const hotel = response.result.find((hotel) => hotel.id === id_hotel);
+
+      setHotelData(hotel);
+      return response.result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getRoomTypeSelect = async (id_hotel) => {
     try {
       const response = await apiGetAllHotelRooms();
@@ -63,6 +77,7 @@ const AdminHotelContextProvider = ({ children }) => {
   const value = {
     hotelData,
     allHotel,
+    getHotel,
     roomTypeSelect,
     setHotelData,
     updateHotelData,
