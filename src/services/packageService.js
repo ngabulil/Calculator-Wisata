@@ -1,4 +1,4 @@
-import { apiDelete, apiGet, apiPost } from "./api";
+import { apiGet } from "./api";
 
 export const apiGetAllActivityVendor = async () => {
   try {
@@ -20,3 +20,12 @@ export const apiGetAllRestaurant = async () => {
   }
 };
 
+export const apiGetAllDestination = async () => {
+  try {
+    const response = await apiGet("/tiket-masuk");
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

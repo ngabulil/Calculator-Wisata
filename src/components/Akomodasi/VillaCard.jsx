@@ -43,20 +43,34 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
     const idRoom = data.roomType.value;
     const options = [];
 
-    if (seasons.normal.find((s) => s.idRoom === idRoom)) {
-      options.push({ value: "normal", label: "Normal Season" });
-    }
+    seasons.normal
+      .filter((s) => s.idRoom === idRoom)
+      .forEach((s, i) => {
+        options.push({
+          value: `normal-${i}`,
+          label: `Normal Season - ${s.label}`,
+          idMusim: s.idMusim,
+        });
+      });
 
     seasons.high
       .filter((s) => s.idRoom === idRoom)
       .forEach((s, i) =>
-        options.push({ value: `high-${i}`, label: `High Season - ${s.label}` })
+        options.push({
+          value: `high-${i}`,
+          label: `High Season - ${s.label}`,
+          idMusim: s.idMusim,
+        })
       );
 
     seasons.peak
       .filter((s) => s.idRoom === idRoom)
       .forEach((s, i) =>
-        options.push({ value: `peak-${i}`, label: `Peak Season - ${s.label}` })
+        options.push({
+          value: `peak-${i}`,
+          label: `Peak Season - ${s.label}`,
+          idMusim: s.idMusim,
+        })
       );
 
     const honeymoon = seasons.honeymoon.find((s) => s.idRoom === idRoom);
@@ -159,6 +173,7 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
                 seasonLabel: null,
                 useExtrabed: false,
                 jumlahExtrabed: 1,
+                idMusim: val.idMusim,
               });
               setJumlahKamar(1);
               setJumlahExtrabed(1);
@@ -181,6 +196,7 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
                 seasonLabel: null,
                 useExtrabed: false,
                 jumlahExtrabed: 1,
+                idMusim: val.idMusim,
               });
               setJumlahKamar(1);
               setJumlahExtrabed(1);
@@ -204,6 +220,7 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
                 ...data,
                 season: val?.value,
                 seasonLabel: val?.label,
+                idMusim: val.idMusim,
               });
               setJumlahKamar(1);
               setJumlahExtrabed(1);

@@ -40,8 +40,13 @@ import RestaurantCard from "../../TourPackages/TourPackagesFormCard/RestaurantCa
 
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { getAllActivities, getAllRestaurant, days, setDays } =
-    useAdminPackageContext();
+  const {
+    getAllActivities,
+    getAllRestaurant,
+    getAllDestination,
+    days,
+    setDays,
+  } = useAdminPackageContext();
   const { getMobils, getAdditionalMobil } = useTransportContext();
   const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
 
@@ -77,6 +82,7 @@ const PackageCreateForm = (props) => {
       await getAdditionalMobil();
       await getAllActivities();
       await getAllRestaurant();
+      await getAllDestination();
     };
     fetchData();
   }, []);
@@ -543,8 +549,92 @@ const PackageFormPage = () => {
       description: desctiptionPackages,
       days: [...primaryData],
     };
+    const payload = {
+      name: data.name,
+      description_day: data.description,
+      days: data.days.map((day) => {
+        return {
+          name: day.name,
+          description_day: day.description_day,
+          data: {
+            akomodasi: {
+              hotels: day.data.akomodasi.hotels.map((hotel) => {
+                return {
+                  id_hotel: hotel.hotel.value,
+                  id_tipe_kamar: hotel.roomType.value,
+                  season: {
+                    type: data.season?.startsWith("normal")
+                      ? "normal"
+                      : data.season?.startsWith("high")
+                      ? "high"
+                      : "peak",
+                    id_musim: hotel.idMusim,
+                  },
+                };
+              }),
+              villas: day.data.akomodasi.villas.map((villa) => {
+                return {
+                  id_villa: villa.villa.value,
+                  id_tipe_kamar: villa.roomType.value,
+                  season: {
+                    type: data.season?.startsWith("normal")
+                      ? "normal"
+                      : data.season?.startsWith("high")
+                      ? "high"
+                      : data.season?.startsWith("honeymoon")
+                      ? "honeymoon"
+                      : "peak",
+                    id_musim: villa.idMusim,
+                  },
+                };
+              }),
+              additional: day.data.akomodasi.additional.map((additional) => {
+                return {
+                  id_additional: additional.selectedInfo.value,
+                };
+              }),
+            },
+            tour: {
+              destinations: day.data.tour.destinations.map((destination) => {
+                return {
+                  id_destinasi: destination.selectedDest.value,
+                  type_wisata: destination.selectedType.value,
+                };
+              }),
+              activities: day.data.tour.activities.map((activity) => {
+                return {
+                  id_vendor: activity.selectedVendor.value,
+                  id_activity: activity.selectedActivity.value,
+                  type_wisate: "domestik",
+                };
+              }),
+              restaurants: day.data.tour.restaurants.map((restaurant) => {
+                return {
+                  id_resto: restaurant.selectedResto.value,
+                  id_menu: restaurant.selectedPackage.value,
+                };
+              }),
+            },
+            transport: {
+              mobils: day.data.transport.mobils.map((mobil) => {
+                return {
+                  id_mobil: mobil.mobil.value,
+                  keterangan: mobil.kategori,
+                };
+              }),
+              additional: day.data.transport.additional.map((additional) => {
+                return {
+                  id_additional: additional.selectedInfo.value,
+                };
+              }),
+            },
+          },
+        };
+      }),
+    };
 
     console.log(data);
+    console.log(payload);
   };
 
   return (

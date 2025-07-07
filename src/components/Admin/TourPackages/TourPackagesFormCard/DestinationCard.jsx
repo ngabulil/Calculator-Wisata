@@ -8,36 +8,41 @@ import {
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
+import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 
-// Dummy destinasi
-const dummyDestinations = [
-  { value: 1, label: "Pantai Kuta", type_wisata: "domestik" },
-  { value: 2, label: "Tanah Lot", type_wisata: "asing" },
-];
-
-// Opsional: daftar tipe wisata eksplisit
 const typeWisataOptions = [
   { value: "domestik", label: "Domestik" },
   { value: "asing", label: "Asing" },
 ];
 
 const DestinationCard = ({ index, data, onChange, onDelete }) => {
+  const { destination } = useAdminPackageContext();
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
   const [selectedType, setSelectedType] = useState(data.selectedType || null);
 
   const textColor = useColorModeValue("white", "white");
 
-  // Saat memilih destinasi, otomatis isi tipe_wisata
+  const destinationOptions =
+    destination?.map((dest) => ({
+      value: dest.id,
+      label: dest.name,
+      originalData: dest,
+    })) || [];
+
   useEffect(() => {
-    if (selectedDest) {
-      const type = typeWisataOptions.find(
-        (opt) => opt.value === selectedDest.type_wisata
+    if (selectedDest && !selectedType) {
+      const dest = destinationOptions.find(
+        (d) => d.value === selectedDest.value
       );
-      setSelectedType(type || null);
+      if (dest) {
+        const isAsing =
+          dest.originalData.price_foreign_adult >
+          dest.originalData.price_domestic_adult;
+        setSelectedType(isAsing ? typeWisataOptions[1] : typeWisataOptions[0]);
+      }
     }
   }, [selectedDest]);
 
-  // Sync ke parent
   useEffect(() => {
     onChange({
       ...data,
@@ -70,7 +75,7 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
           Pilih Destinasi
         </Text>
         <MainSelectCreatableWithDelete
-          options={dummyDestinations}
+          options={destinationOptions}
           value={selectedDest}
           onChange={setSelectedDest}
           placeholder="Pilih destinasi"
@@ -86,7 +91,6 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
           options={typeWisataOptions}
           value={selectedType}
           onChange={setSelectedType}
-          isDisabled
         />
       </Box>
     </Box>

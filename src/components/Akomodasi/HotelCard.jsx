@@ -42,9 +42,15 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
     const { seasons } = selectedHotelData;
     const idRoom = data.roomType.value;
 
-    if (seasons.normal.find((s) => s.idRoom === idRoom)) {
-      seasonLabels.push({ value: "normal", label: "Normal Season" });
-    }
+    seasons.normal
+      .filter((s) => s.idRoom === idRoom)
+      .forEach((s, i) => {
+        seasonLabels.push({
+          value: `normal-${i}`,
+          label: `Normal Season - ${s.label}`,
+          idMusim: s.idMusim,
+        });
+      });
 
     seasons.high
       .filter((s) => s.idRoom === idRoom)
@@ -52,6 +58,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
         seasonLabels.push({
           value: `high-${i}`,
           label: `High Season - ${s.label}`,
+          idMusim: s.idMusim,
         })
       );
 
@@ -61,6 +68,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
         seasonLabels.push({
           value: `peak-${i}`,
           label: `Peak Season - ${s.label}`,
+          idMusim: s.idMusim,
         })
       );
 
@@ -159,6 +167,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
                 roomType: null,
                 season: null,
                 seasonLabel: null,
+                idMusim: null,
                 useExtrabed: false,
                 jumlahExtrabed: 1,
               });
@@ -182,6 +191,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
                 roomType: val,
                 season: null,
                 seasonLabel: null,
+                idMusim: null,
                 useExtrabed: false,
                 jumlahExtrabed: 1,
               });
@@ -203,10 +213,12 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
             options={seasonOptions}
             value={seasonOptions.find((s) => s.value === data.season)}
             onChange={(val) => {
+              console.log(val);
               onChange({
                 ...data,
                 season: val?.value,
                 seasonLabel: val?.label,
+                idMusim: val?.idMusim,
               });
               setJumlahKamar(1); // reset default
               setJumlahExtrabed(1);

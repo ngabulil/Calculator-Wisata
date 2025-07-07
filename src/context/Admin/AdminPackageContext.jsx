@@ -2,11 +2,13 @@ import React from "react";
 
 import {
   apiGetAllActivityVendor,
+  apiGetAllDestination,
   apiGetAllRestaurant,
 } from "../../services/packageService";
 
 const AdminPackageContext = React.createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAdminPackageContext = () => {
   return React.useContext(AdminPackageContext);
 };
@@ -14,6 +16,7 @@ export const useAdminPackageContext = () => {
 const AdminPackageContextProvider = ({ children }) => {
   const [activities, setActivities] = React.useState([]);
   const [restaurant, setRestaurant] = React.useState([]);
+  const [destination, setDestination] = React.useState([]);
   const [days, setDays] = React.useState([
     {
       name: "Hari 1 - Kedatangan dan Check-in",
@@ -71,6 +74,14 @@ const AdminPackageContextProvider = ({ children }) => {
       console.log(error);
     }
   };
+  const getAllDestination = async () => {
+    try {
+      const response = await apiGetAllDestination();
+      setDestination(response.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const value = {
     days,
@@ -78,6 +89,8 @@ const AdminPackageContextProvider = ({ children }) => {
     setDays,
     activities,
     restaurant,
+    destination,
+    getAllDestination,
     getAllActivities,
     getAllRestaurant,
   };
