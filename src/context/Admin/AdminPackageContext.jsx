@@ -3,6 +3,7 @@ import React from "react";
 import {
   apiGetAllActivityVendor,
   apiGetAllDestination,
+  apiGetAllPackageFull,
   apiGetAllRestaurant,
 } from "../../services/packageService";
 
@@ -17,6 +18,11 @@ const AdminPackageContextProvider = ({ children }) => {
   const [activities, setActivities] = React.useState([]);
   const [restaurant, setRestaurant] = React.useState([]);
   const [destination, setDestination] = React.useState([]);
+  const [packageFull, setPackageFull] = React.useState([]);
+  const [headline, setHeadline] = React.useState({
+    name: "",
+    description: "",
+  });
   const [days, setDays] = React.useState([
     {
       name: "Hari 1 - Kedatangan dan Check-in",
@@ -56,7 +62,20 @@ const AdminPackageContextProvider = ({ children }) => {
     });
   };
 
+  const updateHeadline = (name, description) => {
+    setHeadline({ name, description });
+  }
+
   // fetch functions
+
+  const getAllPackageFull = async () => {
+    try {
+      const response = await apiGetAllPackageFull();
+      setPackageFull(response.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getAllActivities = async () => {
     try {
@@ -90,9 +109,13 @@ const AdminPackageContextProvider = ({ children }) => {
     activities,
     restaurant,
     destination,
+    packageFull,
+    headline,
+    updateHeadline,
     getAllDestination,
     getAllActivities,
     getAllRestaurant,
+    getAllPackageFull,
   };
 
   return (

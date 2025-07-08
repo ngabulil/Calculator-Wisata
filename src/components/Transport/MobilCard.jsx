@@ -45,6 +45,7 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
       selectedMobil.keterangan[data.kategori]?.map((area) => ({
         value: area.area,
         label: area.area,
+        id: area.id_area,
       })) || []
     );
   }, [selectedMobil, data.kategori]);
@@ -105,7 +106,9 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
                 area: null,
                 harga: 0,
                 jumlah: 1,
+                id_area: null,
               });
+
               setJumlah(1);
             }}
             placeholder="Pilih Mobil"
@@ -124,6 +127,7 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
                 ...data,
                 kategori: val?.value,
                 area: null,
+                id_area: null,
               });
             }}
             isDisabled={!data.mobil}
@@ -144,7 +148,10 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
               onChange({
                 ...data,
                 area: val?.value,
+                id_area: val?.id,
               });
+
+              console.log(val);
             }}
             isDisabled={!data.kategori}
             placeholder="Pilih Area"

@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { PopoverButton } from "../../../PopoverButton";
+import { useNavigate } from "react-router-dom";
 
 const PackageCard = (props) => {
   return (
@@ -23,10 +24,8 @@ const PackageCard = (props) => {
       display={"flex"}
     >
       <AppTitleDescription
-        title={"Paket Bali"}
-        description={
-          " Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s"
-        }
+        title={props.title}
+        description={props.description}
         onEditButton={props.onEditButton}
         onDeleteButton={props.onDeleteButton}
         onOpenButton={props.onOpenButton}
@@ -38,8 +37,9 @@ const PackageCard = (props) => {
 export default PackageCard;
 
 const AppTitleDescription = (props) => {
+  const navigate = useNavigate();
   return (
-    <Flex direction={"column"} gap={2}>
+    <Flex direction={"column"} gap={2} w={"full"}>
       <img
         alt="photo-detail"
         src="https://picsum.photos/200/300"
@@ -56,7 +56,10 @@ const AppTitleDescription = (props) => {
           </Text>
           <PopoverButton
             isOpenButton={true}
-            onEditButton={props.onEditButton}
+            onEditButton={() => {
+              navigate(`/admin/edit`);
+              props.onEditButton();
+            }}
             onDeleteButton={props.onDeleteButton}
             onOpenButton={props.onOpenButton}
           />

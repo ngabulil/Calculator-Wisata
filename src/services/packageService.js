@@ -1,4 +1,45 @@
-import { apiGet } from "./api";
+import { apiDelete, apiGet, apiPost, apiPut } from "./api";
+
+//
+
+export const apiGetAllPackageFull = async () => {
+  try {
+    const response = await apiGet("/paket/full");
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+export const apiPostPackageFull = async (data) => {
+  try {
+    const response = await apiPost("/paket/full",data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+export const apiPutPackageFull = async (id, data) => {
+  try {
+    const response = await apiPut(`/paket/full/${id}`, data);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+export const apiDeletePackageFull = async (id) => {
+  try {
+    const response = await apiDelete(`/paket/full/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// additional
 
 export const apiGetAllActivityVendor = async () => {
   try {

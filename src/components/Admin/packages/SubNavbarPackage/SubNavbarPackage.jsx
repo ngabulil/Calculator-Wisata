@@ -24,7 +24,7 @@ const SubNavbarPackage = () => {
   return (
     <Popover placement="bottom-start" trigger="hover" isLazy>
       <PopoverTrigger>
-        <Button rightIcon={<ChevronDownIcon />} variant="ghost" p="2">
+        <Button variant="ghost" p="2">
           {buttonLabel}
         </Button>
       </PopoverTrigger>

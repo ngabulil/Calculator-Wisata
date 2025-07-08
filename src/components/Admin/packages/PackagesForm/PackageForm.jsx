@@ -38,8 +38,15 @@ import DestinationCard from "../../TourPackages/TourPackagesFormCard/Destination
 import ActivityCard from "../../TourPackages/TourPackagesFormCard/ActivitiesCard";
 import RestaurantCard from "../../TourPackages/TourPackagesFormCard/RestaurantCard";
 
+//
+import { useLocation } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
+import toastConfig from "../../../../utils/toastConfig";
+import { apiPostPackageFull } from "../../../../services/packageService";
+
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const location = useLocation();
   const {
     getAllActivities,
     getAllRestaurant,
@@ -49,6 +56,7 @@ const PackageCreateForm = (props) => {
   } = useAdminPackageContext();
   const { getMobils, getAdditionalMobil } = useTransportContext();
   const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
+  const [editFormActive, setEditFormActive] = useState(false);
 
   const handleAddDay = () => {
     setDays((prev) => [
@@ -90,6 +98,12 @@ const PackageCreateForm = (props) => {
   useEffect(() => {
     props.onChange?.(days);
   }, [days]);
+
+  useEffect(() => {
+    if (location.pathname.includes("edit")) {
+      setEditFormActive(true);
+    }
+  }, [location.pathname]);
 
   return (
     <Container maxW="7xl" px="0">
@@ -536,14 +550,18 @@ const PackageCreateForm = (props) => {
 };
 
 const PackageFormPage = () => {
+  const toast = useToast();
+  const location = useLocation();
+  const { headline } = useAdminPackageContext();
   const [primaryData, setPrimaryData] = useState([]);
   const [namePackages, setNamePackages] = useState("");
   const [desctiptionPackages, setDescriptionPackages] = useState("");
+  const [editFormActive, setEditFormActive] = useState(false);
 
   const handleonChangeData = (data) => {
     setPrimaryData(data);
   };
-  const handleCreatePackage = () => {
+  const handleButtonPackage = async () => {
     const data = {
       name: namePackages,
       description: desctiptionPackages,
@@ -551,7 +569,7 @@ const PackageFormPage = () => {
     };
     const payload = {
       name: data.name,
-      description_day: data.description,
+      description: data.description,
       days: data.days.map((day) => {
         return {
           name: day.name,
@@ -605,7 +623,7 @@ const PackageFormPage = () => {
                 return {
                   id_vendor: activity.selectedVendor.value,
                   id_activity: activity.selectedActivity.value,
-                  type_wisate: "domestik",
+                  type_wisata: "domestik",
                 };
               }),
               restaurants: day.data.tour.restaurants.map((restaurant) => {
@@ -619,7 +637,8 @@ const PackageFormPage = () => {
               mobils: day.data.transport.mobils.map((mobil) => {
                 return {
                   id_mobil: mobil.mobil.value,
-                  keterangan: mobil.kategori,
+                  keterangan: mobil.kategori.toLowerCase(),
+                  id_area: mobil.id_area,
                 };
               }),
               additional: day.data.transport.additional.map((additional) => {
@@ -633,10 +652,33 @@ const PackageFormPage = () => {
       }),
     };
 
-    console.log(data);
-    console.log(payload);
+    try {
+      const res = await apiPostPackageFull(payload);
+
+      if (res.status == 201) {
+        toast(
+          toastConfig("Buat Berhasil", "Paket berhasil dibuat!", "success")
+        );
+      } else {
+        toast(toastConfig("Buat Gagal", "Data tidak lengkap!", "error"));
+      }
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      toast(toastConfig("Buat Gagal", "Data tidak lengkap!", "error"));
+    }
   };
 
+  const handleSetValue = () => {
+    setNamePackages(headline.name || "");
+    setDescriptionPackages(headline.description || "");
+  };
+
+  useEffect(() => {
+    if (location.pathname.includes("edit")) {
+      setEditFormActive(true);
+      handleSetValue();
+    }
+  }, [location.pathname]);
   return (
     <Flex direction={"column"} gap={5}>
       <Box p={4} bg={"gray.800"} borderRadius={"12px"}>
@@ -646,6 +688,7 @@ const PackageFormPage = () => {
         <Flex direction={"column"} gap={5} py={5}>
           <Text fontWeight="semibold">Nama Paket</Text>
           <Input
+            value={namePackages}
             placeholder="Contoh: Tiket Tour Bali 3 Hari"
             onChange={(e) => {
               setNamePackages(e.target.value);
@@ -653,6 +696,7 @@ const PackageFormPage = () => {
           />
           <Text fontWeight="semibold">Deskripsi untuk Paket</Text>
           <Textarea
+            value={desctiptionPackages}
             onChange={(e) => {
               setDescriptionPackages(e.target.value);
             }}
@@ -663,8 +707,8 @@ const PackageFormPage = () => {
           />
         </Flex>
         <PackageCreateForm onChange={handleonChangeData} />
-        <Button w={"full"} colorScheme="blue" onClick={handleCreatePackage}>
-          Buat Paket
+        <Button w={"full"} colorScheme="blue" onClick={handleButtonPackage}>
+          {editFormActive ? "Edit Paket" : "Buat Paket"}
         </Button>
       </Box>
     </Flex>

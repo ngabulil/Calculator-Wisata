@@ -15,16 +15,22 @@ const Navbar = () => {
       <Flex alignItems="center" justify="space-between">
         <Text fontWeight="bold">Admin</Text>
         <Flex gap={6} alignItems="center">
-          <SubNavbarPackage />
-          <NavLink to="/admin/tour-packages" style={linkStyle}>
-            Tour Packages
+          {/* <SubNavbarPackage /> */}
+          <NavLink to="/admin" style={linkStyle}>
+            Paket
           </NavLink>
-          <NavLink to="/admin/transport" style={linkStyle}>
+          <NavLink to="/admin/packages/hotel" style={linkStyle}>
+            Hotel
+          </NavLink>
+          <NavLink to="/admin/packages/villa" style={linkStyle}>
+            Villa
+          </NavLink>
+          {/* <NavLink to="/admin/transport" style={linkStyle}>
             Transport
           </NavLink>
           <NavLink to="/admin/acomodation" style={linkStyle}>
             Akomodasi
-          </NavLink>
+          </NavLink> */}
           <NavLink to="/calculator" style={linkStyle}>
             Calculator
           </NavLink>
