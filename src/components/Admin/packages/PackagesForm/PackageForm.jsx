@@ -23,11 +23,13 @@ import {
   useColorModeValue,
   Divider,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+//
 import HotelCard from "../../../Akomodasi/HotelCard";
 import VillaCard from "../../../Akomodasi/VillaCard";
 import InfoCard from "../../../Akomodasi/InfoCard";
+import InfoTransportCard from "../../../Transport/InfoCard";
 import MobilCard from "../../../Transport/MobilCard";
 
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
@@ -42,7 +44,12 @@ import RestaurantCard from "../../TourPackages/TourPackagesFormCard/RestaurantCa
 import { useLocation } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import toastConfig from "../../../../utils/toastConfig";
-import { apiPostPackageFull } from "../../../../services/packageService";
+import {
+  apiPostPackageFull,
+  apiPutPackageFull,
+} from "../../../../services/packageService";
+import parseDays from "../../../../utils/encodedParseDays";
+import buildPayloadPaket from "../../../../utils/buildPayloadPaket";
 
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -51,6 +58,7 @@ const PackageCreateForm = (props) => {
     getAllActivities,
     getAllRestaurant,
     getAllDestination,
+    onePackageFull,
     days,
     setDays,
   } = useAdminPackageContext();
@@ -58,11 +66,33 @@ const PackageCreateForm = (props) => {
   const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
   const [editFormActive, setEditFormActive] = useState(false);
 
+  const handleSetValue = async () => {
+    const res = await parseDays(onePackageFull.days);
+    setDays(res);
+  };
+
   const handleAddDay = () => {
     setDays((prev) => [
       ...prev,
       {
-        ...days[0],
+        name: "",
+        description_day: "",
+        data: {
+          akomodasi: {
+            hotels: [],
+            villas: [],
+            additional: [],
+          },
+          tour: {
+            destinations: [],
+            activities: [],
+            restaurants: [],
+          },
+          transport: {
+            mobils: [],
+            additional: [],
+          },
+        },
       },
     ]);
 
@@ -102,8 +132,9 @@ const PackageCreateForm = (props) => {
   useEffect(() => {
     if (location.pathname.includes("edit")) {
       setEditFormActive(true);
+      handleSetValue();
     }
-  }, [location.pathname]);
+  }, [location.pathname, onePackageFull]);
 
   return (
     <Container maxW="7xl" px="0">
@@ -142,7 +173,7 @@ const PackageCreateForm = (props) => {
                       Nama untuk Day {index + 1}
                     </Text>
                     <Input
-                      placeholder="Contoh: Livio Suite"
+                      placeholder="Contoh: Hari Pertama di Bali"
                       onChange={(e) => {
                         const updated = [...days];
                         updated[index].name = e.target.value;
@@ -504,7 +535,7 @@ const PackageCreateForm = (props) => {
 
                       <VStack spacing={2} align="stretch">
                         {day.data.transport.additional.map((info, i) => (
-                          <InfoCard
+                          <InfoTransportCard
                             key={i}
                             isAdmin={true}
                             index={i}
@@ -552,7 +583,7 @@ const PackageCreateForm = (props) => {
 const PackageFormPage = () => {
   const toast = useToast();
   const location = useLocation();
-  const { headline } = useAdminPackageContext();
+  const { headline, onePackageFull } = useAdminPackageContext();
   const [primaryData, setPrimaryData] = useState([]);
   const [namePackages, setNamePackages] = useState("");
   const [desctiptionPackages, setDescriptionPackages] = useState("");
@@ -567,104 +598,45 @@ const PackageFormPage = () => {
       description: desctiptionPackages,
       days: [...primaryData],
     };
-    const payload = {
-      name: data.name,
-      description: data.description,
-      days: data.days.map((day) => {
-        return {
-          name: day.name,
-          description_day: day.description_day,
-          data: {
-            akomodasi: {
-              hotels: day.data.akomodasi.hotels.map((hotel) => {
-                return {
-                  id_hotel: hotel.hotel.value,
-                  id_tipe_kamar: hotel.roomType.value,
-                  season: {
-                    type: data.season?.startsWith("normal")
-                      ? "normal"
-                      : data.season?.startsWith("high")
-                      ? "high"
-                      : "peak",
-                    id_musim: hotel.idMusim,
-                  },
-                };
-              }),
-              villas: day.data.akomodasi.villas.map((villa) => {
-                return {
-                  id_villa: villa.villa.value,
-                  id_tipe_kamar: villa.roomType.value,
-                  season: {
-                    type: data.season?.startsWith("normal")
-                      ? "normal"
-                      : data.season?.startsWith("high")
-                      ? "high"
-                      : data.season?.startsWith("honeymoon")
-                      ? "honeymoon"
-                      : "peak",
-                    id_musim: villa.idMusim,
-                  },
-                };
-              }),
-              additional: day.data.akomodasi.additional.map((additional) => {
-                return {
-                  id_additional: additional.selectedInfo.value,
-                };
-              }),
-            },
-            tour: {
-              destinations: day.data.tour.destinations.map((destination) => {
-                return {
-                  id_destinasi: destination.selectedDest.value,
-                  type_wisata: destination.selectedType.value,
-                };
-              }),
-              activities: day.data.tour.activities.map((activity) => {
-                return {
-                  id_vendor: activity.selectedVendor.value,
-                  id_activity: activity.selectedActivity.value,
-                  type_wisata: "domestik",
-                };
-              }),
-              restaurants: day.data.tour.restaurants.map((restaurant) => {
-                return {
-                  id_resto: restaurant.selectedResto.value,
-                  id_menu: restaurant.selectedPackage.value,
-                };
-              }),
-            },
-            transport: {
-              mobils: day.data.transport.mobils.map((mobil) => {
-                return {
-                  id_mobil: mobil.mobil.value,
-                  keterangan: mobil.kategori.toLowerCase(),
-                  id_area: mobil.id_area,
-                };
-              }),
-              additional: day.data.transport.additional.map((additional) => {
-                return {
-                  id_additional: additional.selectedInfo.value,
-                };
-              }),
-            },
-          },
-        };
-      }),
-    };
+    const payload = buildPayloadPaket(data);
+
+    console.log(payload);
 
     try {
-      const res = await apiPostPackageFull(payload);
+      let res;
+
+      editFormActive
+        ? (res = await apiPutPackageFull(onePackageFull.id, payload))
+        : (res = await apiPostPackageFull(payload));
 
       if (res.status == 201) {
         toast(
-          toastConfig("Buat Berhasil", "Paket berhasil dibuat!", "success")
+          toastConfig(
+            editFormActive ? "Edit berhasil " : "Buat Berhasil",
+            editFormActive
+              ? "Paket berhasil diubah!"
+              : "Paket berhasil dibuat!",
+            "success"
+          )
         );
       } else {
-        toast(toastConfig("Buat Gagal", "Data tidak lengkap!", "error"));
+        toast(
+          toastConfig(
+            editFormActive ? "Edit Gagal " : "Buat Gagal",
+            "Data tidak lengkap!",
+            "error"
+          )
+        );
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      toast(toastConfig("Buat Gagal", "Data tidak lengkap!", "error"));
+      toast(
+        toastConfig(
+          editFormActive ? "Edit Gagal " : "Buat Gagal",
+          "Data tidak lengkap!",
+          "error"
+        )
+      );
     }
   };
 
@@ -683,7 +655,7 @@ const PackageFormPage = () => {
     <Flex direction={"column"} gap={5}>
       <Box p={4} bg={"gray.800"} borderRadius={"12px"}>
         <Text fontWeight="bold" fontSize={"2xl"}>
-          Buat Paket
+          {editFormActive ? "Edit Paket" : "Buat Paket"}
         </Text>
         <Flex direction={"column"} gap={5} py={5}>
           <Text fontWeight="semibold">Nama Paket</Text>

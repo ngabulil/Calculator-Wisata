@@ -51,7 +51,7 @@ const AppTitleDescription = (props) => {
           alignItems={"center"}
           justifyContent={"space-between"}
         >
-          <Text fontSize={"24px"} fontWeight={"bold"}>
+          <Text fontSize={"24px"} fontWeight={"bold"} noOfLines={1}>
             {props.title || "Bali Paket"}
           </Text>
           <PopoverButton
@@ -64,7 +64,7 @@ const AppTitleDescription = (props) => {
             onOpenButton={props.onOpenButton}
           />
         </Flex>
-        <Text fontSize={"10px"} noOfLines={3}>
+        <Text fontSize={"12px"} noOfLines={4}>
           {props.description}
         </Text>
       </Flex>

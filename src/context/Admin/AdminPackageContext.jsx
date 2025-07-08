@@ -19,6 +19,7 @@ const AdminPackageContextProvider = ({ children }) => {
   const [restaurant, setRestaurant] = React.useState([]);
   const [destination, setDestination] = React.useState([]);
   const [packageFull, setPackageFull] = React.useState([]);
+  const [onePackageFull, setOnePackageFull] = React.useState([]);
   const [headline, setHeadline] = React.useState({
     name: "",
     description: "",
@@ -64,7 +65,11 @@ const AdminPackageContextProvider = ({ children }) => {
 
   const updateHeadline = (name, description) => {
     setHeadline({ name, description });
-  }
+  };
+
+  const updatePackageFull = (data) => {
+    setOnePackageFull(data);
+  };
 
   // fetch functions
 
@@ -116,6 +121,8 @@ const AdminPackageContextProvider = ({ children }) => {
     getAllActivities,
     getAllRestaurant,
     getAllPackageFull,
+    onePackageFull,
+    updatePackageFull,
   };
 
   return (

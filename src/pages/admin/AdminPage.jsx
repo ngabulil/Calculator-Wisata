@@ -24,7 +24,7 @@ const AdminPage = () => {
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [readPackageActive, setReadPackageActive] = useState(false);
-  const { getAllPackageFull, packageFull, updateHeadline } =
+  const { getAllPackageFull, packageFull, updateHeadline, updatePackageFull } =
     useAdminPackageContext();
 
   const handleGetAllPackageFull = async () => {
@@ -76,10 +76,14 @@ const AdminPage = () => {
             bg={"blue.500"}
             onClick={() => {
               setFormActive(!formActive);
+
               if (formActive) {
-                navigate("/admin");
+                updatePackageFull([]);
               }
-              if (readPackageActive) setReadPackageActive(false);
+              if (readPackageActive) {
+                setReadPackageActive(false);
+              }
+              navigate("/admin/paket");
             }}
           >
             {formActive || readPackageActive ? (
@@ -105,6 +109,7 @@ const AdminPage = () => {
                     description={packageItem.description}
                     onOpenButton={() => {
                       setReadPackageActive(true);
+                      updatePackageFull(packageItem);
                     }}
                     onDeleteButton={() =>
                       handleDeletePackageFull(packageItem.id)
@@ -112,6 +117,7 @@ const AdminPage = () => {
                     onEditButton={() => {
                       setFormActive(true);
                       updateHeadline(packageItem.name, packageItem.description);
+                      updatePackageFull(packageItem);
                     }}
                   />
                 );

@@ -11,14 +11,18 @@ import SearchBar from "../../components/searchBar";
 import { useToast } from "@chakra-ui/react";
 import toastConfig from "../../utils/toastConfig";
 import { apiDeleteHotel } from "../../services/hotelService";
+import HotelRead from "../../components/Admin/Hotel/HotelRead/HotelRead";
 
 const ITEMS_PER_PAGE = 8;
 
 const AdminHotelPage = () => {
   const toast = useToast();
-  const [formActive, setFormActive] = useState(false);
-  const { updateHotelData, getAllHotel } = useAdminHotelContext();
   const navigate = useNavigate();
+  const { updateHotelData, getAllHotel } = useAdminHotelContext();
+  //
+  const [readHotelActive, setReadHotelActive] = useState(false);
+  const [formActive, setFormActive] = useState(false);
+  //
   const [currentPage, setCurrentPage] = useState(0);
   const [hotels, setHotels] = useState([]);
   const [recentHotels, setRecentHotels] = useState([]);
@@ -99,21 +103,27 @@ const AdminHotelPage = () => {
               setFormActive(!formActive);
               if (formActive) {
                 updateHotelData(null);
-                navigate("/admin/packages/hotel");
+                navigate("/admin/hotel");
+              }
+
+              if (readHotelActive) {
+                setReadHotelActive(false);
               }
             }}
           >
-            {formActive ? (
+            {formActive || readHotelActive ? (
               <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
             ) : (
               <AddIcon pr={"5px"} />
             )}{" "}
-            {formActive ? "Back" : "Create"}
+            {formActive || readHotelActive ? "Back" : "Create"}
           </Button>
         </Flex>
 
         {formActive ? (
           <HotelForm />
+        ) : readHotelActive ? (
+          <HotelRead />
         ) : (
           <>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
@@ -136,12 +146,16 @@ const AdminHotelPage = () => {
                     handleDeleteHotel(hotel.id);
                     handleGetHotels();
                   }}
+                  onOpenButton={() => {
+                    updateHotelData(hotel);
+                    setReadHotelActive(true);
+                  }}
                 />
               ))}
             </Flex>
 
             {/* Pagination */}
-            {!formActive && (
+            {!formActive && !readHotelActive && (
               <Box
                 mt={6}
                 display="flex"

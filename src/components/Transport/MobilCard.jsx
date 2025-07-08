@@ -158,7 +158,7 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           />
         </Box>
 
-        {isAdmin && (
+        {!isAdmin && (
           <Box w="50%">
             <Text mb={1} fontSize="sm" color="gray.300">
               Jumlah Unit

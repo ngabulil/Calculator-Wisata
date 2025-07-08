@@ -73,10 +73,15 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
         })
       );
 
-    const honeymoon = seasons.honeymoon.find((s) => s.idRoom === idRoom);
-    if (honeymoon) {
-      options.push({ value: "honeymoon", label: "Honeymoon" });
-    }
+    seasons.honeymoon
+      .filter((s) => s.idRoom === idRoom)
+      .forEach((s, i) =>
+        options.push({
+          value: `honeymoon-${i}`,
+          label: `Honeymoon Season - ${s.label}`,
+          idMusim: s.idMusim,
+        })
+      );
 
     return options;
   }, [selectedVillaData, data.roomType]);
@@ -230,21 +235,6 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           />
         </Box>
 
-        {isAdmin && (
-          <Box w="50%">
-            <Text mb={1} fontSize="sm" color="gray.300">
-              Jumlah Kamar
-            </Text>
-            <Input
-              value={jumlahKamar}
-              onChange={(e) => setJumlahKamar(Number(e.target.value))}
-              bg={inputBg}
-              color={textColor}
-              borderColor={borderColor}
-            />
-          </Box>
-        )}
-
         {!isAdmin && (
           <Box w="50%">
             <Text mb={1} fontSize="sm" color="gray.300">
@@ -279,23 +269,25 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
       )}
 
       <VStack align="start" spacing={2} mb={3}>
-        <HStack spacing={3}>
-          <Checkbox
-            isChecked={data.useExtrabed || false}
-            onChange={(e) =>
-              onChange({ ...data, useExtrabed: e.target.checked })
-            }
-            isDisabled={hargaExtrabed === 0}
-            colorScheme="teal"
-          >
-            Extrabed?
-          </Checkbox>
-          {hargaExtrabed === 0 && (
-            <Text fontSize="sm" color="orange.300">
-              Tidak tersedia, silahkan tambah di additional
-            </Text>
-          )}
-        </HStack>
+        {!isAdmin && (
+          <HStack spacing={3}>
+            <Checkbox
+              isChecked={data.useExtrabed || false}
+              onChange={(e) =>
+                onChange({ ...data, useExtrabed: e.target.checked })
+              }
+              isDisabled={hargaExtrabed === 0}
+              colorScheme="teal"
+            >
+              Extrabed?
+            </Checkbox>
+            {hargaExtrabed === 0 && (
+              <Text fontSize="sm" color="orange.300">
+                Tidak tersedia, silahkan tambah di additional
+              </Text>
+            )}
+          </HStack>
+        )}
 
         {data.useExtrabed && (
           <HStack spacing={4} w="100%">

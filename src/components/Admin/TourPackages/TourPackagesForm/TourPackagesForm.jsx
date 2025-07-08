@@ -7,10 +7,10 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import TourHeaderForm from "../../../../components/TourForm/TourHeaderForm.jsx";
-import RestaurantForm from "../../../../components/TourForm/RestaurantForm.jsx";
-import VisitorCategoryForm from "../../../../components/TourForm/VisitorCategoryForm.jsx";
-import PriceSummaryBox from "../../../../components/TourForm/PriceSummaryBox.jsx";
+import TourHeaderForm from "../../../TourForm/TourHeaderForm.jsx";
+import RestaurantForm from "../../../TourForm/RestaurantForm.jsx";
+import VisitorCategoryForm from "../../../TourForm/VisitorCategoryForm.jsx";
+import PriceSummaryBox from "../../../TourForm/PriceSummaryBox.jsx";
 
 const TourPackagePage = () => {
   const [tourInfo, setTourInfo] = useState({});

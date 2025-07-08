@@ -19,6 +19,10 @@ export const apiGetHotel = async (id) => {
     throw error;
   }
 };
+
+
+
+
 export const apiPostHotel = async (data) => {
   try {
     const response = await apiPost("/hotels", data);

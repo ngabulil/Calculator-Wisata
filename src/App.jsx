@@ -24,13 +24,13 @@ import AdminAdditionalPage from "./pages/admin/AdminAdditionalPage";
 
 function App() {
   const adminRoutes = [
-    { path: "/admin", element: <AdminPage /> },
-    { path: "/admin/edit", element: <AdminPage /> },
-    { path: "/admin/packages/hotel", element: <AdminHotelPage /> },
-    { path: "/admin/packages/hotel/edit", element: <AdminHotelPage /> },
-    { path: "/admin/packages/villa", element: <AdminVillaPage /> },
-    { path: "/admin/packages/villa/edit", element: <AdminVillaPage /> },
-    { path: "/admin/packages/additional", element: <AdminAdditionalPage /> },
+    { path: "/admin/paket", element: <AdminPage /> },
+    { path: "/admin/paket/edit", element: <AdminPage /> },
+    { path: "/admin/hotel", element: <AdminHotelPage /> },
+    { path: "/admin/hotel/edit", element: <AdminHotelPage /> },
+    { path: "/admin/villa", element: <AdminVillaPage /> },
+    { path: "/admin/villa/edit", element: <AdminVillaPage /> },
+    { path: "/admin/additional", element: <AdminAdditionalPage /> },
     { path: "/admin/tour-packages", element: <AdminTourPackagesPage /> },
     { path: "/admin/tour-packages/edit", element: <AdminTourPackagesPage /> },
     { path: "/admin/transport", element: <AdminTransportPage /> },
@@ -52,7 +52,7 @@ function App() {
   return (
     <Routes>
       {/* Redirect from root to calculator */}
-      <Route path="/" element={<Navigate to="/calculator" />} />
+      <Route path="/" element={<Navigate to="/admin/paket" />} />
 
       {/* Admin Routes */}
       {adminRoutes.map(({ path, element }) => (

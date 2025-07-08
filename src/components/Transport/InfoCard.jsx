@@ -16,7 +16,7 @@ import {
 import { MainSelectCreatableWithDelete } from "../MainSelect";
 import { useTransportContext } from "../../context/TransportContext";
 
-const InfoCard = ({ index, onDelete, data, onChange }) => {
+const InfoCard = ({ index, onDelete, data, onChange, isAdmin }) => {
   const { additional, setAdditional } = useTransportContext();
 
   const infoOptions = useMemo(
@@ -100,7 +100,7 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
 
       <HStack spacing={4} mb={3}>
         {/* Nama Additional */}
-        <Box w="50%">
+        <Box w={isAdmin ? "full" : "50%"}>
           <Text mb={1} fontSize="sm" color="gray.300">
             Nama Additional
           </Text>
@@ -115,40 +115,46 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
         </Box>
 
         {/* Harga */}
-        <Box w="25%">
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Harga
-          </Text>
-          <Input
-            value={harga}
-            onChange={(e) => setHarga(Number(e.target.value))}
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
+        {!isAdmin && (
+          <>
+            <Box w="25%">
+              <Text mb={1} fontSize="sm" color="gray.300">
+                Harga
+              </Text>
+              <Input
+                value={harga}
+                onChange={(e) => setHarga(Number(e.target.value))}
+                bg={inputBg}
+                color={textColor}
+                borderColor={borderColor}
+              />
+            </Box>
 
-        {/* Jumlah */}
-        <Box w="25%">
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Jumlah
-          </Text>
-          <Input
-            value={jumlah}
-            onChange={(e) => setJumlah(Number(e.target.value))}
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
+            {/* Jumlah */}
+            <Box w="25%">
+              <Text mb={1} fontSize="sm" color="gray.300">
+                Jumlah
+              </Text>
+              <Input
+                value={jumlah}
+                onChange={(e) => setJumlah(Number(e.target.value))}
+                bg={inputBg}
+                color={textColor}
+                borderColor={borderColor}
+              />
+            </Box>
+          </>
+        )}
       </HStack>
 
       {/* Total */}
-      <Box mt={2}>
-        <Text fontWeight="semibold" color="green.300">
-          Total Harga: Rp {total.toLocaleString("id-ID")}
-        </Text>
-      </Box>
+      {!isAdmin && (
+        <Box mt={2}>
+          <Text fontWeight="semibold" color="green.300">
+            Total Harga: Rp {total.toLocaleString("id-ID")}
+          </Text>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -100,7 +100,7 @@ const InfoCard = ({ index, onDelete, data, onChange, isAdmin }) => {
 
       <HStack spacing={4} mb={3}>
         {/* Nama Additional */}
-        <Box w="50%">
+        <Box w={isAdmin ? "full" : "50%"}>
           <Text mb={1} fontSize="sm" color="gray.300">
             Nama Additional
           </Text>
@@ -131,18 +131,20 @@ const InfoCard = ({ index, onDelete, data, onChange, isAdmin }) => {
         )}
 
         {/* Jumlah */}
-        <Box w={isAdmin ? "50%" : "25%"}>
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Jumlah
-          </Text>
-          <Input
-            value={jumlah}
-            onChange={(e) => setJumlah(Number(e.target.value))}
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
+        {!isAdmin && (
+          <Box w={"25%"}>
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Jumlah
+            </Text>
+            <Input
+              value={jumlah}
+              onChange={(e) => setJumlah(Number(e.target.value))}
+              bg={inputBg}
+              color={textColor}
+              borderColor={borderColor}
+            />
+          </Box>
+        )}
       </HStack>
 
       {/* Total */}

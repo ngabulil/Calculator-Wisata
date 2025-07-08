@@ -243,7 +243,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           </Box>
         )}
 
-        {isAdmin && (
+        {!isAdmin && (
           <Box w="50%">
             <Text mb={1} fontSize="sm" color="gray.300">
               Jumlah Kamar
@@ -277,23 +277,25 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
       )}
 
       <VStack align="start" spacing={2} mb={3}>
-        <HStack align="center" spacing={3}>
-          <Checkbox
-            colorScheme="teal"
-            isChecked={data.useExtrabed || false}
-            onChange={(e) =>
-              onChange({ ...data, useExtrabed: e.target.checked })
-            }
-            isDisabled={hargaExtrabed === 0}
-          >
-            Extrabed?
-          </Checkbox>
-          {hargaExtrabed === 0 && (
-            <Text fontSize="sm" color="orange.300">
-              Tidak tersedia, silahkan tambah di additional
-            </Text>
-          )}
-        </HStack>
+        {!isAdmin && (
+          <HStack align="center" spacing={3}>
+            <Checkbox
+              colorScheme="teal"
+              isChecked={data.useExtrabed || false}
+              onChange={(e) =>
+                onChange({ ...data, useExtrabed: e.target.checked })
+              }
+              isDisabled={hargaExtrabed === 0}
+            >
+              Extrabed?
+            </Checkbox>
+            {hargaExtrabed === 0 && (
+              <Text fontSize="sm" color="orange.300">
+                Tidak tersedia, silahkan tambah di additional
+              </Text>
+            )}
+          </HStack>
+        )}
 
         {data.useExtrabed && (
           <HStack spacing={4} w="100%">

@@ -107,7 +107,7 @@ const AdminVillaPage = () => {
               setFormActive(!formActive);
               if (formActive) {
                 updateVillaData(null);
-                navigate("/admin/packages/villa");
+                navigate("/admin/villa");
               }
             }}
           >

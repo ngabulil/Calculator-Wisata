@@ -11,29 +11,43 @@ import {
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { PopoverButton } from "../../../PopoverButton";
+import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import { parsePaketDays } from "../../../../utils/parseOnePaket";
+import { useEffect, useState } from "react";
+import App from "../../../../App";
 
 const PackageRead = () => {
+  const { onePackageFull } = useAdminPackageContext();
+  const [paketDay, setPaketDay] = useState([]);
+
+  const handlePaketRead = async () => {
+    const data = await parsePaketDays(onePackageFull.days);
+    console.log(data);
+    setPaketDay(data);
+  };
+
+  useEffect(() => {
+    handlePaketRead();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Container
-      bg={"gray.700"}
+      bg={"gray.800"}
       p={4}
       flexGrow="1"
       rounded={12}
-      maxW="4xl"
+      maxW="7xl"
       display={"flex"}
     >
       <Flex direction={"column"} gap={4} w={"full"}>
         <AppTitleDescription
-          title={"Paket Bali Read"}
-          description={
-            " Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s"
-          }
-          onEditButton={() => console.log("Edit Button Clicked")}
-          onDeleteButton={() => console.log("Delete Button Clicked")}
+          title={onePackageFull.name}
+          description={onePackageFull.description}
         />
         <Tabs variant="line" colorScheme="blue" isFitted>
           <TabList>
-            {Array.from({ length: 3 }).map((_, index) => {
+            {onePackageFull.days.map((_, index) => {
               return (
                 <Tab fontSize={"14px"} key={index}>
                   Day {index + 1}
@@ -43,26 +57,122 @@ const PackageRead = () => {
           </TabList>
 
           <TabPanels>
-            <TabPanel py={4} px={0}>
-              <Flex direction={"column"} gap={2}>
-                {/* Accomodation */}
-                <AppAccomodation
-                  hotelName={"Hotel Bali"}
-                  bedRoom={"2 Kamar Tidur"}
-                />
-                {/* transport */}
-                <AppTransport />
-                {/* tour packages */}
-                <AppTourPackages />
-                {/*  */}
-              </Flex>
-            </TabPanel>
-            <TabPanel py={4} px={0}>
-              <p>Isi Gallery</p>
-            </TabPanel>
-            <TabPanel py={4} px={0}>
-              <p>Isi Review</p>
-            </TabPanel>
+            {paketDay.map((day, index) => {
+              return (
+                <TabPanel key={index} py={4} px={0}>
+                  <Flex direction={"column"} gap={4}>
+                    <Flex direction={"column"} gap={0}>
+                      <Text fontSize={"24px"} fontWeight={"bold"}>
+                        {day.name}
+                      </Text>
+                      <Text fontSize={"14px"}>{day.description_day}</Text>
+                    </Flex>
+                    {/* Accomodation */}
+                    <AppHeadComponent
+                      bg={"gray.700"}
+                      p="4"
+                      rounded={8}
+                      title="Akomodasi"
+                    >
+                      {" "}
+                      <AppHeadComponent title={"Hotel"} isChild>
+                        {" "}
+                        {day.hotels.map((hotel, index) => {
+                          return (
+                            <AppHomeStayCard
+                              isVilla={false}
+                              name={hotel.name}
+                              photos={"https://picsum.photos/200/300"}
+                              star={hotel.star}
+                            />
+                          );
+                        })}
+                      </AppHeadComponent>
+                      <AppHeadComponent title={"Villa"} isChild>
+                        {" "}
+                        {day.villas.map((villa, index) => {
+                          return (
+                            <AppHomeStayCard
+                              isVilla={true}
+                              name={villa.name}
+                              photos={"https://picsum.photos/200/300"}
+                              star={villa.star}
+                            />
+                          );
+                        })}
+                      </AppHeadComponent>
+                      <AppHeadComponent title={"Tambahan"} isChild>
+                        {" "}
+                        {day.akomodasi_additionals.map((add, index) => {
+                          return (
+                            <AppAdditionalCard key={index} title={add.name} />
+                          );
+                        })}
+                      </AppHeadComponent>
+                    </AppHeadComponent>
+                    {/* tour packages */}
+                    <AppHeadComponent
+                      bg={"gray.700"}
+                      p="4"
+                      rounded={8}
+                      title="Tour"
+                    >
+                      <AppHeadComponent title={"Destinasi"} isChild>
+                        {day.destinations.map((dest, index) => {
+                          return (
+                            <AppDestinationCard
+                              title={dest.name}
+                              subtitle={dest.note}
+                            />
+                          );
+                        })}
+                      </AppHeadComponent>
+                      <AppHeadComponent title={"Aktitvitas"} isChild>
+                        {day.activities.map((act, index) => {
+                          return (
+                            <AppActivityCard key={index} title={act.name} />
+                          );
+                        })}
+                      </AppHeadComponent>
+                      <AppHeadComponent title={"Restaurant"} isChild>
+                        {day.restaurants.map((resto, index) => {
+                          return (
+                            <AppRestaurantCard key={index} title={resto.name} />
+                          );
+                        })}
+                      </AppHeadComponent>
+                    </AppHeadComponent>
+                    {/* transport */}
+                    <AppHeadComponent
+                      bg={"gray.700"}
+                      p="4"
+                      rounded={8}
+                      title="Transport"
+                    >
+                      <AppHeadComponent title={"Mobil"} isChild>
+                        {day.mobils.map((mobil, index) => {
+                          return (
+                            <AppTransportCard
+                              key={index}
+                              title={mobil.name}
+                              vendor={mobil.vendor}
+                            />
+                          );
+                        })}{" "}
+                      </AppHeadComponent>
+                      <AppHeadComponent title={"Tambahan"} isChild>
+                        {day.akomodasi_additionals.map((add, index) => {
+                          return (
+                            <AppAdditionalCard key={index} title={add.name} />
+                          );
+                        })}
+                      </AppHeadComponent>
+                    </AppHeadComponent>
+                    {/*  */}
+                  </Flex>
+                </TabPanel>
+              );
+            })}
           </TabPanels>
         </Tabs>
       </Flex>
@@ -79,7 +189,7 @@ const AppTitleDescription = (props) => {
         <img
           alt="photo-detail"
           src="https://picsum.photos/200/300"
-          className="w-[40%] h-[300px] rounded-[12px] object-center"
+          className="w-[40%] h-[300px] rounded-[12px] object-cover"
         />
         <Flex direction={"column"} gap={"15px"} w={"60%"} flexShrink={"1"}>
           <Text fontSize={"32px"} fontWeight={"bold"}>
@@ -92,60 +202,75 @@ const AppTitleDescription = (props) => {
   );
 };
 
-const AppAccomodation = (props) => {
+const AppHeadComponent = (props) => {
   return (
-    <Flex direction={"column"} gap={3}>
-      <Text fontSize={"16px"} noOfLines={3} fontWeight={"semibold"}>
-        Akomodasi
+    <Flex
+      direction={"column"}
+      p={props.p}
+      bg={props.bg}
+      rounded={props.rounded}
+      gap={2}
+    >
+      <Text
+        fontSize={!props.isChild ? "20px" : "16px"}
+        noOfLines={3}
+        bg={!props.isChild && "gray.900"}
+        w={"max"}
+        p={!props.isChild && 2}
+        rounded={!props.isChild && "8px"}
+        fontWeight={"semibold"}
+      >
+        {props.title}
       </Text>
-      <Flex direction={"column"} gap={2}>
-        <Flex w={"full"} flex={"wrap"} gap={2}>
-          <AppHotelCard hotelName={props.hotelName} bedRoom={props.bedRoom} />
-          {/*  */}
-          <AppAdditionalCard title={"Breakfast"} count="1" />
-        </Flex>
+      <Flex
+        w={"full"}
+        flex={"wrap"}
+        direction={props.isChild ? "row" : "column"}
+        gap={4}
+      >
+        {props.children}
       </Flex>
     </Flex>
   );
 };
 
-const AppHotelCard = (props) => {
+const AppHomeStayCard = (props) => {
   return (
     <Flex
-      direction={"row"}
-      gap={2}
-      alignItems={"center"}
+      direction={"column"}
+      gap={3}
+      alignItems={"start"}
       w={"30%"}
       bg={"gray.800"}
       rounded={"12px"}
       p={"10px"}
     >
-      <Icon
-        icon="mingcute:hotel-fill"
-        className="text-white text-[32px] rounded-full p-[8px] border-1 border-white"
+      <Flex direction={"row"} alignItems={"center"} gap={2}>
+        <Icon
+          icon="mingcute:hotel-fill"
+          className="text-white text-[24px] rounded-full p-[4px] border-1 border-white"
+        />
+        <Text fontWeight={"bold"}> {props.isVilla ? "Villa" : "Hotel"} </Text>
+      </Flex>
+      <img
+        src={props.photos || "https://picsum.photos/200/300"}
+        alt="hotel-photos"
+        className="w-full h-[200px] rounded-[8px] object-cover"
       />
-      <Flex direction={"column"} gap={0} w={"full"}>
+      <Flex direction={"column"} gap={1} w={"full"}>
         <Text fontSize={"16px"} fontWeight={"bold"}>
-          {props.hotelName}
+          {props.name}
         </Text>
-        <Flex
-          direction={"row"}
-          w={"full"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize={"10px"}>{props.bedRoom}</Text>
-          <Flex direction={"row"} alignItems={"center"} gap={1}>
-            {Array.from({ length: 3 }).map((_, index) => {
-              return (
-                <Icon
-                  key={index}
-                  icon="mdi:star"
-                  className="text-yellow-400 text-[12px]"
-                />
-              );
-            })}
-          </Flex>
+        <Flex direction={"row"} alignItems={"center"} gap={1}>
+          {Array.from({ length: props.star }).map((_, index) => {
+            return (
+              <Icon
+                key={index}
+                icon="mdi:star"
+                className="text-yellow-400 text-[12px]"
+              />
+            );
+          })}
         </Flex>
       </Flex>
     </Flex>
@@ -186,12 +311,9 @@ const AppAdditionalCard = (props) => {
   );
 };
 
-const AppTransport = () => {
+const AppTransportCard = (props) => {
   return (
     <Flex direction={"column"} gap={3} w={"30%"}>
-      <Text fontSize={"16px"} noOfLines={3} fontWeight={"semibold"}>
-        Transports
-      </Text>
       <Flex
         direction={"row"}
         gap={2}
@@ -203,11 +325,11 @@ const AppTransport = () => {
       >
         <Icon
           icon="mingcute:car-fill"
-          className="text-white text-[32px] rounded-full p-[8px] border-1 border-white"
+          className="text-white text-[34px] rounded-full p-[6px] border-1 border-white"
         />
         <Flex direction={"column"} gap={0} w={"full"}>
           <Text fontSize={"16px"} fontWeight={"bold"}>
-            Mobil Avanza
+            {props.title}
           </Text>
           <Flex
             direction={"row"}
@@ -215,67 +337,7 @@ const AppTransport = () => {
             justifyContent={"space-between"}
             alignItems={"center"}
           >
-            <Text fontSize={"10px"}>Jumlah</Text>
-            <Text fontSize={"10px"}>2</Text>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
-  );
-};
-
-const AppTourPackages = () => {
-  return (
-    <Flex direction={"column"} gap={3}>
-      <Text fontSize={"16px"} noOfLines={3} fontWeight={"semibold"}>
-        Tour Packages
-      </Text>
-      <Flex direction={"column"} gap={2}>
-        <Flex direction={"column"} w={"full"} gap={2}>
-          <Flex
-            direction={"column"}
-            gap={4}
-            alignItems={"center"}
-            w={"full"}
-            bg={"gray.800"}
-            rounded={"12px"}
-            p={"15px"}
-          >
-            <Flex
-              direction={"flex"}
-              alignItems={"center"}
-              w={"full"}
-              justifyContent={"space-between"}
-            >
-              <Text fontSize={"16px"} fontWeight={"semibold"}>
-                Tour Bali 3 Hari
-              </Text>
-              <Text fontSize={"16px"}>Paket 3</Text>
-            </Flex>
-            <Flex direction={"column"} gap={4}>
-              <Flex rounded={10} w={"full"} direction={"column"} gap={2}>
-                <Text fontSize={"12px"} fontWeight="bold">
-                  {1}. Lorem Ipsum is simply dummy text of the
-                </Text>
-                <Text fontSize={"12px"}>
-                  {2}. Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it
-                </Text>
-              </Flex>
-              <Flex gap={3}>
-                <AppRestaurantCard
-                  title="Restoran Bali"
-                  subtitle="Buffet Lunch"
-                />
-                {/* traveler Card */}
-                <AppTravelerCard
-                  title="Traveler"
-                  subtitle="2 Adults, 1 Child"
-                />
-              </Flex>
-            </Flex>
+            <Text fontSize={"10px"}>{props.vendor}</Text>
           </Flex>
         </Flex>
       </Flex>
@@ -290,7 +352,7 @@ const AppRestaurantCard = (props) => {
       gap={2}
       alignItems={"center"}
       w={"30%"}
-      bg={"gray.700"}
+      bg={"gray.800"}
       rounded={"12px"}
       p={"10px"}
     >
@@ -309,10 +371,6 @@ const AppRestaurantCard = (props) => {
           alignItems={"center"}
         >
           <Text fontSize={"10px"}>{props.subtitle}</Text>
-          <Flex gap={1} alignItems={"center"}>
-            <Icon icon="mdi:people" className="text-white text-[14px]" />
-            <Text fontSize={"12px"}>2</Text>
-          </Flex>
         </Flex>
       </Flex>
       {/*  */}
@@ -320,14 +378,14 @@ const AppRestaurantCard = (props) => {
   );
 };
 
-const AppTravelerCard = (props) => {
+const AppDestinationCard = (props) => {
   return (
     <Flex
       direction={"row"}
       gap={2}
       alignItems={"center"}
       w={"30%"}
-      bg={"gray.700"}
+      bg={"gray.800"}
       rounded={"12px"}
       p={"10px"}
     >
@@ -348,6 +406,29 @@ const AppTravelerCard = (props) => {
           <Text fontSize={"10px"}>{props.subtitle}</Text>
         </Flex>
       </Flex>
+      {/*  */}
+    </Flex>
+  );
+};
+const AppActivityCard = (props) => {
+  return (
+    <Flex
+      direction={"row"}
+      gap={2}
+      alignItems={"center"}
+      w={"30%"}
+      bg={"gray.800"}
+      rounded={"12px"}
+      p={"10px"}
+    >
+      <Icon
+        icon="ic:round-local-activity"
+        className="text-white text-[38px] rounded-full p-[8px] border-1 border-white"
+      />
+      <Text fontSize={"12px"} fontWeight={"bold"}>
+        {props.title}
+      </Text>
+
       {/*  */}
     </Flex>
   );

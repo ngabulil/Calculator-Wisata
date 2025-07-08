@@ -34,6 +34,8 @@ const HotelCard = (props) => {
             right={1}
           >
             <PopoverButton
+              isOpenButton
+              onOpenButton={props.onOpenButton}
               onEditButton={() => {
                 navigate(`/admin/packages/hotel/edit`);
                 props.onEditButton();
