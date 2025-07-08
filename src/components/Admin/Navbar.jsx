@@ -25,12 +25,19 @@ const Navbar = () => {
           <NavLink to="/admin/villa" style={linkStyle}>
             Villa
           </NavLink>
-          {/* <NavLink to="/admin/transport" style={linkStyle}>
+          <NavLink to="/admin/activity" style={linkStyle}>
+            Activity
+          </NavLink>
+          <NavLink to="/admin/restaurant" style={linkStyle}>
+            Restaurant
+          </NavLink>
+          <NavLink to="/admin/transport" style={linkStyle}>
             Transport
           </NavLink>
-          <NavLink to="/admin/acomodation" style={linkStyle}>
-            Akomodasi
-          </NavLink> */}
+          <NavLink to="/admin/destination" style={linkStyle}>
+            Destinasi
+          </NavLink>
+
           <NavLink to="/calculator" style={linkStyle}>
             Calculator
           </NavLink>

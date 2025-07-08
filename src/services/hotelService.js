@@ -20,9 +20,6 @@ export const apiGetHotel = async (id) => {
   }
 };
 
-
-
-
 export const apiPostHotel = async (data) => {
   try {
     const response = await apiPost("/hotels", data);
@@ -55,6 +52,15 @@ export const apiDeleteHotel = async (id) => {
 
 //  rooms
 
+export const apiGetHotelRoomsById = async (id) => {
+  try {
+    const response = await apiGet(`/hotels/rooms/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 export const apiGetAllHotelRooms = async () => {
   try {
     const response = await apiGet("/hotels/rooms");
@@ -95,6 +101,16 @@ export const apiDeleteHotelRooms = async (id, data) => {
 
 // seasons
 
+export const apiGetNormalSeasonsById = async (id) => {
+  try {
+    const response = await apiGet(`/hotels/normal-seasons/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 export const apiPostNormalSeasons = async (data) => {
   try {
     const response = await apiPost("/hotels/normal-seasons", data);
@@ -124,6 +140,16 @@ export const apiDeleteNormalSeasons = async (id) => {
 };
 
 //
+
+export const apiGetHighSeasonsById = async (id) => {
+  try {
+    const response = await apiGet(`/hotels/high-seasons/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const apiPostHighSeasons = async (data) => {
   try {
@@ -155,6 +181,16 @@ export const apiDeleteHighSeasons = async (id) => {
 };
 
 //
+
+export const apiGetPeakSeasonsById = async (id) => {
+  try {
+    const response = await apiGet(`/hotels/peak-seasons/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const apiPostPeakSeasons = async (data) => {
   try {

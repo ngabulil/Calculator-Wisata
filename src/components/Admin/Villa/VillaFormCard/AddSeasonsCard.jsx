@@ -120,66 +120,64 @@ const AddSeasonCard = (props) => {
           />
         )}
       </Box>
-      {props.isEdit
-        ? openCreateForm && (
-            <VStack spacing={3} align="stretch">
-              <Box display={"flex"} justifyContent={"space-between"}>
-                <Text fontWeight="bold" color="white">
-                  Tambah
-                </Text>
-                <IconButton
-                  icon={<CloseIcon />}
-                  aria-label="Hapus"
-                  size="sm"
-                  color="white"
-                  variant={"unstyled"}
-                  background={"red.300"}
-                  onClick={() => setOpenCreateForm(!openCreateForm)}
-                />
-              </Box>
-              <Select
-                value={form.season}
-                onChange={(e) => setForm({ ...form, season: e.target.value })}
-              >
-                <option value="normal">Normal</option>
-                <option value="high">High</option>
-                <option value="peak">Peak</option>
-                <option value="honeymoon">Honeymoon</option>
-              </Select>
+      {openCreateForm && (
+        <VStack spacing={3} align="stretch">
+          <Box display={"flex"} justifyContent={"space-between"}>
+            <Text fontWeight="bold" color="white">
+              Tambah
+            </Text>
+            <IconButton
+              icon={<CloseIcon />}
+              aria-label="Hapus"
+              size="sm"
+              color="white"
+              variant={"unstyled"}
+              background={"red.300"}
+              onClick={() => setOpenCreateForm(!openCreateForm)}
+            />
+          </Box>
+          <Select
+            value={form.season}
+            onChange={(e) => setForm({ ...form, season: e.target.value })}
+          >
+            <option value="normal">Normal</option>
+            <option value="high">High</option>
+            <option value="peak">Peak</option>
+            <option value="honeymoon">Honeymoon</option>
+          </Select>
 
-              <Select
-                placeholder="Pilih Room Type"
-                value={form.id}
-                onChange={(e) => setForm({ ...form, id: e.target.value })}
-              >
-                {roomTypeSelect.map((room) => (
-                  <option key={room.id} value={room.id}>
-                    {room.name}
-                  </option>
-                ))}
-              </Select>
+          <Select
+            placeholder="Pilih Room Type"
+            value={form.id}
+            onChange={(e) => setForm({ ...form, id: e.target.value })}
+          >
+            {roomTypeSelect.map((room) => (
+              <option key={room.id} value={room.id}>
+                {room.name}
+              </option>
+            ))}
+          </Select>
 
-              {form.season != "normal" && form.season != "honeymoon" && (
-                <Input
-                  placeholder="Label musim (cth: Lebaran, New Year)"
-                  value={form.label}
-                  onChange={(e) => setForm({ ...form, label: e.target.value })}
-                />
-              )}
+          {form.season != "normal" && form.season != "honeymoon" && (
+            <Input
+              placeholder="Label musim (cth: Lebaran, New Year)"
+              value={form.label}
+              onChange={(e) => setForm({ ...form, label: e.target.value })}
+            />
+          )}
 
-              <NumberInput
-                value={form.price}
-                onChange={(val) => setForm({ ...form, price: val })}
-              >
-                <NumberInputField placeholder="Harga" />
-              </NumberInput>
+          <NumberInput
+            value={form.price}
+            onChange={(val) => setForm({ ...form, price: val })}
+          >
+            <NumberInputField placeholder="Harga" />
+          </NumberInput>
 
-              <Button colorScheme="yellow" onClick={handleAddSeasonPrice}>
-                Tambah ke Musim
-              </Button>
-            </VStack>
-          )
-        : null}
+          <Button colorScheme="yellow" onClick={handleAddSeasonPrice}>
+            Tambah ke Musim
+          </Button>
+        </VStack>
+      )}
       {props.isEdit &&
         seasonData.normal.map((data) => {
           return (

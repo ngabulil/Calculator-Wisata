@@ -37,7 +37,7 @@ const HotelCard = (props) => {
               isOpenButton
               onOpenButton={props.onOpenButton}
               onEditButton={() => {
-                navigate(`/admin/packages/hotel/edit`);
+                navigate(`/admin/hotel/edit`);
                 props.onEditButton();
               }}
               onDeleteButton={() => {
@@ -145,39 +145,6 @@ const HotelInfoCard = (props) => {
         fontSize="10px"
         color="gray.300"
       >
-        {/* <Flex direction={"column"} alignItems="stretch" gap={2} w={"full"}>
-          {Object.entries(props.seasons).map(([season, rooms]) => (
-            <Box key={season} mb={4}>
-              <Text
-                fontSize={"10px"}
-                fontWeight="bold"
-                textTransform="capitalize"
-                mb={1}
-              >
-                {season}
-              </Text>
-
-              {rooms.map((room, index) => (
-                <Flex
-                  key={index}
-                  p="8px"
-                  bg="gray.700"
-                  rounded="10px"
-                  direction="row"
-                  justifyContent="space-between"
-                  mb={1}
-                >
-                  <Text fontSize="9px" color="gray.200">
-                    Room ID: {room.idRoom}
-                  </Text>
-                  <Text fontSize="9px" color="gray.300">
-                    Rp {room.price.toLocaleString("id-ID")}
-                  </Text>
-                </Flex>
-              ))}
-            </Box>
-          ))}
-        </Flex> */}
         <Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
           <SeasonSelect
             seasons={totalSeasons}

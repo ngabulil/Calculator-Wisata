@@ -35,11 +35,13 @@ const VillaCard = (props) => {
             right={1}
           >
             <PopoverButton
+              isOpenButton
               onEditButton={() => {
-                navigate(`/admin/packages/Villa/edit`);
+                navigate(`/admin/villa/edit`);
                 props.onEditButton();
               }}
               onDeleteButton={props.onDeleteButton}
+              onOpenButton={props.onOpenButton}
             />
           </Flex>
         </Box>
@@ -145,30 +147,6 @@ const VillaInfoCard = (props) => {
         fontSize="10px"
         color="gray.300"
       >
-        {/* <Flex direction={"column"} alignItems="stretch" gap={2} w={"full"}>
-        {Object.entries(props.seasons).map(([season, price]) => (
-          <Flex
-            key={season}
-            p={"10px"}
-            bg="gray.700"
-            rounded="10px"
-            direction={"row"}
-            justifyContent={"space-between"}
-            w={"full"}
-          >
-            <Text
-              fontSize={"10px"}
-              fontWeight="bold"
-              textTransform="capitalize"
-            >
-              {season}
-            </Text>
-            <Text fontSize={"9px"} color="gray.300">
-              Rp {price}
-            </Text>
-          </Flex>
-        ))}
-      </Flex> */}
         <Flex alignItems={"center"} justifyContent={"space-between"} w={"full"}>
           <SeasonSelect
             seasons={totalSeasons}

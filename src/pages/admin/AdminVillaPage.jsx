@@ -19,14 +19,16 @@ import SearchBar from "../../components/searchBar";
 import { apiDeleteVilla } from "../../services/villaService";
 import toastConfig from "../../utils/toastConfig";
 import { useToast } from "@chakra-ui/react";
+import VillaRead from "../../components/Admin/Villa/VillaRead/VillaRead";
 
 const ITEMS_PER_PAGE = 8;
 
 const AdminVillaPage = () => {
   const toast = useToast();
-  const [formActive, setFormActive] = useState(false);
   const { updateVillaData, getAllVilla } = useAdminVillaContext();
   const navigate = useNavigate();
+  const [readVillaActive, setReadVillaActive] = useState(false);
+  const [formActive, setFormActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [villas, setVillas] = useState([]);
   const [recentVillas, setRecentVillas] = useState([]);
@@ -104,24 +106,30 @@ const AdminVillaPage = () => {
           <Button
             bg={"blue.500"}
             onClick={() => {
-              setFormActive(!formActive);
               if (formActive) {
                 updateVillaData(null);
                 navigate("/admin/villa");
               }
+              if (readVillaActive) {
+                setReadVillaActive(false);
+              } else {
+                setFormActive(!formActive);
+              }
             }}
           >
-            {formActive ? (
+            {formActive || readVillaActive ? (
               <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
             ) : (
               <AddIcon pr={"5px"} />
             )}{" "}
-            {formActive ? "Back" : "Create"}
+            {formActive || readVillaActive ? "Back" : "Create"}
           </Button>
         </Flex>
 
         {formActive ? (
           <VillaForm />
+        ) : readVillaActive ? (
+          <VillaRead />
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
             {currentVillas.map((villa, index) => (
@@ -142,6 +150,11 @@ const AdminVillaPage = () => {
                 }}
                 onDeleteButton={() => {
                   handleDeleteVilla(villa.id);
+                  handleGetVillas();
+                }}
+                onOpenButton={() => {
+                  updateVillaData(villa);
+                  setReadVillaActive(true);
                 }}
               />
             ))}

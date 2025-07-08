@@ -13,17 +13,17 @@ import {
   Container,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
-import { useAdminHotelContext } from "../../../../context/Admin/AdminHotelContext";
+import { useAdminVillaContext } from "../../../../context/Admin/AdminVillaContext";
 import formatRupiah from "../../../../utils/rupiahFormat";
 
 import { useEffect, useState } from "react";
 
-const HotelRead = () => {
-  const { hotelData } = useAdminHotelContext();
-  const [hotelsData, setHotelsData] = useState([]);
+const VillaRead = () => {
+  const { villaData } = useAdminVillaContext();
+  const [villasData, setVillasData] = useState([]);
 
-  const handleParseHotelData = () => {
-    const parseDataSeasons = Object.entries(hotelData.seasons).flatMap(
+  const handleParsevillaData = () => {
+    const parseDataSeasons = Object.entries(villaData.seasons).flatMap(
       ([namaMusim, items]) =>
         items.map((item) => ({
           ...item,
@@ -31,23 +31,23 @@ const HotelRead = () => {
         }))
     );
 
-    const merged = hotelData.roomType.map((room) => ({
+    const merged = villaData.roomType.map((room) => ({
       ...room,
       seasons: parseDataSeasons.filter(
         (season) => season.idRoom === room.idRoom
       ),
     }));
 
-    const updatedHotelSeason = {
-      ...hotelData,
+    const updatedVillaSeason = {
+      ...villaData,
       roomType: merged,
     };
 
-    const mergedRoomTypes = updatedHotelSeason.roomType.map((room) => {
-      const extra = updatedHotelSeason.extrabed?.find(
+    const mergedRoomTypes = updatedVillaSeason.roomType.map((room) => {
+      const extra = updatedVillaSeason.extrabed?.find(
         (e) => e.idRoom === room.idRoom
       );
-      const contract = updatedHotelSeason.contractUntil?.find(
+      const contract = updatedVillaSeason.contractUntil?.find(
         (c) => c.idRoom === room.idRoom
       );
 
@@ -57,16 +57,16 @@ const HotelRead = () => {
         contractUntil: contract?.valid ?? null,
       };
     });
-    const updatedHotel = {
-      ...hotelData,
+    const updatedVilla = {
+      ...villaData,
       roomType: mergedRoomTypes,
     };
 
-    setHotelsData(updatedHotel);
+    setVillasData(updatedVilla);
   };
 
   useEffect(() => {
-    handleParseHotelData();
+    handleParsevillaData();
   }, []);
 
   return (
@@ -81,14 +81,13 @@ const HotelRead = () => {
       {" "}
       <Flex direction={"column"} gap={4} w={"full"}>
         <AppTitleDescription
-          title={hotelsData.hotelName}
-          description={hotelsData.description}
-          stars={hotelsData.stars}
+          title={villasData.villaName}
+          stars={villasData.stars}
         />
 
         <Flex gap={4} alignItems={"start"} justifyContent={"start"}>
-          {Object.keys(hotelsData).length != 0 &&
-            hotelsData?.roomType.map((room, index) => {
+          {Object.keys(villasData).length != 0 &&
+            villasData?.roomType.map((room, index) => {
               return (
                 <AppRoomCard
                   key={index}
@@ -234,4 +233,4 @@ const AppRoomCard = (props) => {
   );
 };
 
-export default HotelRead;
+export default VillaRead;

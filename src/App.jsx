@@ -31,12 +31,8 @@ function App() {
     { path: "/admin/villa", element: <AdminVillaPage /> },
     { path: "/admin/villa/edit", element: <AdminVillaPage /> },
     { path: "/admin/additional", element: <AdminAdditionalPage /> },
-    { path: "/admin/tour-packages", element: <AdminTourPackagesPage /> },
-    { path: "/admin/tour-packages/edit", element: <AdminTourPackagesPage /> },
     { path: "/admin/transport", element: <AdminTransportPage /> },
     { path: "/admin/transport/edit", element: <AdminTransportPage /> },
-    { path: "/admin/acomodation", element: <AdminAcomodationPage /> },
-    { path: "/admin/acomodation/edit", element: <AdminAcomodationPage /> },
   ];
 
   const publicRoutes = [

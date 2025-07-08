@@ -100,7 +100,6 @@ const AdminHotelPage = () => {
           <Button
             bg={"blue.500"}
             onClick={() => {
-              setFormActive(!formActive);
               if (formActive) {
                 updateHotelData(null);
                 navigate("/admin/hotel");
@@ -108,6 +107,8 @@ const AdminHotelPage = () => {
 
               if (readHotelActive) {
                 setReadHotelActive(false);
+              } else {
+                setFormActive(!formActive);
               }
             }}
           >
