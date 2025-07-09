@@ -9,10 +9,12 @@ import {
 } from "@chakra-ui/react";
 import { useAkomodasiContext } from "../context/AkomodasiContext";
 import { useTransportContext } from "../context/TransportContext";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
   const { days } = useAkomodasiContext();
   const { days: transportDays } = useTransportContext();
+  const navigate = useNavigate()
 
   const bg = useColorModeValue("gray.700", "gray.800");
   const sectionBg = useColorModeValue("gray.600", "gray.700");
@@ -79,6 +81,10 @@ const CheckoutPage = () => {
 
     return sum + subtotal + markupAmount;
   }, 0);
+
+  const handleBuatPesanan = () => {
+    navigate("/expenses");
+  }
 
   const totalKeseluruhan = grandTotalAkomodasi + grandTotalTransport;
 
@@ -289,7 +295,7 @@ const CheckoutPage = () => {
       </Box>
 
       <Box textAlign="right" mt={6}>
-        <Button colorScheme="teal" size="lg">
+        <Button colorScheme="teal" size="lg" onClick={handleBuatPesanan}>
           Buat Pesanan
         </Button>
       </Box>

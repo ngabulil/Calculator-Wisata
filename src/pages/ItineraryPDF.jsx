@@ -20,20 +20,32 @@ const ItineraryPDF = forwardRef ((props, ref) => {
 
   const componentRef = useRef();
 
-  useImperativeHandle(ref, () => ({
-    async exportAsBlob() {
-      const canvas = await html2canvas(componentRef.current, { scale: 0.8 });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+useImperativeHandle(ref, () => ({
+        async exportAsBlob() {
+            const input = componentRef.current;
+            const canvas = await html2canvas(input, { scale: 1 });
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
 
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            const imgWidth = 210;
+            const pageHeight = 297;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
-      return pdf.output('blob'); // return blob!
-    }
-  }));
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+            return pdf.output('blob');
+        }
+    }));
 
   useEffect(() => {
     const formattedExpensesDays = expensesDays.map((day, index) => ({
@@ -53,11 +65,12 @@ const ItineraryPDF = forwardRef ((props, ref) => {
       <Box
         ref={componentRef}
         data-pdf-content
-        width="795px"
+        width="794px"
         minHeight="1123px"
         mx="auto"
-        p="20px"
+        p="40px"
         bg="white"
+        display="block !important"
         fontFamily="Arial, sans-serif"
         fontSize="14px"
         lineHeight="1.4"
