@@ -1,4 +1,11 @@
-import { Flex, Button, Container, Select, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Button,
+  Container,
+  Select,
+  useToast,
+} from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +21,9 @@ import ActivityCard from "../../components/Admin/Activity/ActivityCard/ActivityC
 import ActivityFormPage from "../../components/Admin/Activity/ActivityForm/ActivityForm";
 import VendorFormPage from "../../components/Admin/Activity/ActivityForm/VendorForm";
 import VendorCard from "../../components/Admin/Activity/ActivityCard/VendorCard";
+import ReactPaginate from "react-paginate";
+
+const ITEMS_PER_PAGE = 5;
 
 const AdminActivityPage = () => {
   const toast = useToast();
@@ -28,6 +38,42 @@ const AdminActivityPage = () => {
     updateActivityData,
     updateVendorData,
   } = useAdminActivityContext();
+
+  // handle pagination
+  const [activities, setActivities] = useState([]);
+  const [recentActivities, setRecentActivities] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const offset = currentPage * ITEMS_PER_PAGE;
+  const currentActivities = activities.slice(offset, offset + ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(activities.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
+  const handleSearch = (value) => {
+    if (value.toLowerCase() == "") {
+      setActivities(recentActivities);
+    } else {
+      const villaFiltered =
+        mode == "activity"
+          ? activities.filter((act) => {
+              const query = value.toLowerCase();
+              return (
+                act.name.toLowerCase().includes(query) ||
+                act.note.toLowerCase().includes(query) ||
+                act.keterangan.toLowerCase().includes(query)
+              );
+            })
+          : activities.filter((act) => {
+              const query = value.toLowerCase();
+              return act.name.toLowerCase().includes(query);
+            });
+      setActivities(villaFiltered);
+    }
+  };
+  //
 
   const handleGetActivity = async () => {
     await getAllActivityDetails();
@@ -77,6 +123,16 @@ const AdminActivityPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (mode == "activity") {
+      setActivities(allActivityDetails);
+      setRecentActivities(allActivityDetails);
+    } else {
+      setActivities(allActivityDetails);
+      setRecentActivities(allActivityDetails);
+    }
+  }, [allActivityDetails, allActivityVendors, mode]);
+
   return (
     <Container maxW="container.xl" p={0} borderRadius="lg">
       <Flex direction={"column"} gap="50px">
@@ -92,7 +148,7 @@ const AdminActivityPage = () => {
                 placeholder="Search Aktivitas"
                 value={""}
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  handleSearch(e.target.value);
                 }}
               />
               <VendorActivityDropdown
@@ -132,8 +188,8 @@ const AdminActivityPage = () => {
           <Flex gap={6}>
             <Flex direction={"row"} gap={"20px"} wrap={"wrap"} w={"full"}>
               {mode == "activity"
-                ? allActivityDetails.length != 0 &&
-                  allActivityDetails.map((act) => {
+                ? currentActivities.length != 0 &&
+                  currentActivities.map((act) => {
                     return (
                       <ActivityCard
                         key={act.id}
@@ -153,8 +209,8 @@ const AdminActivityPage = () => {
                       />
                     );
                   })
-                : allActivityVendors.length != 0 &&
-                  allActivityVendors.map((ven) => {
+                : currentActivities.length != 0 &&
+                  currentActivities.map((ven) => {
                     return (
                       <VendorCard
                         key={ven.id}
@@ -174,6 +230,26 @@ const AdminActivityPage = () => {
           </Flex>
         )}
       </Flex>
+      {/* Pagination */}
+      {!formActive && (
+        <Box
+          mt={6}
+          display="flex"
+          flexDirection={"row"}
+          justifyContent="center"
+        >
+          <ReactPaginate
+            pageCount={pageCount}
+            onPageChange={handlePageChange}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
+            previousLabel="<"
+            nextLabel=">"
+            breakLabel="..."
+            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+          />
+        </Box>
+      )}
     </Container>
   );
 };

@@ -9,13 +9,45 @@ import { apiDeleteDestination } from "../../services/destinationService";
 import DestinationCard from "../../components/Admin/Destination/DestinationCard/DestinationCard";
 import toastConfig from "../../utils/toastConfig";
 import DestinationFormPage from "../../components/Admin/Destination/DestinationForm/DestinationForm";
+import ReactPaginate from "react-paginate";
 
+const ITEMS_PER_PAGE = 5;
 const AdminDestinationPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const { getAllDestination, allDestination, updateDestinationData } =
     useAdminDestinationContext();
+
+  // handle pagination
+  const [destination, setDestination] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [recentDestination, setRecentDestination] = useState([]);
+
+  const offset = currentPage * ITEMS_PER_PAGE;
+  const currentDestination = destination.slice(offset, offset + ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(destination.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
+  const handleSearch = (value) => {
+    if (value.toLowerCase() == "") {
+      setDestination(recentDestination);
+    } else {
+      const villaFiltered = destination.filter((dest) => {
+        const query = value.toLowerCase();
+        return (
+          dest.name.toLowerCase().includes(query) ||
+          dest.note.toLowerCase().includes(query)
+        );
+      });
+      setDestination(villaFiltered);
+    }
+  };
+
+  //
 
   const handleGetAllDestination = async () => {
     await getAllDestination();
@@ -43,6 +75,11 @@ const AdminDestinationPage = () => {
     handleGetAllDestination();
   }, []);
 
+  useEffect(() => {
+    setDestination(allDestination);
+    setRecentDestination(allDestination);
+  }, [allDestination]);
+
   return (
     <Box>
       <Flex direction={"column"} gap={4}>
@@ -57,7 +94,7 @@ const AdminDestinationPage = () => {
               placeholder="Search Destinasi"
               value={""}
               onChange={(e) => {
-                console.log(e.target.value);
+                handleSearch(e.target.value);
               }}
             />
           )}
@@ -83,8 +120,8 @@ const AdminDestinationPage = () => {
           <DestinationFormPage />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {allDestination.length > 0 &&
-              allDestination.map((destination, index) => {
+            {currentDestination.length > 0 &&
+              currentDestination.map((destination, index) => {
                 return (
                   <DestinationCard
                     key={index}
@@ -106,6 +143,27 @@ const AdminDestinationPage = () => {
           </Flex>
         )}
       </Flex>
+
+      {/* Pagination */}
+      {!formActive && (
+        <Box
+          mt={6}
+          display="flex"
+          flexDirection={"row"}
+          justifyContent="center"
+        >
+          <ReactPaginate
+            pageCount={pageCount}
+            onPageChange={handlePageChange}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
+            previousLabel="<"
+            nextLabel=">"
+            breakLabel="..."
+            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+          />
+        </Box>
+      )}
     </Box>
   );
 };

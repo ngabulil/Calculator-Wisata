@@ -19,7 +19,6 @@ import AdminPage from "./pages/admin/AdminPage";
 import AdminTransportPage from "./pages/admin/AdminTransportPage";
 import AdminHotelPage from "./pages/admin/AdminHotelPage";
 import AdminVillaPage from "./pages/admin/AdminVillaPage";
-import AdminAdditionalPage from "./pages/admin/AdminAdditionalPage";
 import AdminPesananPage from "./pages/admin/AdminPesananPage";
 import AdminActivityPage from "./pages/admin/AdminActivityPage";
 import AdminRestaurantPage from "./pages/admin/AdminRestaurantPage";
@@ -33,7 +32,6 @@ function App() {
     { path: "/admin/hotel/edit", element: <AdminHotelPage /> },
     { path: "/admin/villa", element: <AdminVillaPage /> },
     { path: "/admin/villa/edit", element: <AdminVillaPage /> },
-    { path: "/admin/additional", element: <AdminAdditionalPage /> },
     { path: "/admin/transport", element: <AdminTransportPage /> },
     { path: "/admin/transport/edit", element: <AdminTransportPage /> },
     { path: "/admin/restaurant", element: <AdminRestaurantPage /> },

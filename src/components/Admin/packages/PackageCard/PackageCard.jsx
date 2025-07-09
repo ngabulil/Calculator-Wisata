@@ -18,8 +18,8 @@ const PackageCard = (props) => {
       bg={"gray.800"}
       p={3}
       shadow={"xl"}
-      w={"20%"}
-      flexGrow="1"
+      w={"23.4%"}
+      flexGrow={props.flexGrow}
       rounded={8}
       display={"flex"}
     >

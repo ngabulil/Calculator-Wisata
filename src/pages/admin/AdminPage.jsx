@@ -1,13 +1,4 @@
-import {
-  Box,
-  Text,
-  Flex,
-  Button,
-  Container,
-  Textarea,
-  Input,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, Button, Container, useToast } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
@@ -18,6 +9,9 @@ import { useAdminPackageContext } from "../../context/Admin/AdminPackageContext"
 import toastConfig from "../../utils/toastConfig";
 import { apiDeletePackageFull } from "../../services/packageService";
 import { useNavigate } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+
+const ITEMS_PER_PAGE = 8;
 
 const AdminPage = () => {
   const toast = useToast();
@@ -26,6 +20,35 @@ const AdminPage = () => {
   const [readPackageActive, setReadPackageActive] = useState(false);
   const { getAllPackageFull, packageFull, updateHeadline, updatePackageFull } =
     useAdminPackageContext();
+  // handle pagination
+  const [packages, setPackages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [recentPackages, setRecentPackages] = useState([]);
+
+  const offset = currentPage * ITEMS_PER_PAGE;
+  const currentPackages = packages.slice(offset, offset + ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(packages.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
+  const handleSearch = (value) => {
+    if (value.toLowerCase() == "") {
+      setPackages(recentPackages);
+    } else {
+      const villaFiltered = packages.filter((pkg) => {
+        const query = value.toLowerCase();
+        return (
+          pkg.name.toLowerCase().includes(query) ||
+          pkg.description.toLowerCase().includes(query)
+        );
+      });
+      setPackages(villaFiltered);
+    }
+  };
+
+  //
 
   const handleGetAllPackageFull = async () => {
     await getAllPackageFull();
@@ -54,6 +77,11 @@ const AdminPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setPackages(packageFull);
+    setRecentPackages(packageFull);
+  }, [packageFull]);
+
   return (
     <Container maxW="container.xl" p={0} borderRadius="lg">
       <Flex direction={"column"} gap="50px">
@@ -68,7 +96,7 @@ const AdminPage = () => {
               placeholder="Search Packages"
               value={""}
               onChange={(e) => {
-                console.log(e.target.value);
+                handleSearch(e.target.value);
               }}
             />
           )}
@@ -100,10 +128,11 @@ const AdminPage = () => {
           <PackageRead />
         ) : (
           <Flex gap={6}>
-            <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
-              {packageFull.map((packageItem, index) => {
+            <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
+              {currentPackages.map((packageItem, index) => {
                 return (
                   <PackageCard
+                    flexGrow={currentPackages.length % 4 != 0 ? 0 : 1}
                     key={index}
                     title={packageItem.name}
                     description={packageItem.description}
@@ -126,6 +155,27 @@ const AdminPage = () => {
           </Flex>
         )}
       </Flex>
+
+      {/* Pagination */}
+      {!formActive && !readPackageActive && (
+        <Box
+          mt={6}
+          display="flex"
+          flexDirection={"row"}
+          justifyContent="center"
+        >
+          <ReactPaginate
+            pageCount={pageCount}
+            onPageChange={handlePageChange}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
+            previousLabel="<"
+            nextLabel=">"
+            breakLabel="..."
+            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+          />
+        </Box>
+      )}
     </Container>
   );
 };

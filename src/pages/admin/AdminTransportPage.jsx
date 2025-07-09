@@ -8,6 +8,9 @@ import { useAdminTransportContext } from "../../context/Admin/AdminTransportCont
 import { useNavigate } from "react-router-dom";
 import { apiDeleteMobilFull } from "../../services/transport";
 import toastConfig from "../../utils/toastConfig";
+import ReactPaginate from "react-paginate";
+
+const ITEMS_PER_PAGE = 5;
 
 const AdminTransportPage = () => {
   const toast = useToast();
@@ -15,6 +18,36 @@ const AdminTransportPage = () => {
   const [formActive, setFormActive] = useState(false);
   const { getAllTransport, allTransport, updateTransportData } =
     useAdminTransportContext();
+
+  // handle pagination
+  const [transports, setTransports] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [recentTransports, setRecentTransports] = useState([]);
+
+  const offset = currentPage * ITEMS_PER_PAGE;
+  const currentTransports = transports.slice(offset, offset + ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(transports.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
+  const handleSearch = (value) => {
+    if (value.toLowerCase() == "") {
+      setTransports(recentTransports);
+    } else {
+      const villaFiltered = transports.filter((trans) => {
+        const query = value.toLowerCase();
+        return (
+          trans.jenisKendaraan.toLowerCase().includes(query) ||
+          trans.vendor.toLowerCase().includes(query)
+        );
+      });
+      setTransports(villaFiltered);
+    }
+  };
+
+  //
 
   const handleGetAllTransport = async () => {
     await getAllTransport();
@@ -48,6 +81,11 @@ const AdminTransportPage = () => {
     handleGetAllTransport();
   }, []);
 
+  useEffect(() => {
+    setTransports(allTransport);
+    setRecentTransports(allTransport);
+  }, [allTransport]);
+
   return (
     <Box>
       <Flex direction={"column"} gap={4}>
@@ -62,7 +100,7 @@ const AdminTransportPage = () => {
               placeholder="Search Packages"
               value={""}
               onChange={(e) => {
-                console.log(e.target.value);
+                handleSearch(e.target.value);
               }}
             />
           )}
@@ -88,8 +126,8 @@ const AdminTransportPage = () => {
           <TransportForm />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {allTransport.length > 0 &&
-              allTransport.map((transport, index) => {
+            {currentTransports.length > 0 &&
+              currentTransports.map((transport, index) => {
                 return (
                   <TransportCard
                     key={index}
@@ -111,6 +149,27 @@ const AdminTransportPage = () => {
           </Flex>
         )}
       </Flex>
+
+      {/* Pagination */}
+      {!formActive && (
+        <Box
+          mt={6}
+          display="flex"
+          flexDirection={"row"}
+          justifyContent="center"
+        >
+          <ReactPaginate
+            pageCount={pageCount}
+            onPageChange={handlePageChange}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
+            previousLabel="<"
+            nextLabel=">"
+            breakLabel="..."
+            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+          />
+        </Box>
+      )}
     </Box>
   );
 };

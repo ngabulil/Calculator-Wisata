@@ -23,8 +23,8 @@ const AdminHotelPage = () => {
   const [readHotelActive, setReadHotelActive] = useState(false);
   const [formActive, setFormActive] = useState(false);
   //
-  const [currentPage, setCurrentPage] = useState(0);
   const [hotels, setHotels] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const [recentHotels, setRecentHotels] = useState([]);
 
   const handlePageChange = (selectedItem) => {
@@ -46,12 +46,10 @@ const AdminHotelPage = () => {
     } else {
       const villaFiltered = hotels.filter((hotel) => {
         const query = value.toLowerCase();
-        return (
-          hotel.hotelName.toLowerCase().includes(query) ||
-          hotel.roomType.toLowerCase().includes(query)
-        );
+        return hotel.hotelName.toLowerCase().includes(query);
       });
       setHotels(villaFiltered);
+      console.log(villaFiltered);
     }
   };
 
@@ -127,11 +125,11 @@ const AdminHotelPage = () => {
           <HotelRead />
         ) : (
           <>
-            <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
+            <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
               {currentHotels.map((hotel, index) => (
                 <HotelCard
                   key={index}
-                  flexGrow={currentHotels.length % 3 == 0 ? "1" : "0"}
+                  flexGrow={currentHotels.length % 4 != 0 ? 0 : 1}
                   photoLink={`https://picsum.photos/id/2${index}/200/300`}
                   name={hotel.hotelName}
                   stars={hotel.stars}

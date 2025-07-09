@@ -18,6 +18,9 @@ import toastConfig from "../../utils/toastConfig";
 import { apiDeleteRestaurant } from "../../services/restaurantService";
 import { useNavigate } from "react-router-dom";
 import RestaurantFormPage from "../../components/Admin/Restaurant/RestaurantForm/RestaurantForm";
+import ReactPaginate from "react-paginate";
+
+const ITEMS_PER_PAGE = 5;
 
 const AdminRestaurantPage = () => {
   const toast = useToast();
@@ -25,6 +28,31 @@ const AdminRestaurantPage = () => {
   const [formActive, setFormActive] = useState(false);
   const { getAllRestaurant, updateRestaurantData, allRestaurant } =
     useAdminRestaurantContext();
+
+  // handle pagination
+  const [restaurant, setRestaurant] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [recentRestaurant, setRecentRestaurant] = useState([]);
+
+  const offset = currentPage * ITEMS_PER_PAGE;
+  const currentRestaurant = restaurant.slice(offset, offset + ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(restaurant.length / ITEMS_PER_PAGE);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
+  const handleSearch = (value) => {
+    if (value.toLowerCase() == "") {
+      setRestaurant(recentRestaurant);
+    } else {
+      const villaFiltered = restaurant.filter((rest) => {
+        const query = value.toLowerCase();
+        return rest.resto_name.toLowerCase().includes(query);
+      });
+      setRestaurant(villaFiltered);
+    }
+  };
 
   const handleGetAllRestaurant = async () => {
     await getAllRestaurant();
@@ -59,6 +87,11 @@ const AdminRestaurantPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setRestaurant(allRestaurant);
+    setRecentRestaurant(allRestaurant);
+  }, [allRestaurant]);
+
   return (
     <Container maxW="container.xl" p={0} borderRadius="lg">
       <Flex direction={"column"} gap="50px">
@@ -70,10 +103,10 @@ const AdminRestaurantPage = () => {
         >
           {!formActive && (
             <SearchBar
-              placeholder="Search Packages"
+              placeholder="Search Restaurant"
               value={""}
               onChange={(e) => {
-                console.log(e.target.value);
+                handleSearch(e.target.value);
               }}
             />
           )}
@@ -100,8 +133,8 @@ const AdminRestaurantPage = () => {
           <RestaurantFormPage />
         ) : (
           <Flex gap={6}>
-            <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
-              {allRestaurant.map((resto, index) => {
+            <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
+              {currentRestaurant.map((resto, index) => {
                 return (
                   <RestaurantCard
                     key={index}
@@ -123,6 +156,26 @@ const AdminRestaurantPage = () => {
           </Flex>
         )}
       </Flex>
+      {/* Pagination */}
+      {!formActive && (
+        <Box
+          mt={6}
+          display="flex"
+          flexDirection={"row"}
+          justifyContent="center"
+        >
+          <ReactPaginate
+            pageCount={pageCount}
+            onPageChange={handlePageChange}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={1}
+            previousLabel="<"
+            nextLabel=">"
+            breakLabel="..."
+            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+          />
+        </Box>
+      )}
     </Container>
   );
 };

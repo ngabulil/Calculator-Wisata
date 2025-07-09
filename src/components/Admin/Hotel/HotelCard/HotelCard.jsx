@@ -12,8 +12,8 @@ const HotelCard = (props) => {
     <Flex
       direction="column"
       gap={3}
-      w={"25%"}
-      flexGrow={props.flexGrow || "1"}
+      w={"23.4%"}
+      flexGrow={props.flexGrow}
       bg="gray.800"
       rounded="12px"
     >
@@ -125,17 +125,6 @@ const HotelInfoCard = (props) => {
             })}
           </Flex>
         </Flex>
-        {props.roomType.length > 0 && (
-          <Flex gap={2}>
-            {props.roomType.map((room, index) => {
-              return (
-                <Text key={index} fontSize="12px" rounded={"4px"}>
-                  {room.label}
-                </Text>
-              );
-            })}
-          </Flex>
-        )}
       </Flex>
 
       <Flex

@@ -52,10 +52,7 @@ const AdminVillaPage = () => {
     } else {
       const villaFiltered = villas.filter((villa) => {
         const query = value.toLowerCase();
-        return (
-          villa.villaName.toLowerCase().includes(query) ||
-          villa.roomType.toLowerCase().includes(query)
-        );
+        return villa.villaName.toLowerCase().includes(query);
       });
       setVillas(villaFiltered);
     }
@@ -130,11 +127,11 @@ const AdminVillaPage = () => {
         ) : readVillaActive ? (
           <VillaRead />
         ) : (
-          <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
+          <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
             {currentVillas.map((villa, index) => (
               <VillaCard
                 key={index}
-                flexGrow={currentVillas >= 4 ? "1" : "0"}
+                flexGrow={currentVillas % 4 != 0 ? 0 : 1}
                 photoLink={`https://picsum.photos/2${index + 6}1/300`}
                 name={villa.villaName}
                 stars={villa.stars}
