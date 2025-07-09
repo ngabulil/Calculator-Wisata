@@ -1,0 +1,130 @@
+import {
+  Box,
+  Text,
+  Flex,
+  Button,
+  Container,
+  Textarea,
+  Input,
+  useToast,
+} from "@chakra-ui/react";
+import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
+import RestaurantCard from "../../components/Admin/Restaurant/RestaurantCard/RestaurantCard";
+import SearchBar from "../../components/searchBar";
+import { useAdminRestaurantContext } from "../../context/Admin/AdminRestaurantContext";
+import toastConfig from "../../utils/toastConfig";
+import { apiDeleteRestaurant } from "../../services/restaurantService";
+import { useNavigate } from "react-router-dom";
+import RestaurantFormPage from "../../components/Admin/Restaurant/RestaurantForm/RestaurantForm";
+
+const AdminRestaurantPage = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
+  const [formActive, setFormActive] = useState(false);
+  const { getAllRestaurant, updateRestaurantData, allRestaurant } =
+    useAdminRestaurantContext();
+
+  const handleGetAllRestaurant = async () => {
+    await getAllRestaurant();
+  };
+
+  const handleDeleteRestaurant = async (id) => {
+    try {
+      const res = await apiDeleteRestaurant(id);
+
+      if (res.status === 200) {
+        toast(
+          toastConfig(
+            "Sukses Hapus",
+            "Berhasil Menghapus Restaurant ",
+            "success"
+          )
+        );
+        handleGetAllRestaurant();
+      } else {
+        toast(
+          toastConfig("Gagal Hapus", "Gagal Menghapus Restaurant", "error")
+        );
+      }
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      toast(toastConfig("Gagal Hapus", "Gagal Menghapus Restaurant", "error"));
+    }
+  };
+
+  useEffect(() => {
+    handleGetAllRestaurant();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <Container maxW="container.xl" p={0} borderRadius="lg">
+      <Flex direction={"column"} gap="50px">
+        <Flex
+          direction={"row"}
+          justifyContent={formActive ? "flex-end" : "space-between"}
+          w="full"
+          gap={2}
+        >
+          {!formActive && (
+            <SearchBar
+              placeholder="Search Packages"
+              value={""}
+              onChange={(e) => {
+                console.log(e.target.value);
+              }}
+            />
+          )}
+          <Button
+            bg={"blue.500"}
+            onClick={() => {
+              setFormActive(!formActive);
+
+              if (formActive) {
+                updateRestaurantData([]);
+                navigate("/admin/restaurant");
+              }
+            }}
+          >
+            {formActive ? (
+              <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
+            ) : (
+              <AddIcon pr={"5px"} />
+            )}{" "}
+            {formActive ? "Back" : "Create"}
+          </Button>
+        </Flex>
+        {formActive ? (
+          <RestaurantFormPage />
+        ) : (
+          <Flex gap={6}>
+            <Flex direction={"row"} gap={"25px"} wrap={"wrap"}>
+              {allRestaurant.map((resto, index) => {
+                return (
+                  <RestaurantCard
+                    key={index}
+                    id={resto.id}
+                    name={resto.resto_name}
+                    packages={resto.packages}
+                    onEditButton={() => {
+                      updateRestaurantData(resto);
+                      setFormActive(true);
+                    }}
+                    onDeleteButton={() => {
+                      handleDeleteRestaurant(resto.id);
+                      handleGetAllRestaurant();
+                    }}
+                  />
+                );
+              })}
+            </Flex>
+          </Flex>
+        )}
+      </Flex>
+    </Container>
+  );
+};
+
+export default AdminRestaurantPage;

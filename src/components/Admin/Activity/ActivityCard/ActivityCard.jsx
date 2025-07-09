@@ -10,15 +10,13 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import formatRupiah from "../../../../utils/rupiahFormat";
-import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
+
 import { useNavigate } from "react-router-dom";
 import { PopoverButton } from "../../../PopoverButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 
 const ActivityCard = (props) => {
-  const { activityData } = useAdminActivityContext();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -26,22 +24,22 @@ const ActivityCard = (props) => {
     {
       tourist_type: "Asing",
       category: "Adult",
-      price: activityData.price_foreign_adult,
+      price: props.act.price_foreign_adult,
     },
     {
       tourist_type: "Asing",
       category: "Child",
-      price: activityData.price_foreign_child,
+      price: props.act.price_foreign_child,
     },
     {
       tourist_type: "Domestik",
       category: "Adult",
-      price: activityData.price_domestic_adult,
+      price: props.act.price_domestic_adult,
     },
     {
       tourist_type: "Domestik",
       category: "Child",
-      price: activityData.price_domestic_child,
+      price: props.act.price_domestic_child,
     },
   ];
   return (
@@ -75,9 +73,9 @@ const ActivityCard = (props) => {
           fontWeight={"bold"}
           flexShrink={"0"}
         >
-          {"SM"}
+          {props.name.slice(0, 2).toUpperCase()}
         </Box>
-        <Flex direction={"column"} flexShrink={"0"}>
+        <Flex direction={"column"} flexShrink={"0"} gap={0}>
           <Text fontSize={"18px"} fontWeight={"bold"}>
             {props.name || "  ATV Adventure"}
           </Text>
@@ -97,7 +95,11 @@ const ActivityCard = (props) => {
           </Flex>
         </Flex>
         <Flex direction={"row"} gap={1} w={"full"} justifyContent={"end"}>
-          <AppIconText icon={"mdi:ticket"} bg={"blue.700"} text={"Rp. 0"} />
+          <AppIconText
+            icon={"mdi:ticket"}
+            bg={"blue.700"}
+            text={props.vendorName}
+          />
           <Flex
             zIndex={10}
             onClick={(event) => {

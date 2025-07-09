@@ -1,264 +1,230 @@
-import React, { useState, useEffect } from "react";
 import {
-  Container,
   Box,
-  Button,
-  Textarea,
-  Text,
   VStack,
   HStack,
+  Input,
+  FormLabel,
   IconButton,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  useColorModeValue,
-  Divider,
+  Button,
+  NumberInput,
+  NumberInputField,
+  Text,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
-import MobilCard from "../../../../components/Transport/MobilCard";
-import InfoCard from "../../../../components/Transport/InfoCard";
-import { useTransportContext } from "../../../../context/TransportContext";
-import { useCheckoutContext } from "../../../../context/CheckoutContext";
+import { useState } from "react";
 
-const TransportForm = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const { getMobils, getAdditionalMobil, days, setDays } =
-    useTransportContext();
-  const { setTransportTotal } = useCheckoutContext();
+const layananTypes = ["fullDay", "halfDay", "inOut", "menginap"];
 
-  const hitungTotalMobil = (mobils) =>
-    mobils.reduce((total, m) => {
-      const harga = m.harga || 0;
-      const jumlah = m.jumlah || 1;
-      return total + harga * jumlah;
-    }, 0);
+const TransportForm = ({ isEdit = false, vehiclesValue = [], onChange }) => {
+  const [vehicles, setVehicles] = useState(
+    isEdit && vehiclesValue.length > 0
+      ? vehiclesValue
+      : [
+          {
+            jenisKendaraan: "",
+            vendor: "",
+            vendor_link: "",
+            keterangan: {
+              fullDay: [],
+              halfDay: [],
+              inOut: [],
+              menginap: [],
+            },
+          },
+        ]
+  );
 
-  const hitungTotalAdditional = (additional) =>
-    additional.reduce(
-      (total, a) => total + (a.harga || 0) * (a.jumlah || 0),
-      0
-    );
+  const handleChange = (index, field, value) => {
+    const newVehicles = [...vehicles];
+    newVehicles[index][field] = value;
+    setVehicles(newVehicles);
+    onChange?.(newVehicles);
+  };
 
-  const handleAddDay = () => {
-    setDays((prev) => [
-      ...prev,
+  const handleAreaChange = (index, type, areaIndex, field, value) => {
+    const newVehicles = [...vehicles];
+    newVehicles[index].keterangan[type][areaIndex][field] = value;
+    setVehicles(newVehicles);
+    onChange?.(newVehicles);
+  };
+
+  const handleAddVehicle = () => {
+    setVehicles([
+      ...vehicles,
       {
-        id: prev.length + 1,
-        description: "",
-        mobils: [],
-        additionalInfo: [],
-        markup: { type: "percent", value: 0 },
+        jenisKendaraan: "",
+        vendor: "",
+        vendor_link: "",
+        keterangan: {
+          fullDay: [],
+          halfDay: [],
+          inOut: [],
+          menginap: [],
+        },
       },
     ]);
-    setActiveIndex(days.length);
   };
 
-  const handleRemoveDay = (index) => {
-    const updated = [...days];
-    updated.splice(index, 1);
-    setDays(updated);
-    setActiveIndex((prev) =>
-      index >= updated.length ? updated.length - 1 : prev
-    );
+  const handleRemoveVehicle = (index) => {
+    const updated = vehicles.filter((_, i) => i !== index);
+    setVehicles(updated);
+    onChange?.(updated);
   };
 
-  const textColor = useColorModeValue("white", "white");
-
-  const handleCreateTransport = () => {
-    console.log(days);
+  const handleAddArea = (index, type) => {
+    const newVehicles = [...vehicles];
+    newVehicles[index].keterangan[type].push({
+      id_area: "",
+      area: "",
+      price: 0,
+    });
+    setVehicles(newVehicles);
+    onChange?.(newVehicles);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getMobils();
-      await getAdditionalMobil();
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const total = days.reduce((sum, day) => {
-      const subtotal =
-        hitungTotalMobil(day.mobils) +
-        hitungTotalAdditional(day.additionalInfo);
-
-      const markup = day.markup || { type: "percent", value: 0 };
-      const markupAmount =
-        markup.type === "amount"
-          ? markup.value
-          : (markup.value / 100) * subtotal;
-
-      return sum + subtotal + markupAmount;
-    }, 0);
-
-    setTransportTotal(total);
-  }, [days]);
+  const handleRemoveArea = (index, type, areaIndex) => {
+    const newVehicles = [...vehicles];
+    newVehicles[index].keterangan[type] = newVehicles[index].keterangan[
+      type
+    ].filter((_, i) => i !== areaIndex);
+    setVehicles(newVehicles);
+    onChange?.(newVehicles);
+  };
 
   return (
-    <Container
-      maxW="7xl"
-      p={6}
-      bg={"gray.800"}
-      rounded={"12px"}
-      display={"flex"}
-      flexDirection={"column"}
-      gap={2}
-    >
-      <Box rounded="lg" boxShadow="lg" color={textColor}>
-        <Text fontSize="xl" fontWeight="bold" mb={4}>
-          Transportasi
-        </Text>
-
-        <Tabs
-          index={activeIndex}
-          onChange={setActiveIndex}
-          variant="soft-rounded"
-          colorScheme="blue"
+    <VStack spacing={8} align="stretch">
+      {vehicles.map((vehicle, index) => (
+        <Box
+          key={index}
+          bg="gray.700"
+          p={4}
+          rounded="xl"
+          boxShadow="md"
+          position="relative"
         >
           <HStack justify="space-between" mb={2}>
-            <TabList overflowX="auto">
-              {days.map((_, i) => (
-                <Tab key={i}>Day {i + 1}</Tab>
-              ))}
-            </TabList>
-            <Button size="sm" leftIcon={<AddIcon />} onClick={handleAddDay}>
-              Tambah Day
-            </Button>
+            <FormLabel fontWeight="bold">Kendaraan #{index + 1}</FormLabel>
+            <IconButton
+              icon={<DeleteIcon />}
+              colorScheme="red"
+              size="sm"
+              onClick={() => handleRemoveVehicle(index)}
+              isDisabled={vehicles.length === 1}
+            />
           </HStack>
 
-          <TabPanels>
-            {days.map((day, index) => (
-              <TabPanel key={index} px={0}>
-                <VStack spacing={6} align="stretch">
-                  <HStack justify="space-between">
-                    <Text fontWeight="semibold">
-                      Deskripsi untuk Day {index + 1}
-                    </Text>
-                    {days.length > 1 && (
-                      <IconButton
-                        icon={<DeleteIcon />}
-                        size="sm"
-                        colorScheme="red"
-                        variant="ghost"
-                        onClick={() => handleRemoveDay(index)}
-                      />
-                    )}
+          <Box mb={3}>
+            <FormLabel>Jenis Kendaraan</FormLabel>
+            <Input
+              value={vehicle.jenisKendaraan}
+              onChange={(e) =>
+                handleChange(index, "jenisKendaraan", e.target.value)
+              }
+              placeholder="Contoh: Toyota Innova Reborn"
+            />
+          </Box>
+
+          <Box mb={3}>
+            <FormLabel>Vendor</FormLabel>
+            <Input
+              value={vehicle.vendor}
+              onChange={(e) => handleChange(index, "vendor", e.target.value)}
+              placeholder="Contoh: PT. Bali Transport"
+            />
+          </Box>
+
+          <Box mb={3}>
+            <FormLabel>Link Vendor</FormLabel>
+            <Input
+              value={vehicle.vendor_link}
+              onChange={(e) =>
+                handleChange(index, "vendor_link", e.target.value)
+              }
+              placeholder="https://example.com/innova"
+            />
+          </Box>
+
+          {layananTypes.map((type) => (
+            <Box key={type} mb={4}>
+              <HStack justify="space-between">
+                <FormLabel textTransform="capitalize">{type}</FormLabel>
+                <Button
+                  size="xs"
+                  onClick={() => handleAddArea(index, type)}
+                  leftIcon={<AddIcon />}
+                >
+                  Tambah Area
+                </Button>
+              </HStack>
+
+              {vehicle.keterangan[type]?.map((areaItem, areaIndex) => (
+                <Box
+                  key={areaIndex}
+                  bg="gray.600"
+                  p={3}
+                  rounded="md"
+                  mb={2}
+                  position="relative"
+                >
+                  <HStack spacing={3} mb={2}>
+                    <Input
+                      placeholder="ID Area"
+                      value={areaItem.id_area}
+                      onChange={(e) =>
+                        handleAreaChange(
+                          index,
+                          type,
+                          areaIndex,
+                          "id_area",
+                          e.target.value
+                        )
+                      }
+                    />
+                    <Input
+                      placeholder="Nama Area"
+                      value={areaItem.area}
+                      onChange={(e) =>
+                        handleAreaChange(
+                          index,
+                          type,
+                          areaIndex,
+                          "area",
+                          e.target.value
+                        )
+                      }
+                    />
+                    <NumberInput
+                      value={areaItem.price}
+                      onChange={(val) =>
+                        handleAreaChange(index, type, areaIndex, "price", val)
+                      }
+                      min={0}
+                    >
+                      <NumberInputField placeholder="Harga" />
+                    </NumberInput>
+                    <IconButton
+                      icon={<DeleteIcon />}
+                      size="sm"
+                      colorScheme="red"
+                      onClick={() => handleRemoveArea(index, type, areaIndex)}
+                    />
                   </HStack>
+                </Box>
+              ))}
+            </Box>
+          ))}
+        </Box>
+      ))}
 
-                  <Textarea
-                    value={day.description}
-                    onChange={(e) => {
-                      const updated = [...days];
-                      updated[index].description = e.target.value;
-                      setDays(updated);
-                    }}
-                    placeholder="Deskripsi hari..."
-                    bg="gray.700"
-                    color="white"
-                    _placeholder={{ color: "gray.400" }}
-                  />
-
-                  {/* Mobil Section */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
-                    p={4}
-                    rounded="md"
-                  >
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                      Mobil
-                    </Text>
-
-                    <VStack spacing={2} align="stretch">
-                      {day.mobils.map((mobil, i) => (
-                        <MobilCard
-                          key={i}
-                          index={i}
-                          data={mobil}
-                          onChange={(newMobil) => {
-                            const updated = [...days];
-                            updated[index].mobils[i] = newMobil;
-                            setDays(updated);
-                          }}
-                          onDelete={() => {
-                            const updated = [...days];
-                            updated[index].mobils.splice(i, 1);
-                            setDays(updated);
-                          }}
-                        />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="teal"
-                        onClick={() => {
-                          const updated = [...days];
-                          updated[index].mobils.push({});
-                          setDays(updated);
-                        }}
-                      >
-                        Tambah Mobil
-                      </Button>
-                    </VStack>
-                  </Box>
-
-                  {/* Additional Info */}
-                  <Box
-                    border="1px solid"
-                    borderColor="gray.600"
-                    p={4}
-                    rounded="md"
-                  >
-                    <Text fontSize="xl" fontWeight="bold" mb={2}>
-                      Additional Info
-                    </Text>
-
-                    <VStack spacing={2} align="stretch">
-                      {day.additionalInfo.map((info, i) => (
-                        <InfoCard
-                          key={i}
-                          index={i}
-                          data={info}
-                          onChange={(newInfo) => {
-                            const updated = [...days];
-                            updated[index].additionalInfo[i] = newInfo;
-                            setDays(updated);
-                          }}
-                          onDelete={() => {
-                            const updated = [...days];
-                            updated[index].additionalInfo.splice(i, 1);
-                            setDays(updated);
-                          }}
-                        />
-                      ))}
-                      <Button
-                        variant="outline"
-                        colorScheme="orange"
-                        onClick={() => {
-                          const updated = [...days];
-                          updated[index].additionalInfo.push({});
-                          setDays(updated);
-                        }}
-                      >
-                        Tambah Info
-                      </Button>
-                    </VStack>
-                  </Box>
-
-                  {/* Markup Section */}
-                </VStack>
-              </TabPanel>
-            ))}
-          </TabPanels>
-        </Tabs>
-      </Box>
-      <Box w={"full"}>
-        <Button w={"full"} colorScheme="blue" onClick={handleCreateTransport}>
-          Buat Transportasi
-        </Button>
-      </Box>
-    </Container>
+      <Button
+        leftIcon={<AddIcon />}
+        colorScheme="teal"
+        onClick={handleAddVehicle}
+        alignSelf="flex-start"
+      >
+        Tambah Kendaraan
+      </Button>
+    </VStack>
   );
 };
 

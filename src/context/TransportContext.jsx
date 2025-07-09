@@ -34,6 +34,7 @@ const TransportContextProvider = ({ children }) => {
     try {
       const response = await apiGetAllMobil();
       setMobils(response.result);
+      console.log(response.result);
     } catch (error) {
       console.log(error);
     }

@@ -18,9 +18,9 @@ export const apiPostActivityDetails = async (data) => {
     throw error;
   }
 };
-export const apiPutActivityDetails = async (id) => {
+export const apiPutActivityDetails = async (id, data) => {
   try {
-    const response = await apiPut(`/activity/details/${id}`);
+    const response = await apiPut(`/activity/details/${id}`, data);
     return response;
   } catch (error) {
     console.error(error);
@@ -54,9 +54,9 @@ export const apiPostActivityVendors = async (data) => {
     throw error;
   }
 };
-export const apiPutActivityVendors = async (id) => {
+export const apiPutActivityVendors = async (id, data) => {
   try {
-    const response = await apiPut(`/activity/vendors/${id}`);
+    const response = await apiPut(`/activity/vendors/${id}`, data);
     return response;
   } catch (error) {
     console.error(error);

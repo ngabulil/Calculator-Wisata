@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Input,
   Select,
   Text,
   Button,
-  VStack,
-  Heading,
-  FormControl,
   FormLabel,
   Flex,
   Container,
+  useToast,
 } from "@chakra-ui/react";
 
-// Dummy data vendor dari array
-const vendors = [
-  {
-    id: 1,
-    name: "Bali Adventure Tours",
-    createdAt: "2025-07-07T00:54:10.412Z",
-    updatedAt: "2025-07-07T00:54:10.412Z",
-  },
-];
+import { useLocation } from "react-router-dom";
+import {
+  apiPostActivityDetails,
+  apiPutActivityDetails,
+} from "../../../../services/activityService";
+import toastConfig from "../../../../utils/toastConfig";
+import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
 
 const ActivityFormPage = () => {
+  const location = useLocation();
+  const toast = useToast();
+  const { activityData, allActivityVendors, getAllActivityVendors } =
+    useAdminActivityContext();
   const [editFormActive, setEditFormActive] = useState(false);
   const [vendorId, setVendorId] = useState("");
   const [name, setName] = useState("");
@@ -35,12 +35,92 @@ const ActivityFormPage = () => {
   const [note, setNote] = useState("");
   const [valid, setValid] = useState("");
 
-  const handleActivityCreate = () => {
-    console.log("Submitted activity:");
+  const handleActivitySetValue = () => {
+    setVendorId(activityData.vendor_id);
+    setName(activityData.name);
+    setPriceForeignAdult(activityData.price_foreign_adult);
+    setPriceForeignChild(activityData.price_foreign_child);
+    setPriceDomesticAdult(activityData.price_domestic_adult);
+    setPriceDomesticChild(activityData.price_domestic_child);
+    setKeterangan(activityData.keterangan);
+    setNote(activityData.note);
+    setValid(activityData.valid);
   };
-  const handleActivityUpdate = () => {
-    console.log("Submitted activity:");
+
+  const handleActivityCreate = async () => {
+    const data = {
+      vendor_id: vendorId,
+      name: name,
+      price_foreign_adult: priceForeignAdult,
+      price_foreign_child: priceForeignChild,
+      price_domestic_adult: priceDomesticAdult,
+      price_domestic_child: priceDomesticChild,
+      keterangan: keterangan,
+      note: note,
+      valid: valid,
+    };
+
+    try {
+      const res = await apiPostActivityDetails(data);
+
+      if (res.status === 201) {
+        toast(
+          toastConfig(
+            "Activity Created",
+            "Aktivitas Berhasil Ditambahkan!",
+            "success"
+          )
+        );
+      } else {
+        toast(
+          toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      toast(
+        toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
+      );
+    }
   };
+
+  const handleActivityUpdate = async () => {
+    const data = {
+      vendor_id: vendorId,
+      name: name,
+      price_foreign_adult: priceForeignAdult,
+      price_foreign_child: priceForeignChild,
+      price_domestic_adult: priceDomesticAdult,
+      price_domestic_child: priceDomesticChild,
+      keterangan: keterangan,
+      note: note,
+      valid: valid,
+    };
+
+    try {
+      const res = await apiPutActivityDetails(activityData.id, data);
+
+      if (res.status === 200) {
+        toast(toastConfig("Hotel Update", "Hotel Berhasil Diubah!", "success"));
+      } else {
+        toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
+      }
+    } catch (error) {
+      console.log(error);
+      toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
+    }
+  };
+
+  useEffect(() => {
+    if (location.pathname.includes("edit")) {
+      setEditFormActive(true);
+      handleActivitySetValue();
+    }
+  }, [location.pathname, activityData]);
+
+  useEffect(() => {
+    getAllActivityVendors();
+  }, []);
 
   return (
     <Container
@@ -95,7 +175,7 @@ const ActivityFormPage = () => {
           }}
           placeholder="Select vendor"
         >
-          {vendors.map((vendor) => (
+          {allActivityVendors.map((vendor) => (
             <option key={vendor.id} value={vendor.id}>
               {vendor.name}
             </option>

@@ -15,14 +15,14 @@ import ItineraryPage from "./pages/ItineraryPDF";
 
 // Admin Pages
 import AdminPage from "./pages/admin/AdminPage";
-import AdminTourPackagesPage from "./pages/admin/AdminTourPackages";
+
 import AdminTransportPage from "./pages/admin/AdminTransportPage";
-import AdminAcomodationPage from "./pages/admin/AdminAkomodasiPage";
 import AdminHotelPage from "./pages/admin/AdminHotelPage";
 import AdminVillaPage from "./pages/admin/AdminVillaPage";
 import AdminAdditionalPage from "./pages/admin/AdminAdditionalPage";
 import AdminPesananPage from "./pages/admin/AdminPesananPage";
 import AdminActivityPage from "./pages/admin/AdminActivityPage";
+import AdminRestaurantPage from "./pages/admin/AdminRestaurantPage";
 
 function App() {
   const adminRoutes = [
@@ -35,6 +35,8 @@ function App() {
     { path: "/admin/additional", element: <AdminAdditionalPage /> },
     { path: "/admin/transport", element: <AdminTransportPage /> },
     { path: "/admin/transport/edit", element: <AdminTransportPage /> },
+    { path: "/admin/restaurant", element: <AdminRestaurantPage /> },
+    { path: "/admin/restaurant/edit", element: <AdminRestaurantPage /> },
     { path: "/admin/pesanan", element: <AdminPesananPage /> },
     { path: "/admin/activity", element: <AdminActivityPage /> },
     { path: "/admin/activity/edit", element: <AdminActivityPage /> },

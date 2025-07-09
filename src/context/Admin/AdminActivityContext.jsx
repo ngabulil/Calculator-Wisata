@@ -13,6 +13,10 @@ export const useAdminActivityContext = () => {
 const AdminActivityContextProvider = ({ children }) => {
   const [allActivityDetails, setAllActivityDetails] = useState([]);
   const [allActivityVendors, setAllActivityVendors] = useState([]);
+  const [vendorData, setVendorData] = useState({
+    id: 0,
+    name: "",
+  });
   const [activityData, setActivityData] = useState({
     id: "",
     vendor_id: "",
@@ -62,9 +66,14 @@ const AdminActivityContextProvider = ({ children }) => {
       ...partial,
     }));
   };
+  const updateVendorData = (data) => {
+    setVendorData(data);
+  };
 
   const value = {
     activityData,
+    vendorData,
+    updateVendorData,
     allActivityDetails,
     setActivityData,
     updateActivityData,
