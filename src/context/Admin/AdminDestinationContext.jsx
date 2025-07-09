@@ -1,0 +1,47 @@
+import React, { createContext, useContext, useState } from "react";
+import { apiGetAllDestination } from "../../services/destinationService";
+
+const AdminDestinationContext = createContext();
+
+export const useAdminDestinationContext = () => {
+  return useContext(AdminDestinationContext);
+};
+
+const AdminDestinationContextProvider = ({ children }) => {
+  const [allDestination, setAllDestination] = useState([]);
+
+  const [destinationData, setDestinationData] = useState([]);
+
+  const getAllDestination = async () => {
+    try {
+      const response = await apiGetAllDestination();
+
+      setAllDestination(response.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateDestinationData = (partial) => {
+    setDestinationData((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
+
+  const value = {
+    destinationData,
+    allDestination,
+    setDestinationData,
+    updateDestinationData,
+    getAllDestination,
+  };
+
+  return (
+    <AdminDestinationContext.Provider value={value}>
+      {children}
+    </AdminDestinationContext.Provider>
+  );
+};
+
+export default AdminDestinationContextProvider;

@@ -1,51 +1,46 @@
 import { Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import TransportCard from "../../components/Admin/Transport/TransportCard/TransportCard";
-import TransportForm from "../../components/Admin/Transport/TransportForm/TransportForm";
-import SearchBar from "../../components/searchBar";
-import { useAdminTransportContext } from "../../context/Admin/AdminTransportContext";
-import { useNavigate } from "react-router-dom";
-import { apiDeleteMobilFull } from "../../services/transport";
-import toastConfig from "../../utils/toastConfig";
 
-const AdminTransportPage = () => {
+import SearchBar from "../../components/searchBar";
+import { useAdminDestinationContext } from "../../context/Admin/AdminDestinationContext";
+import { useNavigate } from "react-router-dom";
+import { apiDeleteDestination } from "../../services/destinationService";
+import DestinationCard from "../../components/Admin/Destination/DestinationCard/DestinationCard";
+import toastConfig from "../../utils/toastConfig";
+import DestinationFormPage from "../../components/Admin/Destination/DestinationForm/DestinationForm";
+
+const AdminDestinationPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
-  const { getAllTransport, allTransport, updateTransportData } =
-    useAdminTransportContext();
+  const { getAllDestination, allDestination, updateDestinationData } =
+    useAdminDestinationContext();
 
-  const handleGetAllTransport = async () => {
-    await getAllTransport();
+  const handleGetAllDestination = async () => {
+    await getAllDestination();
   };
 
-  const handleDeleteTransport = async (id) => {
+  const handleDeleteDestination = async (id) => {
     try {
-      const res = await apiDeleteMobilFull(id);
+      const res = await apiDeleteDestination(id);
 
       if (res.status == 200) {
         toast(
-          toastConfig(
-            "Hapus Sukses",
-            "Transportasi Berhasil Dihapus",
-            "success"
-          )
+          toastConfig("Hapus Sukses", "Destinasi Berhasil Dihapus", "success")
         );
-        handleGetAllTransport();
+        handleGetAllDestination();
       } else {
-        toast(
-          toastConfig("Hapus Gagal", "Transportasi Gagal Dihapus", "error")
-        );
+        toast(toastConfig("Hapus Gagal", "Destinasi Gagal Dihapus", "error"));
       }
     } catch (error) {
       console.log(error);
-      toast(toastConfig("Hapus Gagal", "Transportasi Gagal Dihapus", "error"));
+      toast(toastConfig("Hapus Gagal", "Destinasi Gagal Dihapus", "error"));
     }
   };
 
   useEffect(() => {
-    handleGetAllTransport();
+    handleGetAllDestination();
   }, []);
 
   return (
@@ -59,7 +54,7 @@ const AdminTransportPage = () => {
         >
           {!formActive && (
             <SearchBar
-              placeholder="Search Packages"
+              placeholder="Search Destinasi"
               value={""}
               onChange={(e) => {
                 console.log(e.target.value);
@@ -70,8 +65,8 @@ const AdminTransportPage = () => {
             bg={"blue.500"}
             onClick={() => {
               if (formActive) {
-                updateTransportData(null);
-                navigate("/admin/transport");
+                updateDestinationData(null);
+                navigate("/admin/destination");
               }
               setFormActive(!formActive);
             }}
@@ -85,23 +80,23 @@ const AdminTransportPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <TransportForm />
+          <DestinationFormPage />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {allTransport.length > 0 &&
-              allTransport.map((transport, index) => {
+            {allDestination.length > 0 &&
+              allDestination.map((destination, index) => {
                 return (
-                  <TransportCard
+                  <DestinationCard
                     key={index}
-                    jenisKendaraan={transport.jenisKendaraan}
-                    vendor={transport.vendor}
-                    keterangan={transport.keterangan}
+                    name={destination.name}
+                    note={destination.note}
+                    destination={destination}
                     onDeleteButton={() => {
-                      handleDeleteTransport(transport.id);
-                      handleGetAllTransport();
+                      handleDeleteDestination(destination.id);
+                      handleGetAllDestination();
                     }}
                     onEditButton={() => {
-                      updateTransportData(transport);
+                      updateDestinationData(destination);
 
                       setFormActive(true);
                     }}
@@ -115,4 +110,4 @@ const AdminTransportPage = () => {
   );
 };
 
-export default AdminTransportPage;
+export default AdminDestinationPage;

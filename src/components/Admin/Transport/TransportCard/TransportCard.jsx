@@ -1,137 +1,138 @@
 import {
   Flex,
+  Box,
   Text,
-  Tabs,
-  TabList,
-  TabPanels,
-  TabPanel,
-  Tab,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
 } from "@chakra-ui/react";
-import { Icon } from "@iconify/react";
-import { PopoverButton } from "../../../PopoverButton";
 
-const TransportCard = () => {
+import { useNavigate } from "react-router-dom";
+import { PopoverButton } from "../../../PopoverButton";
+import { Icon } from "@iconify/react";
+import { useState } from "react";
+
+const TransportCard = (props) => {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <Flex
       direction={"column"}
-      gap={3}
-      w={"20%"}
-      flexGrow="1"
-      bg={"gray.800"}
-      p={"15px"}
-      shadow={"xl"}
-      rounded={"12px"}
-    >
-      <Flex direction={"column"} gap={3}>
-        <Flex
-          direction={"row"}
-          alignItems={"center"}
-          w={"full"}
-          justifyContent={"space-between"}
-        >
-          <Text fontSize={"18px"} noOfLines={3} fontWeight={"semibold"}>
-            Transport
-          </Text>
-          <PopoverButton onEditButton={() => {}} onDeleteButton={() => {}} />
-        </Flex>
-        <Tabs variant="line" colorScheme="blue" isFitted>
-          <TabList>
-            {Array.from({ length: 3 }).map((_, index) => {
-              return (
-                <Tab fontSize={"12px"} key={index}>
-                  Day {index + 1}
-                </Tab>
-              );
-            })}
-          </TabList>
-
-          <TabPanels>
-            <TabPanel py={4} px={0}>
-              <Flex direction={"column"} gap={3}>
-                <Text fontSize={12}>
-                  Neque sint id. Dolores a deserunt vitae asperiores atque ut
-                  totam non dolorem. Est rerum aliquam. Facilis dolor voluptatem
-                  totam.
-                </Text>
-                {Array.from({ length: 2 }).map((_, index) => {
-                  return (
-                    <AppTransport
-                      index={index}
-                      title={"Mobil Avanza"}
-                      count={"2"}
-                    />
-                  );
-                })}
-              </Flex>
-            </TabPanel>
-            <TabPanel py={4} px={0}>
-              <AppTransport title={"Mobil Avanza"} count={"3"} />
-            </TabPanel>
-            <TabPanel py={4} px={0}>
-              <Flex direction={"column"} gap={3}>
-                {Array.from({ length: 3 }).map((_, index) => {
-                  return (
-                    <AppTransport
-                      index={index}
-                      title={"Mobil Avanza"}
-                      count={"2"}
-                    />
-                  );
-                })}
-              </Flex>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Flex>
-    </Flex>
-  );
-};
-
-const AppTransport = (props) => {
-  return (
-    <Flex
-      direction={"row"}
-      gap={2}
       alignItems={"start"}
-      w={"full"}
-      bg={"gray.900"}
-      rounded={"6px"}
-      p={"8px"}
+      bg={"gray.800"}
+      p={2}
+      w={"50%"}
+      gap={2}
+      flexGrow={"1"}
+      rounded={"8"}
+      onClick={() => setOpen(!open)}
     >
-      <Flex direction={"column"} gap={2} w={"full"}>
-        <Flex alignItems={"center"} gap={2}>
-          {" "}
-          <Icon icon="mingcute:car-fill" className="text-white text-[16px] " />
-          <Text fontSize={"14px"} fontWeight={"bold"}>
-            {props.title}
+      <Flex
+        gap={4}
+        p={2}
+        alignItems={"start"}
+        justifyContent={"start"}
+        w={"full"}
+      >
+        <Box
+          w={"60px"}
+          h={"50px"}
+          bg={"gray.700"}
+          rounded={5}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          fontSize={"18px"}
+          fontWeight={"bold"}
+          flexShrink={"0"}
+        >
+          {props.jenisKendaraan.slice(0, 2).toUpperCase() || "MO"}
+        </Box>
+        <Flex direction={"column"} flexShrink={"0"} gap={0}>
+          <Text fontSize={"18px"} fontWeight={"bold"}>
+            {props.jenisKendaraan || "  Mobil"}
           </Text>
+          <Flex gap={2} alignItems={"center"}>
+            <Text fontSize={"14px"}>
+              {props.vendor || "2 jam keliling desa"}
+            </Text>
+          </Flex>
         </Flex>
-        <Flex direction={"column"} gap={1}>
-          <AppTextLine title={"Jumlah"} subtitle={"1"} />
-          <AppTextLine title={"Area"} subtitle={"Kintamani, Ubud"} />
-          <AppTextLine title={"Harga"} subtitle={"Rp 500.000"} />
+        <Flex direction={"row"} gap={1} w={"full"} justifyContent={"end"}>
+          <AppIconText icon={"mdi:ticket"} bg={"blue.700"} text={"Vendor"} />
+          <Flex
+            zIndex={10}
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            <PopoverButton
+              isOpenButton={false}
+              onEditButton={() => {
+                navigate(`/admin/transport/edit`);
+                props.onEditButton();
+              }}
+              onDeleteButton={props.onDeleteButton}
+            />
+          </Flex>
         </Flex>
       </Flex>
+      {open && <AppInformationTable keterangan={props.keterangan} />}
     </Flex>
   );
 };
 
-const AppTextLine = (props) => {
+const AppIconText = (props) => {
   return (
     <Flex
       direction={"row"}
-      w={"full"}
-      justifyContent={"space-between"}
       alignItems={"center"}
-      bg={"gray.700"}
-      p={2}
-      color={"white"}
-      fontWeight={"semibold"}
-      rounded={"6px"}
+      gap={2}
+      py={1}
+      px={3}
+      rounded={"full"}
+      bg={props.bg}
+      flexShrink={"0"}
     >
-      <Text fontSize={"10px"}>{props.title}</Text>
-      <Text fontSize={"10px"}>{props.subtitle}</Text>
+      <Icon icon={props.icon} className="text-[14px]" color={"gray.400"} />
+      <Text fontSize={"10px"}>{props.text}</Text>
     </Flex>
+  );
+};
+
+const AppInformationTable = ({ keterangan }) => {
+  const layananTypes = ["fullDay", "halfDay", "inOut", "menginap"];
+
+  return (
+    <Box w={"full"}>
+      <Table variant="simple" size="sm">
+        <Thead bg="gray.700">
+          <Tr>
+            <Th>Kategori</Th>
+            <Th>Nama Area</Th>
+            <Th isNumeric>Harga</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {layananTypes.map((key) =>
+            keterangan[key]?.map((item, idx) => (
+              <Tr key={`${key}-${idx}`}>
+                <Td textTransform="capitalize">{key}</Td>
+                <Td>{item.area}</Td>
+                <Td isNumeric>
+                  Rp {Number(item.price).toLocaleString("id-ID")}
+                </Td>
+              </Tr>
+            ))
+          )}
+        </Tbody>
+      </Table>
+    </Box>
   );
 };
 

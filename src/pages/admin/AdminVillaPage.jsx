@@ -65,7 +65,6 @@ const AdminVillaPage = () => {
     try {
       const res = await apiDeleteVilla(id);
 
-      console.log(res);
       if (res.status == 200) {
         toast(toastConfig("Hapus Sukses", "Villa Berhasil Dihapus", "success"));
         handleGetVillas();

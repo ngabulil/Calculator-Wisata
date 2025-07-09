@@ -8,222 +8,230 @@ import {
   Button,
   NumberInput,
   NumberInputField,
-  Text,
+  useToast,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import toastConfig from "../../../../utils/toastConfig";
+import { useAdminTransportContext } from "../../../../context/Admin/AdminTransportContext";
+import {
+  apiPostMobilFull,
+  apiPutMobilFull,
+} from "../../../../services/transport";
+import { useLocation } from "react-router-dom";
 
 const layananTypes = ["fullDay", "halfDay", "inOut", "menginap"];
 
-const TransportForm = ({ isEdit = false, vehiclesValue = [], onChange }) => {
-  const [vehicles, setVehicles] = useState(
-    isEdit && vehiclesValue.length > 0
-      ? vehiclesValue
-      : [
-          {
-            jenisKendaraan: "",
-            vendor: "",
-            vendor_link: "",
-            keterangan: {
-              fullDay: [],
-              halfDay: [],
-              inOut: [],
-              menginap: [],
-            },
-          },
-        ]
-  );
+const TransportForm = () => {
+  const [vehicle, setVehicle] = useState({
+    name: "",
+    vendor: "",
+    vendor_link: "",
+    keterangan: {
+      fullDay: [],
+      halfDay: [],
+      inOut: [],
+      menginap: [],
+    },
+  });
 
-  const handleChange = (index, field, value) => {
-    const newVehicles = [...vehicles];
-    newVehicles[index][field] = value;
-    setVehicles(newVehicles);
-    onChange?.(newVehicles);
+  const { transportData } = useAdminTransportContext();
+  const toast = useToast();
+  const location = useLocation();
+  const [editFormActive, setEditFormActive] = useState(false);
+
+  const handleChange = (field, value) => {
+    setVehicle((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
   };
 
-  const handleAreaChange = (index, type, areaIndex, field, value) => {
-    const newVehicles = [...vehicles];
-    newVehicles[index].keterangan[type][areaIndex][field] = value;
-    setVehicles(newVehicles);
-    onChange?.(newVehicles);
+  const handleAreaChange = (type, areaIndex, field, value) => {
+    const updated = { ...vehicle };
+    updated.keterangan[type][areaIndex][field] = value;
+    setVehicle(updated);
   };
 
-  const handleAddVehicle = () => {
-    setVehicles([
-      ...vehicles,
-      {
-        jenisKendaraan: "",
-        vendor: "",
-        vendor_link: "",
-        keterangan: {
-          fullDay: [],
-          halfDay: [],
-          inOut: [],
-          menginap: [],
-        },
-      },
-    ]);
-  };
-
-  const handleRemoveVehicle = (index) => {
-    const updated = vehicles.filter((_, i) => i !== index);
-    setVehicles(updated);
-    onChange?.(updated);
-  };
-
-  const handleAddArea = (index, type) => {
-    const newVehicles = [...vehicles];
-    newVehicles[index].keterangan[type].push({
-      id_area: "",
+  const handleAddArea = (type) => {
+    const updated = { ...vehicle };
+    updated.keterangan[type].push({
       area: "",
       price: 0,
     });
-    setVehicles(newVehicles);
-    onChange?.(newVehicles);
+    setVehicle(updated);
   };
 
-  const handleRemoveArea = (index, type, areaIndex) => {
-    const newVehicles = [...vehicles];
-    newVehicles[index].keterangan[type] = newVehicles[index].keterangan[
-      type
-    ].filter((_, i) => i !== areaIndex);
-    setVehicles(newVehicles);
-    onChange?.(newVehicles);
+  const handleRemoveArea = (type, areaIndex) => {
+    const updated = { ...vehicle };
+    updated.keterangan[type] = updated.keterangan[type].filter(
+      (_, i) => i !== areaIndex
+    );
+    setVehicle(updated);
   };
+
+  const handleTransportSetValue = () => {
+    setVehicle({
+      name: transportData.jenisKendaraan,
+      vendor: transportData.vendor,
+      vendor_link: transportData.vendor_link,
+      keterangan: {
+        fullDay: transportData.keterangan.fullDay || [],
+        halfDay: transportData.keterangan.halfDay || [],
+        inOut: transportData.keterangan.inOut || [],
+        menginap: transportData.keterangan.menginap || [],
+      },
+    });
+  };
+
+  const handleTransportCreate = async () => {
+    try {
+      const res = await apiPostMobilFull(vehicle);
+
+      if (res.status === 201) {
+        toast(
+          toastConfig(
+            "Transport Created",
+            "Transport Berhasil Ditambahkan!",
+            "success"
+          )
+        );
+      } else {
+        toast(
+          toastConfig("Create Failed", "Transport Gagal Ditambahkan", "error")
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      toast(
+        toastConfig("Create Failed", "Transport Gagal Ditambahkan", "error")
+      );
+    }
+  };
+
+  const handleTransportUpdate = async () => {
+    try {
+      const res = await apiPutMobilFull(transportData.id, vehicle);
+
+      if (res.status === 200) {
+        toast(
+          toastConfig(
+            "Transport Update",
+            "Transport Berhasil Diubah!",
+            "success"
+          )
+        );
+      } else {
+        toast(toastConfig("Update Failed", "Transport Gagal Diubah", "error"));
+      }
+    } catch (error) {
+      console.log(error);
+      toast(toastConfig("Update Failed", "Transport Gagal Diubah", "error"));
+    }
+  };
+
+  useEffect(() => {
+    if (location.pathname.includes("edit")) {
+      setEditFormActive(true);
+      handleTransportSetValue();
+    }
+  }, [location.pathname, transportData]);
 
   return (
     <VStack spacing={8} align="stretch">
-      {vehicles.map((vehicle, index) => (
-        <Box
-          key={index}
-          bg="gray.700"
-          p={4}
-          rounded="xl"
-          boxShadow="md"
-          position="relative"
-        >
-          <HStack justify="space-between" mb={2}>
-            <FormLabel fontWeight="bold">Kendaraan #{index + 1}</FormLabel>
-            <IconButton
-              icon={<DeleteIcon />}
-              colorScheme="red"
-              size="sm"
-              onClick={() => handleRemoveVehicle(index)}
-              isDisabled={vehicles.length === 1}
-            />
-          </HStack>
+      <Box bg="gray.700" p={4} rounded="xl" boxShadow="md" position="relative">
+        <HStack justify="space-between" mb={2}>
+          <FormLabel fontWeight="bold">Kendaraan</FormLabel>
+        </HStack>
 
-          <Box mb={3}>
-            <FormLabel>Jenis Kendaraan</FormLabel>
-            <Input
-              value={vehicle.jenisKendaraan}
-              onChange={(e) =>
-                handleChange(index, "jenisKendaraan", e.target.value)
-              }
-              placeholder="Contoh: Toyota Innova Reborn"
-            />
-          </Box>
-
-          <Box mb={3}>
-            <FormLabel>Vendor</FormLabel>
-            <Input
-              value={vehicle.vendor}
-              onChange={(e) => handleChange(index, "vendor", e.target.value)}
-              placeholder="Contoh: PT. Bali Transport"
-            />
-          </Box>
-
-          <Box mb={3}>
-            <FormLabel>Link Vendor</FormLabel>
-            <Input
-              value={vehicle.vendor_link}
-              onChange={(e) =>
-                handleChange(index, "vendor_link", e.target.value)
-              }
-              placeholder="https://example.com/innova"
-            />
-          </Box>
-
-          {layananTypes.map((type) => (
-            <Box key={type} mb={4}>
-              <HStack justify="space-between">
-                <FormLabel textTransform="capitalize">{type}</FormLabel>
-                <Button
-                  size="xs"
-                  onClick={() => handleAddArea(index, type)}
-                  leftIcon={<AddIcon />}
-                >
-                  Tambah Area
-                </Button>
-              </HStack>
-
-              {vehicle.keterangan[type]?.map((areaItem, areaIndex) => (
-                <Box
-                  key={areaIndex}
-                  bg="gray.600"
-                  p={3}
-                  rounded="md"
-                  mb={2}
-                  position="relative"
-                >
-                  <HStack spacing={3} mb={2}>
-                    <Input
-                      placeholder="ID Area"
-                      value={areaItem.id_area}
-                      onChange={(e) =>
-                        handleAreaChange(
-                          index,
-                          type,
-                          areaIndex,
-                          "id_area",
-                          e.target.value
-                        )
-                      }
-                    />
-                    <Input
-                      placeholder="Nama Area"
-                      value={areaItem.area}
-                      onChange={(e) =>
-                        handleAreaChange(
-                          index,
-                          type,
-                          areaIndex,
-                          "area",
-                          e.target.value
-                        )
-                      }
-                    />
-                    <NumberInput
-                      value={areaItem.price}
-                      onChange={(val) =>
-                        handleAreaChange(index, type, areaIndex, "price", val)
-                      }
-                      min={0}
-                    >
-                      <NumberInputField placeholder="Harga" />
-                    </NumberInput>
-                    <IconButton
-                      icon={<DeleteIcon />}
-                      size="sm"
-                      colorScheme="red"
-                      onClick={() => handleRemoveArea(index, type, areaIndex)}
-                    />
-                  </HStack>
-                </Box>
-              ))}
-            </Box>
-          ))}
+        <Box mb={3}>
+          <FormLabel>Nama Kendaraan</FormLabel>
+          <Input
+            value={vehicle.name}
+            onChange={(e) => handleChange("name", e.target.value)}
+            placeholder="Contoh: Toyota Innova Reborn"
+          />
         </Box>
-      ))}
 
-      <Button
-        leftIcon={<AddIcon />}
-        colorScheme="teal"
-        onClick={handleAddVehicle}
-        alignSelf="flex-start"
-      >
-        Tambah Kendaraan
-      </Button>
+        <Box mb={3}>
+          <FormLabel>Vendor</FormLabel>
+          <Input
+            value={vehicle.vendor}
+            onChange={(e) => handleChange("vendor", e.target.value)}
+            placeholder="Contoh: PT. Bali Transport"
+          />
+        </Box>
+
+        <Box mb={3}>
+          <FormLabel>Link Vendor</FormLabel>
+          <Input
+            value={vehicle.vendor_link}
+            onChange={(e) => handleChange("vendor_link", e.target.value)}
+            placeholder="https://example.com/innova"
+          />
+        </Box>
+
+        {layananTypes.map((type) => (
+          <Box key={type} mb={4}>
+            <HStack justify="space-between">
+              <FormLabel textTransform="capitalize">{type}</FormLabel>
+              <Button
+                size="xs"
+                onClick={() => handleAddArea(type)}
+                leftIcon={<AddIcon />}
+              >
+                Tambah Area
+              </Button>
+            </HStack>
+
+            {vehicle.keterangan[type]?.map((areaItem, areaIndex) => (
+              <Box
+                key={areaIndex}
+                bg="gray.600"
+                p={3}
+                rounded="md"
+                mb={2}
+                position="relative"
+              >
+                <HStack spacing={3} mb={2}>
+                  <Input
+                    placeholder="Nama Area"
+                    value={areaItem.area}
+                    onChange={(e) =>
+                      handleAreaChange(type, areaIndex, "area", e.target.value)
+                    }
+                  />
+                  <NumberInput
+                    value={areaItem.price}
+                    onChange={(val) =>
+                      handleAreaChange(type, areaIndex, "price", val)
+                    }
+                    min={0}
+                  >
+                    <NumberInputField placeholder="Harga" />
+                  </NumberInput>
+                  <IconButton
+                    icon={<DeleteIcon />}
+                    size="sm"
+                    colorScheme="red"
+                    onClick={() => handleRemoveArea(type, areaIndex)}
+                  />
+                </HStack>
+              </Box>
+            ))}
+          </Box>
+        ))}
+
+        <Button
+          w={"full"}
+          bg={"blue.500"}
+          onClick={
+            editFormActive ? handleTransportUpdate : handleTransportCreate
+          }
+        >
+          {editFormActive ? "Update Transport" : "Create Transport"}
+        </Button>
+      </Box>
     </VStack>
   );
 };

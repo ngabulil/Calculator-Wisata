@@ -3,15 +3,23 @@ import AdminVillaContextProvider from "./AdminVillaContext";
 import AdminPackageContextProvider from "./AdminPackageContext";
 import AdminActivityContextProvider from "./AdminActivityContext";
 import AdminRestaurantContextProvider from "./AdminRestaurantContext";
+import AdminTransportContextProvider from "./AdminTransportContext";
+import AdminDestinationContextProvider from "./AdminDestinationContext";
 
 const AdminProviderContext = ({ children }) => {
   return (
     <AdminPackageContextProvider>
       <AdminVillaContextProvider>
         <AdminActivityContextProvider>
-          <AdminRestaurantContextProvider>
-            <AdminHotelContextProvider>{children}</AdminHotelContextProvider>
-          </AdminRestaurantContextProvider>
+          <AdminTransportContextProvider>
+            <AdminRestaurantContextProvider>
+              <AdminDestinationContextProvider>
+                <AdminHotelContextProvider>
+                  {children}
+                </AdminHotelContextProvider>
+              </AdminDestinationContextProvider>
+            </AdminRestaurantContextProvider>
+          </AdminTransportContextProvider>
         </AdminActivityContextProvider>
       </AdminVillaContextProvider>
     </AdminPackageContextProvider>

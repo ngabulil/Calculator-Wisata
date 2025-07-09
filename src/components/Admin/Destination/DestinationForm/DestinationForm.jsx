@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Box,
   Input,
-  Select,
   Text,
   Button,
   FormLabel,
@@ -13,114 +12,101 @@ import {
 
 import { useLocation } from "react-router-dom";
 import {
-  apiPostActivityDetails,
-  apiPutActivityDetails,
-} from "../../../../services/activityService";
+  apiPutDestination,
+  apiPostDestination,
+} from "../../../../services/destinationService";
 import toastConfig from "../../../../utils/toastConfig";
-import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
+import { useAdminDestinationContext } from "../../../../context/Admin/AdminDestinationContext";
 
-const ActivityFormPage = () => {
+const DestinationFormPage = () => {
   const location = useLocation();
   const toast = useToast();
-  const { activityData, allActivityVendors, getAllActivityVendors } =
-    useAdminActivityContext();
+  const { destinationData } = useAdminDestinationContext();
   const [editFormActive, setEditFormActive] = useState(false);
-  const [vendorId, setVendorId] = useState("");
+
   const [name, setName] = useState("");
   const [priceForeignAdult, setPriceForeignAdult] = useState("");
   const [priceForeignChild, setPriceForeignChild] = useState("");
   const [priceDomesticAdult, setPriceDomesticAdult] = useState("");
   const [priceDomesticChild, setPriceDomesticChild] = useState("");
-  const [keterangan, setKeterangan] = useState("");
-  const [note, setNote] = useState("");
-  const [valid, setValid] = useState("");
 
-  const handleActivitySetValue = () => {
-    setVendorId(activityData.vendor_id);
-    setName(activityData.name);
-    setPriceForeignAdult(activityData.price_foreign_adult);
-    setPriceForeignChild(activityData.price_foreign_child);
-    setPriceDomesticAdult(activityData.price_domestic_adult);
-    setPriceDomesticChild(activityData.price_domestic_child);
-    setKeterangan(activityData.keterangan);
-    setNote(activityData.note);
-    setValid(activityData.valid);
+  const [note, setNote] = useState("");
+
+  const handleDestinationSetValue = () => {
+    setName(destinationData.name);
+    setPriceForeignAdult(destinationData.price_foreign_adult);
+    setPriceForeignChild(destinationData.price_foreign_child);
+    setPriceDomesticAdult(destinationData.price_domestic_adult);
+    setPriceDomesticChild(destinationData.price_domestic_child);
+    setNote(destinationData.note);
   };
 
-  const handleActivityCreate = async () => {
+  const handleDestinationCreate = async () => {
     const data = {
-      vendor_id: vendorId,
       name: name,
       price_foreign_adult: priceForeignAdult,
       price_foreign_child: priceForeignChild,
       price_domestic_adult: priceDomesticAdult,
       price_domestic_child: priceDomesticChild,
-      keterangan: keterangan,
       note: note,
-      valid: valid,
     };
 
     try {
-      const res = await apiPostActivityDetails(data);
+      const res = await apiPostDestination(data);
 
       if (res.status === 201) {
         toast(
           toastConfig(
-            "Activity Created",
-            "Aktivitas Berhasil Ditambahkan!",
+            "Destinasi Created",
+            "Destinasi Berhasil Ditambahkan!",
             "success"
           )
         );
       } else {
         toast(
-          toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
+          toastConfig("Create Failed", "Destinasi Gagal Ditambahkan", "error")
         );
       }
     } catch (error) {
       console.log(error);
       toast(
-        toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
+        toastConfig("Create Failed", "Destinasi Gagal Ditambahkan", "error")
       );
     }
   };
 
-  const handleActivityUpdate = async () => {
+  const handleDestinationUpdate = async () => {
     const data = {
-      vendor_id: vendorId,
       name: name,
       price_foreign_adult: priceForeignAdult,
       price_foreign_child: priceForeignChild,
       price_domestic_adult: priceDomesticAdult,
       price_domestic_child: priceDomesticChild,
-      keterangan: keterangan,
       note: note,
-      valid: valid,
     };
 
     try {
-      const res = await apiPutActivityDetails(activityData.id, data);
+      const res = await apiPutDestination(destinationData.id, data);
 
       if (res.status === 200) {
-        toast(toastConfig("Sukes Update", "Aktivitas Berhasil Diubah!", "success"));
+        toast(
+          toastConfig("Sukses Update", "Destinasi Berhasil Diubah!", "success")
+        );
       } else {
-        toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
+        toast(toastConfig("Create Failed", "Destinasi Gagal Diubah", "error"));
       }
     } catch (error) {
       console.log(error);
-      toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
+      toast(toastConfig("Create Failed", "Destinasi Gagal Diubah", "error"));
     }
   };
 
   useEffect(() => {
     if (location.pathname.includes("edit")) {
       setEditFormActive(true);
-      handleActivitySetValue();
+      handleDestinationSetValue();
     }
-  }, [location.pathname, activityData]);
-
-  useEffect(() => {
-    getAllActivityVendors();
-  }, []);
+  }, [location.pathname, destinationData]);
 
   return (
     <Container
@@ -133,12 +119,12 @@ const ActivityFormPage = () => {
       gap={2}
     >
       <Text fontSize="24px" fontWeight={"bold"}>
-        {editFormActive ? "Edit Aktivitas" : "Create Aktivitas"}
+        {editFormActive ? "Edit Destinasi" : "Create Destinasi"}
       </Text>
       <Box mb={4}>
-        <FormLabel>Nama Aktivitas</FormLabel>
+        <FormLabel>Nama Destinasi</FormLabel>
         <Input
-          placeholder="Contoh: Trip Adventure"
+          placeholder="Contoh: Garuda Wisnu Kencana"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
@@ -148,51 +134,14 @@ const ActivityFormPage = () => {
       <Box mb={4}>
         <FormLabel>Note</FormLabel>
         <Input
-          placeholder="Contoh: Bawa Payung"
+          placeholder="Contoh: Sudah termasuk tiket"
           value={note}
           onChange={(e) => {
             setNote(e.target.value);
           }}
         />
       </Box>
-      <Box mb={4}>
-        <FormLabel>Keterangan</FormLabel>
-        <Input
-          placeholder="Contoh: Jalan Jalan ke Gunung"
-          value={keterangan}
-          onChange={(e) => {
-            setKeterangan(e.target.value);
-          }}
-        />
-      </Box>
-      <Box mb={4}>
-        <FormLabel>Vendor</FormLabel>
-        <Select
-          name="vendor_id"
-          value={vendorId}
-          onChange={(e) => {
-            setVendorId(e.target.value);
-          }}
-          placeholder="Select vendor"
-        >
-          {allActivityVendors.map((vendor) => (
-            <option key={vendor.id} value={vendor.id}>
-              {vendor.name}
-            </option>
-          ))}
-        </Select>{" "}
-      </Box>
-      <Box mb={4}>
-        <FormLabel>Valid Date</FormLabel>
-        <Input
-          type="date"
-          placeholder="Contoh: Aktivitas Bintang Bali"
-          value={valid}
-          onChange={(e) => {
-            setValid(e.target.value);
-          }}
-        />
-      </Box>
+
       <Flex direction="column" w="full" p={4} bg={"gray.700"} rounded={"12px"}>
         <Text fontSize="20px" fontWeight={"bold"} mb={2}>
           Price List{" "}
@@ -240,12 +189,14 @@ const ActivityFormPage = () => {
       <Button
         w={"full"}
         bg={"blue.500"}
-        onClick={editFormActive ? handleActivityUpdate : handleActivityCreate}
+        onClick={
+          editFormActive ? handleDestinationUpdate : handleDestinationCreate
+        }
       >
-        {editFormActive ? "Update Aktivitas" : "Create Aktivitas"}
+        {editFormActive ? "Update Destinasi" : "Create Destinasi"}
       </Button>
     </Container>
   );
 };
 
-export default ActivityFormPage;
+export default DestinationFormPage;

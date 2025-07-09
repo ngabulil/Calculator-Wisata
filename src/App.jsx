@@ -23,6 +23,7 @@ import AdminAdditionalPage from "./pages/admin/AdminAdditionalPage";
 import AdminPesananPage from "./pages/admin/AdminPesananPage";
 import AdminActivityPage from "./pages/admin/AdminActivityPage";
 import AdminRestaurantPage from "./pages/admin/AdminRestaurantPage";
+import AdminDestinationPage from "./pages/admin/AdminDestinationPage";
 
 function App() {
   const adminRoutes = [
@@ -37,6 +38,8 @@ function App() {
     { path: "/admin/transport/edit", element: <AdminTransportPage /> },
     { path: "/admin/restaurant", element: <AdminRestaurantPage /> },
     { path: "/admin/restaurant/edit", element: <AdminRestaurantPage /> },
+    { path: "/admin/destination", element: <AdminDestinationPage /> },
+    { path: "/admin/destination/edit", element: <AdminDestinationPage /> },
     { path: "/admin/pesanan", element: <AdminPesananPage /> },
     { path: "/admin/activity", element: <AdminActivityPage /> },
     { path: "/admin/activity/edit", element: <AdminActivityPage /> },
