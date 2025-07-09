@@ -41,7 +41,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         accommodations.push({
           no: counter++,
           name: villa.villa?.label || "Unknown Villa",
-          room: villa.roomType && villa.roomType.length > 0 ? villa.roomType[0].label : "Superior Room",
+          room: villa.labelgitr  && villa.roomType.length > 0 ? villa.roomType[0].label : "Superior Room",
           type: "Villa"
         });
       });
