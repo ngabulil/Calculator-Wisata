@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState } from "react";
 import {
   apiGetAllHotel,
   apiGetAllHotelRooms,
-  apiGetHotel,
 } from "../../services/hotelService";
 
 const AdminHotelContext = createContext();
