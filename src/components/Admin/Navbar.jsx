@@ -37,6 +37,9 @@ const Navbar = () => {
           <NavLink to="/admin/destination" style={linkStyle}>
             Destinasi
           </NavLink>
+          <NavLink to="/admin/pesanan" style={linkStyle}>
+            Pesanan
+          </NavLink>
 
           <NavLink to="/calculator" style={linkStyle}>
             Calculator

@@ -21,6 +21,7 @@ import AdminAcomodationPage from "./pages/admin/AdminAkomodasiPage";
 import AdminHotelPage from "./pages/admin/AdminHotelPage";
 import AdminVillaPage from "./pages/admin/AdminVillaPage";
 import AdminAdditionalPage from "./pages/admin/AdminAdditionalPage";
+import AdminPesananPage from "./pages/admin/AdminPesananPage";
 
 function App() {
   const adminRoutes = [
@@ -33,6 +34,7 @@ function App() {
     { path: "/admin/additional", element: <AdminAdditionalPage /> },
     { path: "/admin/transport", element: <AdminTransportPage /> },
     { path: "/admin/transport/edit", element: <AdminTransportPage /> },
+    { path: "/admin/pesanan", element: <AdminPesananPage /> },
   ];
 
   const publicRoutes = [

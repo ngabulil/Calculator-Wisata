@@ -1,4 +1,4 @@
-import { apiPost } from "./api";
+import { apiGet, apiPost } from "./api";
 
 export const apiPostPesanan = async (formData) => {
     try {
@@ -9,3 +9,13 @@ export const apiPostPesanan = async (formData) => {
         throw error;
     }
 };
+
+export const apiGetPesanan = async() =>{
+    try {
+        const response = await apiGet('/pesanan');
+        return response;
+    } catch (error) {
+        console.error("Error fetching pesanan:", error);
+        throw error;
+    }
+}
