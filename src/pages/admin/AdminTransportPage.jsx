@@ -123,7 +123,12 @@ const AdminTransportPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <TransportForm />
+          <TransportForm
+            onChange={() => {
+              setFormActive(false);
+              handleGetAllTransport();
+            }}
+          />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
             {currentTransports.length > 0 &&

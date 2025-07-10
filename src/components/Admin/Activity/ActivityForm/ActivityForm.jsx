@@ -19,7 +19,7 @@ import {
 import toastConfig from "../../../../utils/toastConfig";
 import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
 
-const ActivityFormPage = () => {
+const ActivityFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
   const { activityData, allActivityVendors, getAllActivityVendors } =
@@ -68,7 +68,8 @@ const ActivityFormPage = () => {
           toastConfig(
             "Activity Created",
             "Aktivitas Berhasil Ditambahkan!",
-            "success"
+            "success",
+            props.onChange
           )
         );
       } else {
@@ -101,7 +102,14 @@ const ActivityFormPage = () => {
       const res = await apiPutActivityDetails(activityData.id, data);
 
       if (res.status === 200) {
-        toast(toastConfig("Sukes Update", "Aktivitas Berhasil Diubah!", "success"));
+        toast(
+          toastConfig(
+            "Sukes Update",
+            "Aktivitas Berhasil Diubah!",
+            "success",
+            props.onChange
+          )
+        );
       } else {
         toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
       }

@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Textarea,
-  Link,
   Text,
   VStack,
   Flex,
@@ -15,13 +14,8 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   Input,
   useColorModeValue,
-  Divider,
 } from "@chakra-ui/react";
 
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
@@ -50,6 +44,7 @@ import {
 } from "../../../../services/packageService";
 import parseDays from "../../../../utils/encodedParseDays";
 import buildPayloadPaket from "../../../../utils/buildPayloadPaket";
+import parsePayloadPaket from "../../../../utils/parsePayloadPaket";
 
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -580,9 +575,10 @@ const PackageCreateForm = (props) => {
   );
 };
 
-const PackageFormPage = () => {
+const PackageFormPage = (props) => {
   const toast = useToast();
   const location = useLocation();
+
   const { headline, onePackageFull } = useAdminPackageContext();
   const [primaryData, setPrimaryData] = useState([]);
   const [namePackages, setNamePackages] = useState("");
@@ -598,9 +594,7 @@ const PackageFormPage = () => {
       description: desctiptionPackages,
       days: [...primaryData],
     };
-    const payload = buildPayloadPaket(data);
-
-    console.log(payload);
+    const payload = parsePayloadPaket(buildPayloadPaket(data));
 
     try {
       let res;
@@ -609,14 +603,17 @@ const PackageFormPage = () => {
         ? (res = await apiPutPackageFull(onePackageFull.id, payload))
         : (res = await apiPostPackageFull(payload));
 
-      if (res.status == 201) {
+      if (res.status == 201 || res.status == 200) {
         toast(
           toastConfig(
             editFormActive ? "Edit berhasil " : "Buat Berhasil",
             editFormActive
               ? "Paket berhasil diubah!"
               : "Paket berhasil dibuat!",
-            "success"
+            "success",
+            () => {
+              props.onChange();
+            }
           )
         );
       } else {

@@ -117,7 +117,12 @@ const AdminDestinationPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <DestinationFormPage />
+          <DestinationFormPage
+            onChange={() => {
+              setFormActive(false);
+              handleGetAllDestination();
+            }}
+          />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
             {currentDestination.length > 0 &&

@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { PopoverButton } from "../../../PopoverButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
+import formatRupiah from "../../../../utils/rupiahFormat";
 
 const RestaurantCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -81,7 +82,7 @@ const RestaurantCard = (props) => {
         </Flex>
       </Flex>
       {open && (
-        <Flex direction={"column"} gap={4} bg={"gray.700"} p={2} rounded={4}>
+        <Flex direction={"column"} gap={3} rounded={4}>
           {props.packages.map((pack) => {
             return <AppPackageList package={pack} />;
           })}
@@ -120,7 +121,8 @@ const AppPackageList = (props) => {
   return (
     <Flex
       direction={"column"}
-      bg={"gray.800"}
+      bg={"gray.900"}
+      shadow={"xl"}
       p={2}
       gap={2}
       rounded={4}
@@ -185,7 +187,7 @@ const AppPriceList = ({ data }) => {
             <Tr key={index}>
               <Td>{item.tourist_type}</Td>
               <Td>{item.category}</Td>
-              <Td isNumeric>{item.price}</Td>
+              <Td isNumeric>{formatRupiah(item.price)}</Td>
             </Tr>
           ))}
         </Tbody>

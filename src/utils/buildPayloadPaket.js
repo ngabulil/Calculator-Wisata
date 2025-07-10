@@ -79,3 +79,4 @@ function resolveSeason(season) {
   if (season.startsWith("honeymoon")) return "honeymoon";
   return "peak";
 }
+

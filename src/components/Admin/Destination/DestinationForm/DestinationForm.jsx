@@ -18,7 +18,7 @@ import {
 import toastConfig from "../../../../utils/toastConfig";
 import { useAdminDestinationContext } from "../../../../context/Admin/AdminDestinationContext";
 
-const DestinationFormPage = () => {
+const DestinationFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
   const { destinationData } = useAdminDestinationContext();
@@ -59,7 +59,8 @@ const DestinationFormPage = () => {
           toastConfig(
             "Destinasi Created",
             "Destinasi Berhasil Ditambahkan!",
-            "success"
+            "success",
+            props.onChange
           )
         );
       } else {
@@ -90,7 +91,12 @@ const DestinationFormPage = () => {
 
       if (res.status === 200) {
         toast(
-          toastConfig("Sukses Update", "Destinasi Berhasil Diubah!", "success")
+          toastConfig(
+            "Sukses Update",
+            "Destinasi Berhasil Diubah!",
+            "success",
+            props.onChange
+          )
         );
       } else {
         toast(toastConfig("Create Failed", "Destinasi Gagal Diubah", "error"));

@@ -26,9 +26,8 @@ const AdminPackageContextProvider = ({ children }) => {
   });
   const [days, setDays] = React.useState([
     {
-      name: "Hari 1 - Kedatangan dan Check-in",
-      description_day:
-        "Tiba di Bandara Ngurah Rai, check-in hotel, dan menikmati makan malam.",
+      name: "",
+      description_day: "",
       data: {
         akomodasi: {
           hotels: [],

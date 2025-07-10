@@ -101,6 +101,7 @@ const AdminHotelPage = () => {
               if (formActive) {
                 updateHotelData(null);
                 navigate("/admin/hotel");
+                handleGetHotels();
               }
 
               if (readHotelActive) {

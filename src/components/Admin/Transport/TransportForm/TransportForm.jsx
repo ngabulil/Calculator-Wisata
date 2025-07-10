@@ -22,7 +22,7 @@ import { useLocation } from "react-router-dom";
 
 const layananTypes = ["fullDay", "halfDay", "inOut", "menginap"];
 
-const TransportForm = () => {
+const TransportForm = (props) => {
   const [vehicle, setVehicle] = useState({
     name: "",
     vendor: "",
@@ -93,7 +93,8 @@ const TransportForm = () => {
           toastConfig(
             "Transport Created",
             "Transport Berhasil Ditambahkan!",
-            "success"
+            "success",
+            props.onChange
           )
         );
       } else {
@@ -118,7 +119,8 @@ const TransportForm = () => {
           toastConfig(
             "Transport Update",
             "Transport Berhasil Diubah!",
-            "success"
+            "success",
+            props.onChange
           )
         );
       } else {

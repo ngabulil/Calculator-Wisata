@@ -57,7 +57,7 @@ const AppTitleDescription = (props) => {
           <PopoverButton
             isOpenButton={true}
             onEditButton={() => {
-              navigate(`/admin/edit`);
+              navigate(`/admin/paket/edit`);
               props.onEditButton();
             }}
             onDeleteButton={props.onDeleteButton}

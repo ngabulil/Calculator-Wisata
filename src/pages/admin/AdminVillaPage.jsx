@@ -105,6 +105,7 @@ const AdminVillaPage = () => {
               if (formActive) {
                 updateVillaData(null);
                 navigate("/admin/villa");
+                handleGetVillas();
               }
               if (readVillaActive) {
                 setReadVillaActive(false);

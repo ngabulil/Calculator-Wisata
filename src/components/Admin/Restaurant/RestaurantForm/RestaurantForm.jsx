@@ -22,7 +22,7 @@ import {
 import toastConfig from "../../../../utils/toastConfig";
 import { useAdminRestaurantContext } from "../../../../context/Admin/AdminRestaurantContext";
 
-const RestaurantFormPage = () => {
+const RestaurantFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
   const { restaurantData } = useAdminRestaurantContext();
@@ -41,7 +41,6 @@ const RestaurantFormPage = () => {
       packages: restoPackage,
     };
 
-
     try {
       const res = await apiPostRestaurant(data);
 
@@ -50,7 +49,8 @@ const RestaurantFormPage = () => {
           toastConfig(
             "Restaurant Created",
             "Restaurant Berhasil Ditambahkan!",
-            "success"
+            "success",
+            props.onChange
           )
         );
       } else {
@@ -72,7 +72,7 @@ const RestaurantFormPage = () => {
       packages: restoPackage,
     };
 
-    console.log(data)
+    console.log(data);
 
     try {
       const res = await apiPutRestaurant(restaurantData.id, data);
@@ -82,7 +82,8 @@ const RestaurantFormPage = () => {
           toastConfig(
             "Restaurant Update",
             "Restaurant Berhasil Diubah!",
-            "success"
+            "success",
+            props.onChange
           )
         );
       } else {
@@ -135,6 +136,7 @@ const RestaurantFormPage = () => {
       <Button
         w={"full"}
         bg={"blue.500"}
+        mt={4}
         onClick={
           editFormActive ? handleRestaurantUpdate : handleRestaurantCreate
         }
@@ -207,7 +209,7 @@ const PackageFormList = (props) => {
   }, [props.isEdit, props.packagesValue]);
 
   return (
-    <VStack spacing={8} align="stretch">
+    <VStack spacing={4} align="stretch">
       {packages.map((pkg, index) => (
         <Box
           key={index}
@@ -327,7 +329,9 @@ const PackageFormList = (props) => {
       ))}
 
       <Button
+        w={"full"}
         leftIcon={<AddIcon />}
+        variant={"outline"}
         colorScheme="teal"
         onClick={handleAddPackage}
         alignSelf="flex-start"

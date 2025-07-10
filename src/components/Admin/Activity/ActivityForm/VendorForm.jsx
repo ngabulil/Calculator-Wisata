@@ -17,7 +17,7 @@ import {
 import toastConfig from "../../../../utils/toastConfig";
 import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
 
-const VendorFormPage = () => {
+const VendorFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
   const { vendorData } = useAdminActivityContext();
@@ -42,7 +42,8 @@ const VendorFormPage = () => {
           toastConfig(
             "Vendor Created",
             "Vendor Berhasil Ditambahkan!",
-            "success"
+            "success",
+            props.onChange
           )
         );
       } else {
@@ -66,7 +67,12 @@ const VendorFormPage = () => {
 
       if (res.status === 200) {
         toast(
-          toastConfig("Vendor Update", "Vendor Berhasil Diubah!", "success")
+          toastConfig(
+            "Vendor Update",
+            "Vendor Berhasil Diubah!",
+            "success",
+            props.onChange
+          )
         );
       } else {
         toast(toastConfig("Update Failed", "Vendor Gagal Diubah", "error"));

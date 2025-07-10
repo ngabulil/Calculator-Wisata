@@ -180,9 +180,19 @@ const AdminActivityPage = () => {
         </Flex>
         {formActive ? (
           mode == "activity" ? (
-            <ActivityFormPage />
+            <ActivityFormPage
+              onChange={() => {
+                setFormActive(false);
+                handleGetActivity();
+              }}
+            />
           ) : (
-            <VendorFormPage />
+            <VendorFormPage
+              onChange={() => {
+                setFormActive(false);
+                handleGetVendors();
+              }}
+            />
           )
         ) : (
           <Flex gap={6}>

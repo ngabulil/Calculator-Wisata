@@ -1,4 +1,4 @@
-const toastConfig = (title, description, status) => {
+const toastConfig = (title, description, status, onClose) => {
   return {
     title: title,
     status: status,
@@ -6,6 +6,7 @@ const toastConfig = (title, description, status) => {
     duration: 3000,
     isClosable: true,
     position: "top-right",
+    onCloseComplete: onClose,
   };
 };
 export default toastConfig;

@@ -123,7 +123,13 @@ const AdminPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <PackageFormPage />
+          <PackageFormPage
+            onChange={() => {
+              setFormActive(false);
+              handleGetAllPackageFull();
+              console.log("Package form closed and packages updated."); // Debugging log)
+            }}
+          />
         ) : readPackageActive ? (
           <PackageRead />
         ) : (

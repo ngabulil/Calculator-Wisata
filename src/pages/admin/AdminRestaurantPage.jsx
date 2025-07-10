@@ -130,7 +130,12 @@ const AdminRestaurantPage = () => {
           </Button>
         </Flex>
         {formActive ? (
-          <RestaurantFormPage />
+          <RestaurantFormPage
+            onChange={() => {
+              setFormActive(false);
+              handleGetAllRestaurant();
+            }}
+          />
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>

@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { PopoverButton } from "../../../PopoverButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
+import formatRupiah from "../../../../utils/rupiahFormat";
 
 const ActivityCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -156,7 +157,7 @@ const AppPriceList = ({ data }) => {
             <Tr key={index}>
               <Td>{item.tourist_type}</Td>
               <Td>{item.category}</Td>
-              <Td isNumeric>{item.price}</Td>
+              <Td isNumeric>{formatRupiah(item.price)}</Td>
             </Tr>
           ))}
         </Tbody>
