@@ -103,15 +103,15 @@ const AdminPage = () => {
           <Button
             bg={"blue.500"}
             onClick={() => {
-              setFormActive(!formActive);
-
               if (formActive) {
                 updatePackageFull([]);
+                navigate("/admin/paket");
               }
               if (readPackageActive) {
                 setReadPackageActive(false);
+              } else {
+                setFormActive(!formActive);
               }
-              navigate("/admin/paket");
             }}
           >
             {formActive || readPackageActive ? (
@@ -180,7 +180,7 @@ const AdminPage = () => {
       </Flex>
 
       {/* Pagination */}
-      { currentPackages.length > 0 && !formActive && !readPackageActive && (
+      {currentPackages.length > 0 && !formActive && !readPackageActive && (
         <Box
           mt={6}
           display="flex"

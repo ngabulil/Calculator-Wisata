@@ -132,7 +132,7 @@ const AdminHotelPage = () => {
                   <HotelCard
                     key={index}
                     flexGrow={currentHotels.length % 4 != 0 ? 0 : 1}
-                    photoLink={`https://picsum.photos/id/2${index}/200/300`}
+                    photoLink={hotel.photoLink}
                     name={hotel.hotelName}
                     stars={hotel.stars}
                     seasons={hotel.seasons}

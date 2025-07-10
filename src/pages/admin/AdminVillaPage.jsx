@@ -134,7 +134,7 @@ const AdminVillaPage = () => {
                 <VillaCard
                   key={index}
                   flexGrow={currentVillas % 4 != 0 ? 0 : 1}
-                  photoLink={`https://picsum.photos/2${index + 6}1/300`}
+                  photoLink={villa.photoLink}
                   name={villa.villaName}
                   stars={villa.stars}
                   honeymoonPackage={villa.honeymoonPackage}

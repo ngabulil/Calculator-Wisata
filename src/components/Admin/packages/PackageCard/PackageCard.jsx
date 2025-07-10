@@ -40,11 +40,11 @@ const AppTitleDescription = (props) => {
   const navigate = useNavigate();
   return (
     <Flex direction={"column"} gap={2} w={"full"}>
-      <img
+      {/* <img
         alt="photo-detail"
         src="https://picsum.photos/200/300"
         className="w-full h-[180px] rounded-[8px] object-cover"
-      />
+      /> */}
       <Flex direction={"column"} gap={2}>
         <Flex
           direction={"row"}
@@ -64,7 +64,7 @@ const AppTitleDescription = (props) => {
             onOpenButton={props.onOpenButton}
           />
         </Flex>
-        <Text fontSize={"12px"} noOfLines={4}>
+        <Text fontSize={"14px"} color={"gray.500"} noOfLines={4}>
           {props.description}
         </Text>
       </Flex>

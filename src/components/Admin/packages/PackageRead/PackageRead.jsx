@@ -10,11 +10,10 @@ import {
   Container,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
-import { PopoverButton } from "../../../PopoverButton";
+
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 import { parsePaketDays } from "../../../../utils/parseOnePaket";
 import { useEffect, useState } from "react";
-import App from "../../../../App";
 
 const PackageRead = () => {
   const { onePackageFull } = useAdminPackageContext();
@@ -186,11 +185,11 @@ const AppTitleDescription = (props) => {
   return (
     <Flex direction={"column"} gap={2}>
       <Flex direction={"row"} gap={5}>
-        <img
+        {/* <img
           alt="photo-detail"
           src="https://picsum.photos/200/300"
           className="w-[40%] h-[300px] rounded-[12px] object-cover"
-        />
+        /> */}
         <Flex direction={"column"} gap={"15px"} w={"60%"} flexShrink={"1"}>
           <Text fontSize={"32px"} fontWeight={"bold"}>
             {props.title || "Bali Paket"}
