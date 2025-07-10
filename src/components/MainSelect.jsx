@@ -99,6 +99,7 @@ const MainSelect = ({ options = [], value, onChange, placeholder }) => {
       onChange={onChange}
       placeholder={placeholder}
       styles={customSelectStyles}
+      isClearable
       isSearchable
     />
   );

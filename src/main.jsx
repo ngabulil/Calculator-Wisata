@@ -13,6 +13,8 @@ import CheckoutContextProvider from "./context/CheckoutContext";
 import TransportContextProvider from "./context/TransportContext";
 import ExpensesContextProvider from "./context/ExpensesContext";
 import AdminProviderContext from "./context/Admin/AdminProviderContext";
+import PackageContextProvider from "./context/PackageContext";
+import TourContextProvider from "./context/TourContext";
 
 const config = {
   initialColorMode: "dark", // dark default
@@ -24,19 +26,23 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <ChakraProvider theme={theme}>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <CalculatorProvider>
-      <CheckoutContextProvider>
-        <AkomodasiContextProvider>
-          <TransportContextProvider>
-            <ExpensesContextProvider>
-            <AdminProviderContext>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </AdminProviderContext>
-            </ExpensesContextProvider>
-          </TransportContextProvider>
-        </AkomodasiContextProvider>
-      </CheckoutContextProvider>
+      <PackageContextProvider>
+        <CheckoutContextProvider>
+          <AkomodasiContextProvider>
+            <TourContextProvider>
+              <TransportContextProvider>
+                <ExpensesContextProvider>
+                  <AdminProviderContext>
+                    <BrowserRouter>
+                      <App />
+                    </BrowserRouter>
+                  </AdminProviderContext>
+                </ExpensesContextProvider>
+              </TransportContextProvider>
+            </TourContextProvider>
+          </AkomodasiContextProvider>
+        </CheckoutContextProvider>
+      </PackageContextProvider>
     </CalculatorProvider>
   </ChakraProvider>
 );

@@ -15,14 +15,14 @@ const Navbar = () => {
         <Text fontWeight="bold">Calculator Wisata</Text>
         <Flex gap={6}>
           <NavLink to="/calculator" style={linkStyle}>
-            Akomodasi
+            Calculator
           </NavLink>
-          <NavLink to="/tour-packages" style={linkStyle}>
+          {/* <NavLink to="/tour-packages" style={linkStyle}>
             Tour Packages
           </NavLink>
           <NavLink to="/transport" style={linkStyle}>
             Transport
-          </NavLink>
+          </NavLink> */}
           <NavLink to="/checkout" style={linkStyle}>
             Checkout
           </NavLink>
