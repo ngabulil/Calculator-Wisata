@@ -26,7 +26,7 @@ const Navbar = () => {
           <NavLink to="/checkout" style={linkStyle}>
             Checkout
           </NavLink>
-          <NavLink to="/admin" style={linkStyle}>
+          <NavLink to="/admin/paket" style={linkStyle}>
             Admin
           </NavLink>
         </Flex>
