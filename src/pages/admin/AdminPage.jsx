@@ -135,35 +135,52 @@ const AdminPage = () => {
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-              {currentPackages.map((packageItem, index) => {
-                return (
-                  <PackageCard
-                    flexGrow={currentPackages.length % 4 != 0 ? 0 : 1}
-                    key={index}
-                    title={packageItem.name}
-                    description={packageItem.description}
-                    onOpenButton={() => {
-                      setReadPackageActive(true);
-                      updatePackageFull(packageItem);
-                    }}
-                    onDeleteButton={() =>
-                      handleDeletePackageFull(packageItem.id)
-                    }
-                    onEditButton={() => {
-                      setFormActive(true);
-                      updateHeadline(packageItem.name, packageItem.description);
-                      updatePackageFull(packageItem);
-                    }}
-                  />
-                );
-              })}
+              {currentPackages.length > 0 ? (
+                currentPackages.map((packageItem, index) => {
+                  return (
+                    <PackageCard
+                      flexGrow={currentPackages.length % 4 != 0 ? 0 : 1}
+                      key={index}
+                      title={packageItem.name}
+                      description={packageItem.description}
+                      onOpenButton={() => {
+                        setReadPackageActive(true);
+                        updatePackageFull(packageItem);
+                      }}
+                      onDeleteButton={() =>
+                        handleDeletePackageFull(packageItem.id)
+                      }
+                      onEditButton={() => {
+                        setFormActive(true);
+                        updateHeadline(
+                          packageItem.name,
+                          packageItem.description
+                        );
+                        updatePackageFull(packageItem);
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                <Box
+                  w="full"
+                  textAlign="center"
+                  bg={"gray.800"}
+                  p={5}
+                  rounded={2}
+                >
+                  <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                    Paket Tidak Ditemukan
+                  </Text>
+                </Box>
+              )}
             </Flex>
           </Flex>
         )}
       </Flex>
 
       {/* Pagination */}
-      {!formActive && !readPackageActive && (
+      { currentPackages.length > 0 && !formActive && !readPackageActive && (
         <Box
           mt={6}
           display="flex"

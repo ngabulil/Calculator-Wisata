@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 
@@ -125,7 +125,7 @@ const AdminDestinationPage = () => {
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {currentDestination.length > 0 &&
+            {currentDestination.length > 0 ? (
               currentDestination.map((destination, index) => {
                 return (
                   <DestinationCard
@@ -144,13 +144,26 @@ const AdminDestinationPage = () => {
                     }}
                   />
                 );
-              })}
+              })
+            ) : (
+              <Box
+                w="full"
+                textAlign="center"
+                bg={"gray.800"}
+                p={5}
+                rounded={2}
+              >
+                <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                  Destinasi Tidak Ditemukan
+                </Text>
+              </Box>
+            )}
           </Flex>
         )}
       </Flex>
 
       {/* Pagination */}
-      {!formActive && (
+      {currentDestination.length > 0 && !formActive && (
         <Box
           mt={6}
           display="flex"

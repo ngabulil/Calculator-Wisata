@@ -85,7 +85,12 @@ const VillaRead = () => {
           stars={villasData.stars}
         />
 
-        <Flex gap={4} alignItems={"start"} justifyContent={"start"}>
+        <Flex
+          gap={4}
+          alignItems={"start"}
+          justifyContent={"start"}
+          flexWrap={"wrap"}
+        >
           {Object.keys(villasData).length != 0 &&
             villasData?.roomType.map((room, index) => {
               return (

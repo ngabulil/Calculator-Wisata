@@ -5,6 +5,7 @@ import {
   Container,
   Select,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
@@ -197,8 +198,8 @@ const AdminActivityPage = () => {
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"20px"} wrap={"wrap"} w={"full"}>
-              {mode == "activity"
-                ? currentActivities.length != 0 &&
+              {mode == "activity" ? (
+                currentActivities.length != 0 ? (
                   currentActivities.map((act) => {
                     return (
                       <ActivityCard
@@ -219,29 +220,55 @@ const AdminActivityPage = () => {
                       />
                     );
                   })
-                : currentActivities.length != 0 &&
-                  currentActivities.map((ven) => {
-                    return (
-                      <VendorCard
-                        key={ven.id}
-                        name={ven.name}
-                        onEditButton={() => {
-                          updateVendorData(ven);
-                          setFormActive(true);
-                        }}
-                        onDeleteButton={() => {
-                          handleDeleteVendor(ven.id);
-                          handleGetVendors();
-                        }}
-                      />
-                    );
-                  })}
+                ) : (
+                  <Box
+                    w="full"
+                    textAlign="center"
+                    bg={"gray.800"}
+                    p={5}
+                    rounded={2}
+                  >
+                    <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                      Aktivitas Tidak Ditemukan
+                    </Text>
+                  </Box>
+                )
+              ) : currentActivities.length != 0 ? (
+                currentActivities.map((ven) => {
+                  return (
+                    <VendorCard
+                      key={ven.id}
+                      name={ven.name}
+                      onEditButton={() => {
+                        updateVendorData(ven);
+                        setFormActive(true);
+                      }}
+                      onDeleteButton={() => {
+                        handleDeleteVendor(ven.id);
+                        handleGetVendors();
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                <Box
+                  w="full"
+                  textAlign="center"
+                  bg={"gray.800"}
+                  p={5}
+                  rounded={2}
+                >
+                  <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                    Vendor Tidak Ditemukan
+                  </Text>
+                </Box>
+              )}
             </Flex>
           </Flex>
         )}
       </Flex>
       {/* Pagination */}
-      {!formActive && (
+      {currentActivities.length > 0 && !formActive && (
         <Box
           mt={6}
           display="flex"

@@ -139,30 +139,44 @@ const AdminRestaurantPage = () => {
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-              {currentRestaurant.map((resto, index) => {
-                return (
-                  <RestaurantCard
-                    key={index}
-                    id={resto.id}
-                    name={resto.resto_name}
-                    packages={resto.packages}
-                    onEditButton={() => {
-                      updateRestaurantData(resto);
-                      setFormActive(true);
-                    }}
-                    onDeleteButton={() => {
-                      handleDeleteRestaurant(resto.id);
-                      handleGetAllRestaurant();
-                    }}
-                  />
-                );
-              })}
+              {currentRestaurant.length > 0 ? (
+                currentRestaurant.map((resto, index) => {
+                  return (
+                    <RestaurantCard
+                      key={index}
+                      id={resto.id}
+                      name={resto.resto_name}
+                      packages={resto.packages}
+                      onEditButton={() => {
+                        updateRestaurantData(resto);
+                        setFormActive(true);
+                      }}
+                      onDeleteButton={() => {
+                        handleDeleteRestaurant(resto.id);
+                        handleGetAllRestaurant();
+                      }}
+                    />
+                  );
+                })
+              ) : (
+                <Box
+                  w="full"
+                  textAlign="center"
+                  bg={"gray.800"}
+                  p={5}
+                  rounded={2}
+                >
+                  <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                    Restaurant Tidak Ditemukan
+                  </Text>
+                </Box>
+              )}
             </Flex>
           </Flex>
         )}
       </Flex>
       {/* Pagination */}
-      {!formActive && (
+      {currentRestaurant.length > 0 && !formActive && (
         <Box
           mt={6}
           display="flex"

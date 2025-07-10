@@ -129,36 +129,50 @@ const AdminVillaPage = () => {
           <VillaRead />
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-            {currentVillas.map((villa, index) => (
-              <VillaCard
-                key={index}
-                flexGrow={currentVillas % 4 != 0 ? 0 : 1}
-                photoLink={`https://picsum.photos/2${index + 6}1/300`}
-                name={villa.villaName}
-                stars={villa.stars}
-                honeymoonPackage={villa.honeymoonPackage}
-                extraBed={villa.extrabed}
-                seasons={villa.seasons}
-                roomType={villa.roomType}
-                contractUntil={villa.contractUntil}
-                onEditButton={() => {
-                  updateVillaData(villa);
-                  setFormActive(true);
-                }}
-                onDeleteButton={() => {
-                  handleDeleteVilla(villa.id);
-                  handleGetVillas();
-                }}
-                onOpenButton={() => {
-                  updateVillaData(villa);
-                  setReadVillaActive(true);
-                }}
-              />
-            ))}
+            {currentVillas.length > 0 ? (
+              currentVillas.map((villa, index) => (
+                <VillaCard
+                  key={index}
+                  flexGrow={currentVillas % 4 != 0 ? 0 : 1}
+                  photoLink={`https://picsum.photos/2${index + 6}1/300`}
+                  name={villa.villaName}
+                  stars={villa.stars}
+                  honeymoonPackage={villa.honeymoonPackage}
+                  extraBed={villa.extrabed}
+                  seasons={villa.seasons}
+                  roomType={villa.roomType}
+                  contractUntil={villa.contractUntil}
+                  onEditButton={() => {
+                    updateVillaData(villa);
+                    setFormActive(true);
+                  }}
+                  onDeleteButton={() => {
+                    handleDeleteVilla(villa.id);
+                    handleGetVillas();
+                  }}
+                  onOpenButton={() => {
+                    updateVillaData(villa);
+                    setReadVillaActive(true);
+                  }}
+                />
+              ))
+            ) : (
+              <Box
+                w="full"
+                textAlign="center"
+                bg={"gray.800"}
+                p={5}
+                rounded={2}
+              >
+                <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                  Villa Tidak Ditemukan
+                </Text>
+              </Box>
+            )}
           </Flex>
         )}
 
-        {!formActive && (
+        {currentVillas.length > 0 && !formActive && !readVillaActive && (
           <Box mt={6} display="flex" justifyContent="center">
             <ReactPaginate
               pageCount={pageCount}

@@ -127,35 +127,49 @@ const AdminHotelPage = () => {
         ) : (
           <>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-              {currentHotels.map((hotel, index) => (
-                <HotelCard
-                  key={index}
-                  flexGrow={currentHotels.length % 4 != 0 ? 0 : 1}
-                  photoLink={`https://picsum.photos/id/2${index}/200/300`}
-                  name={hotel.hotelName}
-                  stars={hotel.stars}
-                  seasons={hotel.seasons}
-                  roomType={hotel.roomType}
-                  extraBed={hotel.extrabed}
-                  contractUntil={hotel.contractUntil}
-                  onEditButton={() => {
-                    updateHotelData(hotel);
-                    setFormActive(true);
-                  }}
-                  onDeleteButton={() => {
-                    handleDeleteHotel(hotel.id);
-                    handleGetHotels();
-                  }}
-                  onOpenButton={() => {
-                    updateHotelData(hotel);
-                    setReadHotelActive(true);
-                  }}
-                />
-              ))}
+              {currentHotels.length > 0 ? (
+                currentHotels.map((hotel, index) => (
+                  <HotelCard
+                    key={index}
+                    flexGrow={currentHotels.length % 4 != 0 ? 0 : 1}
+                    photoLink={`https://picsum.photos/id/2${index}/200/300`}
+                    name={hotel.hotelName}
+                    stars={hotel.stars}
+                    seasons={hotel.seasons}
+                    roomType={hotel.roomType}
+                    extraBed={hotel.extrabed}
+                    contractUntil={hotel.contractUntil}
+                    onEditButton={() => {
+                      updateHotelData(hotel);
+                      setFormActive(true);
+                    }}
+                    onDeleteButton={() => {
+                      handleDeleteHotel(hotel.id);
+                      handleGetHotels();
+                    }}
+                    onOpenButton={() => {
+                      updateHotelData(hotel);
+                      setReadHotelActive(true);
+                    }}
+                  />
+                ))
+              ) : (
+                <Box
+                  w="full"
+                  textAlign="center"
+                  bg={"gray.800"}
+                  p={5}
+                  rounded={2}
+                >
+                  <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                    Hotel Tidak Ditemukan
+                  </Text>
+                </Box>
+              )}
             </Flex>
 
             {/* Pagination */}
-            {!formActive && !readHotelActive && (
+            {currentHotels.length != 0 && !formActive && !readHotelActive && (
               <Box
                 mt={6}
                 display="flex"

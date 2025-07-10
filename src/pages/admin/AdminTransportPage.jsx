@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import TransportCard from "../../components/Admin/Transport/TransportCard/TransportCard";
@@ -97,7 +97,7 @@ const AdminTransportPage = () => {
         >
           {!formActive && (
             <SearchBar
-              placeholder="Search Packages"
+              placeholder="Search Transport"
               value={""}
               onChange={(e) => {
                 handleSearch(e.target.value);
@@ -131,7 +131,7 @@ const AdminTransportPage = () => {
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {currentTransports.length > 0 &&
+            {currentTransports.length > 0 ? (
               currentTransports.map((transport, index) => {
                 return (
                   <TransportCard
@@ -150,13 +150,26 @@ const AdminTransportPage = () => {
                     }}
                   />
                 );
-              })}
+              })
+            ) : (
+              <Box
+                w="full"
+                textAlign="center"
+                bg={"gray.800"}
+                p={5}
+                rounded={2}
+              >
+                <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                  Transportasi Tidak Ditemukan
+                </Text>
+              </Box>
+            )}
           </Flex>
         )}
       </Flex>
 
       {/* Pagination */}
-      {!formActive && (
+      {currentTransports > 0 && !formActive && (
         <Box
           mt={6}
           display="flex"
