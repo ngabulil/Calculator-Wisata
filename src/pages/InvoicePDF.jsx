@@ -244,7 +244,7 @@ useImperativeHandle(ref, () => ({
 
         setItineraryData(prevData => ({
             ...prevData,
-            code: tourCode || prevData.code, // Gunakan tourCode dari konteks, atau default jika kosong
+            code: tourCode || prevData.code,
             totalFee: formatCurrency(expensesGrandTotal),
             days: mappedExpensesDays,
             hotelChoices: akomodasiDays.flatMap((day) => {
@@ -330,11 +330,11 @@ useImperativeHandle(ref, () => ({
                 <CostBreakDown
                     hotelData={hotelData}
                     transportData={transportData}
-                    additionalData={itineraryData.additionalData} //
-                    totalAdditional={itineraryData.totalAdditional} //
+                    additionalData={itineraryData.additionalData} 
+                    totalAdditional={itineraryData.totalAdditional} 
                     grandTotal={itineraryData.grandTotal} //
-                    perPax={itineraryData.perPax} //
-                    selling={itineraryData.selling} //
+                    perPax={itineraryData.perPax} 
+                    selling={itineraryData.selling} 
                     formatCurrency={formatCurrency}
                 />
             </Box>

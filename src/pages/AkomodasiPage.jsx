@@ -1,287 +1,241 @@
-import React, { useState, useEffect } from "react";
 import {
-  Container,
   Box,
-  Text,
-  VStack,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  HStack,
+  Tag,
+  TagLabel,
+  IconButton,
+  Button,
   Tabs,
+  TabList,
+  Tab,
   TabPanels,
   TabPanel,
-  useColorModeValue,
-  Button,
-  HStack,
-  Select,
-  Input,
+  Text
 } from "@chakra-ui/react";
-import HotelCard from "../components/Calculator/akomodasi/HotelCard";
-import VillaCard from "../components/Calculator/akomodasi/VillaCard";
-import InfoCard from "../components/Calculator/akomodasi/InfoCard";
-import { useAkomodasiContext } from "../context/AkomodasiContext";
-import { useCheckoutContext } from "../context/CheckoutContext";
+import { useState, useEffect } from "react";
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import MainSelect from "../components/MainSelect";
 import { usePackageContext } from "../context/PackageContext";
+import { useCheckoutContext } from "../context/CheckoutContext";
+import AkomodasiTabContent from "../components/Calculator/tab-content/AkomodasiTabContent";
+import TransportTabContent from "../components/Calculator/tab-content/TransportTabContent";
 
 const AkomodasiPage = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
-  const { setAkomodasiTotal } = useCheckoutContext();
-  const { selectedPackage, setSelectedPackage } = usePackageContext();
-  const days = selectedPackage.days || [];
+  const { packagesData, selectedPackage, setSelectedPackage, getPackages } = usePackageContext();
+  const { setAkomodasiTotal, setTransportTotal, setTourTotal, setRestaurantTotal } = useCheckoutContext();
+  
+  const { days = [], name = "", description = "", title = "", id = null } = selectedPackage;
+  const [activeDayId, setActiveDayId] = useState(1);
 
+  // Fetch packages data when component mounts
   useEffect(() => {
-    getHotels();
-    getVillas();
-    getAdditional();
+    getPackages();
   }, []);
 
+  const handleAddDay = () => {
+    const newId = days.length + 1;
+    const newDay = {
+      id: newId,
+      name: `Day ${newId}`,
+      description_day: "",
+      hotels: [],
+      villas: [],
+      akomodasi_additionals: [],
+      destinations: [],
+      activities: [],
+      restaurants: [],
+      mobils: [],
+      transport_additionals: [],
+    };
+    setSelectedPackage((prev) => ({
+      ...prev,
+      days: [...prev.days, newDay],
+    }));
+    setActiveDayId(newId);
+  };
+
+  // Calculate totals from all days
   useEffect(() => {
-    let total = 0;
+    const days = selectedPackage?.days || [];
+
+    let akomodasi = 0;
+    let transport = 0;
+    let tour = 0;
+    let restaurant = 0;
 
     days.forEach((day) => {
-      const totalHotel = (day.hotels || []).reduce(
-        (sum, h) =>
-          sum +
-          (h.jumlahKamar || 0) * (h.hargaPerKamar || 0) +
-          (h.useExtrabed ? (h.jumlahExtrabed || 0) * (h.hargaExtrabed || 0) : 0),
-        0
-      );
+      akomodasi += (day.hotels || []).reduce((sum, h) => sum + (h.total || 0), 0);
+      akomodasi += (day.villas || []).reduce((sum, v) => sum + (v.total || 0), 0);
+      akomodasi += (day.akomodasi_additionals || []).reduce((sum, a) => sum + (a.total || 0), 0);
 
-      const totalVilla = (day.villas || []).reduce(
-        (sum, v) =>
-          sum +
-          (v.jumlahKamar || 0) * (v.hargaPerKamar || 0) +
-          (v.useExtrabed ? (v.jumlahExtrabed || 0) * (v.hargaExtrabed || 0) : 0),
-        0
-      );
+      transport += (day.mobils || []).reduce((sum, m) => sum + (m.total || 0), 0);
+      transport += (day.transport_additionals || []).reduce((sum, t) => sum + (t.total || 0), 0);
 
-      const totalAdditional = (day.akomodasi_additionals || []).reduce(
-        (sum, a) => sum + (a.harga || 0) * (a.jumlah || 0),
-        0
-      );
+      tour += (day.destinations || []).reduce((sum, d) => sum + (d.total || 0), 0);
+      tour += (day.activities || []).reduce((sum, a) => sum + (a.total || 0), 0);
 
-      const subTotal = totalHotel + totalVilla + totalAdditional;
-      const markup = day.markup || {};
-      const markupValue =
-        markup.type === "percent"
-          ? ((markup.value || 0) * subTotal) / 100
-          : markup.value || 0;
-
-      total += subTotal + markupValue;
+      restaurant += (day.restaurants || []).reduce((sum, r) => sum + (r.total || 0), 0);
     });
 
-    setAkomodasiTotal(total);
-  }, [days]);
+    setAkomodasiTotal(akomodasi);
+    setTransportTotal(transport);
+    setTourTotal(tour);
+    setRestaurantTotal(restaurant);
+  }, [selectedPackage, setAkomodasiTotal, setTransportTotal, setTourTotal, setRestaurantTotal]);
 
-  const cardBg = useColorModeValue("gray.700", "gray.800");
-  const textColor = useColorModeValue("white", "white");
+  const handleDeleteDay = (id) => {
+    const filtered = days.filter((d) => d.id !== id);
+    setSelectedPackage((prev) => ({ ...prev, days: filtered }));
+    if (activeDayId === id && filtered.length > 0) {
+      setActiveDayId(filtered[0].id);
+    }
+  };
 
   return (
-    <Container maxW="7xl" py={6} px={0}>
-      <Box bg={cardBg} rounded="lg" p={6} boxShadow="lg" color={textColor}>
-        <Text fontSize="xl" fontWeight="bold" mb={4}>
-          Akomodasi
-        </Text>
+    <Box bg="gray.700" p={4} borderRadius="md" mb={6}>
+      <FormControl mb={4}>
+        <FormLabel color="white">Pilih Paket</FormLabel>
+        <MainSelect
+          options={packagesData.map((p) => ({
+            value: p.id,
+            label: p.name,
+          }))}
+          value={id ? { value: id, label: title } : null}
+          onChange={(selected) => {
+            const found = packagesData.find((p) => p.id === selected.value);
+            setSelectedPackage({
+              ...found,
+              title: found.name,
+              name: found.name,
+              days: found.days || [],
+            });
+            setActiveDayId(1);
+          }}
+          placeholder="Pilih Paket"
+        />
+      </FormControl>
 
-        <Tabs index={activeIndex} onChange={setActiveIndex}>
-          <TabPanels>
-            {days.map((day, index) => {
-              const markup = day.markup || { type: "percent", value: 0 };
-              const totalHotel = (day.hotels || []).reduce(
-                (sum, h) =>
-                  sum +
-                  (h.jumlahKamar || 0) * (h.hargaPerKamar || 0) +
-                  (h.useExtrabed
-                    ? (h.jumlahExtrabed || 0) * (h.hargaExtrabed || 0)
-                    : 0),
-                0
+      <FormControl mb={4}>
+        <FormLabel color="white">Nama Paket</FormLabel>
+        <Input
+          placeholder="Masukkan nama package"
+          bg="gray.600"
+          color="white"
+          value={name}
+          onChange={(e) =>
+            setSelectedPackage((prev) => ({
+              ...prev,
+              name: e.target.value,
+            }))
+          }
+        />
+      </FormControl>
+
+      <FormControl mb={4}>
+        <FormLabel color="white">Description</FormLabel>
+        <Textarea
+          placeholder="Deskripsi paket"
+          bg="gray.600"
+          color="white"
+          value={description}
+          onChange={(e) =>
+            setSelectedPackage((prev) => ({
+              ...prev,
+              description: e.target.value,
+            }))
+          }
+        />
+      </FormControl>
+
+      {/* DAYS */}
+      <Box mt={8}>
+        <HStack spacing={3} mb={3} flexWrap="wrap">
+          {days.map((day) => (
+            <HStack key={day.id} spacing={1}>
+              <Tag
+                size="lg"
+                borderRadius="full"
+                variant="solid"
+                bg={day.id === activeDayId ? "blue.300" : "gray.600"}
+                cursor="pointer"
+                onClick={() => setActiveDayId(day.id)}
+              >
+                <TagLabel>{day.name}</TagLabel>
+              </Tag>
+              <IconButton
+                size="xs"
+                icon={<DeleteIcon />}
+                aria-label="Hapus Day"
+                colorScheme="red"
+                onClick={() => handleDeleteDay(day.id)}
+              />
+            </HStack>
+          ))}
+          <Button
+            size="sm"
+            colorScheme="gray"
+            leftIcon={<AddIcon />}
+            onClick={handleAddDay}
+          >
+            Tambah Day
+          </Button>
+        </HStack>
+
+        {/* DESKRIPSI DAY */}
+        <FormControl>
+          <FormLabel color="white">
+            Deskripsi untuk {days.find((d) => d.id === activeDayId)?.name}
+          </FormLabel>
+          <Textarea
+            placeholder="Deskripsi hari..."
+            bg="gray.600"
+            color="white"
+            value={
+              days.find((d) => d.id === activeDayId)?.description_day || ""
+            }
+            onChange={(e) => {
+              const updatedDays = days.map((day) =>
+                day.id === activeDayId
+                  ? { ...day, description_day: e.target.value }
+                  : day
               );
-              const totalVilla = (day.villas || []).reduce(
-                (sum, v) =>
-                  sum +
-                  (v.jumlahKamar || 0) * (v.hargaPerKamar || 0) +
-                  (v.useExtrabed
-                    ? (v.jumlahExtrabed || 0) * (v.hargaExtrabed || 0)
-                    : 0),
-                0
-              );
-              const totalAdditional = (day.akomodasi_additionals || []).reduce(
-                (sum, a) => sum + (a.harga || 0) * (a.jumlah || 0),
-                0
-              );
-              const subTotal = totalHotel + totalVilla + totalAdditional;
-              const markupNominal =
-                markup.type === "percent"
-                  ? (markup.value || 0) * subTotal / 100
-                  : markup.value || 0;
-              const total = subTotal + markupNominal;
+              setSelectedPackage((prev) => ({
+                ...prev,
+                days: updatedDays,
+              }));
+            }}
+          />
+        </FormControl>
 
-              return (
-                <TabPanel key={index} px={0}>
-                  <VStack spacing={6} align="stretch">
-                    {/* HOTEL LIST */}
-                    {(day.hotels || []).map((hotel, i) => (
-                      <HotelCard
-                        key={i}
-                        index={i}
-                        data={hotel}
-                        onChange={(newHotel) => {
-                          const updated = [...days];
-                          updated[index].hotels[i] = newHotel;
-                          setSelectedPackage((prev) => ({
-                            ...prev,
-                            days: updated,
-                          }));
-                        }}
-                        onDelete={() => {
-                          const updated = [...days];
-                          updated[index].hotels.splice(i, 1);
-                          setSelectedPackage((prev) => ({
-                            ...prev,
-                            days: updated,
-                          }));
-                        }}
-                      />
-                    ))}
-                    <Button
-                      colorScheme="teal"
-                      size="sm"
-                      onClick={() => {
-                        const updated = [...days];
-                        updated[index].hotels = [...(day.hotels || []), {}];
-                        setSelectedPackage((prev) => ({ ...prev, days: updated }));
-                      }}
-                    >
-                      Tambah Hotel
-                    </Button>
-
-                    {/* VILLA LIST */}
-                    {(day.villas || []).map((villa, i) => (
-                      <VillaCard
-                        key={i}
-                        index={i}
-                        data={villa}
-                        onChange={(newVilla) => {
-                          const updated = [...days];
-                          updated[index].villas[i] = newVilla;
-                          setSelectedPackage((prev) => ({
-                            ...prev,
-                            days: updated,
-                          }));
-                        }}
-                        onDelete={() => {
-                          const updated = [...days];
-                          updated[index].villas.splice(i, 1);
-                          setSelectedPackage((prev) => ({
-                            ...prev,
-                            days: updated,
-                          }));
-                        }}
-                      />
-                    ))}
-                    <Button
-                      colorScheme="teal"
-                      size="sm"
-                      onClick={() => {
-                        const updated = [...days];
-                        updated[index].villas = [...(day.villas || []), {}];
-                        setSelectedPackage((prev) => ({ ...prev, days: updated }));
-                      }}
-                    >
-                      Tambah Villa
-                    </Button>
-
-                    {/* ADDITIONAL LIST */}
-                    {(day.akomodasi_additionals || []).map((item, i) => (
-                      <InfoCard
-                        key={i}
-                        index={i}
-                        data={item}
-                        onChange={(newInfo) => {
-                          const updated = [...days];
-                          updated[index].akomodasi_additionals[i] = newInfo;
-                          setSelectedPackage((prev) => ({
-                            ...prev,
-                            days: updated,
-                          }));
-                        }}
-                        onDelete={() => {
-                          const updated = [...days];
-                          updated[index].akomodasi_additionals.splice(i, 1);
-                          setSelectedPackage((prev) => ({
-                            ...prev,
-                            days: updated,
-                          }));
-                        }}
-                      />
-                    ))}
-                    <Button
-                      colorScheme="teal"
-                      size="sm"
-                      onClick={() => {
-                        const updated = [...days];
-                        updated[index].akomodasi_additionals = [
-                          ...(day.akomodasi_additionals || []),
-                          {},
-                        ];
-                        setSelectedPackage((prev) => ({ ...prev, days: updated }));
-                      }}
-                    >
-                      Tambah Tambahan
-                    </Button>
-
-                    {/* MARKUP */}
-                    <Box>
-                      <Text fontWeight="bold" mb={2}>
-                        Markup
-                      </Text>
-                      <HStack>
-                        <Select
-                          w="150px"
-                          value={markup.type}
-                          onChange={(e) => {
-                            const updated = [...days];
-                            updated[index].markup = {
-                              ...markup,
-                              type: e.target.value,
-                            };
-                            setSelectedPackage((prev) => ({
-                              ...prev,
-                              days: updated,
-                            }));
-                          }}
-                        >
-                          <option value="percent">Persen (%)</option>
-                          <option value="amount">Nominal (Rp)</option>
-                        </Select>
-                        <Input
-                          w="150px"
-                          value={markup.value}
-                          onChange={(e) => {
-                            const updated = [...days];
-                            updated[index].markup = {
-                              ...markup,
-                              value: Number(e.target.value),
-                            };
-                            setSelectedPackage((prev) => ({
-                              ...prev,
-                              days: updated,
-                            }));
-                          }}
-                        />
-                      </HStack>
-                    </Box>
-
-                    {/* TOTAL */}
-                    <Box fontWeight="bold" mt={4}>
-                      Total Hari Ini: Rp {total.toLocaleString("id-ID")}
-                    </Box>
-                  </VStack>
-                </TabPanel>
-              );
-            })}
-          </TabPanels>
-        </Tabs>
+        {/* TABS PER HARI */}
+        <Box mt={6}>
+          <Tabs isFitted variant="enclosed">
+            <TabList mb="1em">
+              <Tab>Akomodasi</Tab>
+              <Tab>Tour</Tab>
+              <Tab>Transport</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel px={0}>
+                <AkomodasiTabContent
+                  dayIndex={days.findIndex((d) => d.id === activeDayId)}
+                />
+              </TabPanel>
+              <TabPanel>
+                <Text>Tour content (coming soon)</Text>
+              </TabPanel>
+              <TabPanel>
+                <TransportTabContent dayIndex={days.findIndex((d) => d.id === activeDayId)} />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
       </Box>
-    </Container>
+    </Box>
   );
 };
 
