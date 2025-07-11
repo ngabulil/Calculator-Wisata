@@ -13,9 +13,11 @@ import InvoicePDF from "./pages/InvoicePDF";
 import ExpensesPage from "./pages/ExpensesPage";
 import ItineraryPage from "./pages/ItineraryPDF";
 
+// Auth Pages
+import AuthLoginPage from "./pages/auth/AuthLoginPage";
+
 // Admin Pages
 import AdminPage from "./pages/admin/AdminPage";
-
 import AdminTransportPage from "./pages/admin/AdminTransportPage";
 import AdminHotelPage from "./pages/admin/AdminHotelPage";
 import AdminVillaPage from "./pages/admin/AdminVillaPage";
@@ -53,6 +55,8 @@ function App() {
     { path: "/pdf-itinerary", element: <ItineraryPage /> },
   ];
 
+  const authRoutes = [{ path: "/auth/login", element: <AuthLoginPage /> }];
+
   return (
     <Routes>
       {/* Redirect from root to calculator */}
@@ -65,6 +69,11 @@ function App() {
           path={path}
           element={<LayoutAdmin>{element}</LayoutAdmin>}
         />
+      ))}
+
+      {/* Auth Routes */}
+      {authRoutes.map(({ path, element }) => (
+        <Route key={path} path={path} element={element} />
       ))}
 
       {/* Public Routes */}
