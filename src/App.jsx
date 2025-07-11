@@ -25,6 +25,7 @@ import AdminPesananPage from "./pages/admin/AdminPesananPage";
 import AdminActivityPage from "./pages/admin/AdminActivityPage";
 import AdminRestaurantPage from "./pages/admin/AdminRestaurantPage";
 import AdminDestinationPage from "./pages/admin/AdminDestinationPage";
+import CalculatorFixPage from "./pages/CalculatorFixPage";
 
 function App() {
   const adminRoutes = [
@@ -46,9 +47,9 @@ function App() {
   ];
 
   const publicRoutes = [
-    { path: "/calculator", element: <AkomodasiPage /> },
-    { path: "/tour-packages", element: <TourPackagePage /> },
-    { path: "/transport", element: <TransportPage /> },
+    { path: "/calculator", element: <CalculatorFixPage /> },
+    // { path: "/tour-packages", element: <TourPackagePage /> },
+    // { path: "/transport", element: <TransportPage /> },
     { path: "/checkout", element: <CheckoutPage /> },
     { path: "/pdf-invoice", element: <InvoicePDF /> },
     { path: "/expenses", element: <ExpensesPage /> },

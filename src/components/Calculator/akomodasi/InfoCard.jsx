@@ -15,7 +15,7 @@ import {
 } from "../../../services/akomodasiService";
 import { MainSelectCreatableWithDelete } from "../../MainSelect";
 
-const InfoCard = ({ index, onDelete, data, onChange }) => {
+const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   const { additional, setAdditional } = useAkomodasiContext();
 
   const infoOptions = useMemo(
@@ -69,7 +69,7 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
         });
       }
     }
-  }, [data.selectedInfo, data.id_additional, infoOptions]);
+  }, [data.selectedInfo, data.id_additional, infoOptions, dayIndex]);
 
   // Auto-set harga jika belum ada saat selectedInfo tersedia
   useEffect(() => {
@@ -82,7 +82,7 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
         harga: selectedInfo.defaultPrice || 0,
       });
     }
-  }, [selectedInfo]);
+  }, [selectedInfo, dayIndex]);
 
   const handleCreate = async (inputValue) => {
     try {

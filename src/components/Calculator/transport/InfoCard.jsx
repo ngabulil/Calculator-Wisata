@@ -15,7 +15,7 @@ import {
 import { MainSelectCreatableWithDelete } from "../../MainSelect";
 import { useTransportContext } from "../../../context/TransportContext";
 
-const InfoCard = ({ index, onDelete, data, onChange }) => {
+const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   const { additional, setAdditional } = useTransportContext();
 
   const infoOptions = useMemo(
@@ -68,7 +68,7 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
         });
       }
     }
-  }, [data.selectedInfo, data.id_additional, infoOptions]);
+  }, [data.selectedInfo, data.id_additional, infoOptions, dayIndex]);
 
   useEffect(() => {
     if (
@@ -80,7 +80,7 @@ const InfoCard = ({ index, onDelete, data, onChange }) => {
         harga: selectedInfo.defaultPrice || 0,
       });
     }
-  }, [selectedInfo]);
+  }, [selectedInfo, dayIndex]);
 
   const handleCreate = async (inputValue) => {
     try {

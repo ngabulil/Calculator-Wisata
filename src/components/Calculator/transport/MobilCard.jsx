@@ -11,7 +11,7 @@ import { useMemo, useEffect, useState } from "react";
 import MainSelect from "../../MainSelect";
 import { useTransportContext } from "../../../context/TransportContext";
 
-const MobilCard = ({ index, onDelete, data = {}, onChange }) => {
+const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   const { mobils } = useTransportContext();
 
   const inputBg = useColorModeValue("gray.700", "gray.700");
@@ -97,7 +97,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange }) => {
       jumlah,
       harga,
     });
-  }, [jumlah, harga]);
+  }, [jumlah, harga, dayIndex]);
 
   return (
     <Box bg="gray.600" p={4} rounded="md">
@@ -207,7 +207,6 @@ const MobilCard = ({ index, onDelete, data = {}, onChange }) => {
             Jumlah Unit
           </Text>
           <Input
-            type="number"
             value={jumlah}
             onChange={(e) => setJumlah(Number(e.target.value))}
             bg={inputBg}

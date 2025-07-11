@@ -13,14 +13,29 @@ import InfoCard from "../akomodasi/InfoCard";
 import { useEffect, useMemo, useState } from "react";
 import { useAkomodasiContext } from "../../../context/AkomodasiContext";
 import { usePackageContext } from "../../../context/PackageContext";
+import { useGrandTotalContext } from "../../../context/GrandTotalContext";
 
 const AkomodasiTabContent = ({ dayIndex }) => {
   const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
   const { selectedPackage, setSelectedPackage } = usePackageContext();
+  const { setAkomodasiTotal } = useGrandTotalContext();
   const currentDay = selectedPackage.days?.[dayIndex] || {};
   const [markupState, setMarkupState] = useState(
     currentDay.markup || { type: "percent", value: 0 }
   );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let timeout;
+    timeout = setTimeout(() => {
+      setLoading(false);
+    }, 100);
+
+    return () => {
+      setLoading(true);
+      clearTimeout(timeout);
+    };
+  }, [selectedPackage?.id]);
 
   useEffect(() => {
     getHotels();
@@ -70,11 +85,22 @@ const AkomodasiTabContent = ({ dayIndex }) => {
     });
   };
 
+  useEffect(() => {
+    setAkomodasiTotal((prev) => {
+      const akomodasiTotal = [...(prev || [])];
+      akomodasiTotal[dayIndex] = total;
+      return akomodasiTotal;
+    });
+  }, [total]);
+
+  if (loading) return null;
+
   return (
     <VStack spacing={6} align="stretch">
       {(currentDay.hotels || []).map((hotel, i) => (
         <HotelCard
           key={i}
+          dayIndex={dayIndex}
           index={i}
           data={hotel}
           onChange={(newHotel) => {
@@ -111,6 +137,7 @@ const AkomodasiTabContent = ({ dayIndex }) => {
           key={i}
           index={i}
           data={villa}
+          dayIndex={dayIndex}
           onChange={(newVilla) => {
             updatePackageDay((day) => {
               const villas = [...(day.villas || [])];
@@ -145,6 +172,7 @@ const AkomodasiTabContent = ({ dayIndex }) => {
           key={i}
           index={i}
           data={item}
+          dayIndex={dayIndex}
           onChange={(newInfo) => {
             updatePackageDay((day) => {
               const akomodasi_additionals = [

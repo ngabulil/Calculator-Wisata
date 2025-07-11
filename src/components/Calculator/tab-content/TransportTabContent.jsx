@@ -13,15 +13,30 @@ import MobilCard from "../transport/MobilCard";
 import InfoCard from "../transport/InfoCard";
 import { useTransportContext } from "../../../context/TransportContext";
 import { usePackageContext } from "../../../context/PackageContext";
+import { useGrandTotalContext } from "../../../context/GrandTotalContext";
 
 const TransportTabContent = ({ dayIndex }) => {
   const { getMobils, getAdditionalMobil } = useTransportContext();
   const { selectedPackage, setSelectedPackage } = usePackageContext();
+  const { setTransportTotal } = useGrandTotalContext();
 
   const currentDay = selectedPackage.days?.[dayIndex] || {};
   const [markupState, setMarkupState] = useState(
     currentDay.markup || { type: "percent", value: 0 }
   );
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let timeout;
+    timeout = setTimeout(() => {
+      setLoading(false);
+    }, 100);
+
+    return () => {
+      setLoading(true);
+      clearTimeout(timeout);
+    };
+  }, [selectedPackage?.id]);
 
   useEffect(() => {
     getMobils();
@@ -55,11 +70,22 @@ const TransportTabContent = ({ dayIndex }) => {
     });
   };
 
+  useEffect(() => {
+    setTransportTotal((prev) => {
+      const newTotal = [...prev];
+      newTotal[dayIndex] = total;
+      return newTotal;
+    });
+  }, [total]);
+
+  if (loading) return null;
+
   return (
     <VStack spacing={6} align="stretch">
       {/* Mobil */}
       {(currentDay.mobils || []).map((mobil, i) => (
         <MobilCard
+          dayIndex={dayIndex}
           key={i}
           index={i}
           data={mobil}
@@ -95,19 +121,24 @@ const TransportTabContent = ({ dayIndex }) => {
       {/* Additional Info */}
       {(currentDay.transport_additionals || []).map((info, i) => (
         <InfoCard
+          dayIndex={dayIndex}
           key={i}
           index={i}
           data={info}
           onChange={(newInfo) => {
             updatePackageDay((d) => {
-              const transport_additionals = [...(d.transport_additionals || [])];
+              const transport_additionals = [
+                ...(d.transport_additionals || []),
+              ];
               transport_additionals[i] = newInfo;
               return { ...d, transport_additionals };
             });
           }}
           onDelete={() => {
             updatePackageDay((d) => {
-              const transport_additionals = [...(d.transport_additionals || [])];
+              const transport_additionals = [
+                ...(d.transport_additionals || []),
+              ];
               transport_additionals.splice(i, 1);
               return { ...d, transport_additionals };
             });

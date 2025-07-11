@@ -20,7 +20,7 @@ const seasonTypes = [
   { value: "peak", label: "Peak" },
 ];
 
-const HotelCard = ({ index, onDelete, data, onChange }) => {
+const HotelCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   const { hotels } = useAkomodasiContext();
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
@@ -113,7 +113,7 @@ const HotelCard = ({ index, onDelete, data, onChange }) => {
       });
     // }, 300);
     // return () => clearTimeout(timeout);
-  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed]);
+  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed, dayIndex]);
 
   const handleSelectChange = (field, val) => {
     const updates = { [field]: val?.value ?? null };

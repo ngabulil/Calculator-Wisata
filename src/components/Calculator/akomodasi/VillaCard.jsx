@@ -20,7 +20,7 @@ const seasonTypes = [
   { value: "honeymoon", label: "Honeymoon" },
 ];
 
-const VillaCard = ({ index, onDelete, data, onChange }) => {
+const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   const { villas } = useAkomodasiContext();
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
@@ -103,16 +103,16 @@ const VillaCard = ({ index, onDelete, data, onChange }) => {
 
   useEffect(() => {
     // const timeout = setTimeout(() => {
-      onChange({
-        ...data,
-        jumlahKamar,
-        jumlahExtrabed,
-        hargaPerKamar,
-        hargaExtrabed,
-      });
+    onChange({
+      ...data,
+      jumlahKamar,
+      jumlahExtrabed,
+      hargaPerKamar,
+      hargaExtrabed,
+    });
     // }, 300);
     // return () => clearTimeout(timeout);
-  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed]);
+  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed, dayIndex]);
 
   const handleSelectChange = (field, val) => {
     const updates = { [field]: val?.value ?? null };
