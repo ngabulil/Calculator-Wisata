@@ -24,7 +24,7 @@ import VendorFormPage from "../../components/Admin/Activity/ActivityForm/VendorF
 import VendorCard from "../../components/Admin/Activity/ActivityCard/VendorCard";
 import ReactPaginate from "react-paginate";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 7;
 
 const AdminActivityPage = () => {
   const toast = useToast();

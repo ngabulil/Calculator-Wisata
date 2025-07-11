@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import RestaurantFormPage from "../../components/Admin/Restaurant/RestaurantForm/RestaurantForm";
 import ReactPaginate from "react-paginate";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 7;
 
 const AdminRestaurantPage = () => {
   const toast = useToast();

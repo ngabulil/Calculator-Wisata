@@ -11,7 +11,7 @@ import toastConfig from "../../utils/toastConfig";
 import DestinationFormPage from "../../components/Admin/Destination/DestinationForm/DestinationForm";
 import ReactPaginate from "react-paginate";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 7;
 const AdminDestinationPage = () => {
   const toast = useToast();
   const navigate = useNavigate();

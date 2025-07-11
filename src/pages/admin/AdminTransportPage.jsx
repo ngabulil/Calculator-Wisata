@@ -10,7 +10,7 @@ import { apiDeleteMobilFull } from "../../services/transport";
 import toastConfig from "../../utils/toastConfig";
 import ReactPaginate from "react-paginate";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 7;
 
 const AdminTransportPage = () => {
   const toast = useToast();
