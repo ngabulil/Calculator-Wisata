@@ -58,6 +58,15 @@ export const apiGetAllVillaRooms = async () => {
     throw error;
   }
 };
+export const apiGetVillaRoomsById = async (id) => {
+  try {
+    const response = await apiGet(`/villas/rooms/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const apiPostVillaRooms = async (data) => {
   try {

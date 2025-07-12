@@ -104,7 +104,7 @@ const AdminPage = () => {
             bg={"blue.500"}
             onClick={() => {
               if (formActive) {
-                updatePackageFull([]);
+                updatePackageFull("");
                 navigate("/admin/paket");
               }
               if (readPackageActive) {

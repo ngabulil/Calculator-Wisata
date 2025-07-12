@@ -169,7 +169,7 @@ const AdminTransportPage = () => {
       </Flex>
 
       {/* Pagination */}
-      {currentTransports > 0 && !formActive && (
+      {currentTransports.length > 0 && !formActive && (
         <Box
           mt={6}
           display="flex"

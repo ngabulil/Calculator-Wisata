@@ -9,6 +9,15 @@ export const apiGetAllActivityDetails = async () => {
     throw error;
   }
 };
+export const apiGetActivityDetailsById = async (id) => {
+  try {
+    const response = await apiGet(`/activity/details/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 export const apiPostActivityDetails = async (data) => {
   try {
     const response = await apiPost("/activity/details", data);

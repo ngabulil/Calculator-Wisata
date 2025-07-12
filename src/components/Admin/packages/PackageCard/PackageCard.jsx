@@ -8,7 +8,7 @@ import {
   Text,
   TabPanel,
 } from "@chakra-ui/react";
-import { Icon } from "@iconify/react";
+
 import { PopoverButton } from "../../../PopoverButton";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ const PackageCard = (props) => {
       bg={"gray.800"}
       p={3}
       shadow={"xl"}
-      w={"23.4%"}
+      w={"full"}
       flexGrow={props.flexGrow}
       rounded={8}
       display={"flex"}

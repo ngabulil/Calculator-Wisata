@@ -44,7 +44,6 @@ import {
 } from "../../../../services/packageService";
 import parseDays from "../../../../utils/encodedParseDays";
 import buildPayloadPaket from "../../../../utils/buildPayloadPaket";
-import parsePayloadPaket from "../../../../utils/parsePayloadPaket";
 
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -63,6 +62,7 @@ const PackageCreateForm = (props) => {
 
   const handleSetValue = async () => {
     const res = await parseDays(onePackageFull.days);
+    console.log(res);
     setDays(res);
   };
 
@@ -168,6 +168,7 @@ const PackageCreateForm = (props) => {
                       Nama untuk Day {index + 1}
                     </Text>
                     <Input
+                      value={day.name}
                       placeholder="Contoh: Hari Pertama di Bali"
                       onChange={(e) => {
                         const updated = [...days];
@@ -354,6 +355,7 @@ const PackageCreateForm = (props) => {
                               const updated = [...days];
                               updated[index].data.tour.destinations[i] =
                                 newInfo;
+
                               setDays(updated);
                             }}
                             onDelete={() => {
@@ -362,6 +364,7 @@ const PackageCreateForm = (props) => {
                                 i,
                                 1
                               );
+
                               setDays(updated);
                             }}
                           />
@@ -397,6 +400,7 @@ const PackageCreateForm = (props) => {
                             data={tours}
                             onChange={(newInfo) => {
                               const updated = [...days];
+
                               updated[index].data.tour.restaurants[i] = newInfo;
                               setDays(updated);
                             }}
@@ -438,6 +442,7 @@ const PackageCreateForm = (props) => {
                             data={tours}
                             onChange={(newInfo) => {
                               const updated = [...days];
+
                               updated[index].data.tour.activities[i] = newInfo;
                               setDays(updated);
                             }}
@@ -594,7 +599,7 @@ const PackageFormPage = (props) => {
       description: desctiptionPackages,
       days: [...primaryData],
     };
-    const payload = parsePayloadPaket(buildPayloadPaket(data));
+    const payload = buildPayloadPaket(data);
 
     try {
       let res;

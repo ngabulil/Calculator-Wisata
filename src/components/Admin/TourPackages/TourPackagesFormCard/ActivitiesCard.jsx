@@ -19,6 +19,9 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
   const [selectedActivity, setSelectedActivity] = useState(
     data.selectedActivity || null
   );
+  const [selectedTypeWisata, setSelectedTypeWisata] = useState(
+    data.selectedTypeWisata || null
+  );
 
   const textColor = useColorModeValue("white", "white");
 
@@ -41,15 +44,22 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
     );
   }, [activities, selectedVendor]);
 
+  const typeWisataOptions = [
+    { value: "domestik", label: "Domestik" },
+    { value: "asing", label: "Asing" },
+  ];
+
   useEffect(() => {
     onChange({
       ...data,
       selectedVendor,
       selectedActivity,
+      selectedTypeWisata,
       id_vendor: selectedVendor?.value,
       id_activity: selectedActivity?.value,
+      type_wisata: selectedTypeWisata?.value,
     });
-  }, [selectedVendor, selectedActivity]);
+  }, [selectedVendor, selectedActivity, selectedTypeWisata]);
 
   return (
     <Box bg="gray.600" p={4} rounded="md">
@@ -77,7 +87,8 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
           value={selectedVendor}
           onChange={(val) => {
             setSelectedVendor(val);
-            setSelectedActivity(null); // Reset activity ketika vendor diganti
+            setSelectedActivity(null);
+            setSelectedTypeWisata(null);
           }}
           placeholder="Pilih vendor"
         />
@@ -94,6 +105,20 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
           onChange={setSelectedActivity}
           isDisabled={!selectedVendor}
           placeholder="Pilih aktivitas"
+        />
+      </Box>
+
+      {/* Pilih Tipe Wisata */}
+      <Box>
+        <Text fontSize="sm" color="gray.300" mb={1}>
+          Type Wisata
+        </Text>
+        <MainSelectCreatableWithDelete
+          options={typeWisataOptions}
+          value={selectedTypeWisata}
+          onChange={setSelectedTypeWisata}
+          isDisabled={!selectedVendor || !selectedActivity}
+          placeholder="Pilih jenis wisata"
         />
       </Box>
     </Box>

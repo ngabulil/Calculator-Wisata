@@ -44,13 +44,14 @@ export default function buildPayloadPaket(data) {
             day.data?.tour?.activities?.map((act) => ({
               id_vendor: act.selectedVendor.value,
               id_activity: act.selectedActivity.value,
-              type_wisata: "domestik", // selalu "domestik"? ubah jika perlu
+              type_wisata: "domestik",
             })) ?? [],
 
           restaurants:
             day.data?.tour?.restaurants?.map((resto) => ({
               id_resto: resto.selectedResto.value,
               id_menu: resto.selectedPackage.value,
+              type_wisata: resto.type_wisata,
             })) ?? [],
         },
 
@@ -79,4 +80,3 @@ function resolveSeason(season) {
   if (season.startsWith("honeymoon")) return "honeymoon";
   return "peak";
 }
-
