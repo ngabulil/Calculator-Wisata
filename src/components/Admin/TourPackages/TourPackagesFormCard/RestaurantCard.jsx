@@ -19,10 +19,12 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
   const [selectedPackage, setSelectedPackage] = useState(
     data.selectedPackage || null
   );
+  const [selectedTypeWisata, setSelectedTypeWisata] = useState(
+    data.selectedTypeWisata || null
+  );
 
   const textColor = useColorModeValue("white", "white");
 
-  // Daftar opsi restoran
   const restaurantOptions = useMemo(() => {
     return restaurant.map((r) => ({
       value: r.id,
@@ -30,10 +32,8 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
     }));
   }, [restaurant]);
 
-  // Daftar paket berdasarkan restoran terpilih
   const packageOptions = useMemo(() => {
     if (!selectedResto) return [];
-
     const resto = restaurant.find((r) => r.id === selectedResto.value);
     return (
       resto?.packages.map((p) => ({
@@ -44,16 +44,22 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
     );
   }, [selectedResto, restaurant]);
 
-  // Sinkronisasi ke parent
+  const typeWisataOptions = [
+    { value: "domestik", label: "Domestik" },
+    { value: "asing", label: "Asing" },
+  ];
+
   useEffect(() => {
     onChange({
       ...data,
       selectedResto,
       selectedPackage,
+      selectedTypeWisata,
       id_resto: selectedResto?.value,
       id_package: selectedPackage?.value,
+      type_wisata: selectedTypeWisata?.value,
     });
-  }, [selectedResto, selectedPackage]);
+  }, [selectedResto, selectedPackage, selectedTypeWisata]);
 
   return (
     <Box bg="gray.600" p={4} rounded="md">
@@ -71,7 +77,6 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
         />
       </HStack>
 
-      {/* Pilih Restoran */}
       <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Pilih Restoran
@@ -81,25 +86,39 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
           value={selectedResto}
           onChange={(val) => {
             setSelectedResto(val);
-            setSelectedPackage(null); // reset package saat ganti resto
+            setSelectedPackage(null);
+            setSelectedTypeWisata(null);
           }}
           placeholder="Pilih restoran"
         />
       </Box>
 
-      {/* Pilih Paket Menu */}
       {selectedResto && (
-        <Box>
-          <Text fontSize="sm" color="gray.300" mb={1}>
-            Pilih Paket Menu
-          </Text>
-          <MainSelectCreatableWithDelete
-            options={packageOptions}
-            value={selectedPackage}
-            onChange={setSelectedPackage}
-            placeholder="Pilih paket"
-          />
-        </Box>
+        <>
+          <Box mb={3}>
+            <Text fontSize="sm" color="gray.300" mb={1}>
+              Pilih Paket Menu
+            </Text>
+            <MainSelectCreatableWithDelete
+              options={packageOptions}
+              value={selectedPackage}
+              onChange={setSelectedPackage}
+              placeholder="Pilih paket"
+            />
+          </Box>
+
+          <Box>
+            <Text fontSize="sm" color="gray.300" mb={1}>
+              Type Wisata
+            </Text>
+            <MainSelectCreatableWithDelete
+              options={typeWisataOptions}
+              value={selectedTypeWisata}
+              onChange={setSelectedTypeWisata}
+              placeholder="Pilih jenis wisata"
+            />
+          </Box>
+        </>
       )}
     </Box>
   );

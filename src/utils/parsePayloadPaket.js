@@ -14,15 +14,19 @@ export default function parsePayloadPaket(input) {
           akomodasi.hotels?.map((h) => ({
             id_hotel: h.id_hotel,
             id_tipe_kamar: h.id_tipe_kamar,
-            season_type: h.season?.type,
-            id_musim: h.season?.id_musim,
+            season: {
+              season_type: h.season?.type,
+              id_musim: h.season?.id_musim,
+            },
           })) || [],
         villas:
           akomodasi.villas?.map((v) => ({
             id_villa: v.id_villa,
             id_tipe_kamar: v.id_tipe_kamar,
-            season_type: v.season?.type,
-            id_musim: v.season?.id_musim,
+            season: {
+              season_type: v.season?.type,
+              id_musim: v.season?.id_musim,
+            },
           })) || [],
         akomodasi_additionals: akomodasi.additional || [],
         destinations: tour.destinations || [],

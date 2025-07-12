@@ -2,19 +2,41 @@ import {
   apiGetActivityVendorById,
   apiGetRestaurantById,
   apiGetDestinationById,
+  apiGetAllRestaurant,
 } from "../services/packageService";
-import { apiGetHotel } from "../services/hotelService";
-import { apiGetVilla } from "../services/villaService";
+import { apiGetHotel, apiGetHotelRoomsById } from "../services/hotelService";
+import { apiGetVilla, apiGetVillaRoomsById } from "../services/villaService";
 import { apiGetMobilById } from "../services/transport";
 import { apiGetAdditionalAkomodasiById } from "../services/akomodasiService";
 import { apiGetAdditionalMobilById } from "../services/transport";
+import { apiGetActivityDetailsById } from "../services/activityService";
 
 export default async function parseDays(daysFromApi) {
   async function getLabel(fn, id, defaultLabel = "") {
     try {
       const data = await fn(id);
-      return data?.result?.name || defaultLabel;
+      return data?.result?.name || data.result.resto_name || defaultLabel;
     } catch {
+      return defaultLabel;
+    }
+  }
+  async function getLabelRestoMenu(fn, id_resto, id_menu, defaultLabel = "") {
+    const data = await fn();
+
+    const resto = data.result.find((item) => item.id === id_resto);
+
+    if (resto) {
+      const foundPackage = resto.packages.find(
+        (pkg) => pkg.id_package === id_menu
+      );
+
+      if (foundPackage) {
+        const packageName = foundPackage.package_name;
+        return packageName;
+      } else {
+        return defaultLabel;
+      }
+    } else {
       return defaultLabel;
     }
   }
@@ -27,6 +49,13 @@ export default async function parseDays(daysFromApi) {
           hotel.id_hotel,
           `Hotel ${hotel.id_hotel}`
         );
+
+        const hotelRoomLabel = await getLabel(
+          apiGetHotelRoomsById,
+          hotel.id_tipe_kamar,
+          `Room ${hotel.id_tipe_kamar}`
+        );
+
         return {
           jumlahKamar: 1,
           jumlahExtrabed: 1,
@@ -35,7 +64,7 @@ export default async function parseDays(daysFromApi) {
           hotel: { value: hotel.id_hotel, label: hotelLabel },
           roomType: {
             value: hotel.id_tipe_kamar,
-            label: `Room ${hotel.id_tipe_kamar}`,
+            label: hotelRoomLabel,
           },
           season: `${hotel.season_type}-${0}`,
           seasonLabel: `${capitalizeFirst(
@@ -54,6 +83,13 @@ export default async function parseDays(daysFromApi) {
           villa.id_villa,
           `Villa ${villa.id_villa}`
         );
+
+        const villaRoomLabel = await getLabel(
+          apiGetVillaRoomsById,
+          villa.id_tipe_kamar,
+          `Room ${villa.id_tipe_kamar}`
+        );
+
         return {
           jumlahKamar: 1,
           jumlahExtrabed: 1,
@@ -62,7 +98,7 @@ export default async function parseDays(daysFromApi) {
           villa: { value: villa.id_villa, label: villaLabel },
           roomType: {
             value: villa.id_tipe_kamar,
-            label: `Room ${villa.id_tipe_kamar}`,
+            label: villaRoomLabel,
           },
           season: `${villa.season_type}-${0}`,
           seasonLabel: `${capitalizeFirst(
@@ -120,12 +156,27 @@ export default async function parseDays(daysFromApi) {
           act.id_vendor,
           `Activity ${act.id_activity}`
         );
+
+        const labelAct = await getLabel(
+          apiGetActivityDetailsById,
+          act.id_activity,
+          `Activity label`
+        );
+
         return {
           selectedVendor: {
             value: act.id_vendor,
-            label: `Vendor ${act.id_vendor}`,
+            label: label,
           },
-          selectedActivity: { value: act.id_activity, label, fullData: {} },
+          selectedTypeWisata: {
+            value: act.type_wisata,
+            label: capitalizeFirst(act.type_wisata),
+          },
+          selectedActivity: {
+            value: act.id_activity,
+            label: labelAct,
+            fullData: {},
+          },
           id_vendor: act.id_vendor,
           id_activity: act.id_activity,
         };
@@ -139,12 +190,28 @@ export default async function parseDays(daysFromApi) {
           resto.id_resto,
           `Menu ${resto.id_menu}`
         );
+
+        const labelMenu = await getLabelRestoMenu(
+          apiGetAllRestaurant,
+          resto.id_resto,
+          resto.id_menu,
+          `Menu nich`
+        );
+
         return {
           selectedResto: {
             value: resto.id_resto,
-            label: `Resto ${resto.id_resto}`,
+            label: label,
           },
-          selectedPackage: { value: resto.id_menu, label, fullData: {} },
+          selectedTypeWisata: {
+            value: resto.type_wisata,
+            label: capitalizeFirst(resto.type_wisata),
+          },
+          selectedPackage: {
+            value: resto.id_menu,
+            label: labelMenu,
+            fullData: {},
+          },
           id_resto: resto.id_resto,
           id_package: resto.id_menu,
         };
