@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
@@ -13,200 +13,118 @@ import {
   Badge,
   Flex,
   Spacer,
-  Grid, 
+  Grid,
 } from "@chakra-ui/react";
-import { useColorModeValue } from "@chakra-ui/react"; 
+import { useColorModeValue } from "@chakra-ui/react";
+import { parsePaketDays } from "../../utils/parseOnePaket";
+import { useCheckoutContext } from "../../context/CheckoutContext";
 
 const DayBreakdown = ({ days, formatCurrency }) => {
   const accentColor = useColorModeValue("teal.300", "teal.400");
+  const summaryCardBg = useColorModeValue("gray.600", "gray.700");
 
-  const summaryCardBg = useColorModeValue("gray.600", "gray.700"); 
+  const { 
+    breakdown, 
+    dayTotals, 
+    detailedBreakdown,
+    akomodasiTotal, 
+    transportTotal, 
+    tourTotal
+  } = useCheckoutContext();
 
-
-  const calculateDayTotal = (day) => {
-    const totalHotel = (day.hotels || []).reduce(
-      (sum, h) =>
-        sum +
-        (h.jumlahKamar || 0) * (h.hargaPerKamar || 0) +
-        (h.useExtrabed
-          ? (h.jumlahExtrabed || 0) * (h.hargaExtrabed || 0)
-          : 0),
-      0
-    );
-    const totalVilla = (day.villas || []).reduce(
-      (sum, v) =>
-        sum +
-        (v.jumlahKamar || 0) * (v.hargaPerKamar || 0) +
-        (v.useExtrabed
-          ? (v.jumlahExtrabed || 0) * (v.hargaExtrabed || 0)
-          : 0),
-      0
-    );
-    const totalAdditional = (day.akomodasi_additionals || []).reduce(
-      (sum, a) => sum + (a.harga || 0) * (a.jumlah || 0),
-      0
-    );
-
-    const totalRestaurant = (day.restaurants || []).reduce(
-      (sum, restaurant) => {
-        return sum + (restaurant?.harga || 0);
-      },
-      0
-    );
-
-    const totalMobil = (day.mobils || []).reduce((sum, mobil) => {
-      return sum + (mobil?.harga || 0);
-    }, 0);
-    const totalTransportAdditional = (day.transport_additionals || []).reduce(
-      (sum, transport) => {
-        return sum + (transport?.harga || 0);
-      },
-      0
-    );
-    const totalTransport = totalMobil + totalTransportAdditional;
-
-    const subTotal =
-      totalHotel +
-      totalVilla +
-      totalAdditional +
-      totalRestaurant +
-      totalTransport;
-    const markup = day.markup || {};
-    const markupNominal =
-      markup.type === "percent"
-        ? ((markup.value || 0) * subTotal) / 100
-        : markup.value || 0;
-    return subTotal + markupNominal;
-  };
-
-  // State for overall breakdown summary cards (moved from CheckoutPage)
-  const [breakdownSummary, setBreakdownSummary] = useState({
-    hotels: 0,
-    villas: 0,
-    additionals: 0,
-    restaurants: 0,
-    transports: 0,
-    markup: 0,
-  });
+  const [parsedDays, setParsedDays] = useState([]);
+  const [mergedDays, setMergedDays] = useState([]);
 
   useEffect(() => {
-    let totalHotels = 0;
-    let totalVillas = 0;
-    let totalAdditionals = 0;
-    let totalRestaurants = 0;
-    let totalTransports = 0;
-    let totalMarkup = 0;
+    const parseData = async () => {
+      try {
+        const data = await parsePaketDays(days);
+        setParsedDays(data);
+      } catch (error) {
+        console.error("Error parsing days:", error);
+        setParsedDays([]);
+      }
+    };
 
-    days.forEach((day) => {
-      const dayHotelTotal = (day.hotels || []).reduce(
-        (sum, h) =>
-          sum +
-          (h.jumlahKamar || 0) * (h.hargaPerKamar || 0) +
-          (h.useExtrabed
-            ? (h.jumlahExtrabed || 0) * (h.hargaExtrabed || 0)
-            : 0),
-        0
-      );
-
-      const dayVillaTotal = (day.villas || []).reduce(
-        (sum, v) =>
-          sum +
-          (v.jumlahKamar || 0) * (v.hargaPerKamar || 0) +
-          (v.useExtrabed
-            ? (v.jumlahExtrabed || 0) * (v.hargaExtrabed || 0)
-            : 0),
-        0
-      );
-
-      const dayAdditionalTotal = (day.akomodasi_additionals || []).reduce(
-        (sum, a) => sum + (a.harga || 0) * (a.jumlah || 1),
-        0
-      );
-
-      const dayRestaurantTotal = (day.restaurants || []).reduce(
-        (sum, restaurant) => {
-          return sum + (restaurant?.harga || 0);
-        },
-        0
-      );
-
-      const dayMobilTotal = (day.mobils || []).reduce((sum, mobil) => {
-        return sum + (mobil?.harga || 0);
-      }, 0);
-
-      const dayTransportAdditionalTotal = (
-        day.transport_additionals || []
-      ).reduce((sum, transport) => {
-        return sum + (transport?.harga || 0);
-      }, 0);
-
-      const totalDayTransport = dayMobilTotal + dayTransportAdditionalTotal;
-
-      const subTotal =
-        dayHotelTotal +
-        dayVillaTotal +
-        dayAdditionalTotal +
-        dayRestaurantTotal +
-        totalDayTransport;
-      const markup = day.markup || {};
-      const markupValue =
-        markup.type === "percent"
-          ? ((markup.value || 0) * subTotal) / 100
-          : markup.value || 0;
-
-      totalHotels += dayHotelTotal;
-      totalVillas += dayVillaTotal;
-      totalAdditionals += dayAdditionalTotal;
-      totalRestaurants += dayRestaurantTotal;
-      totalTransports += totalDayTransport;
-      totalMarkup += markupValue;
-    });
-
-    setBreakdownSummary({
-      hotels: totalHotels,
-      villas: totalVillas,
-      additionals: totalAdditionals,
-      restaurants: totalRestaurants,
-      transports: totalTransports,
-      markup: totalMarkup,
-    });
+    if (days && days.length > 0) {
+      parseData();
+    }
   }, [days]);
 
+  // Merge raw days dengan parsed days
+  useEffect(() => {
+    if (days && parsedDays.length > 0) {
+      const merged = days.map((rawDay, index) => {
+        const parsedDay = parsedDays[index] || {};
+        
+        return {
+          ...rawDay, // Ambil semua data raw untuk perhitungan
+          // Merge hotel names dari parsed data
+          hotels: (rawDay.hotels || []).map((hotel, hotelIndex) => ({
+            ...hotel,
+            displayName: parsedDay.hotels?.[hotelIndex]?.name || 
+                        hotel.name || 
+                        hotel.hotel?.name || 
+                        `Hotel ${hotelIndex + 1}`
+          })),
+          // Merge villa names dari parsed data
+          villas: (rawDay.villas || []).map((villa, villaIndex) => ({
+            ...villa,
+            displayName: parsedDay.villas?.[villaIndex]?.name || 
+                        villa.name || 
+                        villa.villa?.name || 
+                        `Villa ${villaIndex + 1}`
+          })),
+          // Merge mobil names dari parsed data
+          mobils: (rawDay.mobils || []).map((mobil, mobilIndex) => ({
+            ...mobil,
+            displayName: parsedDay.mobils?.[mobilIndex]?.name || 
+                        mobil.name || 
+                        mobil.mobil?.nama || 
+                        `Mobil ${mobilIndex + 1}`
+          })),
+          // Merge restaurant names dari parsed data
+          restaurants: (rawDay.restaurants || []).map((resto, restoIndex) => ({
+            ...resto,
+            displayName: parsedDay.restaurants?.[restoIndex]?.name || 
+                        resto.name || 
+                        resto.resto?.name || 
+                        `Restoran ${restoIndex + 1}`
+          })),
+          // Merge destination names dari parsed data
+          destinations: (rawDay.destinations || []).map((dest, destIndex) => ({
+            ...dest,
+            displayName: parsedDay.destinations?.[destIndex]?.name || 
+                        dest.name || 
+                        dest.destinasi?.name || 
+                        `Destinasi ${destIndex + 1}`
+          })),
+          // Merge activity names dari parsed data
+          activities: (rawDay.activities || []).map((activity, actIndex) => ({
+            ...activity,
+            displayName: parsedDay.activities?.[actIndex]?.name || 
+                        activity.name || 
+                        activity.aktivitas?.name || 
+                        `Aktivitas ${actIndex + 1}`
+          }))
+        };
+      });
+      
+      setMergedDays(merged);
+    } else {
+      setMergedDays(days || []);
+    }
+  }, [days, parsedDays]);
 
   return (
     <VStack spacing={6} align="stretch">
-      {/* Summary Cards */}
       <Grid templateColumns="repeat(2, 1fr)" gap={4}>
         <Box bg={summaryCardBg} p={4} rounded="lg">
           <Text fontSize="sm" color="gray.300">
-            Total Hotel
+            Total Akomodasi
           </Text>
           <Text fontSize="lg" fontWeight="bold" color={accentColor}>
-            {formatCurrency(breakdownSummary.hotels)}
-          </Text>
-        </Box>
-        <Box bg={summaryCardBg} p={4} rounded="lg">
-          <Text fontSize="sm" color="gray.300">
-            Total Villa
-          </Text>
-          <Text fontSize="lg" fontWeight="bold" color={accentColor}>
-            {formatCurrency(breakdownSummary.villas)}
-          </Text>
-        </Box>
-        <Box bg={summaryCardBg} p={4} rounded="lg">
-          <Text fontSize="sm" color="gray.300">
-            Total Tambahan Akomodasi
-          </Text>
-          <Text fontSize="lg" fontWeight="bold" color={accentColor}>
-            {formatCurrency(breakdownSummary.additionals)}
-          </Text>
-        </Box>
-        <Box bg={summaryCardBg} p={4} rounded="lg">
-          <Text fontSize="sm" color="gray.300">
-            Total Restoran
-          </Text>
-          <Text fontSize="lg" fontWeight="bold" color={accentColor}>
-            {formatCurrency(breakdownSummary.restaurants)}
+            {formatCurrency(akomodasiTotal)}
           </Text>
         </Box>
         <Box bg={summaryCardBg} p={4} rounded="lg">
@@ -214,7 +132,15 @@ const DayBreakdown = ({ days, formatCurrency }) => {
             Total Transportasi
           </Text>
           <Text fontSize="lg" fontWeight="bold" color={accentColor}>
-            {formatCurrency(breakdownSummary.transports)}
+            {formatCurrency(transportTotal)}
+          </Text>
+        </Box>
+        <Box bg={summaryCardBg} p={4} rounded="lg">
+          <Text fontSize="sm" color="gray.300">
+            Total Tour
+          </Text>
+          <Text fontSize="lg" fontWeight="bold" color={accentColor}>
+            {formatCurrency(tourTotal)}
           </Text>
         </Box>
         <Box bg={summaryCardBg} p={4} rounded="lg">
@@ -222,19 +148,32 @@ const DayBreakdown = ({ days, formatCurrency }) => {
             Total Markup
           </Text>
           <Text fontSize="lg" fontWeight="bold" color={accentColor}>
-            {formatCurrency(breakdownSummary.markup)}
+            {formatCurrency(breakdown.markup)}
           </Text>
         </Box>
+        {/* <Box bg={summaryCardBg} p={4} rounded="lg">
+          <Text fontSize="sm" color="gray.300">
+            Grand Total
+          </Text>
+          <Text fontSize="lg" fontWeight="bold" color={accentColor}>
+            {formatCurrency(
+              akomodasiTotal + 
+              transportTotal + 
+              tourTotal + 
+              breakdown.markup
+            )}
+          </Text>
+        </Box> */}
       </Grid>
 
-      {/* Detailed Breakdown by Day */}
       <Box>
         <Text fontSize="lg" fontWeight="bold" mb={4}>
           Rincian Per Hari
         </Text>
         <Accordion allowMultiple>
-          {days.map((day, index) => {
-            const dayTotal = calculateDayTotal(day);
+          {mergedDays.map((day, index) => {
+            const dayTotal = dayTotals[index] || 0;
+            const dayBreakdown = detailedBreakdown[index] || {};
 
             return (
               <AccordionItem
@@ -262,41 +201,21 @@ const DayBreakdown = ({ days, formatCurrency }) => {
                 </AccordionButton>
                 <AccordionPanel pb={4} bg="gray.650">
                   <VStack spacing={3} align="stretch">
-                    {/* Hotels */}
                     {(day.hotels || []).length > 0 && (
                       <Box>
-                        <Text
-                          fontWeight="bold"
-                          fontSize="sm"
-                          mb={2}
-                          color={accentColor}
-                        >
+                        <Text fontWeight="bold" fontSize="sm" mb={2} color={accentColor}>
                           Hotel ({day.hotels.length} item)
                         </Text>
                         {day.hotels.map((hotel, i) => (
-                          <HStack
-                            key={i}
-                            justify="space-between"
-                            fontSize="sm"
-                            pl={4}
-                          >
+                          <HStack key={i} justify="space-between" fontSize="sm" pl={4}>
                             <Text>
-                              {hotel.hotel?.nama ||
-                                hotel.hotel?.label ||
-                                hotel.hotel ||
-                                `Hotel `}{" "}
-                              - {hotel.jumlahKamar || 0} kamar
-                              {hotel.useExtrabed &&
-                                ` + ${hotel.jumlahExtrabed || 0} extrabed`}
+                              {hotel.displayName} - {hotel.jumlahKamar || 0} kamar
+                              {hotel.useExtrabed && ` + ${hotel.jumlahExtrabed || 0} extrabed`}
                             </Text>
                             <Text fontWeight="bold">
                               {formatCurrency(
-                                (hotel.jumlahKamar || 0) *
-                                  (hotel.hargaPerKamar || 0) +
-                                  (hotel.useExtrabed
-                                    ? (hotel.jumlahExtrabed || 0) *
-                                      (hotel.hargaExtrabed || 0)
-                                    : 0)
+                                (hotel.jumlahKamar || 0) * (hotel.hargaPerKamar || 0) +
+                                (hotel.useExtrabed ? (hotel.jumlahExtrabed || 0) * (hotel.hargaExtrabed || 0) : 0)
                               )}
                             </Text>
                           </HStack>
@@ -305,41 +224,21 @@ const DayBreakdown = ({ days, formatCurrency }) => {
                       </Box>
                     )}
 
-                    {/* Villas */}
                     {(day.villas || []).length > 0 && (
                       <Box>
-                        <Text
-                          fontWeight="bold"
-                          fontSize="sm"
-                          mb={2}
-                          color={accentColor}
-                        >
+                        <Text fontWeight="bold" fontSize="sm" mb={2} color={accentColor}>
                           Villa ({day.villas.length} item)
                         </Text>
                         {day.villas.map((villa, i) => (
-                          <HStack
-                            key={i}
-                            justify="space-between"
-                            fontSize="sm"
-                            pl={4}
-                          >
+                          <HStack key={i} justify="space-between" fontSize="sm" pl={4}>
                             <Text>
-                              {villa.villa?.name ||
-                                villa.villa?.label ||
-                                villa.nama ||
-                                `Villa`}{" "}
-                              - {villa.jumlahKamar || 0} kamar
-                              {villa.useExtrabed &&
-                                ` + ${villa.jumlahExtrabed || 0} extrabed`}
+                              {villa.displayName} - {villa.jumlahKamar || 0} kamar
+                              {villa.useExtrabed && ` + ${villa.jumlahExtrabed || 0} extrabed`}
                             </Text>
                             <Text fontWeight="bold">
                               {formatCurrency(
-                                (villa.jumlahKamar || 0) *
-                                  (villa.hargaPerKamar || 0) +
-                                  (villa.useExtrabed
-                                    ? (villa.jumlahExtrabed || 0) *
-                                      (villa.hargaExtrabed || 0)
-                                    : 0)
+                                (villa.jumlahKamar || 0) * (villa.hargaPerKamar || 0) +
+                                (villa.useExtrabed ? (villa.jumlahExtrabed || 0) * (villa.hargaExtrabed || 0) : 0)
                               )}
                             </Text>
                           </HStack>
@@ -348,34 +247,19 @@ const DayBreakdown = ({ days, formatCurrency }) => {
                       </Box>
                     )}
 
-                    {/* Additionals */}
                     {(day.akomodasi_additionals || []).length > 0 && (
                       <Box>
-                        <Text
-                          fontWeight="bold"
-                          fontSize="sm"
-                          mb={2}
-                          color={accentColor}
-                        >
-                          Tambahan Akomodasi (
-                          {day.akomodasi_additionals.length} item)
+                        <Text fontWeight="bold" fontSize="sm" mb={2} color={accentColor}>
+                          Tambahan Akomodasi ({day.akomodasi_additionals.length} item)
                         </Text>
                         {day.akomodasi_additionals.map((item, i) => (
-                          <VStack
-                            key={i}
-                            align="stretch"
-                            fontSize="sm"
-                            pl={4}
-                            spacing={1}
-                          >
+                          <VStack key={i} align="stretch" fontSize="sm" pl={4} spacing={1}>
                             <HStack justify="space-between">
                               <Text fontWeight="bold">
-                                {item.nama || item.name || `Item ${i + 1}`}
+                                {item.name || item.nama || `Item ${i + 1}`}
                               </Text>
                               <Text>
-                                {formatCurrency(
-                                  (item.harga || 0) * (item.jumlah || 1)
-                                )}
+                                {formatCurrency((item.harga || 0) * (item.jumlah || 1))}
                               </Text>
                             </HStack>
                           </VStack>
@@ -384,62 +268,16 @@ const DayBreakdown = ({ days, formatCurrency }) => {
                       </Box>
                     )}
 
-                    {/* Restaurants */}
-                    {(day.restaurants || []).length > 0 && (
-                      <Box>
-                        <Text
-                          fontWeight="bold"
-                          fontSize="sm"
-                          mb={2}
-                          color={accentColor}
-                        >
-                          Restoran ({day.restaurants.length} item)
-                        </Text>
-                        {day.restaurants.map((item, i) => (
-                          <HStack
-                            key={i}
-                            justify="space-between"
-                            fontSize="sm"
-                            pl={4}
-                          >
-                            <Text>
-                              {item.nama ||
-                                `Restoran ${item.id_resto || i + 1}`}{" "}
-                            </Text>
-                            <Text fontWeight="bold">
-                              {formatCurrency(item?.harga || 0)}{" "}
-                            </Text>
-                          </HStack>
-                        ))}
-                        <Divider my={2} />
-                      </Box>
-                    )}
-
-                    {/* Transport - Mobil */}
                     {(day.mobils || []).length > 0 && (
                       <Box>
-                        <Text
-                          fontWeight="bold"
-                          fontSize="sm"
-                          mb={2}
-                          color={accentColor}
-                        >
+                        <Text fontWeight="bold" fontSize="sm" mb={2} color={accentColor}>
                           Transportasi ({day.mobils.length} item)
                         </Text>
                         {day.mobils.map((item, i) => (
-                          <VStack
-                            key={`mobil-${i}`}
-                            align="stretch"
-                            fontSize="sm"
-                            pl={4}
-                            spacing={1}
-                          >
+                          <VStack key={`mobil-${i}`} align="stretch" fontSize="sm" pl={4} spacing={1}>
                             <HStack justify="space-between">
                               <Text fontWeight="bold">
-                                {item.mobil?.nama ||
-                                  item.mobil?.label ||
-                                  item.keterangan ||
-                                  `Mobil ${i + 1}`}
+                                {item.displayName}
                               </Text>
                               <Text>
                                 {formatCurrency(item?.harga || 0)}
@@ -451,36 +289,19 @@ const DayBreakdown = ({ days, formatCurrency }) => {
                       </Box>
                     )}
 
-                    {/* Transport - Additional */}
                     {(day.transport_additionals || []).length > 0 && (
                       <Box>
-                        <Text
-                          fontWeight="bold"
-                          fontSize="sm"
-                          mb={2}
-                          color={accentColor}
-                        >
-                          Tambahan Transportasi (
-                          {day.transport_additionals.length} item)
+                        <Text fontWeight="bold" fontSize="sm" mb={2} color={accentColor}>
+                          Tambahan Transportasi ({day.transport_additionals.length} item)
                         </Text>
                         {day.transport_additionals.map((item, i) => (
-                          <VStack
-                            key={`transport-add-${i}`}
-                            align="stretch"
-                            fontSize="sm"
-                            pl={4}
-                            spacing={1}
-                          >
+                          <VStack key={`transport-add-${i}`} align="stretch" fontSize="sm" pl={4} spacing={1}>
                             <HStack justify="space-between">
                               <Text fontWeight="bold">
-                                {item.nama ||
-                                  item.name ||
-                                  `Tambahan Transportasi ${i + 1}`}
+                                {item.name || item.nama || `Tambahan Transportasi ${i + 1}`}
                               </Text>
                               <Text>
-                                {formatCurrency(
-                                  (item.harga || 0) * (item.jumlah || 1)
-                                )}
+                                {formatCurrency((item.harga || 0) * (item.jumlah || 1))}
                               </Text>
                             </HStack>
                           </VStack>
@@ -489,11 +310,101 @@ const DayBreakdown = ({ days, formatCurrency }) => {
                       </Box>
                     )}
 
+                    {(day.restaurants?.length > 0 || 
+                      day.destinations?.length > 0 || 
+                      day.activities?.length > 0) && (
+                      <Box>
+                        <Text fontWeight="bold" fontSize="sm" mb={2} color={accentColor}>
+                          Tour
+                        </Text>
+                        
+                        {/* Restoran */}
+                        {(day.restaurants || []).length > 0 && (
+                          <>
+                            <Text fontSize="xs" mb={1} pl={2} color="gray.400">
+                              Restoran:
+                            </Text>
+                            {day.restaurants.map((item, i) => (
+                              <HStack key={`resto-${i}`} justify="space-between" fontSize="sm" pl={4}>
+                                <Text>
+                                  {item.displayName}
+                                </Text>
+                                <Text fontWeight="bold">
+                                  {formatCurrency(
+                                    (item.hargaAdult || 0) * (item.jumlahAdult || 0) + 
+                                    (item.hargaChild || 0) * (item.jumlahChild || 0)
+                                  )}
+                                </Text>
+                              </HStack>
+                            ))}
+                          </>
+                        )}
+                        
+                        {/* Destinasi */}
+                        {(day.destinations || []).length > 0 && (
+                          <>
+                            <Text fontSize="xs" mb={1} pl={2} color="gray.400" mt={day.restaurants?.length > 0 ? 2 : 0}>
+                              Destinasi:
+                            </Text>
+                            {day.destinations.map((item, i) => (
+                              <HStack key={`dest-${i}`} justify="space-between" fontSize="sm" pl={4}>
+                                <Text>
+                                  {item.displayName}
+                                </Text>
+                                <Text fontWeight="bold">
+                                  {formatCurrency(
+                                    (item.hargaAdult || 0) * (item.jumlahAdult || 0) + 
+                                    (item.hargaChild || 0) * (item.jumlahChild || 0)
+                                  )}
+                                </Text>
+                              </HStack>
+                            ))}
+                          </>
+                        )}
+                        
+                        {/* Aktivitas */}
+                        {(day.activities || []).length > 0 && (
+                          <>
+                            <Text fontSize="xs" mb={1} pl={2} color="gray.400" mt={(day.restaurants?.length > 0 || day.destinations?.length > 0) ? 2 : 0}>
+                              Aktivitas:
+                            </Text>
+                            {day.activities.map((item, i) => (
+                              <HStack key={`act-${i}`} justify="space-between" fontSize="sm" pl={4}>
+                                <Text>
+                                  {item.displayName}
+                                  {item.jumlah > 1 && ` (x${item.jumlah})`}
+                                </Text>
+                                <Text fontWeight="bold">
+                                  {formatCurrency(
+                                    (item.hargaAdult || 0) * (item.jumlahAdult || 0) + 
+                                    (item.hargaChild || 0) * (item.jumlahChild || 0)
+                                  )}
+                                </Text>
+                              </HStack>
+                            ))}
+                          </>
+                        )}
+                        
+                        <Divider my={2} />
+                      </Box>
+                    )}
+
+                    {/* Tampilkan markup jika ada */}
+                    {dayBreakdown.markup > 0 && (
+                      <Box>
+                        <HStack justify="space-between" fontSize="sm" color="orange.300">
+                          <Text>Markup</Text>
+                          <Text fontWeight="bold">
+                            {formatCurrency(dayBreakdown.markup)}
+                          </Text>
+                        </HStack>
+                        <Divider my={2} />
+                      </Box>
+                    )}
+
                     <HStack justify="space-between" fontWeight="bold">
                       <Text>Total Hari {index + 1}</Text>
-                      <Text color={accentColor}>
-                        {formatCurrency(dayTotal)}
-                      </Text>
+                      <Text color={accentColor}>{formatCurrency(dayTotal)}</Text>
                     </HStack>
                   </VStack>
                 </AccordionPanel>

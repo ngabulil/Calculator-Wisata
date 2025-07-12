@@ -53,7 +53,6 @@ const CalculatorFixPage = () => {
     id = null,
   } = selectedPackage;
   const [activeDayId, setActiveDayId] = useState(1);
-  console.log(activeDayId, selectedPackage);
   
 
   useEffect(() => {
@@ -63,6 +62,7 @@ const CalculatorFixPage = () => {
   useEffect(() => {
     setActiveDayId(selectedPackage?.days[0]?.id);
   }, [selectedPackage?.id]);
+  
 
   const handleAddDay = () => {
     const newId = days.length + 1;
