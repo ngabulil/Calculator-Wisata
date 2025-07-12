@@ -6,7 +6,7 @@ import {
 } from "../services/packageService";
 import { apiGetHotel, apiGetHotelRoomsById } from "../services/hotelService";
 import { apiGetVilla, apiGetVillaRoomsById } from "../services/villaService";
-import { apiGetMobilById } from "../services/transport";
+import { apiGetMobilById, apiGetAllMobil } from "../services/transport";
 import { apiGetAdditionalAkomodasiById } from "../services/akomodasiService";
 import { apiGetAdditionalMobilById } from "../services/transport";
 import { apiGetActivityDetailsById } from "../services/activityService";
@@ -32,6 +32,34 @@ export default async function parseDays(daysFromApi) {
 
       if (foundPackage) {
         const packageName = foundPackage.package_name;
+        return packageName;
+      } else {
+        return defaultLabel;
+      }
+    } else {
+      return defaultLabel;
+    }
+  }
+
+  async function getLabelMobil(fn, id_mobil, id_area, defaultLabel) {
+    const data = await fn();
+
+    const mobil = data.result.find((item) => item.id === id_mobil);
+
+    if (mobil) {
+      const foundKeteranganKey = Object.keys(mobil.keterangan).find((key) =>
+        mobil.keterangan[key].some((item) => item.id_area === id_area)
+      );
+
+      if (foundKeteranganKey) {
+        const matchedItem = mobil.keterangan[foundKeteranganKey].find(
+          (item) => item.id_area === id_area
+        );
+
+        console.log(foundKeteranganKey);
+
+        const packageName = matchedItem?.area ?? defaultLabel;
+
         return packageName;
       } else {
         return defaultLabel;
@@ -137,7 +165,7 @@ export default async function parseDays(daysFromApi) {
           selectedDest: {
             value: dest.id_destinasi,
             label,
-            originalData: {}, // bisa diisi nanti
+            originalData: {},
           },
           selectedType: {
             value: dest.type_wisata,
@@ -225,10 +253,25 @@ export default async function parseDays(daysFromApi) {
           mobil.id_mobil,
           `Mobil ${mobil.id_mobil}`
         );
+
+        const labelArea = await getLabelMobil(
+          apiGetAllMobil,
+          mobil.id_mobil,
+          mobil.id_area,
+          `Mobil Area`
+        );
+
         return {
           mobil: { value: mobil.id_mobil, label },
-          kategori: mobil.keterangan,
-          area: `Area ${mobil.id_area}`,
+          kategori:
+            mobil.keterangan == "fullday"
+              ? "fullDay"
+              : mobil.keterangan == "halfday"
+              ? "halfDay"
+              : mobil.keterangan == "inout"
+              ? "inOut"
+              : "menginap",
+          area: labelArea,
           harga: 400000,
           jumlah: 1,
           id_area: mobil.id_area,

@@ -127,7 +127,6 @@ const AdminPage = () => {
             onChange={() => {
               setFormActive(false);
               handleGetAllPackageFull();
-              console.log("Package form closed and packages updated."); // Debugging log)
             }}
           />
         ) : readPackageActive ? (
