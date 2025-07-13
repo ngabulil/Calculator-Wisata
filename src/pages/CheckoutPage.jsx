@@ -1,6 +1,6 @@
 import { Container, Box, Text, useColorModeValue, Grid, GridItem } from "@chakra-ui/react";
 import { usePackageContext } from "../context/PackageContext";
-import DayBreakDown from "../components/Checkout/DayBreakDown";
+import DayBreakDown from "../components/Checkout/DayBreakDown/DayBreakDown";
 import CheckoutSummary from "../components/Checkout/CheckoutSummary";
 
 const CheckoutPage = () => {

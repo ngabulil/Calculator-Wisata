@@ -188,7 +188,7 @@ const ExpensesPage = () => {
           >
             <Flex justify="space-between" align="center">
               <Text fontSize="xl" fontWeight="bold" color="green">
-                Total Expensis:
+                Total Expenses:
               </Text>
               <Text fontSize="2xl" fontWeight="bold" color="green.600">
                 {formatCurrency(calculateGrandTotal())}
