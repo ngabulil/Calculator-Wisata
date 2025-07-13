@@ -25,23 +25,25 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
   let counter = 1;
 
   akomodasiDays?.forEach((day) => {
+    // Hotels
     if (day.hotels) {
       day.hotels.forEach(hotel => {
         accommodations.push({
           no: counter++,
-          name: hotel.hotel?.label || "Unknown Hotel",
-          room: hotel.roomType && hotel.roomType.length > 0 ? hotel.roomType[0].label : "Superior Room",
+          name: hotel.displayName || hotel.hotel?.label || "Unknown Hotel",
+          room: hotel.roomType?.[0]?.label || "Superior Room",
           type: "Hotel"
         });
       });
     }
     
+    // Villas
     if (day.villas) {
       day.villas.forEach(villa => {
         accommodations.push({
           no: counter++,
-          name: villa.villa?.label || "Unknown Villa",
-          room: villa.labelgitr  && villa.roomType.length > 0 ? villa.roomType[0].label : "Superior Room",
+          name: villa.displayName || villa.villa?.label || "Unknown Villa",
+          room: villa.roomType?.[0]?.label || "Superior Room",
           type: "Villa"
         });
       });
@@ -49,9 +51,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
   });
 
   return (
-    <Box
-      mb={8}
-    >
+    <Box mb={8}>
       <Table variant="simple" size="sm">
         <Thead>
           <Tr>

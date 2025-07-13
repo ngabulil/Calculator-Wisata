@@ -32,13 +32,41 @@ const tableTotalStyle = {
 };
 
 const ItineraryTable = ({ days, formatCurrency }) => {
-    const calculateTotalExpenses = () => {
+   const calculateTotalExpenses = () => {
         let total = 0;
         days.forEach(day => {
+            // Calculate total from regular activities
             day.activities.forEach(activity => {
                 if (activity.expense) {
                     const amount = parseFloat(
                         activity.expense.replace(/[^\d,-]/g, '')
+                        .replace(/\./g, '')
+                        .replace(',', '.')
+                    );
+                    if (!isNaN(amount)) {
+                        total += amount;
+                    }
+                }
+            });
+            
+            if (day.expenseItems) {
+                day.expenseItems.forEach(expenseItem => {
+                    const price = expenseItem.price || 0;
+                    const quantity = expenseItem.quantity || 1;
+                    total += (price * quantity);
+                });
+            }
+        });
+        return total;
+    };
+
+    const calculateTotalKidExpenses = () => {
+        let total = 0;
+        days.forEach(day => {
+            day.activities.forEach(activity => {
+                if (activity.kidExpense) {
+                    const amount = parseFloat(
+                        activity.kidExpense.replace(/[^\d,-]/g, '')
                         .replace(/\./g, '')
                         .replace(',', '.')
                     );
@@ -76,19 +104,28 @@ const ItineraryTable = ({ days, formatCurrency }) => {
                                     <Td></Td>
                                     <Td pl={6}>• {activity.item}</Td>
                                     <Td textAlign="right">{activity.expense}</Td>
+                                    <Td textAlign="right">{activity.kidExpense || '-'}</Td>
+                                </Tr>
+                            ))}
+                            {/* Display expense items if they exist */}
+                            {day.expenseItems && day.expenseItems.map((expenseItem, expIndex) => (
+                                <Tr key={`exp-${expIndex}`} _hover={{ background: gray }}>
                                     <Td></Td>
+                                    <Td pl={6}>• {expenseItem.label}</Td>
+                                    <Td textAlign="right">{formatCurrency(expenseItem.price * expenseItem.quantity)}</Td>
+                                    <Td textAlign="right">-</Td>
                                 </Tr>
                             ))}
                         </React.Fragment>
                     ))}
-                <Tr>
-                    <Td colSpan={3} style={tableTotalStyle}>
-                        Total Expenses
-                    </Td>
-                    <Td textAlign="right" style={tableTotalStyle}>
-                        {formatCurrency(calculateTotalExpenses())}
-                    </Td>
-                </Tr>
+                    <Tr>
+                        <Td colSpan={3} style={tableTotalStyle}>
+                            Total Expenses
+                        </Td>
+                        <Td textAlign="right" style={tableTotalStyle}>
+                            {formatCurrency(calculateTotalExpenses()+calculateTotalKidExpenses())}
+                        </Td>
+                    </Tr>
                 </Tbody>
             </Table>
         </Box>
