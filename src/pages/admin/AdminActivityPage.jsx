@@ -129,8 +129,8 @@ const AdminActivityPage = () => {
       setActivities(allActivityDetails);
       setRecentActivities(allActivityDetails);
     } else {
-      setActivities(allActivityDetails);
-      setRecentActivities(allActivityDetails);
+      setActivities(allActivityVendors);
+      setRecentActivities(allActivityVendors);
     }
   }, [allActivityDetails, allActivityVendors, mode]);
 
@@ -206,7 +206,7 @@ const AdminActivityPage = () => {
                         key={act.id}
                         act={act}
                         name={act.name}
-                        vendorName={act.vendor.name}
+                        vendorName={act?.vendor?.name || "Vendor"}
                         keterangan={act.keterangan}
                         note={act.note}
                         onEditButton={() => {
@@ -297,7 +297,6 @@ const VendorActivityDropdown = (props) => {
   return (
     <Select
       w={"max"}
-      placeholder="Mode"
       value={selectedOption}
       onChange={(e) => {
         setSelectedOption(e.target.value);

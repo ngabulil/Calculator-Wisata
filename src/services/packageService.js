@@ -54,7 +54,7 @@ export const apiGetAllActivityVendor = async () => {
 };
 export const apiGetActivityVendorById = async (id) => {
   try {
-    const response = await apiGet(`/activity/vendors/${id}`, token);
+    const response = await apiGet(`/activity/vendors/${id}`);
     return response;
   } catch (error) {
     console.error(error);
@@ -66,7 +66,7 @@ export const apiGetActivityVendorById = async (id) => {
 
 export const apiGetAllRestaurant = async () => {
   try {
-    const response = await apiGet("/restaurant/full", token);
+    const response = await apiGet("/restaurant/full");
     return response;
   } catch (error) {
     console.error(error);
@@ -76,7 +76,7 @@ export const apiGetAllRestaurant = async () => {
 
 export const apiGetRestaurantById = async (id) => {
   try {
-    const response = await apiGet(`/restaurant/${id}`, token);
+    const response = await apiGet(`/restaurant/${id}`);
     return response;
   } catch (error) {
     console.error(error);
@@ -97,7 +97,7 @@ export const apiGetAllDestination = async () => {
 
 export const apiGetDestinationById = async (id) => {
   try {
-    const response = await apiGet(`/tiket-masuk/${id}`, token);
+    const response = await apiGet(`/tiket-masuk/${id}`);
     return response;
   } catch (error) {
     console.error(error);

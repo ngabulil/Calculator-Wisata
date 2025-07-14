@@ -23,6 +23,7 @@ const RequireAuth = ({ children }) => {
           toast(toastConfig("Error", "Failed to fetch admin users", "error"));
         }
       } catch (error) {
+        console.log(error);
         toast(toastConfig("Error", "Invalid Token", "error"));
       } finally {
         setIsLoading(false);
