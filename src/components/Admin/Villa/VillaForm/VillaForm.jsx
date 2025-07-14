@@ -47,6 +47,7 @@ const VillaForm = () => {
   };
 
   const handleVillaCreate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: villaName,
       star: stars,
@@ -56,6 +57,7 @@ const VillaForm = () => {
       const res = await apiPostVilla(data);
 
       if (res.status == 201) {
+        toast.close(loading);
         toast(
           toastConfig("Hotel Created", "Hotel Berhasil Ditambahkan!", "success")
         );
@@ -63,16 +65,19 @@ const VillaForm = () => {
         setVillaAvailable(true);
         setVillaCreateId(res.result.id);
       } else {
+        toast.close(loading);
         toast(toastConfig("Villa Failed", "Villa Gagal Ditambahkan", "error"));
         setVillaAvailable(false);
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       setVillaAvailable(false);
     }
   };
 
   const handleVillaUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: villaName,
       star: stars,
@@ -83,15 +88,18 @@ const VillaForm = () => {
       const res = await apiPutVilla(villaData.id, data);
 
       if (res.status == 200) {
+        toast.close(loading);
         toast(toastConfig("Edit Villa", "Hotel Berhasil Diedit!", "success"));
 
         setVillaAvailable(true);
         setVillaCreateId(res.result.id);
       } else {
+        toast.close(loading);
         toast(toastConfig("Edit Villa", "Villa Gagal Diedit!", "error"));
         setVillaAvailable(false);
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       setVillaAvailable(false);
     }

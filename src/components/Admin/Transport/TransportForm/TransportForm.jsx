@@ -85,10 +85,12 @@ const TransportForm = (props) => {
   };
 
   const handleTransportCreate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiPostMobilFull(vehicle);
 
       if (res.status === 201) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Transport Created",
@@ -98,12 +100,14 @@ const TransportForm = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(
           toastConfig("Create Failed", "Transport Gagal Ditambahkan", "error")
         );
       }
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
       toast(
         toastConfig("Create Failed", "Transport Gagal Ditambahkan", "error")
       );
@@ -111,10 +115,12 @@ const TransportForm = (props) => {
   };
 
   const handleTransportUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiPutMobilFull(transportData.id, vehicle);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Transport Update",
@@ -124,10 +130,14 @@ const TransportForm = (props) => {
           )
         );
       } else {
+        toast.close(loading);
+
         toast(toastConfig("Update Failed", "Transport Gagal Diubah", "error"));
       }
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
+
       toast(toastConfig("Update Failed", "Transport Gagal Diubah", "error"));
     }
   };

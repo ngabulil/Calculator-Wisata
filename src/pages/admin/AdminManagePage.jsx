@@ -68,10 +68,12 @@ const AdminManagePage = () => {
   };
 
   const handleDeleteadminAccount = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteAdmin(id);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Sukses Hapus",
@@ -81,12 +83,14 @@ const AdminManagePage = () => {
         );
         handleGetAllAdmin();
       } else {
+        toast.close(loading);
         toast(
           toastConfig("Gagal Hapus", "Gagal Menghapus admin account", "error")
         );
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
+      toast.close(loading);
       toast(
         toastConfig("Gagal Hapus", "Gagal Menghapus admin account", "error")
       );

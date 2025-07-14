@@ -48,6 +48,8 @@ const ActivityFormPage = (props) => {
   };
 
   const handleActivityCreate = async () => {
+    
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       vendor_id: vendorId,
       name: name,
@@ -64,6 +66,7 @@ const ActivityFormPage = (props) => {
       const res = await apiPostActivityDetails(data);
 
       if (res.status === 201) {
+        toast.close(loading)
         toast(
           toastConfig(
             "Activity Created",
@@ -73,11 +76,13 @@ const ActivityFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading)
         toast(
           toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
         );
       }
     } catch (error) {
+      toast.close(loading)
       console.log(error);
       toast(
         toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
@@ -86,6 +91,7 @@ const ActivityFormPage = (props) => {
   };
 
   const handleActivityUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       vendor_id: vendorId,
       name: name,
@@ -102,6 +108,7 @@ const ActivityFormPage = (props) => {
       const res = await apiPutActivityDetails(activityData.id, data);
 
       if (res.status === 200) {
+        toast.close(loading)
         toast(
           toastConfig(
             "Sukes Update",
@@ -111,9 +118,11 @@ const ActivityFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading)
         toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
       }
     } catch (error) {
+      toast.close(loading)
       console.log(error);
       toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
     }

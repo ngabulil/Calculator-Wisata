@@ -84,36 +84,44 @@ const AdminActivityPage = () => {
   };
 
   const handleDeleteActivity = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteActivityDetails(id);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig("Sukses Hapus", "Berhasil Menghapus activity", "success")
         );
         handleGetActivity();
       } else {
+        toast.close(loading);
         toast(toastConfig("Gagal Hapus", "Gagal Menghapus activity", "error"));
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
+      toast.close(loading);
       toast(toastConfig("Gagal Hapus", "Gagal Menghapus activity", "error"));
     }
   };
   const handleDeleteVendor = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteActivityVendors(id);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig("Sukses Hapus", "Berhasil Menghapus vendor", "success")
         );
         handleGetVendors();
       } else {
+        toast.close(loading);
         toast(toastConfig("Gagal Hapus", "Gagal Menghapus vendor", "error"));
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
+      toast.close(loading);
       toast(toastConfig("Gagal Hapus", "Gagal Menghapus vendor", "error"));
     }
   };

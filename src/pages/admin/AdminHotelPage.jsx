@@ -54,17 +54,20 @@ const AdminHotelPage = () => {
   };
 
   const handleDeleteHotel = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteHotel(id);
 
-      console.log(res);
       if (res.status == 200) {
+        toast.close(loading);
         toast(toastConfig("Hapus Sukses", "Hotel Berhasil Dihapus", "success"));
         handleGetHotels();
       } else {
+        toast.close(loading);
         toast(toastConfig("Hapus Gagal", "Hotel Gagal Dihapus", "error"));
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       toast(toastConfig("Hapus Gagal", "Hotel Gagal Dihapus", "error"));
     }

@@ -23,15 +23,18 @@ const AuthLoginPage = () => {
   const { updateToken } = useAdminAuthContext();
 
   const handleSubmit = async (e) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
+
     e.preventDefault();
 
     const data = {
-      username: username ,
+      username: username,
       password: password,
     };
 
     try {
-      if (username  == "" || password == "") {
+      if (username == "" || password == "") {
+        toast.close(loading);
         toast(
           toastConfig(
             "Login Gagal",
@@ -44,6 +47,7 @@ const AuthLoginPage = () => {
       const res = await apiLoginAdmin(data);
 
       if (res.status === 200) {
+        toast.close(loading);
         updateToken(res.result.token);
         toast(
           toastConfig(
@@ -56,6 +60,7 @@ const AuthLoginPage = () => {
           )
         );
       } else {
+        toast.close(loading);
         toast(
           toastConfig(
             "Login Gagal",
@@ -65,6 +70,7 @@ const AuthLoginPage = () => {
         );
       }
     } catch (error) {
+      toast.close(loading);
       toast(toastConfig("Login Gagal", error.message, "error"));
     }
   };
@@ -87,9 +93,10 @@ const AuthLoginPage = () => {
               <FormLabel>Username</FormLabel>
               <Input
                 type="text"
-                placeholder="example"
+                placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required
               />
             </FormControl>
 

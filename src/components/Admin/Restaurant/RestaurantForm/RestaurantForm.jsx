@@ -36,6 +36,7 @@ const RestaurantFormPage = (props) => {
   };
 
   const handleRestaurantCreate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       resto_name: restoName,
       packages: restoPackage,
@@ -45,6 +46,7 @@ const RestaurantFormPage = (props) => {
       const res = await apiPostRestaurant(data);
 
       if (res.status === 201) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Restaurant Created",
@@ -54,12 +56,14 @@ const RestaurantFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(
           toastConfig("Create Failed", "Restaurant Gagal Ditambahkan", "error")
         );
       }
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
       toast(
         toastConfig("Create Failed", "Restaurant Gagal Ditambahkan", "error")
       );
@@ -67,17 +71,17 @@ const RestaurantFormPage = (props) => {
   };
 
   const handleRestaurantUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       resto_name: restoName,
       packages: restoPackage,
     };
 
-    console.log(data);
-
     try {
       const res = await apiPutRestaurant(restaurantData.id, data);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Restaurant Update",
@@ -87,10 +91,13 @@ const RestaurantFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(toastConfig("Update Failed", "Restaurant Gagal Diubah", "error"));
       }
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
+
       toast(toastConfig("Update Failed", "Restaurant Gagal Diubah", "error"));
     }
   };

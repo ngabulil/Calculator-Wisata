@@ -59,10 +59,12 @@ const AdminRestaurantPage = () => {
   };
 
   const handleDeleteRestaurant = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteRestaurant(id);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Sukses Hapus",
@@ -72,12 +74,14 @@ const AdminRestaurantPage = () => {
         );
         handleGetAllRestaurant();
       } else {
+        toast.close(loading);
         toast(
           toastConfig("Gagal Hapus", "Gagal Menghapus Restaurant", "error")
         );
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
+      toast.close(loading);
       toast(toastConfig("Gagal Hapus", "Gagal Menghapus Restaurant", "error"));
     }
   };

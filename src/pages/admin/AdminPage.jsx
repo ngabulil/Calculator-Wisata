@@ -55,19 +55,23 @@ const AdminPage = () => {
   };
 
   const handleDeletePackageFull = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeletePackageFull(id);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig("Sukses Hapus", "Berhasil Menghapus paket", "success")
         );
         handleGetAllPackageFull();
       } else {
+        toast.close(loading);
         toast(toastConfig("Gagal Hapus", "Gagal Menghapus paket", "error"));
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
+      toast.close(loading);
       toast(toastConfig("Gagal Hapus", "Gagal Menghapus paket", "error"));
     }
   };

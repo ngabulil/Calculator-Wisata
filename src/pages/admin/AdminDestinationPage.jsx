@@ -54,19 +54,23 @@ const AdminDestinationPage = () => {
   };
 
   const handleDeleteDestination = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteDestination(id);
 
       if (res.status == 200) {
+        toast.close(loading);
         toast(
           toastConfig("Hapus Sukses", "Destinasi Berhasil Dihapus", "success")
         );
         handleGetAllDestination();
       } else {
+        toast.close(loading);
         toast(toastConfig("Hapus Gagal", "Destinasi Gagal Dihapus", "error"));
       }
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
       toast(toastConfig("Hapus Gagal", "Destinasi Gagal Dihapus", "error"));
     }
   };

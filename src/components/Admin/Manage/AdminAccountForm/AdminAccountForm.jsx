@@ -30,6 +30,7 @@ const AdminFormPage = (props) => {
   };
 
   const handleAdminCreate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
       username: username,
@@ -40,6 +41,7 @@ const AdminFormPage = (props) => {
       const res = await apiPostAdmin(data);
 
       if (res.status === 201) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Admin Created",
@@ -49,15 +51,19 @@ const AdminFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(toastConfig("Create Failed", "Admin Gagal Ditambahkan", "error"));
       }
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
+
       toast(toastConfig("Create Failed", "Admin Gagal Ditambahkan", "error"));
     }
   };
 
   const handleAdminAccountUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
       username: username,
@@ -67,6 +73,7 @@ const AdminFormPage = (props) => {
       const res = await apiPutAdmin(adminData.id, data);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Admin Update",
@@ -76,10 +83,13 @@ const AdminFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(toastConfig("Update Failed", "Admin Gagal Diubah", "error"));
       }
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
+    
       toast(toastConfig("Update Failed", "Admin Gagal Diubah", "error"));
     }
   };

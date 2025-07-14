@@ -59,16 +59,20 @@ const AdminVillaPage = () => {
   };
 
   const handleDeleteVilla = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteVilla(id);
 
       if (res.status == 200) {
+        toast.close(loading);
         toast(toastConfig("Hapus Sukses", "Villa Berhasil Dihapus", "success"));
         handleGetVillas();
       } else {
+        toast.close(loading);
         toast(toastConfig("Hapus Gagal", "Villa Gagal Dihapus", "error"));
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       toast(toastConfig("Hapus Gagal", "Villa Gagal Dihapus", "error"));
     }

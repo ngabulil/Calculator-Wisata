@@ -54,10 +54,12 @@ const AdminTransportPage = () => {
   };
 
   const handleDeleteTransport = async (id) => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
       const res = await apiDeleteMobilFull(id);
 
       if (res.status == 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Hapus Sukses",
@@ -67,12 +69,14 @@ const AdminTransportPage = () => {
         );
         handleGetAllTransport();
       } else {
+        toast.close(loading);
         toast(
           toastConfig("Hapus Gagal", "Transportasi Gagal Dihapus", "error")
         );
       }
+    // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
       toast(toastConfig("Hapus Gagal", "Transportasi Gagal Dihapus", "error"));
     }
   };

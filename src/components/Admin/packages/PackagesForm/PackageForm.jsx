@@ -58,7 +58,7 @@ const PackageCreateForm = (props) => {
   } = useAdminPackageContext();
   const { getMobils, getAdditionalMobil } = useTransportContext();
   const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
-  const [editFormActive, setEditFormActive] = useState(false);
+  const [setEditFormActive] = useState(false);
 
   const handleSetValue = async () => {
     const res = await parseDays(onePackageFull.days);
@@ -601,6 +601,8 @@ const PackageFormPage = (props) => {
     };
     const payload = buildPayloadPaket(data);
 
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
+
     try {
       let res;
 
@@ -609,6 +611,7 @@ const PackageFormPage = (props) => {
         : (res = await apiPostPackageFull(payload));
 
       if (res.status == 201 || res.status == 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             editFormActive ? "Edit berhasil " : "Buat Berhasil",
@@ -622,6 +625,7 @@ const PackageFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(
           toastConfig(
             editFormActive ? "Edit Gagal " : "Buat Gagal",
@@ -632,6 +636,7 @@ const PackageFormPage = (props) => {
       }
       // eslint-disable-next-line no-unused-vars
     } catch (error) {
+      toast.close(loading);
       toast(
         toastConfig(
           editFormActive ? "Edit Gagal " : "Buat Gagal",

@@ -48,6 +48,7 @@ const HotelForm = () => {
   };
 
   const handleHotelCreate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: hotelName,
       star: stars,
@@ -58,6 +59,7 @@ const HotelForm = () => {
       const res = await apiPostHotel(data);
 
       if (res.status == 201) {
+        toast.close(loading);
         toast(
           toastConfig("Hotel Created", "Hotel Berhasil Ditambahkan!", "success")
         );
@@ -65,16 +67,19 @@ const HotelForm = () => {
         setHotelAvailable(true);
         setHotelCreateId(res.result.id);
       } else {
+        toast.close(loading);
         toast(toastConfig("Hotel Failed", "Hotel Gagal Ditambahkan", "error"));
         setHotelAvailable(false);
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       setHotelAvailable(false);
     }
   };
 
   const handleHotelUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: hotelName,
       star: stars,
@@ -85,15 +90,18 @@ const HotelForm = () => {
       const res = await apiPutHotel(hotelData.id, data);
 
       if (res.status == 200) {
+        toast.close(loading);
         toast(toastConfig("Edit Hotel", "Hotel Berhasil Diedit!", "success"));
 
         setHotelAvailable(true);
         setHotelCreateId(res.result.id);
       } else {
+        toast.close(loading);
         toast(toastConfig("Edit Hotel", "Hotel Gagal Diedit!", "error"));
         setHotelAvailable(false);
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       setHotelAvailable(false);
     }

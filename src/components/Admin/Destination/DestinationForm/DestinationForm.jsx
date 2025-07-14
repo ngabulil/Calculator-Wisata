@@ -42,6 +42,7 @@ const DestinationFormPage = (props) => {
   };
 
   const handleDestinationCreate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
       price_foreign_adult: priceForeignAdult,
@@ -55,6 +56,7 @@ const DestinationFormPage = (props) => {
       const res = await apiPostDestination(data);
 
       if (res.status === 201) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Destinasi Created",
@@ -64,12 +66,14 @@ const DestinationFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(
           toastConfig("Create Failed", "Destinasi Gagal Ditambahkan", "error")
         );
       }
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
       toast(
         toastConfig("Create Failed", "Destinasi Gagal Ditambahkan", "error")
       );
@@ -77,6 +81,7 @@ const DestinationFormPage = (props) => {
   };
 
   const handleDestinationUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
       price_foreign_adult: priceForeignAdult,
@@ -90,6 +95,7 @@ const DestinationFormPage = (props) => {
       const res = await apiPutDestination(destinationData.id, data);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Sukses Update",
@@ -99,10 +105,12 @@ const DestinationFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(toastConfig("Create Failed", "Destinasi Gagal Diubah", "error"));
       }
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      console.log(error);
+      toast.close(loading);
       toast(toastConfig("Create Failed", "Destinasi Gagal Diubah", "error"));
     }
   };

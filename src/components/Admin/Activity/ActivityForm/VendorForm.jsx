@@ -30,6 +30,7 @@ const VendorFormPage = (props) => {
   };
 
   const handleVendorCreate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
     };
@@ -38,6 +39,7 @@ const VendorFormPage = (props) => {
       const res = await apiPostActivityVendors(data);
 
       if (res.status === 201) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Vendor Created",
@@ -47,11 +49,13 @@ const VendorFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(
           toastConfig("Create Failed", "Vendor Gagal Ditambahkan", "error")
         );
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       toast(toastConfig("Create Failed", "Vendor Gagal Ditambahkan", "error"));
     }
