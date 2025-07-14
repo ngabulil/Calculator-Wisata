@@ -499,9 +499,6 @@ const PackageCreateForm = (props) => {
                               const updated = [...days];
                               updated[index].data.transport.mobils[i] =
                                 newMobil;
-                              console.log(
-                                updated[index].data.transport.mobils[i]
-                              );
                               setDays(updated);
                             }}
                             onDelete={() => {

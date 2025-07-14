@@ -1,5 +1,9 @@
 import { apiDelete, apiGet, apiPost, apiPut } from "./api";
 
+import Cookies from "js-cookie";
+
+const token = Cookies.get("token");
+
 export const apiGetAllHotel = async () => {
   try {
     const response = await apiGet("/hotels/full");
@@ -22,7 +26,7 @@ export const apiGetHotel = async (id) => {
 
 export const apiPostHotel = async (data) => {
   try {
-    const response = await apiPost("/hotels", data);
+    const response = await apiPost("/hotels", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -32,7 +36,7 @@ export const apiPostHotel = async (data) => {
 
 export const apiPutHotel = async (id, data) => {
   try {
-    const response = await apiPut(`/hotels/${id}`, data);
+    const response = await apiPut(`/hotels/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -42,7 +46,7 @@ export const apiPutHotel = async (id, data) => {
 
 export const apiDeleteHotel = async (id) => {
   try {
-    const response = await apiDelete(`/hotels/${id}`);
+    const response = await apiDelete(`/hotels/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -73,7 +77,7 @@ export const apiGetAllHotelRooms = async () => {
 
 export const apiPostHotelRooms = async (data) => {
   try {
-    const response = await apiPost("/hotels/rooms", data);
+    const response = await apiPost("/hotels/rooms", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -82,7 +86,7 @@ export const apiPostHotelRooms = async (data) => {
 };
 export const apiPutHotelRooms = async (id, data) => {
   try {
-    const response = await apiPut(`/hotels/rooms/${id}`, data);
+    const response = await apiPut(`/hotels/rooms/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -113,7 +117,7 @@ export const apiGetNormalSeasonsById = async (id) => {
 
 export const apiPostNormalSeasons = async (data) => {
   try {
-    const response = await apiPost("/hotels/normal-seasons", data);
+    const response = await apiPost("/hotels/normal-seasons", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -122,7 +126,7 @@ export const apiPostNormalSeasons = async (data) => {
 };
 export const apiPutNormalSeasons = async (id, data) => {
   try {
-    const response = await apiPut(`/hotels/normal-seasons/${id}`, data);
+    const response = await apiPut(`/hotels/normal-seasons/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -131,7 +135,7 @@ export const apiPutNormalSeasons = async (id, data) => {
 };
 export const apiDeleteNormalSeasons = async (id) => {
   try {
-    const response = await apiDelete(`/hotels/normal-seasons/${id} `);
+    const response = await apiDelete(`/hotels/normal-seasons/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -153,7 +157,7 @@ export const apiGetHighSeasonsById = async (id) => {
 
 export const apiPostHighSeasons = async (data) => {
   try {
-    const response = await apiPost("/hotels/high-seasons", data);
+    const response = await apiPost("/hotels/high-seasons", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -163,7 +167,7 @@ export const apiPostHighSeasons = async (data) => {
 
 export const apiPutHighSeasons = async (id, data) => {
   try {
-    const response = await apiPut(`/hotels/high-seasons/${id}`, data);
+    const response = await apiPut(`/hotels/high-seasons/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -172,7 +176,7 @@ export const apiPutHighSeasons = async (id, data) => {
 };
 export const apiDeleteHighSeasons = async (id) => {
   try {
-    const response = await apiDelete(`/hotels/high-seasons/${id} `);
+    const response = await apiDelete(`/hotels/high-seasons/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -194,7 +198,7 @@ export const apiGetPeakSeasonsById = async (id) => {
 
 export const apiPostPeakSeasons = async (data) => {
   try {
-    const response = await apiPost("/hotels/peak-seasons", data);
+    const response = await apiPost("/hotels/peak-seasons", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -204,7 +208,7 @@ export const apiPostPeakSeasons = async (data) => {
 
 export const apiPutPeakSeasons = async (id, data) => {
   try {
-    const response = await apiPut(`/hotels/peak-seasons/${id}`, data);
+    const response = await apiPut(`/hotels/peak-seasons/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -213,7 +217,7 @@ export const apiPutPeakSeasons = async (id, data) => {
 };
 export const apiDeletePeakSeasons = async (id) => {
   try {
-    const response = await apiDelete(`/hotels/peak-seasons/${id} `);
+    const response = await apiDelete(`/hotels/peak-seasons/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);

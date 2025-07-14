@@ -1,4 +1,7 @@
 import { apiDelete, apiGet, apiPost, apiPut } from "./api";
+import Cookies from "js-cookie";
+
+const token = Cookies.get("token");
 
 export const apiGetAllVilla = async () => {
   try {
@@ -21,7 +24,7 @@ export const apiGetVilla = async (id) => {
 };
 export const apiPostVilla = async (data) => {
   try {
-    const response = await apiPost("/villas", data);
+    const response = await apiPost("/villas", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -30,7 +33,7 @@ export const apiPostVilla = async (data) => {
 };
 export const apiPutVilla = async (id, data) => {
   try {
-    const response = await apiPut(`/villas/${id}`, data);
+    const response = await apiPut(`/villas/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -39,7 +42,7 @@ export const apiPutVilla = async (id, data) => {
 };
 export const apiDeleteVilla = async (id) => {
   try {
-    const response = await apiDelete(`/villas/${id}`);
+    const response = await apiDelete(`/villas/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -70,7 +73,7 @@ export const apiGetVillaRoomsById = async (id) => {
 
 export const apiPostVillaRooms = async (data) => {
   try {
-    const response = await apiPost("/villas/rooms", data);
+    const response = await apiPost("/villas/rooms", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -80,7 +83,7 @@ export const apiPostVillaRooms = async (data) => {
 
 export const apiPutVillaRooms = async (id, data) => {
   try {
-    const response = await apiPut(`/villas/rooms/${id}`, data);
+    const response = await apiPut(`/villas/rooms/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -89,7 +92,7 @@ export const apiPutVillaRooms = async (id, data) => {
 };
 export const apiDeleteVillaRooms = async (id, data) => {
   try {
-    const response = await apiDelete(`/villas/rooms/${id}`, data);
+    const response = await apiDelete(`/villas/rooms/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -101,7 +104,7 @@ export const apiDeleteVillaRooms = async (id, data) => {
 
 export const apiPostNormalSeasons = async (data) => {
   try {
-    const response = await apiPost("/villas/normal-seasons", data);
+    const response = await apiPost("/villas/normal-seasons", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -111,7 +114,7 @@ export const apiPostNormalSeasons = async (data) => {
 
 export const apiPutNormalSeasons = async (id, data) => {
   try {
-    const response = await apiPut(`/villas/normal-seasons/${id}`, data);
+    const response = await apiPut(`/villas/normal-seasons/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -120,7 +123,7 @@ export const apiPutNormalSeasons = async (id, data) => {
 };
 export const apiDeleteNormalSeasons = async (id) => {
   try {
-    const response = await apiDelete(`/villas/normal-seasons/${id} `);
+    const response = await apiDelete(`/villas/normal-seasons/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -132,7 +135,7 @@ export const apiDeleteNormalSeasons = async (id) => {
 
 export const apiPostHighSeasons = async (data) => {
   try {
-    const response = await apiPost("/villas/high-seasons", data);
+    const response = await apiPost("/villas/high-seasons", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -142,7 +145,7 @@ export const apiPostHighSeasons = async (data) => {
 
 export const apiPutHighSeasons = async (id, data) => {
   try {
-    const response = await apiPut(`/villas/high-seasons/${id}`, data);
+    const response = await apiPut(`/villas/high-seasons/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -151,7 +154,7 @@ export const apiPutHighSeasons = async (id, data) => {
 };
 export const apiDeleteHighSeasons = async (id) => {
   try {
-    const response = await apiDelete(`/villas/high-seasons/${id} `);
+    const response = await apiDelete(`/villas/high-seasons/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -163,7 +166,7 @@ export const apiDeleteHighSeasons = async (id) => {
 
 export const apiPostPeakSeasons = async (data) => {
   try {
-    const response = await apiPost("/villas/peak-seasons", data);
+    const response = await apiPost("/villas/peak-seasons", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -173,7 +176,7 @@ export const apiPostPeakSeasons = async (data) => {
 
 export const apiPutPeakSeasons = async (id, data) => {
   try {
-    const response = await apiPut(`/villas/peak-seasons/${id}`, data);
+    const response = await apiPut(`/villas/peak-seasons/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -182,7 +185,7 @@ export const apiPutPeakSeasons = async (id, data) => {
 };
 export const apiDeletePeakSeasons = async (id) => {
   try {
-    const response = await apiDelete(`/villas/peak-seasons/${id} `);
+    const response = await apiDelete(`/villas/peak-seasons/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -194,7 +197,7 @@ export const apiDeletePeakSeasons = async (id) => {
 
 export const apiPostHoneySeasons = async (data) => {
   try {
-    const response = await apiPost("/villas/honeymoon-seasons", data);
+    const response = await apiPost("/villas/honeymoon-seasons", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -204,7 +207,11 @@ export const apiPostHoneySeasons = async (data) => {
 
 export const apiPutHoneySeasons = async (id, data) => {
   try {
-    const response = await apiPut(`/villas/honeymoon-seasons/${id}`, data);
+    const response = await apiPut(
+      `/villas/honeymoon-seasons/${id}`,
+      data,
+      token
+    );
     return response;
   } catch (error) {
     console.error(error);
@@ -213,7 +220,7 @@ export const apiPutHoneySeasons = async (id, data) => {
 };
 export const apiDeleteHoneySeasons = async (id) => {
   try {
-    const response = await apiDelete(`/villas/honeymoon-seasons/${id} `);
+    const response = await apiDelete(`/villas/honeymoon-seasons/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);

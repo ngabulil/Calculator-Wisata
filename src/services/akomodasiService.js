@@ -1,5 +1,9 @@
 import { apiDelete, apiGet, apiPost } from "./api";
 
+import Cookies from "js-cookie";
+
+const token = Cookies.get("token");
+
 export const apiGetAllHotel = async () => {
   try {
     const response = await apiGet("/hotels/full");
@@ -42,7 +46,7 @@ export const apiGetAdditionalAkomodasi = async () => {
 
 export const apiPostAdditionalAkomodasi = async (data) => {
   try {
-    const response = await apiPost("/akomodasi/additional", data);
+    const response = await apiPost("/akomodasi/additional", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -52,7 +56,7 @@ export const apiPostAdditionalAkomodasi = async (data) => {
 
 export const apiDeleteAdditionalAkomodasi = async (id) => {
   try {
-    const response = await apiDelete(`/akomodasi/additional/${id}`);
+    const response = await apiDelete(`/akomodasi/additional/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);

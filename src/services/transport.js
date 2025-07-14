@@ -1,5 +1,9 @@
 import { apiDelete, apiGet, apiPost, apiPut } from "./api";
 
+import Cookies from "js-cookie";
+
+const token = Cookies.get("token");
+
 export const apiGetAllMobil = async () => {
   try {
     const response = await apiGet("/mobil/full");
@@ -11,7 +15,7 @@ export const apiGetAllMobil = async () => {
 };
 export const apiPutMobilFull = async (id, data) => {
   try {
-    const response = await apiPut(`/mobil/full/${id}`, data);
+    const response = await apiPut(`/mobil/full/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -20,7 +24,7 @@ export const apiPutMobilFull = async (id, data) => {
 };
 export const apiPostMobilFull = async (data) => {
   try {
-    const response = await apiPost("/mobil/full", data);
+    const response = await apiPost("/mobil/full", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -29,7 +33,7 @@ export const apiPostMobilFull = async (data) => {
 };
 export const apiDeleteMobilFull = async (id) => {
   try {
-    const response = await apiDelete(`/mobil/full/${id}`);
+    const response = await apiDelete(`/mobil/full/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -68,7 +72,7 @@ export const apiGetAdditionalMobilById = async (id) => {
 
 export const apiPostAdditionalMobil = async (data) => {
   try {
-    const response = await apiPost("/transport/additional", data);
+    const response = await apiPost("/transport/additional", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -78,7 +82,7 @@ export const apiPostAdditionalMobil = async (data) => {
 
 export const apiDeleteAdditionalMobil = async (id) => {
   try {
-    const response = await apiDelete(`/transport/additional/${id}`);
+    const response = await apiDelete(`/transport/additional/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);

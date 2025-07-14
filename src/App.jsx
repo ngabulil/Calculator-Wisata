@@ -25,7 +25,10 @@ import AdminPesananPage from "./pages/admin/AdminPesananPage";
 import AdminActivityPage from "./pages/admin/AdminActivityPage";
 import AdminRestaurantPage from "./pages/admin/AdminRestaurantPage";
 import AdminDestinationPage from "./pages/admin/AdminDestinationPage";
+import AdminManagePage from "./pages/admin/AdminManagePage";
 import CalculatorFixPage from "./pages/CalculatorFixPage";
+import RequireAuth from "./pages/auth/requireAuth";
+import RequireRole from "./pages/auth/requireRole";
 
 function App() {
   const adminRoutes = [
@@ -42,6 +45,8 @@ function App() {
     { path: "/admin/destination", element: <AdminDestinationPage /> },
     { path: "/admin/destination/edit", element: <AdminDestinationPage /> },
     { path: "/admin/pesanan", element: <AdminPesananPage /> },
+    { path: "/admin/manage", element: <AdminManagePage /> },
+    { path: "/admin/manage/edit", element: <AdminManagePage /> },
     { path: "/admin/activity", element: <AdminActivityPage /> },
     { path: "/admin/activity/edit", element: <AdminActivityPage /> },
   ];
@@ -68,7 +73,19 @@ function App() {
         <Route
           key={path}
           path={path}
-          element={<LayoutAdmin>{element}</LayoutAdmin>}
+          element={
+            <RequireAuth>
+              <RequireRole
+                allow={
+                  path.includes("manage")
+                    ? ["super_admin"]
+                    : ["super_admin", "admin"]
+                }
+              >
+                <LayoutAdmin>{element}</LayoutAdmin>
+              </RequireRole>
+            </RequireAuth>
+          }
         />
       ))}
 

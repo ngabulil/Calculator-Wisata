@@ -5,6 +5,7 @@ import AdminActivityContextProvider from "./AdminActivityContext";
 import AdminRestaurantContextProvider from "./AdminRestaurantContext";
 import AdminTransportContextProvider from "./AdminTransportContext";
 import AdminDestinationContextProvider from "./AdminDestinationContext";
+import AdminManageContextProvider from "./AdminManageContext";
 
 const AdminProviderContext = ({ children }) => {
   return (
@@ -14,9 +15,11 @@ const AdminProviderContext = ({ children }) => {
           <AdminTransportContextProvider>
             <AdminRestaurantContextProvider>
               <AdminDestinationContextProvider>
-                <AdminHotelContextProvider>
-                  {children}
-                </AdminHotelContextProvider>
+                <AdminManageContextProvider>
+                  <AdminHotelContextProvider>
+                    {children}
+                  </AdminHotelContextProvider>
+                </AdminManageContextProvider>
               </AdminDestinationContextProvider>
             </AdminRestaurantContextProvider>
           </AdminTransportContextProvider>

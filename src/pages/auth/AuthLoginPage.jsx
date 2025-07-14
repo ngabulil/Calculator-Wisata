@@ -10,34 +10,62 @@ import {
   Container,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import toastConfig from "../../utils/toastConfig";
+import { apiLoginAdmin } from "../../services/adminService";
+import { useNavigate } from "react-router-dom";
+import { useAdminAuthContext } from "../../context/AuthContext";
 
-const AuthLoginPage = ({ onLogin }) => {
+const AuthLoginPage = () => {
+  const navigate = useNavigate();
   const toast = useToast();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { updateToken } = useAdminAuthContext();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simulasi login - ganti dengan API call bila perlu
-    if (email === "admin@example.com" && password === "admin123") {
-      toast({
-        title: "Login berhasil",
-        description: "Selamat datang, Superadmin!",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+    const data = {
+      username: username ,
+      password: password,
+    };
 
-      onLogin?.({ role: "superadmin", email });
-    } else {
-      toast({
-        title: "Login gagal",
-        description: "Email atau password salah.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+    try {
+      if (username  == "" || password == "") {
+        toast(
+          toastConfig(
+            "Login Gagal",
+            "Username dan Password tidak boleh kosong",
+            "error"
+          )
+        );
+      }
+
+      const res = await apiLoginAdmin(data);
+
+      if (res.status === 200) {
+        updateToken(res.result.token);
+        toast(
+          toastConfig(
+            "Login Berhasil",
+            "Selamat datang di halaman admin",
+            "success",
+            () => {
+              navigate("/admin/paket");
+            }
+          )
+        );
+      } else {
+        toast(
+          toastConfig(
+            "Login Gagal",
+            "Periksa username dan password Anda",
+            "error"
+          )
+        );
+      }
+    } catch (error) {
+      toast(toastConfig("Login Gagal", error.message, "error"));
     }
   };
 
@@ -56,12 +84,12 @@ const AuthLoginPage = ({ onLogin }) => {
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl id="email" isRequired>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Username</FormLabel>
               <Input
-                type="email"
-                placeholder="admin@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="example"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </FormControl>
 

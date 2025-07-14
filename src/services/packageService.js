@@ -1,5 +1,7 @@
 import { apiDelete, apiGet, apiPost, apiPut } from "./api";
+import Cookies from "js-cookie";
 
+const token = Cookies.get("token");
 //
 
 export const apiGetAllPackageFull = async () => {
@@ -13,7 +15,7 @@ export const apiGetAllPackageFull = async () => {
 };
 export const apiPostPackageFull = async (data) => {
   try {
-    const response = await apiPost("/paket/full", data);
+    const response = await apiPost("/paket/full", data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -22,7 +24,7 @@ export const apiPostPackageFull = async (data) => {
 };
 export const apiPutPackageFull = async (id, data) => {
   try {
-    const response = await apiPut(`/paket/full/${id}`, data);
+    const response = await apiPut(`/paket/full/${id}`, data, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -31,7 +33,7 @@ export const apiPutPackageFull = async (id, data) => {
 };
 export const apiDeletePackageFull = async (id) => {
   try {
-    const response = await apiDelete(`/paket/full/${id}`);
+    const response = await apiDelete(`/paket/full/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -52,7 +54,7 @@ export const apiGetAllActivityVendor = async () => {
 };
 export const apiGetActivityVendorById = async (id) => {
   try {
-    const response = await apiGet(`/activity/vendors/${id}`);
+    const response = await apiGet(`/activity/vendors/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -64,7 +66,7 @@ export const apiGetActivityVendorById = async (id) => {
 
 export const apiGetAllRestaurant = async () => {
   try {
-    const response = await apiGet("/restaurant/full");
+    const response = await apiGet("/restaurant/full", token);
     return response;
   } catch (error) {
     console.error(error);
@@ -74,7 +76,7 @@ export const apiGetAllRestaurant = async () => {
 
 export const apiGetRestaurantById = async (id) => {
   try {
-    const response = await apiGet(`/restaurant/${id}`);
+    const response = await apiGet(`/restaurant/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
@@ -95,7 +97,7 @@ export const apiGetAllDestination = async () => {
 
 export const apiGetDestinationById = async (id) => {
   try {
-    const response = await apiGet(`/tiket-masuk/${id}`);
+    const response = await apiGet(`/tiket-masuk/${id}`, token);
     return response;
   } catch (error) {
     console.error(error);
