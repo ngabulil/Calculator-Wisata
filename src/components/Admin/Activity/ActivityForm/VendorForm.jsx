@@ -36,6 +36,16 @@ const VendorFormPage = (props) => {
     };
 
     try {
+      for (const [key, value] of Object.entries(data)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       const res = await apiPostActivityVendors(data);
 
       if (res.status === 201) {
@@ -62,14 +72,26 @@ const VendorFormPage = (props) => {
   };
 
   const handleVendorUpdate = async () => {
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
     };
 
     try {
+      for (const [key, value] of Object.entries(data)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       const res = await apiPutActivityVendors(vendorData.id, data);
 
       if (res.status === 200) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Vendor Update",
@@ -79,9 +101,11 @@ const VendorFormPage = (props) => {
           )
         );
       } else {
+        toast.close(loading);
         toast(toastConfig("Update Failed", "Vendor Gagal Diubah", "error"));
       }
     } catch (error) {
+      toast.close(loading);
       console.log(error);
       toast(toastConfig("Update Failed", "Vendor Gagal Diubah", "error"));
     }

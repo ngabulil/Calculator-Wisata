@@ -272,6 +272,7 @@ export default async function parseDays(daysFromApi) {
               ? "inOut"
               : "menginap",
           area: labelArea,
+
           harga: 400000,
           jumlah: 1,
           id_area: mobil.id_area,
@@ -324,3 +325,5 @@ export default async function parseDays(daysFromApi) {
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+

@@ -155,7 +155,7 @@ const AddRoomTypeCard = (props) => {
         >
           <Flex p={"0.2"} w={"full"} justifyContent={"space-between"}>
             <Text fontWeight={"bold"}>Room Type</Text>
-            {props.isEdit && (
+            {
               <IconButton
                 icon={isEdit ? <DeleteIcon /> : <CloseIcon />}
                 aria-label="Hapus"
@@ -165,7 +165,7 @@ const AddRoomTypeCard = (props) => {
                 background={"red.300"}
                 onClick={() => handleDeleteRoom(room, index)}
               />
-            )}
+            }
           </Flex>
 
           <Input

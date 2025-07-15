@@ -44,10 +44,18 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
     );
   }, [selectedResto, restaurant]);
 
-  const typeWisataOptions = [
-    { value: "domestik", label: "Domestik" },
-    { value: "asing", label: "Asing" },
-  ];
+  const typeWisataOptions = useMemo(() => {
+    const defaultOptions = [
+      { value: "domestik", label: "Domestik" },
+      { value: "asing", label: "Asing" },
+    ];
+
+    console.log("selectedTypeWisata", selectedTypeWisata);
+
+    if (!selectedTypeWisata) return defaultOptions;
+
+    return defaultOptions.filter((opt) => opt.value === selectedTypeWisata);
+  }, [selectedTypeWisata]);
 
   useEffect(() => {
     onChange({

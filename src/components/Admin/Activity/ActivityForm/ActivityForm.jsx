@@ -48,7 +48,6 @@ const ActivityFormPage = (props) => {
   };
 
   const handleActivityCreate = async () => {
-    
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       vendor_id: vendorId,
@@ -63,10 +62,20 @@ const ActivityFormPage = (props) => {
     };
 
     try {
+      for (const [key, value] of Object.entries(data)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       const res = await apiPostActivityDetails(data);
 
       if (res.status === 201) {
-        toast.close(loading)
+        toast.close(loading);
         toast(
           toastConfig(
             "Activity Created",
@@ -76,13 +85,13 @@ const ActivityFormPage = (props) => {
           )
         );
       } else {
-        toast.close(loading)
+        toast.close(loading);
         toast(
           toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
         );
       }
     } catch (error) {
-      toast.close(loading)
+      toast.close(loading);
       console.log(error);
       toast(
         toastConfig("Create Failed", "Aktivitas Gagal Ditambahkan", "error")
@@ -105,10 +114,20 @@ const ActivityFormPage = (props) => {
     };
 
     try {
+      for (const [key, value] of Object.entries(data)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       const res = await apiPutActivityDetails(activityData.id, data);
 
       if (res.status === 200) {
-        toast.close(loading)
+        toast.close(loading);
         toast(
           toastConfig(
             "Sukes Update",
@@ -118,11 +137,11 @@ const ActivityFormPage = (props) => {
           )
         );
       } else {
-        toast.close(loading)
+        toast.close(loading);
         toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
       }
     } catch (error) {
-      toast.close(loading)
+      toast.close(loading);
       console.log(error);
       toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
     }

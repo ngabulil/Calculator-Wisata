@@ -97,6 +97,7 @@ const HotelRead = () => {
               return (
                 <AppRoomCard
                   key={index}
+                  flexGrow={hotelsData?.roomType.length % 2 != 0 ? 0 : 1}
                   label={room.label}
                   extrabed={room.extrabed}
                   contractUntil={room.contractUntil}
@@ -168,7 +169,8 @@ const AppRoomCard = (props) => {
       p={3}
       bg={"gray.700"}
       rounded={12}
-      w={"max"}
+      w={"49.1%"}
+      flexGrow={props.flexGrow}
     >
       <Flex gap={2} alignItems={"center"}>
         <Box

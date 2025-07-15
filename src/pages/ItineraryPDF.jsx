@@ -1,52 +1,22 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
+import { 
+  useState, 
+  useEffect, 
+  useRef, 
+  useImperativeHandle, 
+  forwardRef 
 } from "react";
-import { Box } from "@chakra-ui/react";
-import InvoiceHeader from "../components/InvoicePDF/InvoiceHeader";
-import ItineraryTable from "../components/InvoicePDF/ItineraryTable";
-import CostBreakDown from "../components/InvoicePDF/CostBreakDown";
+import { Box, Text, Divider,Button } from "@chakra-ui/react";
+import HotelChoiceTable from "../components/ItineraryPDF/HotelChoiceTable";
+import ItineraryTable from "../components/ItineraryPDF/ItineraryTable";
+import InclusionExclusion from "../components/ItineraryPDF/InclusionExclusion";
 import { usePackageContext } from "../context/PackageContext";
-import { useCheckoutContext } from "../context/CheckoutContext";
-import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
-import { apiGetUser } from "../services/adminService";
-import Cookies from "js-cookie"
 import useExportPdf from "../hooks/useExportPdf";
 
-const formatCurrency = (amount) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(amount);
-};
-
-const InvoicePDF = forwardRef((props, ref) => {
+const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
-  const {
-    akomodasiTotal,
-    transportTotal,
-    tourTotal,
-    expensesTotal, // Now getting from checkout context
-    grandTotal,
-    breakdown,
-    calculateHotelTotal,
-    calculateVillaTotal,
-  } = useCheckoutContext();
-  const { days: expenseDays, tourCode, pax } = useExpensesContext();
-
-  const [hotelData, setHotelData] = useState([]);
-  const [villaData, setVillaData] = useState([]);
-  const [transportData, setTransportData] = useState([]);
-  const [additionalData, setAdditionalData] = useState([]);
-  const [itineraryData, setItineraryData] = useState([]);
   const [mergedDays, setMergedDays] = useState([]);
-  const [adminName, setAdminName] = useState("")
-
+  const [itineraryData, setItineraryData] = useState([]);
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const componentRef = useRef();
 
@@ -54,7 +24,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     async exportAsBlob() {
       return exportAsBlob(componentRef);
     },
-    async download(filename = `${tourCode}_invoice.pdf`) {
+    async download(filename = `itinerary_${selectedPackage?.title || ""}.pdf`) {
       await downloadPdf(componentRef, filename);
     }
   }));
@@ -71,142 +41,33 @@ const InvoicePDF = forwardRef((props, ref) => {
         }
       }
     };
-
-    const fetchAdmin = async () => {
-      const token = Cookies.get("token");
-      if (!token) {
-        return;
-      }
-
-      try {
-        const res = await apiGetUser(token);
-        if (res.status === 200) {
-          setAdminName(res.result.name);
-        } else{
-          console.log("Error", "Failed to fetch admin users", "error");
-        }
-      } catch (error) {
-        console.log(error);
-        console.log("Error", "Invalid Token", "error");
-      }
-    };
-
     processDays();
-    fetchAdmin();
   }, [selectedPackage]);
 
   useEffect(() => {
     if (mergedDays.length === 0) return;
 
-    const hotels = [];
-    const villas = [];
-    const transports = [];
-    const additionals = [];
-
-    mergedDays.forEach((day, dayIndex) => {
-      // Hotel
-      day.hotels?.forEach((hotel) => {
-        hotels.push({
-          day: `Day ${dayIndex + 1}`,
-          name: hotel.displayName,
-          rooms: hotel.jumlahKamar || 1,
-          extrabedQty: hotel.useExtrabed ? hotel.jumlahExtrabed || 0 : 0,
-          pricePerNight: hotel.hargaPerKamar || 0,
-          extrabedPrice: hotel.hargaExtrabed || 0,
-          total: calculateHotelTotal([hotel]),
-        });
-      });
-
-      // Villa
-      day.villas?.forEach((villa) => {
-        villas.push({
-          day: `Day ${dayIndex + 1}`,
-          name: villa.displayName,
-          rooms: villa.jumlahKamar || 1,
-          extrabedQty: villa.useExtrabed ? villa.jumlahExtrabed || 0 : 0,
-          pricePerNight: villa.hargaPerKamar || 0,
-          extrabedPrice: villa.hargaExtrabed || 0,
-          total: calculateVillaTotal([villa]),
-        });
-      });
-
-      // Transport
-      day.mobils?.forEach((mobil) => {
-        transports.push({
-          day: `Day ${dayIndex + 1}`,
-          description: mobil.displayName,
-          price: mobil.harga || 0,
-        });
-      });
-
-      // Akomodasi tambahan
-      day.akomodasi_additionals?.forEach((item) => {
-        additionals.push({
-          day: `Day ${dayIndex + 1}`,
-          name: item.displayName,
-          quantity: item.jumlah || 1,
-          price: item.harga || 0,
-          total: (item.harga || 0) * (item.jumlah || 1),
-        });
-      });
-
-      // Transport tambahan
-      day.transport_additionals?.forEach((item) => {
-        additionals.push({
-          day: `Day ${dayIndex + 1}`,
-          name: item.displayName,
-          quantity: item.jumlah || 1,
-          price: item.harga || 0,
-          total: (item.harga || 0) * (item.jumlah || 1),
-        });
-      });
-    });
-
-    setHotelData(hotels.concat(villas));
-    setVillaData(villas);
-    setTransportData(transports);
-    setAdditionalData(additionals);
-
-    // Itinerary with kid expenses and expense items
-    const itinerary = mergedDays.map((day, index) => {
+    // Format itinerary data dari mergedDays
+    const formattedDays = mergedDays.map((day, index) => {
+      // Gabungkan semua aktivitas
       const activities = [
-        ...(day.destinations || []).map((dest) => ({
-          item: dest.displayName,
-          expense: formatCurrency(dest.hargaAdult || 0),
-          kidExpense: formatCurrency(dest.hargaChild || 0),
-        })),
-        ...(day.restaurants || []).map((resto) => ({
-          item: resto.displayName,
-          expense: formatCurrency(resto.hargaAdult || 0),
-          kidExpense: formatCurrency(resto.hargaChild || 0),
-        })),
-        ...(day.activities || []).map((act) => ({
-          item: act.displayName,
-          expense: formatCurrency(act.hargaAdult || 0),
-          kidExpense: formatCurrency(act.hargaChild || 0),
-        })),
+        ...(day.destinations || []).map(dest => dest.displayName),
+        ...(day.restaurants || []).map(resto => resto.displayName),
+        ...(day.activities || []).map(act => act.displayName),
       ];
-
-      // Get expense items from ExpensesContext for this day
-      const expenseDay = expenseDays[index];
-      const expenseItems = expenseDay?.totals || [];
 
       return {
         day: index + 1,
         title: day.day_name || `Day ${index + 1}`,
         description: day.description_day || day.day_description || "",
         activities: activities,
-        expenseItems: expenseItems,
       };
     });
 
-    setItineraryData(itinerary);
-  }, [mergedDays, calculateHotelTotal, calculateVillaTotal, expenseDays]);
+    setItineraryData(formattedDays);
+  }, [mergedDays]);
 
-  const actualPax = pax && parseInt(pax) > 0 ? parseInt(pax) : 1;
-  const perPax = actualPax > 0 ? breakdown.markup / actualPax : 0;
-  const selling = grandTotal / actualPax;
-
+  // console.log("merger",mergedDays);
   return (
     <Box
       ref={componentRef}
@@ -222,28 +83,57 @@ const InvoicePDF = forwardRef((props, ref) => {
       lineHeight="1.4"
       color="#000000"
       boxSizing="border-box"
+            sx={{
+        "& img": {
+          display: "block !important",
+          maxWidth: "100%",
+          height: "auto",
+        },
+        "& table": {
+          borderCollapse: "collapse",
+          width: "100%",
+          marginBottom: "20px",
+        },
+        "& th, & td": {
+          border: "1px solid #ddd",
+          padding: "8px",
+          textAlign: "left",
+          verticalAlign: "top",
+        },
+        "& th": {
+          backgroundColor: "#FB8C00",
+          color: "#000000",
+          fontWeight: "bold",
+        },
+      }}
     >
-      <InvoiceHeader code={tourCode} totalPax={actualPax} adminName={adminName} />
+      <Text
+        fontSize="2xl"
+        fontWeight="bold"
+        mb={2}
+        color="#FB8C00"
+        textAlign="center"
+      >
+        Travel Itinerary & Quotation
+      </Text>
 
-      <ItineraryTable days={itineraryData} formatCurrency={formatCurrency} />
+      <Text fontSize="md" textAlign="center" mb={6} color="gray.600">
+        Your Adventure Awaits!
+      </Text>
 
-      <CostBreakDown
-        hotelData={hotelData}
-        villaData={villaData}
-        transportData={transportData}
-        additionalData={additionalData}
-        akomodasiTotal={akomodasiTotal}
-        transportTotal={transportTotal}
-        tourTotal={tourTotal}
-        markup={breakdown.markup}
-        grandTotal={grandTotal}
-        totalExpenses={expensesTotal} 
-        perPax={perPax}
-        selling={selling}
-        formatCurrency={formatCurrency}
-      />
+      <Divider mb={6} borderColor="#FFA726" />
+
+      <HotelChoiceTable akomodasiDays={mergedDays} />
+
+      <Divider my={6} borderColor="#FFA726" />
+
+      <ItineraryTable   title={`ITINERARY ${selectedPackage?.title || ""}`} days={itineraryData} />
+
+      <Divider my={6} borderColor="#FFA726" />
+
+      <InclusionExclusion />
     </Box>
   );
 });
 
-export default InvoicePDF;
+export default ItineraryPDF;

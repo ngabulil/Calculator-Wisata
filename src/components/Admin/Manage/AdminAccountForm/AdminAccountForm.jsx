@@ -38,6 +38,16 @@ const AdminFormPage = (props) => {
     };
 
     try {
+      for (const [key, value] of Object.entries(data)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       const res = await apiPostAdmin(data);
 
       if (res.status === 201) {
@@ -54,7 +64,7 @@ const AdminFormPage = (props) => {
         toast.close(loading);
         toast(toastConfig("Create Failed", "Admin Gagal Ditambahkan", "error"));
       }
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.close(loading);
 
@@ -68,6 +78,14 @@ const AdminFormPage = (props) => {
       name: name,
       username: username,
     };
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === "") {
+        toast.close(loading);
+        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
+        return;
+      }
+    }
 
     try {
       const res = await apiPutAdmin(adminData.id, data);
@@ -86,10 +104,10 @@ const AdminFormPage = (props) => {
         toast.close(loading);
         toast(toastConfig("Update Failed", "Admin Gagal Diubah", "error"));
       }
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.close(loading);
-    
+
       toast(toastConfig("Update Failed", "Admin Gagal Diubah", "error"));
     }
   };

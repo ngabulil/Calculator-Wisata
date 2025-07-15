@@ -219,7 +219,7 @@ const VillaCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           </Text>
           <MainSelect
             options={seasonOptions}
-            value={seasonOptions.find((s) => s.value === data.season)}
+            value={seasonOptions.find((s) => s.idMusim == data.idMusim)}
             onChange={(val) => {
               onChange({
                 ...data,
