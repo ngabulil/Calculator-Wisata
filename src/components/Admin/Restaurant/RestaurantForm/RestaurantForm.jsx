@@ -42,6 +42,13 @@ const RestaurantFormPage = (props) => {
       packages: restoPackage,
     };
 
+    for (const [key, value] of Object.entries(data)) {
+      if (value === "") {
+        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
+        return;
+      }
+    }
+
     try {
       const res = await apiPostRestaurant(data);
 
@@ -76,6 +83,13 @@ const RestaurantFormPage = (props) => {
       resto_name: restoName,
       packages: restoPackage,
     };
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === "") {
+        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
+        return;
+      }
+    }
 
     try {
       const res = await apiPutRestaurant(restaurantData.id, data);

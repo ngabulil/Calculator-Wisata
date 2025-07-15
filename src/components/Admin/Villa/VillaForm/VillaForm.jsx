@@ -53,6 +53,14 @@ const VillaForm = () => {
       star: stars,
       link_photo: photoLink,
     };
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === "") {
+        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
+        return;
+      }
+    }
+
     try {
       const res = await apiPostVilla(data);
 
@@ -83,6 +91,13 @@ const VillaForm = () => {
       star: stars,
       link_photo: photoLink,
     };
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === "") {
+        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
+        return;
+      }
+    }
 
     try {
       const res = await apiPutVilla(villaData.id, data);

@@ -87,6 +87,16 @@ const TransportForm = (props) => {
   const handleTransportCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
+      for (const [key, value] of Object.entries(vehicle)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       const res = await apiPostMobilFull(vehicle);
 
       if (res.status === 201) {
@@ -117,6 +127,16 @@ const TransportForm = (props) => {
   const handleTransportUpdate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
+      for (const [key, value] of Object.entries(vehicle)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       const res = await apiPutMobilFull(transportData.id, vehicle);
 
       if (res.status === 200) {
@@ -134,7 +154,7 @@ const TransportForm = (props) => {
 
         toast(toastConfig("Update Failed", "Transport Gagal Diubah", "error"));
       }
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.close(loading);
 

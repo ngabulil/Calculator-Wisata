@@ -604,6 +604,16 @@ const PackageFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
 
     try {
+      for (const [key, value] of Object.entries(data)) {
+        if (value === "") {
+          toast.close(loading);
+          toast(
+            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
+          );
+          return;
+        }
+      }
+
       let res;
 
       editFormActive

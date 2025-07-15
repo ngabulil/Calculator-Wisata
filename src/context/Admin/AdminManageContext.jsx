@@ -16,7 +16,9 @@ const AdminManageContextProvider = ({ children }) => {
     try {
       const response = await apiGetAllAdmin();
 
-      setAllAdminAccount(response.result);
+      const adminOnly = response.result.filter((item) => item.role === "admin");
+
+      setAllAdminAccount(adminOnly);
     } catch (error) {
       console.log(error);
     }
