@@ -129,10 +129,6 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
     return () => clearTimeout(delayTimer);
   }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed]);
 
-  useEffect(() => {
-    console.log(hotels);
-  }, []);
-
   return (
     <Box bg="gray.600" p={4} rounded="md">
       <HStack justify="space-between" mb={3}>
@@ -211,16 +207,16 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           </Text>
           <MainSelect
             options={seasonOptions}
-            value={seasonOptions.find((s) => s.value === data.season)}
+            value={seasonOptions.find((s) => s.value == data.season)}
             onChange={(val) => {
-              console.log(val);
               onChange({
                 ...data,
                 season: val?.value,
                 seasonLabel: val?.label,
                 idMusim: val?.idMusim,
               });
-              setJumlahKamar(1); // reset default
+
+              setJumlahKamar(1);
               setJumlahExtrabed(1);
             }}
             isDisabled={!data.roomType}

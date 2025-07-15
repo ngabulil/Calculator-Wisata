@@ -88,7 +88,7 @@ const AddSeasonCard = (props) => {
   };
 
   useEffect(() => {
-    console.log(hotelData);
+   
     setSeasonData(hotelData.seasons);
   }, [hotelData]);
 
@@ -105,7 +105,7 @@ const AddSeasonCard = (props) => {
         <Text mb={3} fontWeight="bold" color="white">
           {props.isEdit ? "Edit Musim" : "Tambah Musim"}
         </Text>
-        {props.isEdit && (
+        {
           <IconButton
             icon={<AddIcon />}
             aria-label="Tambah Musim"
@@ -113,7 +113,7 @@ const AddSeasonCard = (props) => {
             colorScheme="red"
             onClick={() => setOpenCreateForm(!openCreateForm)}
           />
-        )}
+        }
       </Box>
       {openCreateForm && (
         <VStack spacing={3} align="stretch" bg="gray.600" p={3} rounded="md">

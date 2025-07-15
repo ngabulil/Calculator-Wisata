@@ -21,7 +21,7 @@ const PackageRead = () => {
 
   const handlePaketRead = async () => {
     const data = await parsePaketDays(onePackageFull.days);
-    console.log(data);
+
     setPaketDay(data);
   };
 

@@ -1,9 +1,9 @@
-import { 
-  useState, 
-  useEffect, 
-  useRef, 
-  useImperativeHandle, 
-  forwardRef 
+import {
+  useState,
+  useEffect,
+  useRef,
+  useImperativeHandle,
+  forwardRef,
 } from "react";
 import { Box, Text, Divider } from "@chakra-ui/react";
 import HotelChoiceTable from "../components/ItineraryPDF/HotelChoiceTable";
@@ -25,8 +25,8 @@ const ItineraryPDF = forwardRef((props, ref) => {
     async exportAsBlob() {
       const input = componentRef.current;
       const canvas = await html2canvas(input, { scale: 1 });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
 
       const imgWidth = 210;
       const pageHeight = 297;
@@ -35,17 +35,17 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
       let position = 0;
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
 
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-      return pdf.output('blob');
-    }
+      return pdf.output("blob");
+    },
   }));
 
   useEffect(() => {
@@ -70,9 +70,9 @@ const ItineraryPDF = forwardRef((props, ref) => {
     const formattedDays = mergedDays.map((day, index) => {
       // Gabungkan semua aktivitas
       const activities = [
-        ...(day.destinations || []).map(dest => dest.displayName),
-        ...(day.restaurants || []).map(resto => resto.displayName),
-        ...(day.activities || []).map(act => act.displayName),
+        ...(day.destinations || []).map((dest) => dest.displayName),
+        ...(day.restaurants || []).map((resto) => resto.displayName),
+        ...(day.activities || []).map((act) => act.displayName),
       ];
 
       return {
@@ -85,7 +85,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
     setItineraryData(formattedDays);
   }, [mergedDays]);
-  console.log(mergedDays)
+
   return (
     <Box
       ref={componentRef}

@@ -41,6 +41,16 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
 
   const areaOptions = useMemo(() => {
     if (!selectedMobil || !data.kategori) return [];
+
+    console.log(
+      "Selected Mobil:",
+      selectedMobil.keterangan[data.kategori]?.map((area) => ({
+        value: area.area,
+        label: area.area,
+        id: area.id_area,
+      }))
+    );
+
     return (
       selectedMobil.keterangan[data.kategori]?.map((area) => ({
         value: area.area,
@@ -143,15 +153,13 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           </Text>
           <MainSelect
             options={areaOptions}
-            value={areaOptions.find((a) => a.value === data.area)}
+            value={areaOptions.find((a) => a.id === data.id_area)}
             onChange={(val) => {
               onChange({
                 ...data,
                 area: val?.value,
                 id_area: val?.id,
               });
-
-              console.log(val);
             }}
             isDisabled={!data.kategori}
             placeholder="Pilih Area"

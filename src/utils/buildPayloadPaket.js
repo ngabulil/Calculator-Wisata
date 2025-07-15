@@ -12,7 +12,7 @@ export default function buildPayloadPaket(data) {
               id_hotel: hotel.hotel.value,
               id_tipe_kamar: hotel.roomType.value,
               season: {
-                type: resolveSeason(data.season),
+                type: resolveSeason(hotel.season),
                 id_musim: hotel.idMusim,
               },
             })) ?? [],
@@ -22,7 +22,7 @@ export default function buildPayloadPaket(data) {
               id_villa: villa.villa.value,
               id_tipe_kamar: villa.roomType.value,
               season: {
-                type: resolveSeason(data.season),
+                type: resolveSeason(villa.season),
                 id_musim: villa.idMusim,
               },
             })) ?? [],

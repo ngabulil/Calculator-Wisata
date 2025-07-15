@@ -110,7 +110,7 @@ const AddSeasonCard = (props) => {
         <Text mb={3} fontWeight="bold" color="white">
           {props.isEdit ? "Edit Musim" : "Tambah Musim"}
         </Text>
-        {props.isEdit && (
+        {
           <IconButton
             icon={<AddIcon />}
             aria-label="Tambah Tipe Kamar"
@@ -118,7 +118,7 @@ const AddSeasonCard = (props) => {
             colorScheme="red"
             onClick={() => setOpenCreateForm(!openCreateForm)}
           />
-        )}
+        }
       </Box>
       {openCreateForm && (
         <VStack spacing={3} align="stretch">

@@ -197,14 +197,12 @@ const InvoicePDF = forwardRef((props, ref) => {
     setItineraryData(itinerary);
   }, [mergedDays, calculateHotelTotal, calculateVillaTotal, expenseDays]);
 
-  console.log(mergedDays);
-
   const perPax = totalPax > 0 ? breakdown.markup / totalPax : 0;
   const selling = grandTotal / 2;
-  
+
   // Calculate total expenses from ExpensesContext
   const totalExpensesFromContext = calculateGrandTotal();
-  
+
   // Calculate adjusted grand total including expenses
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
 

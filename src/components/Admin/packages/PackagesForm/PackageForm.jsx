@@ -58,7 +58,8 @@ const PackageCreateForm = (props) => {
   } = useAdminPackageContext();
   const { getMobils, getAdditionalMobil } = useTransportContext();
   const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
-  const [setEditFormActive] = useState(false);
+  // eslint-disable-next-line no-unused-vars
+  const [editFormActive, setEditFormActive] = useState(false);
 
   const handleSetValue = async () => {
     const res = await parseDays(onePackageFull.days);
@@ -599,6 +600,7 @@ const PackageFormPage = (props) => {
       description: desctiptionPackages,
       days: [...primaryData],
     };
+
     const payload = buildPayloadPaket(data);
 
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
