@@ -7,6 +7,7 @@ import {
   Flex,
   Spinner,
   useToast,
+  Select, // 1. Import komponen Select
 } from '@chakra-ui/react';
 import OrderCard from '../../components/Admin/Pesanan/PesananCard';
 import { apiGetPesanan } from '../../services/pesanan';
@@ -18,10 +19,16 @@ const AdminPesananPage = () => {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
+  const [sortOrder, setSortOrder] = useState('desc'); 
   const toast = useToast();
 
   const handlePageChange = (selectedItem) => {
     setCurrentPage(selectedItem.selected);
+  };
+
+  const handleSortChange = (e) => {
+    setSortOrder(e.target.value);
+    setCurrentPage(0); 
   };
 
   useEffect(() => {
@@ -57,14 +64,31 @@ const AdminPesananPage = () => {
     getOrders();
   }, [toast]);
 
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return sortOrder === 'asc' 
+      ? dateA - dateB 
+      : dateB - dateA;
+  });
+
   const offset = currentPage * ITEMS_PER_PAGE;
-  const currentOrders = orders.slice(offset, offset + ITEMS_PER_PAGE);
-  const pageCount = Math.ceil(orders.length / ITEMS_PER_PAGE);
+  const currentOrders = sortedOrders.slice(offset, offset + ITEMS_PER_PAGE);
+  const pageCount = Math.ceil(sortedOrders.length / ITEMS_PER_PAGE); 
 
   return (
     <Box maxW="6xl" mx="auto" p={6}>
       <Flex justifyContent="space-between" alignItems="center" mb={6}>
         <Heading as="h1" size="xl">Daftar Pesanan</Heading>
+        <Select 
+          value={sortOrder}
+          onChange={handleSortChange}
+          width="200px"
+          variant="filled"
+        >
+          <option value="desc">Terbaru</option>
+          <option value="asc">Terlama</option>
+        </Select>
       </Flex>
 
       {isLoading ? (
