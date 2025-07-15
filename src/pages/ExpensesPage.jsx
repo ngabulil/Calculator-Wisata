@@ -9,7 +9,7 @@ import {
   useColorModeValue,
   Input,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, DownloadIcon, ViewIcon } from "@chakra-ui/icons";
 import DayCard from "../components/Expenses/DayCard";
 import { useExpensesContext } from "../context/ExpensesContext";
 import InvoicePDF from "./InvoicePDF";
@@ -29,6 +29,8 @@ const ExpensesPage = () => {
     formatCurrency,
     tourCode,
     setTourCode,
+    pax,
+    setpax
   } = useExpensesContext();
 
   const [editingItem, setEditingItem] = useState(null);
@@ -64,7 +66,7 @@ const ExpensesPage = () => {
       return;
     }
 
-    if (!tourCode) { 
+    if (!tourCode) {
       toast({
         title: "Error",
         description: "Kode Pesanan tidak boleh kosong.",
@@ -112,15 +114,65 @@ const ExpensesPage = () => {
   };
 
   const handleViewPdf = () => {
-    localStorage.setItem("expenseItineraryData", JSON.stringify(days));
     window.history.pushState({}, "", "/pdf-invoice");
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
 
   const handleViewItineraryPdf = () => {
-    localStorage.setItem("expenseItineraryData", JSON.stringify(days));
     window.history.pushState({}, "", "/pdf-itinerary");
     window.dispatchEvent(new PopStateEvent("popstate"));
+  };
+
+  // Fungsi untuk download langsung invoice
+  const handleDownloadInvoice = async () => {
+    if (!invoiceRef.current) {
+      toast({
+        title: "Error",
+        description: "Invoice component is not ready.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      await invoiceRef.current.download();
+    } catch (error) {
+      toast({
+        title: "Gagal mengunduh invoice",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  // Fungsi untuk download langsung itinerary
+  const handleDownloadItinerary = async () => {
+    if (!itineraryRef.current) {
+      toast({
+        title: "Error",
+        description: "Itinerary component is not ready.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      await itineraryRef.current.download();
+    } catch (error) {
+      toast({
+        title: "Gagal mengunduh itinerary",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -130,15 +182,56 @@ const ExpensesPage = () => {
           <Text fontSize="2xl" fontWeight="bold" color="white">
             Input Expenses Itinerary
           </Text>
-          <Flex gap={3}>
-            <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={addDay}>
-              Day
+          <Flex gap={3} wrap="wrap">
+            {/* Tombol "Day" */}
+            <Button
+              leftIcon={<AddIcon />}
+              colorScheme="blue"
+              onClick={addDay}
+              variant="solid" // Contoh varian
+              size="md" // Ukuran tombol
+            >
+              Hari
             </Button>
-            <Button colorScheme="teal" onClick={handleViewPdf}>
-              PDF Harga
+            {/* Tombol "Lihat Invoice" */}
+            <Button
+              leftIcon={<ViewIcon />}
+              colorScheme="purple"
+              onClick={handleViewPdf}
+              variant="solid" 
+              size="md"
+            >
+              Invoice
             </Button>
-            <Button colorScheme="teal" onClick={handleViewItineraryPdf}>
-              PDF Itinerary
+            {/* Tombol "Unduh Invoice" */}
+            <Button
+              leftIcon={<DownloadIcon />}
+              colorScheme="teal"
+              onClick={handleDownloadInvoice}
+              variant="outline" // Contoh varian
+              size="md"
+            >
+              Invoice
+            </Button>
+            {/* Tombol "Lihat Itinerary" */}
+            <Button
+              leftIcon={<ViewIcon />}
+              colorScheme="blue"
+              onClick={handleViewItineraryPdf}
+              variant="solid" 
+              size="md"
+            >
+              Itinerary
+            </Button>
+            {/* Tombol "Unduh Itinerary" */}
+            <Button
+              leftIcon={<DownloadIcon />} 
+              colorScheme="teal"
+              onClick={handleDownloadItinerary}
+              variant="outline"
+              size="md"
+            >
+              Itinerary
             </Button>
           </Flex>
         </Flex>
@@ -154,6 +247,20 @@ const ExpensesPage = () => {
             placeholder="Masukkan Kode Pesanan (contoh: ORD-123)"
             color="white"
             borderColor="gray.600"
+            _hover={{ borderColor: "gray.500" }}
+          />
+        </Box>
+        <Box mb={6}>
+          <Text fontSize="lg" fontWeight="semibold" color="white" mb={2}>
+            Jumlah Pax:
+          </Text>
+          <Input
+            value={pax}
+            onChange={(e) => setpax(e.target.value)}
+            placeholder="1"
+            color="white"
+            borderColor="gray.600"
+            type="number"
             _hover={{ borderColor: "gray.500" }}
           />
         </Box>
@@ -200,14 +307,14 @@ const ExpensesPage = () => {
 
       {/* Komponen PDF disembunyikan dan direferensikan */}
       <Box style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-        <InvoicePDF ref={invoiceRef} />
+        <InvoicePDF ref={invoiceRef} totalPax={pax} tourCode={tourCode} />
         <ItineraryPDF ref={itineraryRef} />
       </Box>
 
       <Flex justify="center" mt={6}>
         <Button
           colorScheme="purple"
-          variant="outline"
+          variant="solid" // Mengubah varian
           onClick={handleCreateOrder}
           width="100%"
           maxW="400px"

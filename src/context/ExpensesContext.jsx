@@ -17,6 +17,7 @@ const ExpensesContextProvider = ({ children }) => {
     ]);
 
     const [tourCode, setTourCode] = React.useState("");
+    const [pax, setpax] = React.useState(1);
 
     const updateDay = (index, updatedDay) => {
         setDays((prev) => {
@@ -136,7 +137,9 @@ const ExpensesContextProvider = ({ children }) => {
                 calculateGrandTotal,
                 formatCurrency,
                 tourCode,
-                setTourCode
+                setTourCode,
+                pax,
+                setpax
             }}
         >
             {children}

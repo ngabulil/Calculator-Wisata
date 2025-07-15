@@ -10,7 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-const orange = "#FFA726";
+const orange = "#FB8C00";
 const orangeLight = "#FFE0B2";
 
 const tableHeaderStyle = {
@@ -18,58 +18,62 @@ const tableHeaderStyle = {
   color: "#222",
   fontWeight: "bold",
   fontSize: "1rem",
+  textAlign: "center",
+  padding: "12px 8px",
 };
 
-const tableSubHeaderStyle = {
+const dayTitleStyle = {
   backgroundColor: orangeLight,
   fontWeight: "bold",
+  padding: "2px 40px 12px 40px",
+  verticalAlign: "top",
 };
 
-const ItineraryTable = ({ days = [] }) => {
+const itineraryTextStyle = {
+  fontSize: "sm",
+  padding: "2px 40px 12px 40px",
+  verticalAlign: "top",
+};
+
+const ItineraryTable = ({
+  days = [],
+  title = ""
+}) => {
   return (
-    <Box
-    >
-      <Table variant="simple" size="sm">
+    <Box>
+      <Table variant="simple" size="sm" border="1px solid #ddd">
         <Thead>
           <Tr>
-            <Th textAlign="center" width="50px" style={tableHeaderStyle} py={4}>
-              Day
+            <Th style={tableHeaderStyle} border="1px solid #ddd">
+              {title.toUpperCase()}
             </Th>
-            <Th style={tableHeaderStyle} py={4}>Itinerary</Th>
           </Tr>
         </Thead>
-        <Tbody color={"#222"}>
+        <Tbody color="#222" textAlign="center"  >
           {days.length > 0 ? (
-            days.map((day, dayIndex) => (
-              <React.Fragment key={dayIndex}>
+            days.map((day, index) => (
+              <React.Fragment key={index}>
+                {/* Judul Hari */}
                 <Tr>
-                  <Td
-                    textAlign="center"
-                    fontWeight="bold"
-                    style={tableSubHeaderStyle}
-                    py={4}
-                  >
-                    {day.day}
-                  </Td>
-                  <Td fontWeight="bold" colSpan={1} style={tableSubHeaderStyle} py={4}>
-                    {day.title} - {day.description}
+                  <Td style={dayTitleStyle} border="1px solid #ddd">
+                    DAY {day.day} - {day.description}
                   </Td>
                 </Tr>
-                {/* Daftar aktivitas tanpa harga */}
-                {day.activities && day.activities.length > 0 && 
-                  day.activities.map((activity, actIndex) => (
-                    <Tr key={actIndex}>
-                      <Td py={3}></Td>
-                      <Td py={3}>• {activity}</Td>
-                    </Tr>
-                  ))
-                }
 
+                {/* Daftar Aktivitas */}
+                {day.activities &&
+                  day.activities.map((activity, i) => (
+                    <Tr key={i}>
+                      <Td style={itineraryTextStyle} border="1px solid #ddd">
+                        • {activity}
+                      </Td>
+                    </Tr>
+                  ))}
               </React.Fragment>
             ))
           ) : (
             <Tr>
-              <Td colSpan={2} textAlign="center" py={4}>
+              <Td textAlign="center" py={4} border="1px solid #ddd">
                 <Text color="gray.500">No itinerary data available</Text>
               </Td>
             </Tr>

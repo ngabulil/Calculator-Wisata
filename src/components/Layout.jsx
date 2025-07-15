@@ -8,7 +8,8 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useCheckoutContext } from "../context/CheckoutContext"; // Mengimpor useCheckoutContext
+import { useCheckoutContext } from "../context/CheckoutContext";
+import { useExpensesContext } from "../context/ExpensesContext";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 import { CloseIcon, ChevronUpIcon } from "@chakra-ui/icons";
@@ -18,7 +19,8 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   // Mengambil grandTotal dari useCheckoutContext
-  const { grandTotal } = useCheckoutContext(); //
+  const { grandTotal } = useCheckoutContext();
+  const { calculateGrandTotal } = useExpensesContext();
   const [isVisible, setIsVisible] = useState(true);
 
   const isCheckoutPage = location.pathname === "/checkout";
@@ -50,7 +52,7 @@ const Layout = ({ children }) => {
                 <Text fontWeight="bold">
                   Grand Total: Rp{" "}
                   {/* Menampilkan grandTotal yang diambil dari context */}
-                  {grandTotal.toLocaleString("id-ID")} {/* */}
+                  {(grandTotal + calculateGrandTotal()).toLocaleString("id-ID")}
                 </Text>
                 <HStack spacing={3}>
                   <Button

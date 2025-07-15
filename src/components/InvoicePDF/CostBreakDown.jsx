@@ -20,11 +20,34 @@ const tableHeaderStyle = {
   color: "#222",
   fontWeight: "bold",
   fontSize: "1rem",
+  textAlign: "center",
+  padding: "2px 40px 12px 10px",
+  verticalAlign: "top", 
+};
+
+
+const tableCellStyle = {
+  padding: "2px 20px 12px 10px",
+  verticalAlign: "top",
+};
+
+
+const narrowColumnStyle = {
+  ...tableCellStyle,
+  width: "60px",
+};
+
+
+const wideColumnStyle = {
+  ...tableCellStyle,
+  minWidth: "200px",
 };
 
 const tableTotalStyle = {
   backgroundColor: yellow,
   fontWeight: "bold",
+  padding: "2px 40px 12px 10px",
+  verticalAlign: "top",
 };
 
 const tableGrandTotalStyle = {
@@ -39,43 +62,48 @@ const CostBreakDown = ({
   transportData,
   additionalData,
   grandTotal,
-  perPax,
+  // perPax,
   selling,
   formatCurrency,
+  markup
 }) => {
   return (
     <VStack spacing={6} align="stretch">
       {/* Hotel */}
       <Box>
         <Text fontWeight="bold" mb={1} fontSize="lg" color={orangeDark}>
-          <Akomodasi></Akomodasi>
+          Akomodasi
         </Text>
         <Divider mb={1} borderColor="white" />
         <Table variant="simple" size="sm" border="1px solid #e0e0e0">
           <Thead>
             <Tr>
-              <Th style={tableHeaderStyle}>Day</Th>
-              <Th style={tableHeaderStyle}>Name</Th>
-              <Th style={tableHeaderStyle}>Rooms</Th>
-              <Th style={tableHeaderStyle}>Price/Room</Th>
-              <Th style={tableHeaderStyle}>TOTAL</Th>
+              <Th style={{...tableHeaderStyle, width: "60px"}}>Day</Th>
+              <Th style={{...tableHeaderStyle, minWidth: "200px"}}>Name</Th>
+              <Th style={{...tableHeaderStyle, width: "60px"}}>Rooms</Th>
+              <Th style={{...tableHeaderStyle, width: "100px"}}>Price/Room</Th>
+              <Th style={{...tableHeaderStyle, width: "100px"}}>TOTAL</Th>
             </Tr>
           </Thead>
           <Tbody color={"#222"}>
             {hotelData.map((item, index) => (
               <Tr key={index}>
-                <Td>{item.day}</Td>
-                <Td>{item.name}</Td>
-                <Td>{item.rooms}</Td>
-                <Td>{formatCurrency(item.pricePerNight)}</Td>
-                <Td>{formatCurrency(item.total)}</Td>
+                <Td style={narrowColumnStyle}>{item.day}</Td>
+                <Td style={wideColumnStyle}>{item.name}</Td>
+                <Td style={narrowColumnStyle}>{item.rooms}</Td>
+                <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                  {formatCurrency(item.pricePerNight)}
+                </Td>
+                <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                  {formatCurrency(item.total)}
+                </Td>
               </Tr>
             ))}
             <Tr>
               <Td colSpan={4} style={tableTotalStyle}>
                 Total Hotel
               </Td>
-              <Td style={tableTotalStyle}>
+              <Td style={{...tableTotalStyle, textAlign: "left"}}>
                 {formatCurrency(
                   hotelData.reduce((sum, i) => sum + i.total, 0)
                 )}
@@ -94,24 +122,26 @@ const CostBreakDown = ({
         <Table variant="simple" size="sm" border="1px solid #e0e0e0">
           <Thead>
             <Tr>
-              <Th style={tableHeaderStyle}>Day</Th>
-              <Th style={tableHeaderStyle}>Description</Th>
-              <Th style={{ ...tableHeaderStyle, textAlign: "right" }}>Price</Th>
+              <Th style={{...tableHeaderStyle, width: "60px"}}>Day</Th>
+              <Th style={{...tableHeaderStyle, minWidth: "200px"}}>Description</Th>
+              <Th style={{...tableHeaderStyle, width: "100px"}}>Price</Th>
             </Tr>
           </Thead>
           <Tbody color={"#222"}>
             {transportData.map((item, index) => (
               <Tr key={index}>
-                <Td>{item.day}</Td>
-                <Td>{item.description}</Td>
-                <Td textAlign="right">{formatCurrency(item.price)}</Td>
+                <Td style={narrowColumnStyle}>{item.day}</Td>
+                <Td style={wideColumnStyle}>{item.description}</Td>
+                <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                  {formatCurrency(item.price)}
+                </Td>
               </Tr>
             ))}
             <Tr>
               <Td colSpan={2} style={tableTotalStyle}>
                 Total Transport
               </Td>
-              <Td style={tableTotalStyle} textAlign="right">
+              <Td style={{...tableTotalStyle, textAlign: "left"}}>
                 {formatCurrency(
                   transportData.reduce((sum, i) => sum + i.price, 0)
                 )}
@@ -131,11 +161,11 @@ const CostBreakDown = ({
           {additionalData.length > 0 && (
             <Thead>
               <Tr>
-                <Th style={tableHeaderStyle}>Day</Th>
-                <Th style={tableHeaderStyle}>Item</Th>
-                <Th style={tableHeaderStyle}>Quantity</Th>
-                <Th style={tableHeaderStyle}>Price</Th>
-                <Th style={tableHeaderStyle}>Total</Th>
+                <Th style={{...tableHeaderStyle, width: "60px"}}>Day</Th>
+                <Th style={{...tableHeaderStyle, minWidth: "150px"}}>Item</Th>
+                <Th style={{...tableHeaderStyle, width: "60px"}}>Qty</Th>
+                <Th style={{...tableHeaderStyle, width: "100px"}}>Price</Th>
+                <Th style={{...tableHeaderStyle, width: "100px"}}>Total</Th>
               </Tr>
             </Thead>
           )}
@@ -144,18 +174,22 @@ const CostBreakDown = ({
               <>
                 {additionalData.map((item, index) => (
                   <Tr key={index}>
-                    <Td>{item.day}</Td>
-                    <Td>{item.name}</Td>
-                    <Td>{item.quantity}</Td>
-                    <Td>{formatCurrency(item.price)}</Td>
-                    <Td>{formatCurrency(item.total)}</Td>
+                    <Td style={narrowColumnStyle}>{item.day}</Td>
+                    <Td style={wideColumnStyle}>{item.name}</Td>
+                    <Td style={narrowColumnStyle}>{item.quantity}</Td>
+                    <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                      {formatCurrency(item.price)}
+                    </Td>
+                    <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                      {formatCurrency(item.total)}
+                    </Td>
                   </Tr>
                 ))}
                 <Tr>
                   <Td colSpan={4} style={tableTotalStyle}>
                     Total Tambahan
                   </Td>
-                  <Td style={tableTotalStyle}>
+                  <Td style={{...tableTotalStyle, textAlign: "left"}}>
                     {formatCurrency(
                       additionalData.reduce((sum, i) => sum + i.total, 0)
                     )}
@@ -164,7 +198,7 @@ const CostBreakDown = ({
               </>
             ) : (
               <Tr>
-                <Td colSpan={5} textAlign="center" color="gray.500">
+                <Td colSpan={5} style={{...tableCellStyle, textAlign: "center", color: "gray.500"}}>
                   Tidak ada tambahan
                 </Td>
               </Tr>
@@ -172,7 +206,6 @@ const CostBreakDown = ({
           </Tbody>
         </Table>
       </Box>
-
 
       {/* Grand Total */}
       <Box p={4} borderRadius="md" style={tableGrandTotalStyle}>
@@ -182,8 +215,8 @@ const CostBreakDown = ({
             <Text>{formatCurrency(grandTotal)}</Text>
           </HStack>
           <HStack justify="space-between" w="100%" fontSize="lg">
-            <Text>Markup per Pax</Text>
-            <Text>{formatCurrency(perPax)}</Text>
+            <Text>Markup</Text>
+            <Text>{formatCurrency(markup)}</Text>
           </HStack>
           <HStack justify="space-between" w="100%">
             <Text fontWeight="bold">Selling</Text>

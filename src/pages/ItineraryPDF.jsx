@@ -1,51 +1,32 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  useImperativeHandle,
-  forwardRef,
+import { 
+  useState, 
+  useEffect, 
+  useRef, 
+  useImperativeHandle, 
+  forwardRef 
 } from "react";
-import { Box, Text, Divider } from "@chakra-ui/react";
+import { Box, Text, Divider,Button } from "@chakra-ui/react";
 import HotelChoiceTable from "../components/ItineraryPDF/HotelChoiceTable";
 import ItineraryTable from "../components/ItineraryPDF/ItineraryTable";
 import InclusionExclusion from "../components/ItineraryPDF/InclusionExclusion";
 import { usePackageContext } from "../context/PackageContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import useExportPdf from "../hooks/useExportPdf";
 
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
   const [mergedDays, setMergedDays] = useState([]);
   const [itineraryData, setItineraryData] = useState([]);
-
+  const { exportAsBlob, downloadPdf } = useExportPdf();
   const componentRef = useRef();
 
   useImperativeHandle(ref, () => ({
     async exportAsBlob() {
-      const input = componentRef.current;
-      const canvas = await html2canvas(input, { scale: 1 });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-
-      let position = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-      return pdf.output("blob");
+      return exportAsBlob(componentRef);
     },
+    async download(filename = `itinerary_${selectedPackage?.title || ""}.pdf`) {
+      await downloadPdf(componentRef, filename);
+    }
   }));
 
   useEffect(() => {
@@ -70,9 +51,9 @@ const ItineraryPDF = forwardRef((props, ref) => {
     const formattedDays = mergedDays.map((day, index) => {
       // Gabungkan semua aktivitas
       const activities = [
-        ...(day.destinations || []).map((dest) => dest.displayName),
-        ...(day.restaurants || []).map((resto) => resto.displayName),
-        ...(day.activities || []).map((act) => act.displayName),
+        ...(day.destinations || []).map(dest => dest.displayName),
+        ...(day.restaurants || []).map(resto => resto.displayName),
+        ...(day.activities || []).map(act => act.displayName),
       ];
 
       return {
@@ -86,6 +67,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
     setItineraryData(formattedDays);
   }, [mergedDays]);
 
+  // console.log("merger",mergedDays);
   return (
     <Box
       ref={componentRef}
@@ -101,7 +83,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
       lineHeight="1.4"
       color="#000000"
       boxSizing="border-box"
-      sx={{
+            sx={{
         "& img": {
           display: "block !important",
           maxWidth: "100%",
@@ -145,7 +127,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
       <Divider my={6} borderColor="#FFA726" />
 
-      <ItineraryTable days={itineraryData} />
+      <ItineraryTable   title={`ITINERARY ${selectedPackage?.title || ""}`} days={itineraryData} />
 
       <Divider my={6} borderColor="#FFA726" />
 
