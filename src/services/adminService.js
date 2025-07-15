@@ -2,8 +2,6 @@ import { apiDelete, apiGet, apiPost, apiPut } from "./api";
 
 import Cookies from "js-cookie";
 
-const token = Cookies.get("token");
-
 export const apiLoginAdmin = async (data) => {
   try {
     const response = await apiPost(`/admin/login`, data);
@@ -15,6 +13,7 @@ export const apiLoginAdmin = async (data) => {
 };
 
 export const apiGetAllAdmin = async () => {
+  const token = Cookies.get("token");
   try {
     const response = await apiGet("/admin", "", token);
     return response;
@@ -33,6 +32,7 @@ export const apiGetUser = async (tokenData) => {
   }
 };
 export const apiGetAdmin = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiGet(`/admin/${id}`, token);
     return response;
@@ -43,6 +43,7 @@ export const apiGetAdmin = async (id) => {
 };
 
 export const apiPostAdmin = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost(`/admin`, data, token);
     return response;
@@ -52,6 +53,7 @@ export const apiPostAdmin = async (data) => {
   }
 };
 export const apiPutAdmin = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/admin/${id}`, data, token);
     return response;
@@ -61,6 +63,7 @@ export const apiPutAdmin = async (id, data) => {
   }
 };
 export const apiDeleteAdmin = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/admin/${id}`, token);
     return response;

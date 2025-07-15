@@ -2,7 +2,7 @@ import { apiDelete, apiGet, apiPost, apiPut } from "./api";
 
 import Cookies from "js-cookie";
 
-const token = Cookies.get("token");
+
 
 export const apiGetAllHotel = async () => {
   try {
@@ -25,6 +25,7 @@ export const apiGetHotel = async (id) => {
 };
 
 export const apiPostHotel = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/hotels", data, token);
     return response;
@@ -35,6 +36,7 @@ export const apiPostHotel = async (data) => {
 };
 
 export const apiPutHotel = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/hotels/${id}`, data, token);
     return response;
@@ -45,6 +47,7 @@ export const apiPutHotel = async (id, data) => {
 };
 
 export const apiDeleteHotel = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/hotels/${id}`, token);
     return response;
@@ -76,6 +79,7 @@ export const apiGetAllHotelRooms = async () => {
 };
 
 export const apiPostHotelRooms = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/hotels/rooms", data, token);
     return response;
@@ -85,6 +89,7 @@ export const apiPostHotelRooms = async (data) => {
   }
 };
 export const apiPutHotelRooms = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/hotels/rooms/${id}`, data, token);
     return response;
@@ -116,6 +121,7 @@ export const apiGetNormalSeasonsById = async (id) => {
 };
 
 export const apiPostNormalSeasons = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/hotels/normal-seasons", data, token);
     return response;
@@ -125,6 +131,7 @@ export const apiPostNormalSeasons = async (data) => {
   }
 };
 export const apiPutNormalSeasons = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/hotels/normal-seasons/${id}`, data, token);
     return response;
@@ -134,6 +141,7 @@ export const apiPutNormalSeasons = async (id, data) => {
   }
 };
 export const apiDeleteNormalSeasons = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/hotels/normal-seasons/${id}`, token);
     return response;
@@ -156,6 +164,7 @@ export const apiGetHighSeasonsById = async (id) => {
 };
 
 export const apiPostHighSeasons = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/hotels/high-seasons", data, token);
     return response;
@@ -166,6 +175,7 @@ export const apiPostHighSeasons = async (data) => {
 };
 
 export const apiPutHighSeasons = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/hotels/high-seasons/${id}`, data, token);
     return response;
@@ -175,6 +185,7 @@ export const apiPutHighSeasons = async (id, data) => {
   }
 };
 export const apiDeleteHighSeasons = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/hotels/high-seasons/${id}`, token);
     return response;
@@ -197,6 +208,7 @@ export const apiGetPeakSeasonsById = async (id) => {
 };
 
 export const apiPostPeakSeasons = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/hotels/peak-seasons", data, token);
     return response;
@@ -207,6 +219,7 @@ export const apiPostPeakSeasons = async (data) => {
 };
 
 export const apiPutPeakSeasons = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/hotels/peak-seasons/${id}`, data, token);
     return response;
@@ -216,6 +229,7 @@ export const apiPutPeakSeasons = async (id, data) => {
   }
 };
 export const apiDeletePeakSeasons = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/hotels/peak-seasons/${id}`, token);
     return response;

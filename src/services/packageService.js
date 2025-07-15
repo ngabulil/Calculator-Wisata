@@ -1,7 +1,7 @@
 import { apiDelete, apiGet, apiPost, apiPut } from "./api";
 import Cookies from "js-cookie";
 
-const token = Cookies.get("token");
+
 //
 
 export const apiGetAllPackageFull = async () => {
@@ -14,6 +14,7 @@ export const apiGetAllPackageFull = async () => {
   }
 };
 export const apiPostPackageFull = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/paket/full", data, token);
     return response;
@@ -23,6 +24,7 @@ export const apiPostPackageFull = async (data) => {
   }
 };
 export const apiPutPackageFull = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/paket/full/${id}`, data, token);
     return response;
@@ -32,6 +34,7 @@ export const apiPutPackageFull = async (id, data) => {
   }
 };
 export const apiDeletePackageFull = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/paket/full/${id}`, token);
     return response;

@@ -1,8 +1,6 @@
 import { apiDelete, apiGet, apiPost, apiPut } from "./api";
 import Cookies from "js-cookie";
 
-const token = Cookies.get("token");
-
 export const apiGetAllActivityDetails = async () => {
   try {
     const response = await apiGet("/activity/details");
@@ -22,6 +20,7 @@ export const apiGetActivityDetailsById = async (id) => {
   }
 };
 export const apiPostActivityDetails = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/activity/details", data, token);
     return response;
@@ -31,6 +30,7 @@ export const apiPostActivityDetails = async (data) => {
   }
 };
 export const apiPutActivityDetails = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/activity/details/${id}`, data, token);
     return response;
@@ -40,6 +40,7 @@ export const apiPutActivityDetails = async (id, data) => {
   }
 };
 export const apiDeleteActivityDetails = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/activity/details/${id}`, token);
     return response;
@@ -58,6 +59,7 @@ export const apiGetAllActivityVendors = async () => {
   }
 };
 export const apiPostActivityVendors = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/activity/vendors", data, token);
     return response;
@@ -67,6 +69,7 @@ export const apiPostActivityVendors = async (data) => {
   }
 };
 export const apiPutActivityVendors = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/activity/vendors/${id}`, data, token);
     return response;
@@ -76,6 +79,7 @@ export const apiPutActivityVendors = async (id, data) => {
   }
 };
 export const apiDeleteActivityVendors = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/activity/vendors/${id}`, token);
     return response;

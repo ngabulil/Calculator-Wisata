@@ -2,8 +2,6 @@ import { apiDelete, apiGet, apiPost, apiPut } from "./api";
 
 import Cookies from "js-cookie";
 
-const token = Cookies.get("token");
-
 export const apiGetAllDestination = async () => {
   try {
     const response = await apiGet("/tiket-masuk/");
@@ -14,6 +12,7 @@ export const apiGetAllDestination = async () => {
   }
 };
 export const apiPostDestination = async (data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPost("/tiket-masuk/", data, token);
     return response;
@@ -23,6 +22,7 @@ export const apiPostDestination = async (data) => {
   }
 };
 export const apiPutDestination = async (id, data) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiPut(`/tiket-masuk/${id}`, data, token);
     return response;
@@ -32,6 +32,7 @@ export const apiPutDestination = async (id, data) => {
   }
 };
 export const apiDeleteDestination = async (id) => {
+  const token = Cookies.get("token");
   try {
     const response = await apiDelete(`/tiket-masuk/${id}`, token);
     return response;
