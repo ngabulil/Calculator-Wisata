@@ -18,18 +18,26 @@ const tableHeaderStyle = {
     backgroundColor: orange,
     color: "#222",
     fontWeight: "bold",
-    fontSize: "1rem"
+    fontSize: "1rem",
+    padding: "2px 20px 12px 10px",
 };
 
 const tableSubHeaderStyle = {
     backgroundColor: orangeLight,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    padding: "2px 20px 12px 10px",
 };
 
 const tableTotalStyle = {
     backgroundColor: orange,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    padding: "2px 20px 12px 10px",
 };
+
+const tableCellStyle = {
+    padding: "2px 30px 12px 10px",
+    verticalAlign: "top",
+}
 
 const ItineraryTable = ({ days, formatCurrency }) => {
    const calculateTotalExpenses = () => {
@@ -102,18 +110,18 @@ const ItineraryTable = ({ days, formatCurrency }) => {
                             {day.activities.map((activity, actIndex) => (
                                 <Tr key={actIndex} _hover={{ background: gray }}>
                                     <Td></Td>
-                                    <Td pl={6}>• {activity.item}</Td>
-                                    <Td textAlign="right">{activity.expense}</Td>
-                                    <Td textAlign="right">{activity.kidExpense || '-'}</Td>
+                                    <Td style={tableCellStyle}>• {activity.item}</Td>
+                                    <Td style={tableCellStyle}>{activity.expense}</Td>
+                                    <Td style={tableCellStyle}>{activity.kidExpense || '-'}</Td>
                                 </Tr>
                             ))}
                             {/* Display expense items if they exist */}
                             {day.expenseItems && day.expenseItems.map((expenseItem, expIndex) => (
                                 <Tr key={`exp-${expIndex}`} _hover={{ background: gray }}>
                                     <Td></Td>
-                                    <Td pl={6}>• {expenseItem.label}</Td>
-                                    <Td textAlign="right">{formatCurrency(expenseItem.price * expenseItem.quantity)}</Td>
-                                    <Td textAlign="right">-</Td>
+                                    <Td style={tableCellStyle}>• {expenseItem.label}</Td>
+                                    <Td style={tableCellStyle}>{formatCurrency(expenseItem.price * expenseItem.quantity)}</Td>
+                                    <Td style={tableCellStyle}>-</Td>
                                 </Tr>
                             ))}
                         </React.Fragment>

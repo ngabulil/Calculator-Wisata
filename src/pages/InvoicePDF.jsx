@@ -12,9 +12,10 @@ import CostBreakDown from "../components/InvoicePDF/CostBreakDown";
 import { usePackageContext } from "../context/PackageContext";
 import { useCheckoutContext } from "../context/CheckoutContext";
 import { useExpensesContext } from "../context/ExpensesContext";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
+import { apiGetUser } from "../services/adminService";
+import Cookies from "js-cookie"
+import useExportPdf from "../hooks/useExportPdf";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -35,7 +36,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     calculateHotelTotal,
     calculateVillaTotal,
   } = useCheckoutContext();
-  const { days: expenseDays, calculateGrandTotal } = useExpensesContext();
+  const { days: expenseDays, calculateGrandTotal, tourCode, pax } = useExpensesContext();
 
   const [hotelData, setHotelData] = useState([]);
   const [villaData, setVillaData] = useState([]);
@@ -43,35 +44,18 @@ const InvoicePDF = forwardRef((props, ref) => {
   const [additionalData, setAdditionalData] = useState([]);
   const [itineraryData, setItineraryData] = useState([]);
   const [mergedDays, setMergedDays] = useState([]);
+  const [adminName, setAdminName] = useState("")
 
+  const { exportAsBlob, downloadPdf } = useExportPdf();
   const componentRef = useRef();
-  const { totalPax = 0, tourCode = "N/A" } = props;
 
   useImperativeHandle(ref, () => ({
     async exportAsBlob() {
-      const input = componentRef.current;
-      const canvas = await html2canvas(input, { scale: 1 });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      return pdf.output("blob");
+      return exportAsBlob(componentRef);
     },
+    async download(filename = `${tourCode}_invoice.pdf`) {
+      await downloadPdf(componentRef, filename);
+    }
   }));
 
   useEffect(() => {
@@ -86,7 +70,28 @@ const InvoicePDF = forwardRef((props, ref) => {
         }
       }
     };
+
+    const fetchAdmin = async () => {
+      const token = Cookies.get("token");
+      if (!token) {
+        return;
+      }
+
+      try {
+        const res = await apiGetUser(token);
+        if (res.status === 200) {
+          setAdminName(res.result.name);
+        } else{
+          console.log("Error", "Failed to fetch admin users", "error");
+        }
+      } catch (error) {
+        console.log(error);
+        console.log("Error", "Invalid Token", "error");
+      }
+    };
+
     processDays();
+    fetchAdmin();
   }, [selectedPackage]);
 
   useEffect(() => {
@@ -197,15 +202,12 @@ const InvoicePDF = forwardRef((props, ref) => {
     setItineraryData(itinerary);
   }, [mergedDays, calculateHotelTotal, calculateVillaTotal, expenseDays]);
 
-  console.log(mergedDays);
-
-  const perPax = totalPax > 0 ? breakdown.markup / totalPax : 0;
-  const selling = grandTotal / 2;
+  const actualPax = pax && parseInt(pax) > 0 ? parseInt(pax) : 1;
+  const perPax = actualPax > 0 ? breakdown.markup / actualPax : 0;
+  const selling = grandTotal / actualPax;
   
-  // Calculate total expenses from ExpensesContext
   const totalExpensesFromContext = calculateGrandTotal();
   
-  // Calculate adjusted grand total including expenses
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
 
   return (
@@ -223,31 +225,8 @@ const InvoicePDF = forwardRef((props, ref) => {
       lineHeight="1.4"
       color="#000000"
       boxSizing="border-box"
-      sx={{
-        "& img": {
-          display: "block !important",
-          maxWidth: "100%",
-          height: "auto",
-        },
-        "& table": {
-          borderCollapse: "collapse",
-          width: "100%",
-          marginBottom: "20px",
-        },
-        "& th, & td": {
-          border: "1px solid #ddd",
-          padding: "8px",
-          textAlign: "left",
-          verticalAlign: "top",
-        },
-        "& th": {
-          backgroundColor: "#FB8C00",
-          color: "#000000",
-          fontWeight: "bold",
-        },
-      }}
     >
-      <InvoiceHeader code={tourCode} totalPax={`${totalPax} Pax`} />
+      <InvoiceHeader code={tourCode} totalPax={actualPax} adminName={adminName} />
 
       <ItineraryTable days={itineraryData} formatCurrency={formatCurrency} />
 
