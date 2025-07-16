@@ -30,6 +30,7 @@ const RestaurantCard = (props) => {
       gap={2}
       flexGrow={"1"}
       rounded={"8"}
+      cursor={"pointer"}
       onClick={() => setOpen(!open)}
     >
       <Flex
@@ -126,6 +127,7 @@ const AppPackageList = (props) => {
       p={2}
       gap={2}
       rounded={4}
+      cursor={"pointer"}
       onClick={(event) => {
         event.stopPropagation();
         setOpen(!open);
@@ -143,7 +145,7 @@ const AppPackageList = (props) => {
           <Text fontSize={"12px"} color={"gray.400"}>
             {props.package.note || "note minimal pax"}
           </Text>
-          <AppIconText icon={"mdi:download"} text={"Contract"} />
+          {/* <AppIconText icon={"mdi:download"} text={"Contract"} /> */}
         </Flex>
 
         {open && <AppPriceList data={formattedPrices} />}

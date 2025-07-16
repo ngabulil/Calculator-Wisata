@@ -82,6 +82,7 @@ const VillaRead = () => {
       <Flex direction={"column"} gap={4} w={"full"}>
         <AppTitleDescription
           title={villasData.villaName}
+          img={villasData.photoLink}
           stars={villasData.stars}
         />
 
@@ -115,7 +116,7 @@ const AppTitleDescription = (props) => {
     <Flex direction={"column"} gap={3} w={"full"}>
       <img
         alt="photo-detail"
-        src="https://picsum.photos/200/300"
+        src={props.img || "https://picsum.photos/200/300"}
         className="w-full h-[300px] rounded-[12px] object-cover"
       />
       <Flex direction={"column"} gap={5}>
