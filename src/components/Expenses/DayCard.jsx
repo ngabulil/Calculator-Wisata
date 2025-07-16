@@ -54,14 +54,6 @@ const DayCard = ({
               onClick={() => removeDay(dayIndex)}
             />
           </Flex>
-          {/* Hapus bagian Input berikut: */}
-          {/* <Input
-            value={day.day_description}
-            onChange={(e) => updateDayDescription(dayIndex, e.target.value)}
-            placeholder="Deskripsi hari..."
-            mb={3}
-            color="white"
-          /> */}
         </Flex>
 
         <Flex direction="column" align="flex-end">

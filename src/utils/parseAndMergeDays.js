@@ -1,6 +1,7 @@
-import { parsePaketDays } from "./parseOnePaket";
+import { parseData } from "./parseData";
+
 export async function parseAndMergeDays(rawDays = []) {
-  const parsedDays = await parsePaketDays(rawDays);
+  const parsedDays = await parseData(rawDays);
 
   const enrich = (items, parsedItems, nameKey, fallbackPrefix) =>
     (items || []).map((item, i) => ({
@@ -20,7 +21,6 @@ export async function parseAndMergeDays(rawDays = []) {
       ...rawDay,
       hotels: enrich(rawDay.hotels, parsedDay.hotels, "hotel", "Hotel"),
       villas: enrich(rawDay.villas, parsedDay.villas, "villa", "Villa"),
-      mobils: enrich(rawDay.mobils, parsedDay.mobils, "mobil", "Mobil"),
       restaurants: enrich(rawDay.restaurants, parsedDay.restaurants, "resto", "Restoran"),
       destinations: enrich(rawDay.destinations, parsedDay.destinations, "destinasi", "Destinasi"),
       activities: enrich(rawDay.activities, parsedDay.activities, "aktivitas", "Aktivitas"),
