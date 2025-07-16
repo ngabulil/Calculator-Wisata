@@ -37,17 +37,16 @@ const tablePriceStyle = {
 
 const HotelChoiceTable = ({ akomodasiDays }) => {
   const accommodations = [];
-  let counter = 1;
-
-  akomodasiDays?.forEach((day) => {
+  // Ganti counter dengan dayIndex untuk melacak hari
+  akomodasiDays?.forEach((day, dayIndex) => { // Tambahkan dayIndex di sini
     // Hotels
     if (day.hotels) {
       day.hotels.forEach(hotel => {
         const hotelName = hotel.displayName || hotel.name || hotel.hotel?.label || "Unknown Hotel";
-        const stars = hotel.bintang || hotel.star_rating || "4";
+        const stars = hotel.bintang || hotel.star || "";
         
         accommodations.push({
-          no: counter++,
+          no: dayIndex + 1, // Gunakan dayIndex + 1 sebagai nomor hari
           name: hotelName,
           stars: stars,
           type: "Hotel",
@@ -59,10 +58,10 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     if (day.villas && day.villas.length > 0) {
       day.villas.forEach(villa => {
         const villaName = villa.displayName || villa.name || villa.villaName || "Unknown Villa";
-        const stars = villa.bintang || villa.star_rating || villa.stars || "4";
+        const stars = villa.bintang || villa.star_rating || villa.star;
         
         accommodations.push({
-          no: counter++,
+          no: dayIndex + 1, // Gunakan dayIndex + 1 sebagai nomor hari
           name: villaName,
           stars: stars,
           type: "Villa",
@@ -78,17 +77,17 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         <Thead>
           <Tr>
             <Th style={tableHeaderStyle} border="1px solid #ddd" width="60px">
-              NO
+              HARI
             </Th>
             <Th style={tableHeaderStyle} border="1px solid #ddd">
               <VStack spacing={0}>
-                <Text>HOTEL CHOICE</Text>
-                <Text fontSize="sm" fontStyle="italic">(3 Night Hotel)</Text>
+                <Text>PILIHAN AKOMODASI</Text> {/* Ubah teks header */}
+                <Text fontSize="sm" fontStyle="italic">(3 Malam Akomodasi)</Text> {/* Ubah teks sub-header */}
               </VStack>
             </Th>
             <Th style={tableHeaderStyle} border="1px solid #ddd" width="200px">
               <VStack spacing={0}>
-                <Text>PRICE PER NIGHT</Text>
+                <Text>HARGA PER MALAM</Text> {/* Ubah teks header */}
 
               </VStack>
             </Th>
@@ -99,7 +98,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
             accommodations.map((accommodation, index) => (
               <Tr key={index} _hover={{ background: gray }}>
                 <Td style={tableCellStyle}>
-                  {accommodation.no}
+                  {accommodation.no} {/* Ini akan menampilkan nomor hari */}
                 </Td>
                 <Td style={tableCellStyle}
                 >
@@ -118,7 +117,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
                     padding="4px 8px"
                     borderRadius="4px"
                   >
-                    {formatRupiah(accommodation.price)}/Day
+                    {formatRupiah(accommodation.price)}/Malam {/* Ubah teks menjadi "/Malam" */}
                   </Text>
                 </Td>
               </Tr>
@@ -126,7 +125,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
           ) : (
             <Tr>
               <Td colSpan={3} textAlign="center" py={4} border="1px solid #ddd">
-                <Text color="gray.500" textAlign="center">No accommodation data available</Text>
+                <Text color="gray.500" textAlign="center">Tidak ada data akomodasi tersedia</Text> {/* Ubah teks */}
               </Td>
             </Tr>
           )}
