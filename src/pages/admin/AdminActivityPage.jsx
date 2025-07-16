@@ -306,6 +306,7 @@ const VendorActivityDropdown = (props) => {
     <Select
       w={"max"}
       value={selectedOption}
+      defaultValue="activity"
       onChange={(e) => {
         setSelectedOption(e.target.value);
         props.onChange(e.target.value);

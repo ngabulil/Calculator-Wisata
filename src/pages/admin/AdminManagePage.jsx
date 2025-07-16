@@ -3,6 +3,7 @@ import {
   Table,
   Thead,
   Tbody,
+  Text,
   Tr,
   Th,
   Flex,
@@ -155,19 +156,21 @@ const AdminManagePage = () => {
         ) : (
           <Box overflowX="auto">
             <Table variant="simple">
-              <Thead bg="gray.800">
-                <Tr>
-                  <Th>No</Th>
-                  <Th>Username</Th>
-                  <Th>Name</Th>
-                  <Th>Role</Th>
-                  <Th>Created At</Th>
-                  <Th>Updated At</Th>
-                  <Th>Action</Th>
-                </Tr>
-              </Thead>
+              {currentAdminAccount.length > 0 && (
+                <Thead bg="gray.800">
+                  <Tr>
+                    <Th>No</Th>
+                    <Th>Username</Th>
+                    <Th>Name</Th>
+                    <Th>Role</Th>
+                    <Th>Created At</Th>
+                    <Th>Updated At</Th>
+                    <Th>Action</Th>
+                  </Tr>
+                </Thead>
+              )}
               <Tbody>
-                {currentAdminAccount.length > 0 &&
+                {currentAdminAccount.length > 0 ? (
                   currentAdminAccount.map((account, index) => (
                     <AdminAccountCard
                       key={index}
@@ -182,7 +185,20 @@ const AdminManagePage = () => {
                         handleGetAllAdmin();
                       }}
                     />
-                  ))}
+                  ))
+                ) : (
+                  <Box
+                    w="full"
+                    textAlign="center"
+                    bg={"gray.800"}
+                    p={5}
+                    rounded={2}
+                  >
+                    <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                      Daftar Admin Tidak Ditemukan
+                    </Text>
+                  </Box>
+                )}
               </Tbody>
             </Table>
           </Box>
