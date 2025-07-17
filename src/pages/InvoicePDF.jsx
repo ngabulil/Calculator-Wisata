@@ -12,7 +12,7 @@ import CostBreakDown from "../components/InvoicePDF/CostBreakDown";
 import { usePackageContext } from "../context/PackageContext";
 import { useCheckoutContext } from "../context/CheckoutContext";
 import { useExpensesContext } from "../context/ExpensesContext";
-import { parseAndMergeDays } from "../utils/parseAndMergeDays";
+import { parseAndMergeDays } from "../utils/parseAndMergeDays"; // Tetap gunakan ini untuk data lain
 import { apiGetUser } from "../services/adminService";
 import Cookies from "js-cookie"
 import useExportPdf from "../hooks/useExportPdf";
@@ -62,11 +62,14 @@ const InvoicePDF = forwardRef((props, ref) => {
     const processDays = async () => {
       if (selectedPackage?.days?.length > 0) {
         try {
+          // Tetap panggil parseAndMergeDays untuk memastikan struktur data yang konsisten
+          // untuk destinasi, restoran, aktivitas, dan akomodasi/transport tambahan.
+          // parseAndMergeDays menangani 'displayName' yang penting untuk InvoicePDF.
           const merged = await parseAndMergeDays(selectedPackage.days);
           setMergedDays(merged);
         } catch (err) {
-          console.error("Gagal memproses days:", err);
-          setMergedDays(selectedPackage.days);
+          console.error("Gagal memproses days:", err); //
+          setMergedDays(selectedPackage.days); // fallback jika parsing gagal
         }
       }
     };
@@ -131,38 +134,43 @@ const InvoicePDF = forwardRef((props, ref) => {
 
       // Transport
       day.mobils?.forEach((mobil) => {
+        const price = parseInt(mobil.harga) || 0; //
         transports.push({
           day: `Day ${dayIndex + 1}`,
-          description: mobil.displayName,
-          price: mobil.harga || 0,
+          description: mobil.mobil?.label || mobil.label,
+          price: price,
         });
       });
 
       // Akomodasi tambahan
       day.akomodasi_additionals?.forEach((item) => {
+        const price = parseInt(item.harga) || 0;
+        const quantity = parseInt(item.jumlah) || 1;
         additionals.push({
           day: `Day ${dayIndex + 1}`,
           name: item.displayName,
-          quantity: item.jumlah || 1,
-          price: item.harga || 0,
-          total: (item.harga || 0) * (item.jumlah || 1),
+          quantity: quantity,
+          price: price,
+          total: price * quantity,
         });
       });
 
       // Transport tambahan
       day.transport_additionals?.forEach((item) => {
+        const price = parseInt(item.harga) || 0;
+        const quantity = parseInt(item.jumlah) || 1;
         additionals.push({
           day: `Day ${dayIndex + 1}`,
           name: item.displayName,
-          quantity: item.jumlah || 1,
-          price: item.harga || 0,
-          total: (item.harga || 0) * (item.jumlah || 1),
+          quantity: quantity,
+          price: price,
+          total: price * quantity,
         });
       });
     });
 
     setHotelData(hotels.concat(villas));
-    setVillaData(villas);
+    setVillaData(villas); // Ini tampaknya duplikasi dengan hotelData, mungkin perlu dicek lagi penggunaannya
     setTransportData(transports);
     setAdditionalData(additionals);
 
@@ -171,18 +179,18 @@ const InvoicePDF = forwardRef((props, ref) => {
       const activities = [
         ...(day.destinations || []).map((dest) => ({
           item: dest.displayName,
-          expense: formatCurrency(dest.hargaAdult || 0),
-          kidExpense: formatCurrency(dest.hargaChild || 0),
+          expense: formatCurrency(parseInt(dest.hargaAdult) || 0),
+          kidExpense: formatCurrency(parseInt(dest.hargaChild) || 0),
         })),
         ...(day.restaurants || []).map((resto) => ({
           item: resto.displayName,
-          expense: formatCurrency(resto.hargaAdult || 0),
-          kidExpense: formatCurrency(resto.hargaChild || 0),
+          expense: formatCurrency(parseInt(resto.hargaAdult) || 0),
+          kidExpense: formatCurrency(parseInt(resto.hargaChild) || 0),
         })),
         ...(day.activities || []).map((act) => ({
           item: act.displayName,
-          expense: formatCurrency(act.hargaAdult || 0),
-          kidExpense: formatCurrency(act.hargaChild || 0),
+          expense: formatCurrency(parseInt(act.hargaAdult) || 0),
+          kidExpense: formatCurrency(parseInt(act.hargaChild) || 0),
         })),
       ];
 
@@ -205,9 +213,9 @@ const InvoicePDF = forwardRef((props, ref) => {
   const actualPax = pax && parseInt(pax) > 0 ? parseInt(pax) : 1;
   const perPax = actualPax > 0 ? breakdown.markup / actualPax : 0;
   const selling = grandTotal / actualPax;
-  
+
   const totalExpensesFromContext = calculateGrandTotal();
-  
+
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
 
   return (

@@ -25,18 +25,15 @@ const tableHeaderStyle = {
   verticalAlign: "top", 
 };
 
-
 const tableCellStyle = {
   padding: "2px 20px 12px 10px",
   verticalAlign: "top",
 };
 
-
 const narrowColumnStyle = {
   ...tableCellStyle,
   width: "60px",
 };
-
 
 const wideColumnStyle = {
   ...tableCellStyle,
@@ -62,11 +59,23 @@ const CostBreakDown = ({
   transportData,
   additionalData,
   grandTotal,
-  // perPax,
   selling,
   formatCurrency,
   markup
 }) => {
+  const sortByDay = (data) => {
+    return [...data].sort((a, b) => {
+      const dayA = parseInt(a.day.replace(/\D/g, '')) || 0;
+      const dayB = parseInt(b.day.replace(/\D/g, '')) || 0;
+      return dayA - dayB;
+    });
+  };
+
+  // Sort the data before rendering
+  const sortedHotelData = sortByDay(hotelData);
+  const sortedTransportData = sortByDay(transportData);
+  const sortedAdditionalData = sortByDay(additionalData);
+
   return (
     <VStack spacing={6} align="stretch">
       {/* Hotel */}
@@ -86,7 +95,7 @@ const CostBreakDown = ({
             </Tr>
           </Thead>
           <Tbody color={"#222"}>
-            {hotelData.map((item, index) => (
+            {sortedHotelData.map((item, index) => (
               <Tr key={index}>
                 <Td style={narrowColumnStyle}>{item.day}</Td>
                 <Td style={wideColumnStyle}>{item.name}</Td>
@@ -105,7 +114,7 @@ const CostBreakDown = ({
               </Td>
               <Td style={{...tableTotalStyle, textAlign: "left"}}>
                 {formatCurrency(
-                  hotelData.reduce((sum, i) => sum + i.total, 0)
+                  sortedHotelData.reduce((sum, i) => sum + i.total, 0)
                 )}
               </Td>
             </Tr>
@@ -128,7 +137,7 @@ const CostBreakDown = ({
             </Tr>
           </Thead>
           <Tbody color={"#222"}>
-            {transportData.map((item, index) => (
+            {sortedTransportData.map((item, index) => (
               <Tr key={index}>
                 <Td style={narrowColumnStyle}>{item.day}</Td>
                 <Td style={wideColumnStyle}>{item.description}</Td>
@@ -143,7 +152,7 @@ const CostBreakDown = ({
               </Td>
               <Td style={{...tableTotalStyle, textAlign: "left"}}>
                 {formatCurrency(
-                  transportData.reduce((sum, i) => sum + i.price, 0)
+                  sortedTransportData.reduce((sum, i) => sum + i.price, 0)
                 )}
               </Td>
             </Tr>
@@ -158,7 +167,7 @@ const CostBreakDown = ({
         </Text>
         <Divider mb={1} borderColor="white" />
         <Table variant="simple" size="sm" border="1px solid #e0e0e0">
-          {additionalData.length > 0 && (
+          {sortedAdditionalData.length > 0 && (
             <Thead>
               <Tr>
                 <Th style={{...tableHeaderStyle, width: "60px"}}>Day</Th>
@@ -170,9 +179,9 @@ const CostBreakDown = ({
             </Thead>
           )}
           <Tbody color="#222">
-            {additionalData.length > 0 ? (
+            {sortedAdditionalData.length > 0 ? (
               <>
-                {additionalData.map((item, index) => (
+                {sortedAdditionalData.map((item, index) => (
                   <Tr key={index}>
                     <Td style={narrowColumnStyle}>{item.day}</Td>
                     <Td style={wideColumnStyle}>{item.name}</Td>
@@ -191,7 +200,7 @@ const CostBreakDown = ({
                   </Td>
                   <Td style={{...tableTotalStyle, textAlign: "left"}}>
                     {formatCurrency(
-                      additionalData.reduce((sum, i) => sum + i.total, 0)
+                      sortedAdditionalData.reduce((sum, i) => sum + i.total, 0)
                     )}
                   </Td>
                 </Tr>

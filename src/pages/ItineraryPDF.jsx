@@ -67,7 +67,6 @@ const ItineraryPDF = forwardRef((props, ref) => {
     setItineraryData(formattedDays);
   }, [mergedDays]);
 
-  // console.log("merger",mergedDays);
   return (
     <Box
       ref={componentRef}

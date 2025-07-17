@@ -1,4 +1,4 @@
-import { Box, Text, Button, Link, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Text, Button, Link, Stack, useColorModeValue, Badge, Flex } from '@chakra-ui/react';
 
 const PesananCard = ({ pesanan }) => {
   const cardBg = useColorModeValue('white', 'gray.700');
@@ -38,9 +38,19 @@ const PesananCard = ({ pesanan }) => {
       <Text fontSize="lg" fontWeight="bold" color={textColor} mb={1}>
         Kode Pesanan: {pesanan.kode_pesanan || 'N/A'}
       </Text>
-      <Text fontSize="sm" color="gray.500" mb={3}>
+      <Text fontSize="sm" color="gray.500" mb={2}>
         Dibuat pada: {formattedDate}
       </Text>
+
+      {/* Admin Information */}
+      <Flex align="center" mb={3}>
+        <Text fontSize="sm" color="gray.600" mr={2}>
+          Dibuat oleh:
+        </Text>
+        <Badge colorScheme="green" variant="subtle">
+          {pesanan.admin?.name || 'N/A'}
+        </Badge>
+      </Flex>
 
       <Stack spacing={2}>
         {pesanan.invoice_pdf && (
