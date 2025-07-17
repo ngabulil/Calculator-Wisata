@@ -137,6 +137,7 @@ const AdminDestinationPage = () => {
                     name={destination.name}
                     note={destination.note}
                     destination={destination}
+                    date={destination.updatedAt}
                     onDeleteButton={() => {
                       handleDeleteDestination(destination.id);
                       handleGetAllDestination();

@@ -143,7 +143,8 @@ const VillaInfoCard = (props) => {
           />
           <Text fontSize={18} fontWeight={"bold"}>
             {formatRupiah(
-              seasonPrice + (props.extraBed.length > 0 && countExtrabed)
+              // seasonPrice + (props.extraBed.length > 0 && countExtrabed)
+              seasonPrice
             )}
           </Text>
         </Flex>

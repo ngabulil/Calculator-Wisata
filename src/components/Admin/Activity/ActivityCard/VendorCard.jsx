@@ -1,19 +1,8 @@
-import {
-  Flex,
-  Box,
-  Text,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-} from "@chakra-ui/react";
+import { Flex, Box, Text } from "@chakra-ui/react";
 
 import { useNavigate } from "react-router-dom";
 import { PopoverButton } from "../../../PopoverButton";
-import { Icon } from "@iconify/react";
+import formatDateOnly from "../../../../utils/formatDate";
 import { useState } from "react";
 
 const VendorCard = (props) => {
@@ -58,14 +47,28 @@ const VendorCard = (props) => {
             {props.name || "  ATV Adventure"}
           </Text>
         </Flex>
-        <PopoverButton
-          isOpenButton={false}
-          onEditButton={() => {
-            navigate(`/admin/activity/edit`);
-            props.onEditButton();
-          }}
-          onDeleteButton={props.onDeleteButton}
-        />
+        <Flex alignItems={"center"} gap={2}>
+          <Text
+            minW={"max"}
+            fontSize={"12px"}
+            fontWeight={"bold"}
+            bg={"purple.600"}
+            color={"purple.200"}
+            py={1}
+            px={4}
+            rounded={"full"}
+          >
+            {formatDateOnly(props.date)}
+          </Text>
+          <PopoverButton
+            isOpenButton={false}
+            onEditButton={() => {
+              navigate(`/admin/activity/edit`);
+              props.onEditButton();
+            }}
+            onDeleteButton={props.onDeleteButton}
+          />
+        </Flex>
       </Flex>
     </Flex>
   );

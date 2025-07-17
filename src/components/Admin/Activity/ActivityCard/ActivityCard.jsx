@@ -16,6 +16,7 @@ import { PopoverButton } from "../../../PopoverButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import formatRupiah from "../../../../utils/rupiahFormat";
+import formatDateOnly from "../../../../utils/formatDate";
 
 const ActivityCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -53,6 +54,7 @@ const ActivityCard = (props) => {
       gap={2}
       flexGrow={"1"}
       rounded={"8"}
+      _hover={{ bg: "gray.700", transition: "all 0.2s" }}
       onClick={() => setOpen(!open)}
     >
       <Flex
@@ -65,7 +67,7 @@ const ActivityCard = (props) => {
         <Box
           w={"60px"}
           h={"50px"}
-          bg={"gray.700"}
+          bg={"gray.900"}
           rounded={5}
           display={"flex"}
           justifyContent={"center"}
@@ -76,20 +78,36 @@ const ActivityCard = (props) => {
         >
           {props.name.slice(0, 2).toUpperCase()}
         </Box>
-        <Flex direction={"column"} flexShrink={"0"} gap={0}>
-          <Text fontSize={"18px"} fontWeight={"bold"}>
-            {props.name || "  ATV Adventure"}
-          </Text>
+        <Flex direction={"column"} flexShrink={"0"} gap={1}>
+          <Flex alignItems={"center"} gap={2}>
+            {" "}
+            <Text fontSize={"18px"} fontWeight={"bold"}>
+              {props.name || "  ATV Adventure"}
+            </Text>
+            <Text
+              minW={"max"}
+              fontSize={"10px"}
+              fontWeight={"bold"}
+              bg={"purple.600"}
+              color={"purple.200"}
+              py={1}
+              px={4}
+              rounded={"full"}
+            >
+              {formatDateOnly(props.date)}
+            </Text>
+          </Flex>
           <Flex gap={2} alignItems={"center"}>
-            <Text fontSize={"14px"}>
+            <Text fontSize={"14px"} color={"gray.500"}>
               {props.keterangan || "2 jam keliling desa"}
             </Text>
             <Text
               fontSize={"12px"}
               color={"gray.400"}
               bg={"gray.900"}
-              p={2}
-              rounded={"10px"}
+              py={1}
+              px={2}
+              rounded={"4px"}
             >
               {props.note || "Sepatu tertutup wajib"}
             </Text>
@@ -143,21 +161,50 @@ const AppIconText = (props) => {
 
 const AppPriceList = ({ data }) => {
   return (
-    <TableContainer w={"full"}>
+    <TableContainer
+      w="full"
+      bg="gray.700"
+      borderRadius="lg"
+      boxShadow="md"
+      border={"2px solid"}
+      borderColor={"gray.900"}
+    >
       <Table variant="simple" size="sm">
-        <Thead bg="gray.700">
-          <Tr>
-            <Th>Type</Th>
-            <Th>KategorI</Th>
-            <Th isNumeric>Harga</Th>
+        <Thead>
+          <Tr bg="gray.900" p={"8px"}>
+            <Th color="white" borderTopLeftRadius="lg" bg="gray.900" p={"8px"}>
+              Type
+            </Th>
+            <Th color="white" bg="gray.900" p={"8px"}>
+              Kategori
+            </Th>
+            <Th
+              isNumeric
+              color="white"
+              borderTopRightRadius="lg"
+              bg="gray.900"
+              p={"8px"}
+            >
+              Harga
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
           {data.map((item, index) => (
-            <Tr key={index}>
-              <Td>{item.tourist_type}</Td>
-              <Td>{item.category}</Td>
-              <Td isNumeric>{formatRupiah(item.price)}</Td>
+            <Tr
+              key={index}
+              _hover={{ bg: "gray.600" }}
+              transition="background-color 0.2s ease"
+            >
+              <Td color="whiteAlpha.900" fontWeight="medium">
+                {item.tourist_type}
+              </Td>
+              <Td color="whiteAlpha.800" textTransform="capitalize">
+                {item.category}
+              </Td>
+              <Td isNumeric color="green.300" fontWeight="semibold">
+                {formatRupiah(item.price)}
+              </Td>
             </Tr>
           ))}
         </Tbody>

@@ -46,25 +46,51 @@ const PackageRead = () => {
         />
         <Tabs variant="line" colorScheme="blue" isFitted>
           <TabList>
-            {onePackageFull.days.map((_, index) => {
-              return (
-                <Tab fontSize={"14px"} key={index}>
-                  Day {index + 1}
-                </Tab>
-              );
-            })}
+            {onePackageFull.days.map((_, index) => (
+              <Tab
+                key={index}
+                fontSize="14px"
+                fontWeight="medium"
+                borderTopLeftRadius="md"
+                borderTopRightRadius="md"
+                border="1px solid"
+                borderColor="transparent"
+                _selected={{
+                  bg: "whiteAlpha.100",
+                  borderColor: "gray.500 gray.500 white",
+                  color: "green.300",
+                  fontWeight: "bold",
+                }}
+                _hover={{
+                  bg: "gray.600",
+                  color: "white",
+                }}
+                transition="all 0.2s"
+                px={4}
+                py={2}
+              >
+                Day {index + 1}
+              </Tab>
+            ))}
           </TabList>
 
           <TabPanels>
             {paketDay.map((day, index) => {
               return (
-                <TabPanel key={index} py={4} px={0}>
+                <TabPanel
+                  key={index}
+                  p={2}
+                  bg={"gray.900"}
+                  roundedBottom={"12px"}
+                >
                   <Flex direction={"column"} gap={4}>
-                    <Flex direction={"column"} gap={0}>
+                    <Flex direction={"column"} gap={2}>
                       <Text fontSize={"24px"} fontWeight={"bold"}>
                         {day.name}
                       </Text>
-                      <Text fontSize={"14px"}>{day.description_day}</Text>
+                      <Text fontSize={"14px"} w={"70%"}>
+                        {day.description_day}
+                      </Text>
                     </Flex>
                     {/* Accomodation */}
                     <AppHeadComponent
@@ -74,33 +100,33 @@ const PackageRead = () => {
                       title="Akomodasi"
                     >
                       {" "}
-                      <AppHeadComponent title={"Hotel"} isChild>
+                      <AppHeadComponent title={"Hotel"} isChild isOpen>
                         {" "}
-                        {day.hotels.map((hotel, index) => {
+                        {day.hotels.map((hotel) => {
                           return (
                             <AppHomeStayCard
                               isVilla={false}
                               name={hotel.name}
-                              photos={"https://picsum.photos/200/300"}
+                              photos={hotel.link_photo}
                               star={hotel.star}
                             />
                           );
                         })}
                       </AppHeadComponent>
-                      <AppHeadComponent title={"Villa"} isChild>
+                      <AppHeadComponent title={"Villa"} isChild isOpen>
                         {" "}
-                        {day.villas.map((villa, index) => {
+                        {day.villas.map((villa) => {
                           return (
                             <AppHomeStayCard
                               isVilla={true}
                               name={villa.name}
-                              photos={"https://picsum.photos/200/300"}
+                              photos={villa.link_photo}
                               star={villa.star}
                             />
                           );
                         })}
                       </AppHeadComponent>
-                      <AppHeadComponent title={"Tambahan"} isChild>
+                      <AppHeadComponent title={"Tambahan"} isChild isOpen>
                         {" "}
                         {day.akomodasi_additionals.map((add, index) => {
                           return (
@@ -116,8 +142,8 @@ const PackageRead = () => {
                       rounded={8}
                       title="Tour"
                     >
-                      <AppHeadComponent title={"Destinasi"} isChild>
-                        {day.destinations.map((dest, index) => {
+                      <AppHeadComponent title={"Destinasi"} isChild isOpen>
+                        {day.destinations.map((dest) => {
                           return (
                             <AppDestinationCard
                               title={dest.name}
@@ -126,14 +152,14 @@ const PackageRead = () => {
                           );
                         })}
                       </AppHeadComponent>
-                      <AppHeadComponent title={"Aktitvitas"} isChild>
+                      <AppHeadComponent title={"Aktitvitas"} isChild isOpen>
                         {day.activities.map((act, index) => {
                           return (
                             <AppActivityCard key={index} title={act.name} />
                           );
                         })}
                       </AppHeadComponent>
-                      <AppHeadComponent title={"Restaurant"} isChild>
+                      <AppHeadComponent title={"Restaurant"} isChild isOpen>
                         {day.restaurants.map((resto, index) => {
                           return (
                             <AppRestaurantCard key={index} title={resto.name} />
@@ -148,7 +174,7 @@ const PackageRead = () => {
                       rounded={8}
                       title="Transport"
                     >
-                      <AppHeadComponent title={"Mobil"} isChild>
+                      <AppHeadComponent title={"Mobil"} isChild isOpen>
                         {day.mobils.map((mobil, index) => {
                           return (
                             <AppTransportCard
@@ -159,7 +185,7 @@ const PackageRead = () => {
                           );
                         })}{" "}
                       </AppHeadComponent>
-                      <AppHeadComponent title={"Tambahan"} isChild>
+                      <AppHeadComponent title={"Tambahan"} isChild isOpen>
                         {day.akomodasi_additionals.map((add, index) => {
                           return (
                             <AppAdditionalCard key={index} title={add.name} />
@@ -185,11 +211,6 @@ const AppTitleDescription = (props) => {
   return (
     <Flex direction={"column"} gap={2}>
       <Flex direction={"row"} gap={5}>
-        {/* <img
-          alt="photo-detail"
-          src="https://picsum.photos/200/300"
-          className="w-[40%] h-[300px] rounded-[12px] object-cover"
-        /> */}
         <Flex direction={"column"} gap={"15px"} w={"60%"} flexShrink={"1"}>
           <Text fontSize={"32px"} fontWeight={"bold"}>
             {props.title || "Bali Paket"}
@@ -202,233 +223,165 @@ const AppTitleDescription = (props) => {
 };
 
 const AppHeadComponent = (props) => {
+  const [open, setOpen] = useState(props.isOpen ? true : false);
+
   return (
-    <Flex
-      direction={"column"}
-      p={props.p}
-      bg={props.bg}
-      rounded={props.rounded}
-      gap={2}
-    >
+    <Flex direction={"column"} bg={props.bg} rounded={props.rounded} gap={2}>
       <Text
         fontSize={!props.isChild ? "20px" : "16px"}
         noOfLines={3}
-        bg={!props.isChild && "gray.900"}
-        w={"max"}
-        p={!props.isChild && 2}
-        rounded={!props.isChild && "8px"}
+        bg={!props.isChild && "blue.600"}
+        w={"full"}
+        p={!props.isChild && 4}
+        roundedTop={!props.isChild && "8px"}
+        roundedBottom={!props.isChild && !open && "8px"}
+        boxShadow={!props.isChild && "md"}
         fontWeight={"semibold"}
+        cursor={!props.isChild ? "pointer" : "default"}
+        onClick={() => {
+          if (!props.isOpen) setOpen(!open);
+        }}
       >
         {props.title}
       </Text>
-      <Flex
-        w={"full"}
-        flex={"wrap"}
-        direction={props.isChild ? "row" : "column"}
-        gap={4}
-      >
-        {props.children}
-      </Flex>
-    </Flex>
-  );
-};
-
-const AppHomeStayCard = (props) => {
-  return (
-    <Flex
-      direction={"column"}
-      gap={3}
-      alignItems={"start"}
-      w={"30%"}
-      bg={"gray.800"}
-      rounded={"12px"}
-      p={"10px"}
-    >
-      <Flex direction={"row"} alignItems={"center"} gap={2}>
-        <Icon
-          icon="mingcute:hotel-fill"
-          className="text-white text-[24px] rounded-full p-[4px] border-1 border-white"
-        />
-        <Text fontWeight={"bold"}> {props.isVilla ? "Villa" : "Hotel"} </Text>
-      </Flex>
-      <img
-        src={props.photos || "https://picsum.photos/200/300"}
-        alt="hotel-photos"
-        className="w-full h-[200px] rounded-[8px] object-cover"
-      />
-      <Flex direction={"column"} gap={1} w={"full"}>
-        <Text fontSize={"16px"} fontWeight={"bold"}>
-          {props.name}
-        </Text>
-        <Flex direction={"row"} alignItems={"center"} gap={1}>
-          {Array.from({ length: props.star }).map((_, index) => {
-            return (
-              <Icon
-                key={index}
-                icon="mdi:star"
-                className="text-yellow-400 text-[12px]"
-              />
-            );
-          })}
-        </Flex>
-      </Flex>
-    </Flex>
-  );
-};
-
-const AppAdditionalCard = (props) => {
-  return (
-    <Flex
-      direction={"row"}
-      gap={2}
-      alignItems={"center"}
-      w={"30%"}
-      bg={"gray.800"}
-      rounded={"12px"}
-      p={"10px"}
-    >
-      <Icon
-        icon="mynaui:gift"
-        className="text-white text-[32px] rounded-full p-[8px] border-1 border-white"
-      />
-      <Flex direction={"column"} gap={0} w={"full"}>
-        <Text fontSize={"16px"} fontWeight={"bold"}>
-          {props.title}
-        </Text>
-        <Flex
-          direction={"row"}
-          w={"full"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize={"10px"}>Jumlah</Text>
-          <Text fontSize={"10px"}>{props.count}</Text>
-        </Flex>
-      </Flex>
-      {/*  */}
-    </Flex>
-  );
-};
-
-const AppTransportCard = (props) => {
-  return (
-    <Flex direction={"column"} gap={3} w={"30%"}>
-      <Flex
-        direction={"row"}
-        gap={2}
-        alignItems={"center"}
-        w={"full"}
-        bg={"gray.800"}
-        rounded={"12px"}
-        p={"10px"}
-      >
-        <Icon
-          icon="mingcute:car-fill"
-          className="text-white text-[34px] rounded-full p-[6px] border-1 border-white"
-        />
-        <Flex direction={"column"} gap={0} w={"full"}>
-          <Text fontSize={"16px"} fontWeight={"bold"}>
-            {props.title}
-          </Text>
-          <Flex
-            direction={"row"}
-            w={"full"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <Text fontSize={"10px"}>{props.vendor}</Text>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
-  );
-};
-
-const AppRestaurantCard = (props) => {
-  return (
-    <Flex
-      direction={"row"}
-      gap={2}
-      alignItems={"center"}
-      w={"30%"}
-      bg={"gray.800"}
-      rounded={"12px"}
-      p={"10px"}
-    >
-      <Icon
-        icon="famicons:restaurant-sharp"
-        className="text-white text-[38px] rounded-full p-[8px] border-1 border-white"
-      />
-      <Flex direction={"column"} gap={0} w={"full"}>
-        <Text fontSize={"12px"} fontWeight={"bold"}>
-          {props.title}
-        </Text>
+      {open && (
         <Flex
           w={"full"}
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
+          flex={"wrap"}
+          direction={props.isChild ? "row" : "column"}
+          p={2}
+          gap={4}
+          overflowX={props.isChild ? "auto" : "hidden"}
         >
-          <Text fontSize={"10px"}>{props.subtitle}</Text>
+          {props.children}
         </Flex>
-      </Flex>
-      {/*  */}
+      )}
     </Flex>
   );
 };
 
-const AppDestinationCard = (props) => {
-  return (
-    <Flex
-      direction={"row"}
-      gap={2}
-      alignItems={"center"}
-      w={"30%"}
-      bg={"gray.800"}
-      rounded={"12px"}
-      p={"10px"}
-    >
-      <Icon
-        icon="fluent:people-queue-32-filled"
-        className="text-white text-[38px] rounded-full p-[8px] border-1 border-white"
-      />
-      <Flex direction={"column"} gap={0} w={"full"}>
-        <Text fontSize={"12px"} fontWeight={"bold"}>
-          {props.title}
-        </Text>
-        <Flex
-          w={"full"}
-          direction={"row"}
-          justifyContent={"space-between"}
-          alignItems={"center"}
-        >
-          <Text fontSize={"10px"}>{props.subtitle}</Text>
-        </Flex>
-      </Flex>
-      {/*  */}
-    </Flex>
-  );
+const cardBaseStyle = {
+  bg: "gray.800",
+  rounded: "12px",
+  p: 3,
+  w: "30%",
+  transition: "all 0.2s ease-in-out",
+  _hover: {
+    bg: "gray.600",
+    cursor: "pointer",
+    transform: "translateY(-2px)",
+  },
 };
-const AppActivityCard = (props) => {
-  return (
-    <Flex
-      direction={"row"}
-      gap={2}
-      alignItems={"center"}
-      w={"30%"}
-      bg={"gray.800"}
-      rounded={"12px"}
-      p={"10px"}
-    >
+
+const AppHomeStayCard = (props) => (
+  <Flex direction="column" gap={3} align="start" {...cardBaseStyle}>
+    <Flex align="center" gap={2}>
       <Icon
-        icon="ic:round-local-activity"
-        className="text-white text-[38px] rounded-full p-[8px] border-1 border-white"
+        icon="mingcute:hotel-fill"
+        className="text-white text-[24px] p-[4px] border border-white rounded-full"
       />
-      <Text fontSize={"12px"} fontWeight={"bold"}>
+      <Text fontWeight="bold">{props.isVilla ? "Villa" : "Hotel"}</Text>
+    </Flex>
+
+    <img
+      src={props.photos || "https://picsum.photos/200/300"}
+      alt="hotel"
+      className="w-full h-[200px] object-cover rounded-md"
+    />
+
+    <Flex direction="column" gap={1} w="full">
+      <Text fontSize="16px" fontWeight="bold">
+        {props.name}
+      </Text>
+      <Flex align="center" gap={1}>
+        {Array.from({ length: props.star }).map((_, index) => (
+          <Icon
+            key={index}
+            icon="mdi:star"
+            className="text-yellow-400 text-[14px]"
+          />
+        ))}
+      </Flex>
+    </Flex>
+  </Flex>
+);
+
+const AppAdditionalCard = (props) => (
+  <Flex align="center" gap={3} {...cardBaseStyle}>
+    <Icon
+      icon="mynaui:gift"
+      className="text-white text-[32px] p-[6px] border border-white rounded-full"
+    />
+    <Flex direction="column" gap={1} w="full">
+      <Text fontSize="16px" fontWeight="bold">
         {props.title}
       </Text>
-
-      {/*  */}
+      <Flex justify="space-between" fontSize="12px" color="gray.400"></Flex>
     </Flex>
-  );
-};
+  </Flex>
+);
+
+const AppTransportCard = (props) => (
+  <Flex direction="column" gap={3} {...cardBaseStyle}>
+    <Flex align="center" gap={3}>
+      <Icon
+        icon="mingcute:car-fill"
+        className="text-white text-[32px] p-[6px] border border-white rounded-full"
+      />
+      <Flex direction="column" w="full">
+        <Text fontSize="16px" fontWeight="bold">
+          {props.title}
+        </Text>
+        <Text fontSize="12px" color="gray.400">
+          {props.vendor}
+        </Text>
+      </Flex>
+    </Flex>
+  </Flex>
+);
+
+const AppRestaurantCard = (props) => (
+  <Flex align="center" gap={3} {...cardBaseStyle}>
+    <Icon
+      icon="famicons:restaurant-sharp"
+      className="text-white text-[32px] p-[6px] border border-white rounded-full"
+    />
+    <Flex direction="column" gap={1} w="full">
+      <Text fontSize="14px" fontWeight="bold">
+        {props.title}
+      </Text>
+      <Text fontSize="12px" color="gray.400">
+        {props.subtitle}
+      </Text>
+    </Flex>
+  </Flex>
+);
+
+const AppDestinationCard = (props) => (
+  <Flex align="center" gap={3} {...cardBaseStyle}>
+    <Icon
+      icon="fluent:people-queue-32-filled"
+      className="text-white text-[32px] p-[6px] border border-white rounded-full"
+    />
+    <Flex direction="column" gap={1} w="full">
+      <Text fontSize="14px" fontWeight="bold">
+        {props.title}
+      </Text>
+      <Text fontSize="12px" color="gray.400">
+        {props.subtitle}
+      </Text>
+    </Flex>
+  </Flex>
+);
+
+const AppActivityCard = (props) => (
+  <Flex align="center" gap={3} {...cardBaseStyle}>
+    <Icon
+      icon="ic:round-local-activity"
+      className="text-white text-[32px] p-[6px] border border-white rounded-full"
+    />
+    <Text fontSize="14px" fontWeight="bold">
+      {props.title}
+    </Text>
+  </Flex>
+);

@@ -217,6 +217,7 @@ const AdminActivityPage = () => {
                         vendorName={act?.vendor?.name || "Vendor"}
                         keterangan={act.keterangan}
                         note={act.note}
+                        date={act.updatedAt}
                         onEditButton={() => {
                           updateActivityData(act);
                           setFormActive(true);
@@ -247,6 +248,7 @@ const AdminActivityPage = () => {
                     <VendorCard
                       key={ven.id}
                       name={ven.name}
+                      date={ven.updatedAt}
                       onEditButton={() => {
                         updateVendorData(ven);
                         setFormActive(true);

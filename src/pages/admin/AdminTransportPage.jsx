@@ -143,6 +143,7 @@ const AdminTransportPage = () => {
                     jenisKendaraan={transport.jenisKendaraan}
                     vendor={transport.vendor}
                     keterangan={transport.keterangan}
+                    vendorLink={transport.vendor_link}
                     onDeleteButton={() => {
                       handleDeleteTransport(transport.id);
                       handleGetAllTransport();

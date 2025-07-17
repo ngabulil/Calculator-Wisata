@@ -7,6 +7,7 @@ import {
   Tr,
   Th,
   Td,
+  TableContainer,
   Heading,
   Text,
   Divider,
@@ -207,36 +208,74 @@ const AppRoomCard = (props) => {
       <Text>Price Season List</Text>
 
       <Box key={props.idRoom}>
-        <Table variant="simple" size="sm">
-          <Thead>
-            <Tr>
-              <Th fontSize={"12px"} p={0}>
-                Nama Musim
-              </Th>
-              <Th fontSize={"12px"} px={10}>
-                Label
-              </Th>
-              <Th fontSize={"12px"}>Harga</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {props.seasons.map((season, idx) => (
-              <Tr key={idx}>
-                <Td fontSize={"12px"} p={0}>
-                  {" "}
-                  {season.namaMusim.charAt(0).toUpperCase() +
-                    season.namaMusim.slice(1)}
-                </Td>
-                <Td fontSize={"12px"} px={10}>
-                  {season.label}
-                </Td>
-                <Td fontSize={"12px"}>
-                  {formatRupiah(season.price) || "Rp. 0"}
-                </Td>
+        <TableContainer
+          w="full"
+          bg="gray.700"
+          borderRadius="lg"
+          boxShadow="md"
+          border="1px solid"
+          borderColor="gray.900"
+        >
+          <Table variant="simple" size="sm">
+            <Thead>
+              <Tr bg="gray.800">
+                <Th
+                  color="white"
+                  borderTopLeftRadius="lg"
+                  px={4}
+                  py={3}
+                  fontSize="12px"
+                >
+                  Nama Musim
+                </Th>
+                <Th color="white" px={4} py={3} fontSize="12px">
+                  Label
+                </Th>
+                <Th
+                  color="white"
+                  borderTopRightRadius="lg"
+                  px={4}
+                  py={3}
+                  fontSize="12px"
+                >
+                  Harga
+                </Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {props.seasons.map((season, idx) => (
+                <Tr
+                  key={idx}
+                  _hover={{ bg: "gray.600" }}
+                  transition="background-color 0.2s ease"
+                >
+                  <Td
+                    px={4}
+                    py={3}
+                    fontSize="12px"
+                    color="whiteAlpha.900"
+                    fontWeight="medium"
+                  >
+                    {season.namaMusim.charAt(0).toUpperCase() +
+                      season.namaMusim.slice(1)}
+                  </Td>
+                  <Td px={4} py={3} fontSize="12px" color="whiteAlpha.800">
+                    {season.label}
+                  </Td>
+                  <Td
+                    px={4}
+                    py={3}
+                    fontSize="12px"
+                    color="green.300"
+                    fontWeight="semibold"
+                  >
+                    {formatRupiah(season.price) || "Rp. 0"}
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
       </Box>
     </Flex>
   );

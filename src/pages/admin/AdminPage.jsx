@@ -146,6 +146,8 @@ const AdminPage = () => {
                       key={index}
                       title={packageItem.name}
                       description={packageItem.description}
+                      days={packageItem.days}
+                      date={packageItem.updatedAt}
                       onOpenButton={() => {
                         setReadPackageActive(true);
                         updatePackageFull(packageItem);

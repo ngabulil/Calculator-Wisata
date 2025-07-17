@@ -31,6 +31,7 @@ const RestaurantCard = (props) => {
       flexGrow={"1"}
       rounded={"8"}
       cursor={"pointer"}
+      _hover={{ bg: "gray.700", transition: "all 0.2s" }}
       onClick={() => setOpen(!open)}
     >
       <Flex
@@ -51,7 +52,7 @@ const RestaurantCard = (props) => {
           <Box
             w={"40px"}
             h={"40px"}
-            bg={"gray.700"}
+            bg={"gray.900"}
             rounded={5}
             display={"flex"}
             justifyContent={"center"}
@@ -66,20 +67,34 @@ const RestaurantCard = (props) => {
             {props.name || "  ATV Adventure"}
           </Text>
         </Flex>
-        <Flex
-          zIndex={10}
-          onClick={(event) => {
-            event.stopPropagation();
-          }}
-        >
-          <PopoverButton
-            isOpenButton={false}
-            onEditButton={() => {
-              navigate(`/admin/restaurant/edit`);
-              props.onEditButton();
+        <Flex alignItems={"center"} gap={2}>
+          <Text
+            minW={"max"}
+            fontSize={"12px"}
+            fontWeight={"bold"}
+            bg={"green.600"}
+            color={"green.200"}
+            py={1}
+            px={4}
+            rounded={"full"}
+          >
+            {props.packages.length} Paket
+          </Text>
+          <Flex
+            zIndex={10}
+            onClick={(event) => {
+              event.stopPropagation();
             }}
-            onDeleteButton={props.onDeleteButton}
-          />
+          >
+            <PopoverButton
+              isOpenButton={false}
+              onEditButton={() => {
+                navigate(`/admin/restaurant/edit`);
+                props.onEditButton();
+              }}
+              onDeleteButton={props.onDeleteButton}
+            />
+          </Flex>
         </Flex>
       </Flex>
       {open && (
@@ -124,9 +139,9 @@ const AppPackageList = (props) => {
       direction={"column"}
       bg={"gray.900"}
       shadow={"xl"}
-      p={2}
+      p={4}
       gap={2}
-      rounded={4}
+      rounded={8}
       cursor={"pointer"}
       onClick={(event) => {
         event.stopPropagation();
@@ -140,7 +155,7 @@ const AppPackageList = (props) => {
         <AppIconText icon={"mdi:restaurant"} text="1 Pax" bg={"gray.600"} />
       </Flex>
       {/*  */}
-      <Flex direction={"column"}>
+      <Flex direction={"column"} gap={2}>
         <Flex gap={2} w={"full"} justifyContent={"space-between"}>
           <Text fontSize={"12px"} color={"gray.400"}>
             {props.package.note || "note minimal pax"}
@@ -175,21 +190,55 @@ const AppIconText = (props) => {
 
 const AppPriceList = ({ data }) => {
   return (
-    <TableContainer w={"full"}>
+    <TableContainer
+      w="full"
+      bg="gray.700"
+      borderRadius="lg"
+      boxShadow="md"
+      border={"2px solid"}
+      borderColor={"gray.900"}
+    >
       <Table variant="simple" size="sm">
-        <Thead bg="gray.700">
-          <Tr>
-            <Th>Type</Th>
-            <Th>KategorI</Th>
-            <Th isNumeric>Harga</Th>
+        <Thead>
+          <Tr bg="gray.800">
+            <Th color="white" borderTopLeftRadius="lg" px={4} py={3}>
+              Type
+            </Th>
+            <Th color="white" px={4} py={3}>
+              Kategori
+            </Th>
+            <Th isNumeric color="white" borderTopRightRadius="lg" px={4} py={3}>
+              Harga
+            </Th>
           </Tr>
         </Thead>
         <Tbody>
           {data.map((item, index) => (
-            <Tr key={index}>
-              <Td>{item.tourist_type}</Td>
-              <Td>{item.category}</Td>
-              <Td isNumeric>{formatRupiah(item.price)}</Td>
+            <Tr
+              key={index}
+              _hover={{ bg: "gray.600" }}
+              transition="background-color 0.2s ease"
+            >
+              <Td px={4} py={3} color="whiteAlpha.900" fontWeight="medium">
+                {item.tourist_type}
+              </Td>
+              <Td
+                px={4}
+                py={3}
+                color="whiteAlpha.800"
+                textTransform="capitalize"
+              >
+                {item.category}
+              </Td>
+              <Td
+                isNumeric
+                px={4}
+                py={3}
+                color="green.300"
+                fontWeight="semibold"
+              >
+                {formatRupiah(item.price)}
+              </Td>
             </Tr>
           ))}
         </Tbody>

@@ -9,6 +9,7 @@ import {
   Th,
   Td,
   TableContainer,
+  Link,
 } from "@chakra-ui/react";
 
 import { useNavigate } from "react-router-dom";
@@ -22,53 +23,55 @@ const TransportCard = (props) => {
 
   return (
     <Flex
-      direction={"column"}
-      alignItems={"start"}
-      bg={"gray.800"}
-      p={2}
-      w={"50%"}
+      direction="column"
+      alignItems="start"
+      bg="gray.800"
+      p={3}
+      w="50%"
       gap={2}
-      flexGrow={"1"}
-      rounded={"8"}
+      flexGrow="1"
+      _hover={{ bg: "gray.700", transition: "all 0.2s" }}
+      rounded="8"
       onClick={() => setOpen(!open)}
     >
       <Flex
         gap={4}
         p={2}
-        alignItems={"start"}
-        justifyContent={"start"}
-        w={"full"}
+        alignItems="start"
+        justifyContent="space-between"
+        w="full"
       >
-        <Box
-          w={"60px"}
-          h={"50px"}
-          bg={"gray.700"}
-          rounded={5}
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          fontSize={"18px"}
-          fontWeight={"bold"}
-          flexShrink={"0"}
-        >
-          {props.jenisKendaraan.slice(0, 2).toUpperCase() || "MO"}
-        </Box>
-        <Flex direction={"column"} flexShrink={"0"} gap={0}>
-          <Text fontSize={"18px"} fontWeight={"bold"}>
-            {props.jenisKendaraan || "  Mobil"}
-          </Text>
-          <Flex gap={2} alignItems={"center"}>
-            <Text fontSize={"14px"}>
+        <Flex gap={4} alignItems="center" flex="1">
+          <Box
+            w="60px"
+            h="50px"
+            bg="gray.900"
+            rounded="md"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            fontSize="18px"
+            fontWeight="bold"
+            flexShrink="0"
+          >
+            {(props.jenisKendaraan || "MO").slice(0, 2).toUpperCase()}
+          </Box>
+
+          <Flex direction="column" gap={1}>
+            <Text fontSize="18px" fontWeight="bold">
+              {props.jenisKendaraan || "Mobil"}
+            </Text>
+            <Text fontSize="14px" color="gray.300">
               {props.vendor || "2 jam keliling desa"}
             </Text>
           </Flex>
         </Flex>
-        <Flex direction={"row"} gap={1} w={"full"} justifyContent={"end"}>
-          <AppIconText icon={"mdi:ticket"} bg={"blue.700"} text={"Vendor"} />
-          <Flex
-            zIndex={10}
-            onClick={(event) => {
-              event.stopPropagation();
+
+        <Flex gap={2} alignItems="center" zIndex={10}>
+          <AppIconText icon="mdi:ticket" bg="blue.700" link={props.vendorLink} text="Vendor" />
+          <Box
+            onClick={(e) => {
+              e.stopPropagation();
             }}
           >
             <PopoverButton
@@ -79,9 +82,10 @@ const TransportCard = (props) => {
               }}
               onDeleteButton={props.onDeleteButton}
             />
-          </Flex>
+          </Box>
         </Flex>
       </Flex>
+
       {open && <AppInformationTable keterangan={props.keterangan} />}
     </Flex>
   );
@@ -100,7 +104,16 @@ const AppIconText = (props) => {
       flexShrink={"0"}
     >
       <Icon icon={props.icon} className="text-[14px]" color={"gray.400"} />
-      <Text fontSize={"10px"}>{props.text}</Text>
+      <Text fontSize="10px" color={"white"}>
+        <Link
+          href={props.link}
+          isExternal
+          color="white"
+          _hover={{ textDecoration: "none", color: "white" }}
+        >
+          {props.text}
+        </Link>
+      </Text>
     </Flex>
   );
 };
@@ -110,28 +123,68 @@ const AppInformationTable = ({ keterangan }) => {
 
   return (
     <Box w={"full"}>
-      <Table variant="simple" size="sm">
-        <Thead bg="gray.700">
-          <Tr>
-            <Th>Kategori</Th>
-            <Th>Nama Area</Th>
-            <Th isNumeric>Harga</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {layananTypes.map((key) =>
-            keterangan[key]?.map((item, idx) => (
-              <Tr key={`${key}-${idx}`}>
-                <Td textTransform="capitalize">{key}</Td>
-                <Td>{item.area}</Td>
-                <Td isNumeric>
-                  Rp {Number(item.price).toLocaleString("id-ID")}
-                </Td>
-              </Tr>
-            ))
-          )}
-        </Tbody>
-      </Table>
+      <TableContainer
+        w="full"
+        bg="gray.700"
+        borderRadius="lg"
+        boxShadow="md"
+        border={"2px solid"}
+        borderColor={"gray.900"}
+      >
+        <Table variant="simple" size="sm">
+          <Thead>
+            <Tr bg="gray.900">
+              <Th color="white" borderTopLeftRadius="lg" px={4} py={3}>
+                Kategori
+              </Th>
+              <Th color="white" px={4} py={3}>
+                Nama Area
+              </Th>
+              <Th
+                isNumeric
+                color="white"
+                borderTopRightRadius="lg"
+                px={4}
+                py={3}
+              >
+                Harga
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {layananTypes.map((key) =>
+              keterangan[key]?.map((item, idx) => (
+                <Tr
+                  key={`${key}-${idx}`}
+                  _hover={{ bg: "gray.600" }}
+                  transition="background-color 0.2s ease"
+                >
+                  <Td
+                    px={4}
+                    py={3}
+                    color="whiteAlpha.900"
+                    textTransform="capitalize"
+                  >
+                    {key}
+                  </Td>
+                  <Td px={4} py={3} color="whiteAlpha.800">
+                    {item.area}
+                  </Td>
+                  <Td
+                    isNumeric
+                    px={4}
+                    py={3}
+                    color="green.300"
+                    fontWeight="semibold"
+                  >
+                    Rp {Number(item.price).toLocaleString("id-ID")}
+                  </Td>
+                </Tr>
+              ))
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };
