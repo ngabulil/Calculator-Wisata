@@ -40,7 +40,19 @@ const tableCellStyle = {
 }
 
 const ItineraryTable = ({ days, formatCurrency }) => {
-   const calculateTotalExpenses = () => {
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const options = { 
+            weekday: 'short', 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        };
+        return date.toLocaleDateString('id-ID', options);
+    };
+
+    const calculateTotalExpenses = () => {
         let total = 0;
         days.forEach(day => {
             // Calculate total from regular activities
@@ -103,7 +115,14 @@ const ItineraryTable = ({ days, formatCurrency }) => {
                         <React.Fragment key={dayIndex}>
                             <Tr>
                                 <Td textAlign="center" fontWeight="bold" style={tableSubHeaderStyle}>{day.day}</Td>
-                                <Td fontWeight="bold" style={tableSubHeaderStyle}>({day.description})</Td>
+                                <Td fontWeight="bold" style={tableSubHeaderStyle}>
+                                    <Box>
+                                        <Text>{day.description}</Text>
+                                        <Text fontSize="sm" color="#555" mt={1}>
+                                            {formatDate(day.date)}
+                                        </Text>
+                                    </Box>
+                                </Td>
                                 <Td style={tableSubHeaderStyle}></Td>
                                 <Td style={tableSubHeaderStyle}></Td>
                             </Tr>

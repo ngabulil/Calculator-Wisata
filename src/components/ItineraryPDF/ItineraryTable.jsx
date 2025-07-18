@@ -35,10 +35,20 @@ const itineraryTextStyle = {
   verticalAlign: "top",
 };
 
-const ItineraryTable = ({
-  days = [],
-  title = ""
-}) => {
+const ItineraryTable = ({days = [], title = ""}) => {
+      const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const options = { 
+            weekday: 'short', 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        };
+        return date.toLocaleDateString('id-ID', options);
+    };
+
+
   return (
     <Box>
       <Table variant="simple" size="sm" border="1px solid #ddd">
@@ -56,7 +66,8 @@ const ItineraryTable = ({
                 {/* Judul Hari */}
                 <Tr>
                   <Td style={dayTitleStyle} border="1px solid #ddd">
-                    DAY {day.day} - {day.description}
+                    <Text>DAY {day.day} - {day.description}</Text>
+                    <Text fontSize="sm" fontWeight="normal">{formatDate(day.date)}</Text>
                   </Td>
                 </Tr>
 

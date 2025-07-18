@@ -28,9 +28,11 @@ const enrich = (items, parsedItems, nameKey, fallbackPrefix, extraFields = []) =
 
     return {
       ...rawDay,
+      date: rawDay.date,
       hotels: enrich(rawDay.hotels, parsedDay.hotels, "hotel", "Hotel", ["star"]),
       villas: enrich(rawDay.villas, parsedDay.villas, "villa", "Villa", ["star"]),
       restaurants: enrich(rawDay.restaurants, parsedDay.restaurants, "resto", "Restoran"),
+      mobils: enrich(rawDay.mobils, parsedDay.mobils, "mobil", "Mobil"),
       destinations: enrich(rawDay.destinations, parsedDay.destinations, "destinasi", "Destinasi"),
       activities: enrich(rawDay.activities, parsedDay.activities, "aktivitas", "Aktivitas"),
       transport_additionals: enrich(rawDay.transport_additionals, parsedDay.transport_additionals, null, "Tambahan Transportasi"),

@@ -60,6 +60,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
         day: index + 1,
         title: day.day_name || `Day ${index + 1}`,
         description: day.description_day || day.day_description || "",
+        date: day.date,
         activities: activities,
       };
     });
