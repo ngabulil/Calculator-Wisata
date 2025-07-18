@@ -1,7 +1,7 @@
 // components/Navbar.jsx
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
-import AccountCard from "./accountCard";
+import AccountCard from "./AccountCard";
 import { useAdminAuthContext } from "../../context/AuthContext";
 
 const linkStyle = ({ isActive }) => ({
