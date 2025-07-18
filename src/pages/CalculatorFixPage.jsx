@@ -16,7 +16,7 @@ import {
   TabPanels,
   TabPanel,
   Tag,
-  TagLabel
+  TagLabel,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -53,7 +53,6 @@ const CalculatorFixPage = () => {
     id = null,
   } = selectedPackage;
   const [activeDayId, setActiveDayId] = useState(1);
-  
 
   useEffect(() => {
     getPackages();
@@ -62,7 +61,6 @@ const CalculatorFixPage = () => {
   useEffect(() => {
     setActiveDayId(selectedPackage?.days[0]?.id);
   }, [selectedPackage?.id]);
-  
 
   const handleAddDay = () => {
     const newId = days.length + 1;
@@ -189,7 +187,30 @@ const CalculatorFixPage = () => {
 
             {/* DESKRIPSI DAY */}
             <FormControl>
+              {/* Label dan Input Tanggal */}
               <FormLabel color="white">
+                Tanggal untuk {days.find((d) => d.id === activeDayId)?.name}
+              </FormLabel>
+              <Input
+                type="date"
+                bg="gray.600"
+                color="white"
+                value={days.find((d) => d.id === activeDayId)?.date || ""}
+                onChange={(e) => {
+                  const updatedDays = days.map((day) =>
+                    day.id === activeDayId
+                      ? { ...day, date: e.target.value }
+                      : day
+                  );
+                  setSelectedPackage((prev) => ({
+                    ...prev,
+                    days: updatedDays,
+                  }));
+                }}
+              />
+
+              {/* Deskripsi Hari */}
+              <FormLabel mt={4} color="white">
                 Deskripsi untuk {days.find((d) => d.id === activeDayId)?.name}
               </FormLabel>
               <Textarea
