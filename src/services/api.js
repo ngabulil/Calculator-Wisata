@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000/api"
-// const BASE_URL = "http://ec2-35-88-18-176.us-west-2.compute.amazonaws.com:3000/api"
+// const BASE_URL = "http://localhost:3000/api"
+const BASE_URL = "https://backend.calcula.tours/api"
 
 const apiGet = async (url, params, token) => {
   try {
