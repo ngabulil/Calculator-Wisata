@@ -80,7 +80,6 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
             <Th style={tableHeaderStyle} border="1px solid #ddd">
               <VStack spacing={0}>
                 <Text>PILIHAN AKOMODASI</Text> 
-                <Text fontSize="sm" fontStyle="italic">(3 Malam Akomodasi)</Text> 
               </VStack>
             </Th>
             <Th style={tableHeaderStyle} border="1px solid #ddd" width="200px">

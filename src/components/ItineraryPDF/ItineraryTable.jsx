@@ -19,7 +19,7 @@ const tableHeaderStyle = {
   fontWeight: "bold",
   fontSize: "1rem",
   textAlign: "center",
-  padding: "12px 8px",
+  padding: "2px 40px 12px 40px",
 };
 
 const dayTitleStyle = {
