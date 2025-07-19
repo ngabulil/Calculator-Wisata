@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
   const { calculateGrandTotal } = useExpensesContext();
   const [isVisible, setIsVisible] = useState(true);
 
-  const isCheckoutPage = location.pathname === "/checkout";
+  const isCalculatorPage = location.pathname === "/calculator";
 
   return (
     <Box minH="100vh" bg={bg} position="relative">
@@ -33,7 +33,7 @@ const Layout = ({ children }) => {
       </Container>
 
       {/* Grand Total Box */}
-      {!isCheckoutPage && (
+      {isCalculatorPage && (
         <>
           {isVisible ? (
             <Box
