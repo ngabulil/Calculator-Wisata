@@ -53,14 +53,13 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
     // Format itinerary data dari mergedDays
     const formattedDays = mergedDays.map((day, index) => {
-      // Gabungkan semua aktivitas dari destinations, restaurants, dan activities
+      // Gabungkan semua aktivitas
       const activities = [
         ...(day.destinations || []).map(dest => dest.displayName),
         ...(day.restaurants || []).map(resto => resto.displayName),
         ...(day.activities || []).map(act => act.displayName),
       ];
 
-      // Get expense items dari ExpensesContext untuk hari ini
       const expenseDay = expenseDays[index];
       const expenseItems = expenseDay?.totals || [];
 
@@ -70,12 +69,12 @@ const ItineraryPDF = forwardRef((props, ref) => {
         description: day.description_day || day.day_description || "",
         date: day.date,
         activities: activities,
-        expenseItems: expenseItems, // Tambahkan expense items
+        expenseItems: expenseItems,
       };
     });
 
     setItineraryData(formattedDays);
-  }, [mergedDays, expenseDays]);
+  }, [mergedDays]);
 
   const handleSaveInclusion = () => {
     toast({

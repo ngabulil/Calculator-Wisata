@@ -214,10 +214,6 @@ const InvoicePDF = forwardRef((props, ref) => {
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
   const selling = adjustedGrandTotal / actualPax;
 
-
-
-
-
   return (
     <Box
       ref={componentRef}
