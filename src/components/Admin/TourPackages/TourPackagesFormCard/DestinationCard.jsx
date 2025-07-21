@@ -9,6 +9,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import DestinationModal from "../TourModal/DestinationModal";
 
 const typeWisataOptions = [
   { value: "domestik", label: "Domestik" },
@@ -19,6 +20,7 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
   const { destination } = useAdminPackageContext();
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
   const [selectedType, setSelectedType] = useState(data.selectedType || null);
+  const [openModal, setOpenModal] = useState(false);
 
   const textColor = useColorModeValue("white", "white");
 
@@ -77,7 +79,11 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
         <MainSelectCreatableWithDelete
           options={destinationOptions}
           value={selectedDest}
-          onChange={setSelectedDest}
+          onChange={(value) => {
+            setSelectedDest(value);
+
+            if (value.__isNew__) setOpenModal(true);
+          }}
           placeholder="Pilih destinasi"
         />
       </Box>
@@ -93,6 +99,11 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
           onChange={setSelectedType}
         />
       </Box> */}
+
+      <DestinationModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+      />
     </Box>
   );
 };

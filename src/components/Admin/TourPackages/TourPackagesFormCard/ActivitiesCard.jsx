@@ -7,10 +7,12 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
-import { MainSelectCreatableWithDelete } from "../../../MainSelect";
+import { MainSelectCreatable } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import ActivitiesModal from "../TourModal/ActivitiesModal";
 
 const ActivityCard = ({ index, data, onChange, onDelete }) => {
+  const [openModal, setOpenModal] = useState(false);
   const { activities } = useAdminPackageContext();
 
   const [selectedVendor, setSelectedVendor] = useState(
@@ -44,10 +46,10 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
     );
   }, [activities, selectedVendor]);
 
-  const typeWisataOptions = [
-    { value: "domestik", label: "Domestik" },
-    { value: "asing", label: "Asing" },
-  ];
+  // const typeWisataOptions = [
+  //   { value: "domestik", label: "Domestik" },
+  //   { value: "asing", label: "Asing" },
+  // ];
 
   useEffect(() => {
     onChange({
@@ -82,7 +84,7 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
         <Text fontSize="sm" color="gray.300" mb={1}>
           Pilih Vendor
         </Text>
-        <MainSelectCreatableWithDelete
+        <MainSelectCreatable
           options={vendorOptions}
           value={selectedVendor}
           onChange={(val) => {
@@ -97,12 +99,18 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
       {/* Pilih Aktivitas */}
       <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
-          Pilih Aktivitas
+          Pilih Aktivitas sda
         </Text>
-        <MainSelectCreatableWithDelete
+        <MainSelectCreatable
           options={activityOptions}
           value={selectedActivity}
-          onChange={setSelectedActivity}
+          onChange={(value) => {
+            setSelectedActivity(value);
+
+            if (value.__isNew__) {
+              setOpenModal(true);
+            }
+          }}
           isDisabled={!selectedVendor}
           placeholder="Pilih aktivitas"
         />
@@ -121,6 +129,7 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
           placeholder="Pilih jenis wisata"
         />
       </Box> */}
+      <ActivitiesModal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </Box>
   );
 };

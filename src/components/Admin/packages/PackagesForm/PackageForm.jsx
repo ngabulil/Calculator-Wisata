@@ -19,22 +19,21 @@ import {
   Input,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 //
 import HotelCard from "../../../Akomodasi/HotelPaketCard";
-import VillaCard from "../../../Akomodasi/VillaCard";
+import VillaCard from "../../../Akomodasi/VillaPaketCard";
 import InfoCard from "../../../Akomodasi/InfoCard";
 import InfoTransportCard from "../../../Transport/InfoCard";
-import MobilCard from "../../../Transport/MobilCard";
+import MobilCard from "../../../Transport/MobilPaketCard";
 
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 import { useAkomodasiContext } from "../../../../context/AkomodasiContext";
 import { useTransportContext } from "../../../../context/TransportContext";
 
 import DestinationCard from "../../TourPackages/TourPackagesFormCard/DestinationCard";
-import ActivityCard from "../../TourPackages/TourPackagesFormCard/ActivitiesCard";
+import ActivityCard from "../../TourPackages/TourPackagesFormCard/ActivitiesCard";     
 import RestaurantCard from "../../TourPackages/TourPackagesFormCard/RestaurantCard";
 
 //

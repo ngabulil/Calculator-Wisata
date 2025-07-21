@@ -9,9 +9,11 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import RestaurantModal from "../TourModal/RestaurantModal";
 
 const RestaurantCard = ({ index, data, onChange, onDelete }) => {
   const { restaurant } = useAdminPackageContext();
+  const [openModal, setOpenModal] = useState(false);
 
   const [selectedResto, setSelectedResto] = useState(
     data.selectedResto || null
@@ -44,16 +46,16 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
     );
   }, [selectedResto, restaurant]);
 
-  const typeWisataOptions = useMemo(() => {
-    const defaultOptions = [
-      { value: "domestik", label: "Domestik" },
-      { value: "asing", label: "Asing" },
-    ];
+  // const typeWisataOptions = useMemo(() => {
+  //   const defaultOptions = [
+  //     { value: "domestik", label: "Domestik" },
+  //     { value: "asing", label: "Asing" },
+  //   ];
 
-    if (!selectedTypeWisata) return defaultOptions;
+  //   if (!selectedTypeWisata) return defaultOptions;
 
-    return defaultOptions.filter((opt) => opt.value === selectedTypeWisata);
-  }, [selectedTypeWisata]);
+  //   return defaultOptions.filter((opt) => opt.value === selectedTypeWisata);
+  // }, [selectedTypeWisata]);
 
   useEffect(() => {
     onChange({
@@ -94,6 +96,7 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
             setSelectedResto(val);
             setSelectedPackage(null);
             setSelectedTypeWisata(null);
+            if (val.__isNew__) setOpenModal(true);
           }}
           placeholder="Pilih restoran"
         />
@@ -126,6 +129,7 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
           </Box> */}
         </>
       )}
+      <RestaurantModal isOpen={openModal} onClose={() => setOpenModal(false)} />
     </Box>
   );
 };
