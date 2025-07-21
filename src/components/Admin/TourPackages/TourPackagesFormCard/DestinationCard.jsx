@@ -83,7 +83,7 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
       </Box>
 
       {/* Tipe Wisata */}
-      <Box>
+      {/* <Box>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Tipe Wisata
         </Text>
@@ -92,7 +92,7 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
           value={selectedType}
           onChange={setSelectedType}
         />
-      </Box>
+      </Box> */}
     </Box>
   );
 };

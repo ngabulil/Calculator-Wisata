@@ -5,9 +5,7 @@ import Layout from "./components/Layout";
 import LayoutAdmin from "./components/Admin/Layout";
 
 // Public Pages
-import TourPackagePage from "./pages/TourPackages";
-import AkomodasiPage from "./pages/AkomodasiPage";
-import TransportPage from "./pages/TransportPage";
+
 import CheckoutPage from "./pages/CheckoutPage";
 import InvoicePDF from "./pages/InvoicePDF";
 import ExpensesPage from "./pages/ExpensesPage";

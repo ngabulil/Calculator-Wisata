@@ -16,10 +16,12 @@ import { PopoverButton } from "../../../PopoverButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
 import formatRupiah from "../../../../utils/rupiahFormat";
+import { useAdminAuthContext } from "../../../../context/AuthContext";
 
 const RestaurantCard = (props) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { userData } = useAdminAuthContext();
 
   return (
     <Flex
@@ -86,14 +88,16 @@ const RestaurantCard = (props) => {
               event.stopPropagation();
             }}
           >
-            <PopoverButton
-              isOpenButton={false}
-              onEditButton={() => {
-                navigate(`/admin/restaurant/edit`);
-                props.onEditButton();
-              }}
-              onDeleteButton={props.onDeleteButton}
-            />
+            {userData?.role === "super_admin" && (
+              <PopoverButton
+                isOpenButton={false}
+                onEditButton={() => {
+                  navigate(`/admin/restaurant/edit`);
+                  props.onEditButton();
+                }}
+                onDeleteButton={props.onDeleteButton}
+              />
+            )}
           </Flex>
         </Flex>
       </Flex>

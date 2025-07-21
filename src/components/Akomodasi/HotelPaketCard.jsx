@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useMemo, useEffect, useState } from "react";
-import MainSelect from "../MainSelect";
+import MainSelect, { MainSelectCreatable } from "../MainSelect";
 import { useAkomodasiContext } from "../../context/AkomodasiContext";
 
 const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
@@ -150,7 +150,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           <Text mb={1} fontSize="sm" color="gray.300">
             Pilih Hotel
           </Text>
-          <MainSelect
+          <MainSelectCreatable
             options={hotels.map((hotel) => ({
               value: hotel.id,
               label: hotel.hotelName,
@@ -169,8 +169,6 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
               });
               setJumlahKamar(1);
               setJumlahExtrabed(1);
-            }}
-            onCreateoption={(val) => {
               console.log(val);
             }}
             placeholder="Pilih Hotel"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   Container,
   Box,
@@ -9,6 +10,7 @@ import {
   Flex,
   HStack,
   IconButton,
+  Select,
   Tabs,
   TabList,
   TabPanels,
@@ -17,10 +19,11 @@ import {
   Input,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 //
-import HotelCard from "../../../Akomodasi/HotelCard";
+import HotelCard from "../../../Akomodasi/HotelPaketCard";
 import VillaCard from "../../../Akomodasi/VillaCard";
 import InfoCard from "../../../Akomodasi/InfoCard";
 import InfoTransportCard from "../../../Transport/InfoCard";
@@ -66,6 +69,18 @@ const PackageCreateForm = (props) => {
 
     setDays(res);
   };
+
+  const [selectedTypeWisata, setSelectedTypeWisata] = useState(
+    days[0]?.data?.tour?.destinations[0]?.type_wisata ||
+      days[0]?.data?.tour?.activities[0]?.type_wisata ||
+      days[0]?.data?.tour?.restaurants[0]?.type_wisata ||
+      null
+  );
+
+  const typeWisataOptions = [
+    { value: "domestik", label: "Domestik" },
+    { value: "asing", label: "Asing" },
+  ];
 
   const handleAddDay = () => {
     setDays((prev) => [
@@ -131,6 +146,23 @@ const PackageCreateForm = (props) => {
       handleSetValue();
     }
   }, [location.pathname, onePackageFull]);
+
+  useEffect(() => {
+    if (!selectedTypeWisata) return;
+
+    const updatedDays = days.map((day) => ({
+      ...day,
+      data: {
+        ...day.data,
+        tour: {
+          ...day.data.tour,
+          type_wisata: selectedTypeWisata,
+        },
+      },
+    }));
+
+    setDays(updatedDays);
+  }, [selectedTypeWisata]);
 
   return (
     <Container maxW="7xl" px="0">
@@ -336,6 +368,28 @@ const PackageCreateForm = (props) => {
                     <Text fontWeight="bold" fontSize={"22px"}>
                       Tour
                     </Text>
+
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Type Wisata
+                      </Text>
+                      <Select
+                        placeholder="Pilih Tipe Wisata"
+                        value={selectedTypeWisata}
+                        onChange={(e) => setSelectedTypeWisata(e.target.value)}
+                      >
+                        {typeWisataOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </Select>
+                    </Box>
                     <Box
                       border="1px solid"
                       borderColor="gray.600"
@@ -595,17 +649,19 @@ const PackageFormPage = (props) => {
     setPrimaryData(data);
   };
   const handleButtonPackage = async () => {
-    const data = {
-      name: namePackages,
-      description: desctiptionPackages,
-      days: [...primaryData],
-    };
-
-    const payload = buildPayloadPaket(data);
-
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
 
     try {
+      const data = {
+        name: namePackages,
+        description: desctiptionPackages,
+        days: [...primaryData],
+      };
+
+      console.log(primaryData);
+
+      const payload = buildPayloadPaket(data);
+
       for (const [key, value] of Object.entries(data)) {
         if (value === "") {
           toast.close(loading);
@@ -652,7 +708,7 @@ const PackageFormPage = (props) => {
       toast(
         toastConfig(
           editFormActive ? "Edit Gagal " : "Buat Gagal",
-          "Data tidak lengkap!",
+          error.message,
           "error"
         )
       );

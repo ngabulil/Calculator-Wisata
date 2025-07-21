@@ -50,8 +50,6 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
       { value: "asing", label: "Asing" },
     ];
 
-    console.log("selectedTypeWisata", selectedTypeWisata);
-
     if (!selectedTypeWisata) return defaultOptions;
 
     return defaultOptions.filter((opt) => opt.value === selectedTypeWisata);
@@ -115,7 +113,7 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
             />
           </Box>
 
-          <Box>
+          {/* <Box>
             <Text fontSize="sm" color="gray.300" mb={1}>
               Type Wisata
             </Text>
@@ -125,7 +123,7 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
               onChange={setSelectedTypeWisata}
               placeholder="Pilih jenis wisata"
             />
-          </Box>
+          </Box> */}
         </>
       )}
     </Box>

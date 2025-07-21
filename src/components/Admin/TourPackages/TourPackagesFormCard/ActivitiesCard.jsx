@@ -109,7 +109,7 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
       </Box>
 
       {/* Pilih Tipe Wisata */}
-      <Box>
+      {/* <Box>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Type Wisata
         </Text>
@@ -120,7 +120,7 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
           isDisabled={!selectedVendor || !selectedActivity}
           placeholder="Pilih jenis wisata"
         />
-      </Box>
+      </Box> */}
     </Box>
   );
 };
