@@ -28,18 +28,12 @@ const tableSubHeaderStyle = {
     padding: "2px 20px 12px 10px",
 };
 
-const tableTotalStyle = {
-    backgroundColor: orange,
-    fontWeight: "bold",
-    padding: "2px 20px 12px 10px",
-};
-
 const tableCellStyle = {
     padding: "2px 30px 12px 10px",
     verticalAlign: "top",
 }
 
-const ItineraryTable = ({ days, formatCurrency }) => {
+const ItineraryTable = ({ days }) => {
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -52,53 +46,6 @@ const ItineraryTable = ({ days, formatCurrency }) => {
         return date.toLocaleDateString('id-ID', options);
     };
 
-    const calculateTotalExpenses = () => {
-        let total = 0;
-        days.forEach(day => {
-            // Calculate total from regular activities
-            day.activities.forEach(activity => {
-                if (activity.expense) {
-                    const amount = parseFloat(
-                        activity.expense.replace(/[^\d,-]/g, '')
-                        .replace(/\./g, '')
-                        .replace(',', '.')
-                    );
-                    if (!isNaN(amount)) {
-                        total += amount;
-                    }
-                }
-            });
-            
-            if (day.expenseItems) {
-                day.expenseItems.forEach(expenseItem => {
-                    const price = expenseItem.price || 0;
-                    const quantity = expenseItem.quantity || 1;
-                    total += (price * quantity);
-                });
-            }
-        });
-        return total;
-    };
-
-    const calculateTotalKidExpenses = () => {
-        let total = 0;
-        days.forEach(day => {
-            day.activities.forEach(activity => {
-                if (activity.kidExpense) {
-                    const amount = parseFloat(
-                        activity.kidExpense.replace(/[^\d,-]/g, '')
-                        .replace(/\./g, '')
-                        .replace(',', '.')
-                    );
-                    if (!isNaN(amount)) {
-                        total += amount;
-                    }
-                }
-            });
-        });
-        return total;
-    };
-
     return (
         <Box mb={8} borderRadius="md" overflow="hidden">
             <Table variant="simple" size="sm">
@@ -106,8 +53,6 @@ const ItineraryTable = ({ days, formatCurrency }) => {
                     <Tr>
                         <Th textAlign="center" width="60px" style={tableHeaderStyle}>Day</Th>
                         <Th style={tableHeaderStyle}>Quotation</Th>
-                        <Th textAlign="center" width="100px" style={tableHeaderStyle}>Expenses</Th>
-                        <Th textAlign="center" width="100px" style={tableHeaderStyle}>Kid 4-9</Th>
                     </Tr>
                 </Thead>
                 <Tbody color={"#222"}>
@@ -123,15 +68,11 @@ const ItineraryTable = ({ days, formatCurrency }) => {
                                         </Text>
                                     </Box>
                                 </Td>
-                                <Td style={tableSubHeaderStyle}></Td>
-                                <Td style={tableSubHeaderStyle}></Td>
                             </Tr>
                             {day.activities.map((activity, actIndex) => (
                                 <Tr key={actIndex} _hover={{ background: gray }}>
                                     <Td></Td>
                                     <Td style={tableCellStyle}>• {activity.item}</Td>
-                                    <Td style={tableCellStyle}>{activity.expense}</Td>
-                                    <Td style={tableCellStyle}>{activity.kidExpense || '-'}</Td>
                                 </Tr>
                             ))}
                             {/* Display expense items if they exist */}
@@ -139,20 +80,10 @@ const ItineraryTable = ({ days, formatCurrency }) => {
                                 <Tr key={`exp-${expIndex}`} _hover={{ background: gray }}>
                                     <Td></Td>
                                     <Td style={tableCellStyle}>• {expenseItem.label}</Td>
-                                    <Td style={tableCellStyle}>{formatCurrency(expenseItem.price * expenseItem.quantity)}</Td>
-                                    <Td style={tableCellStyle}>-</Td>
                                 </Tr>
                             ))}
                         </React.Fragment>
                     ))}
-                    <Tr>
-                        <Td colSpan={3} style={tableTotalStyle}>
-                            Total Expenses
-                        </Td>
-                        <Td textAlign="right" style={tableTotalStyle}>
-                            {formatCurrency(calculateTotalExpenses()+calculateTotalKidExpenses())}
-                        </Td>
-                    </Tr>
                 </Tbody>
             </Table>
         </Box>

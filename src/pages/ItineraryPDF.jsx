@@ -10,11 +10,13 @@ import HotelChoiceTable from "../components/ItineraryPDF/HotelChoiceTable";
 import ItineraryTable from "../components/ItineraryPDF/ItineraryTable";
 import InclusionExclusion from "../components/ItineraryPDF/InclusionExclusion";
 import { usePackageContext } from "../context/PackageContext";
+import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
 
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
+  const { days: expenseDays } = useExpensesContext();
   const [mergedDays, setMergedDays] = useState([]);
   const [itineraryData, setItineraryData] = useState([]);
   const [isEditingInclusion, setIsEditingInclusion] = useState(false);
@@ -51,12 +53,16 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
     // Format itinerary data dari mergedDays
     const formattedDays = mergedDays.map((day, index) => {
-      // Gabungkan semua aktivitas
+      // Gabungkan semua aktivitas dari destinations, restaurants, dan activities
       const activities = [
         ...(day.destinations || []).map(dest => dest.displayName),
         ...(day.restaurants || []).map(resto => resto.displayName),
         ...(day.activities || []).map(act => act.displayName),
       ];
+
+      // Get expense items dari ExpensesContext untuk hari ini
+      const expenseDay = expenseDays[index];
+      const expenseItems = expenseDay?.totals || [];
 
       return {
         day: index + 1,
@@ -64,11 +70,12 @@ const ItineraryPDF = forwardRef((props, ref) => {
         description: day.description_day || day.day_description || "",
         date: day.date,
         activities: activities,
+        expenseItems: expenseItems, // Tambahkan expense items
       };
     });
 
     setItineraryData(formattedDays);
-  }, [mergedDays]);
+  }, [mergedDays, expenseDays]);
 
   const handleSaveInclusion = () => {
     toast({
@@ -182,11 +189,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
           color="#FB8C00"
           textAlign="center"
         >
-          Travel Itinerary & Quotation
-        </Text>
-
-        <Text fontSize="md" textAlign="center" mb={6} color="gray.600">
-          Your Adventure Awaits!
+          Travel Itinerary
         </Text>
 
         <Divider mb={6} borderColor="#FFA726" />

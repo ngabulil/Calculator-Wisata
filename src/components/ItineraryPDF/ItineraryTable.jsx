@@ -36,18 +36,17 @@ const itineraryTextStyle = {
 };
 
 const ItineraryTable = ({days = [], title = ""}) => {
-      const formatDate = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        const options = { 
-            weekday: 'short', 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric' 
-        };
-        return date.toLocaleDateString('id-ID', options);
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const options = { 
+        weekday: 'short', 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
     };
-
+    return date.toLocaleDateString('id-ID', options);
+  };
 
   return (
     <Box>
@@ -59,7 +58,7 @@ const ItineraryTable = ({days = [], title = ""}) => {
             </Th>
           </Tr>
         </Thead>
-        <Tbody color="#222" textAlign="center"  >
+        <Tbody color="#222" textAlign="center">
           {days.length > 0 ? (
             days.map((day, index) => (
               <React.Fragment key={index}>
@@ -71,12 +70,22 @@ const ItineraryTable = ({days = [], title = ""}) => {
                   </Td>
                 </Tr>
 
-                {/* Daftar Aktivitas */}
+                {/* Daftar Aktivitas dari package */}
                 {day.activities &&
                   day.activities.map((activity, i) => (
                     <Tr key={i}>
                       <Td style={itineraryTextStyle} border="1px solid #ddd">
                         • {activity}
+                      </Td>
+                    </Tr>
+                  ))}
+
+                {/* Daftar Expense Items dari ExpensesContext */}
+                {day.expenseItems && day.expenseItems.length > 0 &&
+                  day.expenseItems.map((expenseItem, i) => (
+                    <Tr key={`expense-${i}`}>
+                      <Td style={itineraryTextStyle} border="1px solid #ddd">
+                        • {expenseItem.label}
                       </Td>
                     </Tr>
                   ))}

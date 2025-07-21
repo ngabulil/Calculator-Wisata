@@ -7,7 +7,7 @@ const InvoiceHeader = ({ code, totalPax, adminName }) => (
   <Box>
     <VStack spacing={1} mb={6}>
       <Text fontSize="2xl" fontWeight="bold" color={orangeDark} textAlign="center" letterSpacing="wide">
-        Travel Itinerary & Quotation
+        Travel Quotation
       </Text>
     </VStack>
     
