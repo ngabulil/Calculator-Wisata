@@ -15,7 +15,7 @@ import { useAkomodasiContext } from "../../context/AkomodasiContext";
 import VillaFormModal from "../Admin/Villa/VillaModal/VillaModal";
 import { useAdminVillaContext } from "../../context/Admin/AdminVillaContext";
 
-const VillaCard = ({ index, onDelete, data, onChange }) => {
+const VillaCard = ({ index, onDelete, data, onChange, onModalClose }) => {
   const { villas } = useAkomodasiContext();
   const { updateVillaModal } = useAdminVillaContext();
   const [openModal, setOpenModal] = useState();
@@ -186,8 +186,8 @@ const VillaCard = ({ index, onDelete, data, onChange }) => {
               if (val.__isNew__) {
                 setOpenModal(true);
                 updateVillaModal({
-                  villaName: val.value
-                })
+                  villaName: val.value,
+                });
               }
             }}
             placeholder="Pilih Villa"
@@ -274,7 +274,13 @@ const VillaCard = ({ index, onDelete, data, onChange }) => {
           </HStack>
         )}
       </VStack>
-      <VillaFormModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <VillaFormModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose?.(false);
+        }}
+      />
     </Box>
   );
 };

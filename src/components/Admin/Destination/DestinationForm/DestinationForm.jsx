@@ -44,7 +44,7 @@ const DestinationFormPage = (props) => {
   const handleDestinationCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
-      name: name,
+      name: props.isModal ? destModalData.name : name,
       price_foreign_adult: priceForeignAdult,
       price_foreign_child: priceForeignChild,
       price_domestic_adult: priceDomesticAdult,

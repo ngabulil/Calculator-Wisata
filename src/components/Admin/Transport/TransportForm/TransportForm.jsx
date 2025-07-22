@@ -35,7 +35,7 @@ const TransportForm = (props) => {
     },
   });
 
-  const { transportData } = useAdminTransportContext();
+  const { transportData, mobilModalData } = useAdminTransportContext();
   const toast = useToast();
   const location = useLocation();
   const [editFormActive, setEditFormActive] = useState(false);
@@ -87,17 +87,12 @@ const TransportForm = (props) => {
   const handleTransportCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     try {
-      for (const [key, value] of Object.entries(vehicle)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
+      const data = {
+        ...vehicle,
+        name: mobilModalData.name,
+      };
 
-      const res = await apiPostMobilFull(vehicle);
+      const res = await apiPostMobilFull(props.isModal ? data : vehicle);
 
       if (res.status === 201) {
         toast.close(loading);
@@ -163,7 +158,7 @@ const TransportForm = (props) => {
   };
 
   useEffect(() => {
-    if (location.pathname.includes("edit")) {
+    if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleTransportSetValue();
     }
@@ -171,7 +166,13 @@ const TransportForm = (props) => {
 
   return (
     <VStack spacing={8} align="stretch">
-      <Box bg="gray.700" p={4} rounded="xl" boxShadow="md" position="relative">
+      <Box
+        bg="gray.700"
+        p={4}
+        rounded="xl"
+        boxShadow={!props.isModal && "md"}
+        position="relative"
+      >
         <HStack justify="space-between" mb={2}>
           <FormLabel fontWeight="bold">Kendaraan</FormLabel>
         </HStack>
@@ -179,9 +180,15 @@ const TransportForm = (props) => {
         <Box mb={3}>
           <FormLabel>Nama Kendaraan</FormLabel>
           <Input
-            value={vehicle.name}
-            onChange={(e) => handleChange("name", e.target.value)}
+            value={props.isModal ? mobilModalData.name : vehicle.name}
+            onChange={(e) =>
+              handleChange(
+                "name",
+                props.isModal ? mobilModalData.name : e.target.value
+              )
+            }
             placeholder="Contoh: Toyota Innova Reborn"
+            isDisabled={props.isModal}
           />
         </Box>
 

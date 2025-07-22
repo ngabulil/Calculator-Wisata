@@ -33,7 +33,7 @@ import { useAkomodasiContext } from "../../../../context/AkomodasiContext";
 import { useTransportContext } from "../../../../context/TransportContext";
 
 import DestinationCard from "../../TourPackages/TourPackagesFormCard/DestinationCard";
-import ActivityCard from "../../TourPackages/TourPackagesFormCard/ActivitiesCard";     
+import ActivityCard from "../../TourPackages/TourPackagesFormCard/ActivitiesCard";
 import RestaurantCard from "../../TourPackages/TourPackagesFormCard/RestaurantCard";
 
 //
@@ -49,6 +49,7 @@ import buildPayloadPaket from "../../../../utils/buildPayloadPaket";
 
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [modalTrigger, setModalTrigger] = useState(false);
   const location = useLocation();
   const {
     getAllActivities,
@@ -133,7 +134,7 @@ const PackageCreateForm = (props) => {
       await getAllDestination();
     };
     fetchData();
-  }, []);
+  }, [modalTrigger]);
 
   useEffect(() => {
     props.onChange?.(days);
@@ -252,6 +253,9 @@ const PackageCreateForm = (props) => {
                             isAdmin={true}
                             index={i}
                             data={hotel}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newHotel) => {
                               const updated = [...days];
                               updated[index].data.akomodasi.hotels[i] =
@@ -288,6 +292,9 @@ const PackageCreateForm = (props) => {
                               updated[index].data.akomodasi.villas[i] =
                                 newVilla;
                               setDays(updated);
+                            }}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
                             }}
                             onDelete={() => {
                               const updated = [...days];
@@ -405,6 +412,9 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={tours}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newInfo) => {
                               const updated = [...days];
                               updated[index].data.tour.destinations[i] =
@@ -452,6 +462,9 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={tours}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newInfo) => {
                               const updated = [...days];
 
@@ -494,6 +507,9 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={tours}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newInfo) => {
                               const updated = [...days];
 
@@ -549,10 +565,21 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={mobil}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                              const updated = [...days];
+
+                              console.log(
+                                updated[index].data.transport.mobils[i]
+                              );
+                              setDays(updated);
+                            }}
                             onChange={(newMobil) => {
                               const updated = [...days];
                               updated[index].data.transport.mobils[i] =
                                 newMobil;
+
+                              console.log("newmobil", newMobil);
                               setDays(updated);
                             }}
                             onDelete={() => {

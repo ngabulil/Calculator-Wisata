@@ -22,8 +22,12 @@ import { useAdminActivityContext } from "../../../../context/Admin/AdminActivity
 const ActivityFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { activityData, allActivityVendors, getAllActivityVendors , activityModalData } =
-    useAdminActivityContext();
+  const {
+    activityData,
+    allActivityVendors,
+    getAllActivityVendors,
+    activityModalData,
+  } = useAdminActivityContext();
   const [editFormActive, setEditFormActive] = useState(false);
   const [vendorId, setVendorId] = useState("");
   const [name, setName] = useState("");
@@ -51,7 +55,7 @@ const ActivityFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       vendor_id: vendorId,
-      name: name,
+      name: props.isModal ? activityModalData.name : name,
       price_foreign_adult: priceForeignAdult,
       price_foreign_child: priceForeignChild,
       price_domestic_adult: priceDomesticAdult,
@@ -148,7 +152,7 @@ const ActivityFormPage = (props) => {
   };
 
   useEffect(() => {
-    if   ( !props.isModal &&  location.pathname.includes("edit")) {
+    if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleActivitySetValue();
     }
@@ -175,7 +179,7 @@ const ActivityFormPage = (props) => {
         <FormLabel>Nama Aktivitas</FormLabel>
         <Input
           placeholder="Contoh: Trip Adventure"
-          value={ props.isModal ? activityModalData.name :  name}
+          value={props.isModal ? activityModalData.name : name}
           onChange={(e) => {
             setName(e.target.value);
           }}

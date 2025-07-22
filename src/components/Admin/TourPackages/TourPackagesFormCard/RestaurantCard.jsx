@@ -12,7 +12,7 @@ import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageCo
 import RestaurantModal from "../TourModal/RestaurantModal";
 import { useAdminRestaurantContext } from "../../../../context/Admin/AdminRestaurantContext";
 
-const RestaurantCard = ({ index, data, onChange, onDelete }) => {
+const RestaurantCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const { restaurant } = useAdminPackageContext();
   const { updateRestModalData } = useAdminRestaurantContext();
   const [openModal, setOpenModal] = useState(false);
@@ -134,7 +134,13 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
           </Box> */}
         </>
       )}
-      <RestaurantModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <RestaurantModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose(false);
+        }}
+      />
     </Box>
   );
 };

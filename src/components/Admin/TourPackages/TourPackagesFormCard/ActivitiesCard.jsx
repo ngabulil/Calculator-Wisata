@@ -12,7 +12,7 @@ import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageCo
 import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
 import ActivitiesModal from "../TourModal/ActivitiesModal";
 
-const ActivityCard = ({ index, data, onChange, onDelete }) => {
+const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const [openModal, setOpenModal] = useState(false);
   const { activities } = useAdminPackageContext();
   const { updateActivityModalData } = useAdminActivityContext();
@@ -101,7 +101,7 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
       {/* Pilih Aktivitas */}
       <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
-          Pilih Aktivitas sda
+          Pilih Aktivitas
         </Text>
         <MainSelectCreatable
           options={activityOptions}
@@ -134,7 +134,13 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
           placeholder="Pilih jenis wisata"
         />
       </Box> */}
-      <ActivitiesModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <ActivitiesModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose(false);
+        }}
+      />
     </Box>
   );
 };

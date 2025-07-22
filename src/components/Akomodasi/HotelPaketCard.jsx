@@ -15,7 +15,7 @@ import { useAkomodasiContext } from "../../context/AkomodasiContext";
 import { useAdminHotelContext } from "../../context/Admin/AdminHotelContext";
 import HotelFormModal from "../Admin/Hotel/HotelModal/HotelModal";
 
-const HotelCard = ({ index, onDelete, data, onChange }) => {
+const HotelCard = ({ index, onDelete, data, onChange, onModalClose }) => {
   const { hotels } = useAkomodasiContext();
   const { updateHotelModal } = useAdminHotelContext();
   const [jumlahKamar, setJumlahKamar] = useState(1);
@@ -113,8 +113,6 @@ const HotelCard = ({ index, onDelete, data, onChange }) => {
         ?.price || 0
     );
   }, [selectedHotelData, data.roomType]);
-
-
 
   useEffect(() => {
     let delayTimer = null;
@@ -266,7 +264,13 @@ const HotelCard = ({ index, onDelete, data, onChange }) => {
         )}
       </VStack>
 
-      <HotelFormModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <HotelFormModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose?.(false);
+        }}
+      />
     </Box>
   );
 };

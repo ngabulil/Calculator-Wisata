@@ -19,9 +19,8 @@ const TransportFormModal = ({ isOpen, onClose }) => {
         scrollBehavior="inside"
       >
         <ModalOverlay />
-        <ModalContent bg="gray.800">
-          <ModalCloseButton />
-
+        <ModalCloseButton />
+        <ModalContent bg="gray.100">
           <ModalBody>
             <TransportForm />
           </ModalBody>

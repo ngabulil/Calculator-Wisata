@@ -50,7 +50,7 @@ const HotelForm = (props) => {
   const handleHotelCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
-      name: hotelName,
+      name: props.isModal ? hotelModal.hotelName : hotelName,
       star: stars,
       link_photo: photoLink,
     };

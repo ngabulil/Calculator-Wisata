@@ -38,7 +38,7 @@ const RestaurantFormPage = (props) => {
   const handleRestaurantCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
-      resto_name: restoName,
+      resto_name: props.isModal ? restModalData.name : restoName,
       packages: restoPackage,
     };
 

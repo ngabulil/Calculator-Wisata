@@ -49,7 +49,7 @@ const VillaForm = (props) => {
   const handleVillaCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
-      name: villaName,
+      name: props.isModal ? villaModal.villaName : villaName,
       star: stars,
       link_photo: photoLink,
     };

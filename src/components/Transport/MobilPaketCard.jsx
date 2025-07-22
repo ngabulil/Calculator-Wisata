@@ -11,9 +11,18 @@ import { useMemo, useEffect, useState } from "react";
 import MainSelect, { MainSelectCreatable } from "../MainSelect";
 import { useTransportContext } from "../../context/TransportContext";
 import TransportFormModal from "./TransportModal/MobilModal";
+import { useAdminTransportContext } from "../../context/Admin/AdminTransportContext";
 
-const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
+const MobilCard = ({
+  index,
+  onDelete,
+  data,
+  onChange,
+  isAdmin,
+  onModalClose,
+}) => {
   const { mobils } = useTransportContext();
+  const { updateMobilModalData } = useAdminTransportContext();
   const [jumlah, setJumlah] = useState(data.jumlah || 1);
   const [openModal, setOpenModal] = useState(false);
 
@@ -70,8 +79,6 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
     return found?.price || 0;
   }, [selectedMobil, data.kategori, data.area]);
 
-  const totalHarga = jumlah * harga;
-
   useEffect(() => {
     const timer = setTimeout(() => {
       onChange({
@@ -122,10 +129,12 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
               });
 
               setJumlah(1);
-              console.log(val);
+
               if (val.__isNew__) {
                 setOpenModal(true);
+                updateMobilModalData({ name: val.value });
               }
+
             }}
             placeholder="Pilih Mobil"
           />
@@ -221,7 +230,10 @@ const MobilCard = ({ index, onDelete, data, onChange, isAdmin }) => {
 
       <TransportFormModal
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={() => {
+          onModalClose(false);
+          setOpenModal(false);
+        }}
       />
     </Box>
   );

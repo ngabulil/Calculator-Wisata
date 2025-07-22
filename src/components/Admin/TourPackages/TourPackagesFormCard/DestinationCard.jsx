@@ -17,7 +17,7 @@ const typeWisataOptions = [
   { value: "asing", label: "Asing" },
 ];
 
-const DestinationCard = ({ index, data, onChange, onDelete }) => {
+const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const { destination } = useAdminPackageContext();
   const { updateDestinationModalData } = useAdminDestinationContext();
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
@@ -109,7 +109,10 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
 
       <DestinationModal
         isOpen={openModal}
-        onClose={() => setOpenModal(false)}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose(false);
+        }}
       />
     </Box>
   );
