@@ -92,8 +92,6 @@ const CalculatorFixPage = () => {
     }
   };
 
-  console.log(selectedPackage);
-
   return (
     <Box minH="100vh" bg={bg} position="relative">
       <Container maxW="7xl" py={3}>

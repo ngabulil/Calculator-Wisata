@@ -56,7 +56,7 @@ const PesananCard = ({ pesanan }) => {
         {pesanan.invoice_pdf && (
           <Link href={pesanan.invoice_pdf} isExternal style={{ textDecoration: 'none' }}>
             <Button colorScheme="blue" variant="outline" size="sm" width="full">
-              Lihat Invoice PDF
+              Lihat Quotation PDF
             </Button>
           </Link>
         )}
