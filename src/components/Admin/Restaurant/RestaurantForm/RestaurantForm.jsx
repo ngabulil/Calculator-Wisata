@@ -53,6 +53,7 @@ const RestaurantFormPage = (props) => {
       const res = await apiPostRestaurant(data);
 
       if (res.status === 201) {
+        props.onModalClose?.();
         toast.close(loading);
         toast(
           toastConfig(

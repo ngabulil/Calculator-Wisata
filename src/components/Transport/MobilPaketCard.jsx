@@ -134,7 +134,6 @@ const MobilCard = ({
                 setOpenModal(true);
                 updateMobilModalData({ name: val.value });
               }
-
             }}
             placeholder="Pilih Mobil"
           />
@@ -230,7 +229,7 @@ const MobilCard = ({
 
       <TransportFormModal
         isOpen={openModal}
-        onClose={() => {
+        onClose={(val) => {
           onModalClose(false);
           setOpenModal(false);
         }}

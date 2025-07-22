@@ -79,6 +79,7 @@ const ActivityFormPage = (props) => {
       const res = await apiPostActivityDetails(data);
 
       if (res.status === 201) {
+        props.onModalClose?.()
         toast.close(loading);
         toast(
           toastConfig(

@@ -8,12 +8,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import RestaurantForm from "../../../Admin/Restaurant/RestaurantForm/RestaurantForm";
+import { useState } from "react";
 
 const RestaurantFormModal = ({ isOpen, onClose }) => {
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Modal
-        isOpen={isOpen}
+        isOpen={open || isOpen}
         onClose={onClose}
         size="6xl"
         scrollBehavior="inside"
@@ -23,7 +25,13 @@ const RestaurantFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <RestaurantForm isModal />
+            <RestaurantForm
+              isModal
+              onModalClose={() => {
+                setOpen(false);
+                onClose?.();
+              }}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

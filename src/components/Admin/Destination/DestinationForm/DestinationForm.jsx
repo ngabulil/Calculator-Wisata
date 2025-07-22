@@ -66,6 +66,7 @@ const DestinationFormPage = (props) => {
       const res = await apiPostDestination(data);
 
       if (res.status === 201) {
+        props.onModalClose?.()
         toast.close(loading);
         toast(
           toastConfig(

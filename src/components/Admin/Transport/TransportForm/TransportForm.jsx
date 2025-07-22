@@ -95,6 +95,7 @@ const TransportForm = (props) => {
       const res = await apiPostMobilFull(props.isModal ? data : vehicle);
 
       if (res.status === 201) {
+        props.onModalClose?.({id: res.result.id , name: mobilModalData.name});
         toast.close(loading);
         toast(
           toastConfig(

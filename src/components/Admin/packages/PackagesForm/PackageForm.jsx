@@ -569,9 +569,6 @@ const PackageCreateForm = (props) => {
                               setModalTrigger(!val);
                               const updated = [...days];
 
-                              console.log(
-                                updated[index].data.transport.mobils[i]
-                              );
                               setDays(updated);
                             }}
                             onChange={(newMobil) => {
@@ -579,7 +576,6 @@ const PackageCreateForm = (props) => {
                               updated[index].data.transport.mobils[i] =
                                 newMobil;
 
-                              console.log("newmobil", newMobil);
                               setDays(updated);
                             }}
                             onDelete={() => {

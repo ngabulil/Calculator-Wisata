@@ -7,13 +7,15 @@ import {
   ModalCloseButton,
   Button,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import TransportForm from "../TransportForm/TransportForm";
 
 const TransportFormModal = ({ isOpen, onClose }) => {
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Modal
-        isOpen={isOpen}
+        isOpen={open || isOpen}
         onClose={onClose}
         size="6xl"
         scrollBehavior="inside"
@@ -22,7 +24,13 @@ const TransportFormModal = ({ isOpen, onClose }) => {
         <ModalCloseButton />
         <ModalContent bg="gray.100">
           <ModalBody>
-            <TransportForm />
+            <TransportForm
+              onModalClose={() => {
+                setOpen(false);
+              onClose?.();
+                
+              }}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

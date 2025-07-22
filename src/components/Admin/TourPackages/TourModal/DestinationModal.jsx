@@ -8,12 +8,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import DestinationForm from "../../../../components/Admin/Destination/DestinationForm/DestinationForm";
+import { useState } from "react";
 
 const DestinationFormModal = ({ isOpen, onClose }) => {
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Modal
-        isOpen={isOpen}
+        isOpen={open || isOpen}
         onClose={onClose}
         size="6xl"
         scrollBehavior="inside"
@@ -23,7 +25,13 @@ const DestinationFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <DestinationForm isModal />
+            <DestinationForm
+              isModal
+              onModalClose={() => {
+                setOpen(false);
+                onClose?.();
+              }}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -8,12 +8,14 @@ import {
   Button,
 } from "@chakra-ui/react";
 import ActivitiesForm from "../../../Admin/Activity/ActivityForm/ActivityForm";
+import { useState } from "react";
 
 const ActivitiesFormModal = ({ isOpen, onClose }) => {
+  const [open, setOpen] = useState(false);
   return (
     <>
       <Modal
-        isOpen={isOpen}
+        isOpen={open || isOpen}
         onClose={onClose}
         size="6xl"
         scrollBehavior="inside"
@@ -23,7 +25,13 @@ const ActivitiesFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <ActivitiesForm isModal />
+            <ActivitiesForm
+              isModal
+              onModalClose={() => {
+                setOpen(false);
+                onClose?.();
+              }}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>
