@@ -38,21 +38,21 @@ export default function buildPayloadPaket(data) {
               destinations:
                 day.data?.tour?.destinations?.map((dest) => ({
                   id_destinasi: dest?.selectedDest?.value,
-                  type_wisata: day.data.tour.type_wisata.value,
+                  type_wisata: day.data.tour.type_wisata,
                 })) ?? [],
 
               activities:
                 day.data?.tour?.activities?.map((act) => ({
                   id_vendor: act?.selectedVendor?.value,
                   id_activity: act?.selectedActivity?.value,
-                  type_wisata: day.data.tour.type_wisata.value,
+                  type_wisata: day.data.tour.type_wisata,
                 })) ?? [],
 
               restaurants:
                 day.data?.tour?.restaurants?.map((resto) => ({
                   id_resto: resto?.selectedResto?.value,
                   id_menu: resto?.selectedPackage?.value,
-                  type_wisata: day.data.tour.type_wisata.value,
+                  type_wisata: day.data.tour.type_wisata,
                 })) ?? [],
             },
 
