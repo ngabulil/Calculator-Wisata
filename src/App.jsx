@@ -48,6 +48,7 @@ function App() {
     { path: "/admin/activity", element: <AdminActivityPage /> },
     { path: "/admin/activity/edit", element: <AdminActivityPage /> },
   ];
+  
 
   const publicRoutes = [
     { path: "/calculator", element: <CalculatorFixPage /> },
