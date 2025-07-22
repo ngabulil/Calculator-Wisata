@@ -201,7 +201,7 @@ const ExpensesPage = () => {
               variant="solid" 
               size="md"
             >
-              Invoice
+              Quotation
             </Button>
             {/* Tombol "Unduh Invoice" */}
             <Button
@@ -211,7 +211,7 @@ const ExpensesPage = () => {
               variant="outline" // Contoh varian
               size="md"
             >
-              Invoice
+              Quotation
             </Button>
             {/* Tombol "Lihat Itinerary" */}
             <Button
