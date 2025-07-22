@@ -13,9 +13,11 @@ import { useMemo, useEffect, useState } from "react";
 import MainSelect, { MainSelectCreatable } from "../MainSelect";
 import { useAkomodasiContext } from "../../context/AkomodasiContext";
 import VillaFormModal from "../Admin/Villa/VillaModal/VillaModal";
+import { useAdminVillaContext } from "../../context/Admin/AdminVillaContext";
 
 const VillaCard = ({ index, onDelete, data, onChange }) => {
   const { villas } = useAkomodasiContext();
+  const { updateVillaModal } = useAdminVillaContext();
   const [openModal, setOpenModal] = useState();
 
   const [jumlahKamar, setJumlahKamar] = useState(1);
@@ -183,6 +185,9 @@ const VillaCard = ({ index, onDelete, data, onChange }) => {
 
               if (val.__isNew__) {
                 setOpenModal(true);
+                updateVillaModal({
+                  villaName: val.value
+                })
               }
             }}
             placeholder="Pilih Villa"

@@ -23,7 +23,7 @@ const DestinationFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <DestinationForm />
+            <DestinationForm isModal />
           </ModalBody>
         </ModalContent>
       </Modal>

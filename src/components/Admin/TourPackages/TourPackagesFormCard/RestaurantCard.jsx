@@ -10,9 +10,11 @@ import { useEffect, useState, useMemo } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 import RestaurantModal from "../TourModal/RestaurantModal";
+import { useAdminRestaurantContext } from "../../../../context/Admin/AdminRestaurantContext";
 
 const RestaurantCard = ({ index, data, onChange, onDelete }) => {
   const { restaurant } = useAdminPackageContext();
+  const { updateRestModalData } = useAdminRestaurantContext();
   const [openModal, setOpenModal] = useState(false);
 
   const [selectedResto, setSelectedResto] = useState(
@@ -96,7 +98,10 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
             setSelectedResto(val);
             setSelectedPackage(null);
             setSelectedTypeWisata(null);
-            if (val.__isNew__) setOpenModal(true);
+            if (val.__isNew__) {
+              setOpenModal(true);
+              updateRestModalData({ name: val.value });
+            }
           }}
           placeholder="Pilih restoran"
         />

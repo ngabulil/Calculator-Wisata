@@ -13,6 +13,7 @@ export const useAdminHotelContext = () => {
 const AdminHotelContextProvider = ({ children }) => {
   const [allHotel, setAllHotel] = useState([]);
   const [roomTypeSelect, SetRoomTypeSelect] = useState([]);
+  const [hotelModal, setHotelModal] = useState({});
   const [hotelData, setHotelData] = useState({
     hotelName: "",
     stars: "",
@@ -62,7 +63,7 @@ const AdminHotelContextProvider = ({ children }) => {
       SetRoomTypeSelect(roomType);
       return response.result;
     } catch (error) {
-      console.log(error); // Added error logging
+      console.log(error);
     }
   };
 
@@ -73,8 +74,17 @@ const AdminHotelContextProvider = ({ children }) => {
     }));
   };
 
+  const updateHotelModal = (partial) => {
+    setHotelModal((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
+
   const value = {
     hotelData,
+    hotelModal,
+    updateHotelModal,
     allHotel,
     getHotel,
     roomTypeSelect,

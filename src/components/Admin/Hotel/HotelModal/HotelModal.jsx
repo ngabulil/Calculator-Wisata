@@ -23,7 +23,7 @@ const HotelFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <HotelForm />
+            <HotelForm isModal />
           </ModalBody>
         </ModalContent>
       </Modal>

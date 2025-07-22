@@ -23,7 +23,7 @@ const RestaurantFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <RestaurantForm />
+            <RestaurantForm isModal />
           </ModalBody>
         </ModalContent>
       </Modal>

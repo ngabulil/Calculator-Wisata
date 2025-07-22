@@ -24,7 +24,7 @@ const VillaFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <VillaForm />
+            <VillaForm isModal />
           </ModalBody>
         </ModalContent>
       </Modal>

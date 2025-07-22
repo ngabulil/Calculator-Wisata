@@ -21,7 +21,7 @@ import { useAdminDestinationContext } from "../../../../context/Admin/AdminDesti
 const DestinationFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { destinationData } = useAdminDestinationContext();
+  const { destinationData, destModalData } = useAdminDestinationContext();
   const [editFormActive, setEditFormActive] = useState(false);
 
   const [name, setName] = useState("");
@@ -136,7 +136,7 @@ const DestinationFormPage = (props) => {
   };
 
   useEffect(() => {
-    if (location.pathname.includes("edit")) {
+    if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleDestinationSetValue();
     }
@@ -159,7 +159,8 @@ const DestinationFormPage = (props) => {
         <FormLabel>Nama Destinasi</FormLabel>
         <Input
           placeholder="Contoh: Garuda Wisnu Kencana"
-          value={name}
+          value={props.isModal ? destModalData.name : name}
+          isDisabled={props.isModal}
           onChange={(e) => {
             setName(e.target.value);
           }}

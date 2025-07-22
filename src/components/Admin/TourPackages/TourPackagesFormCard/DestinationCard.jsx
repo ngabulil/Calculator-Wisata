@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 import DestinationModal from "../TourModal/DestinationModal";
+import { useAdminDestinationContext } from "../../../../context/Admin/AdminDestinationContext";
 
 const typeWisataOptions = [
   { value: "domestik", label: "Domestik" },
@@ -18,6 +19,7 @@ const typeWisataOptions = [
 
 const DestinationCard = ({ index, data, onChange, onDelete }) => {
   const { destination } = useAdminPackageContext();
+  const { updateDestinationModalData } = useAdminDestinationContext();
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
   const [selectedType, setSelectedType] = useState(data.selectedType || null);
   const [openModal, setOpenModal] = useState(false);
@@ -82,7 +84,12 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
           onChange={(value) => {
             setSelectedDest(value);
 
-            if (value.__isNew__) setOpenModal(true);
+            if (value.__isNew__) {
+              setOpenModal(true);
+              updateDestinationModalData({
+                name: value.label,
+              });
+            }
           }}
           placeholder="Pilih destinasi"
         />

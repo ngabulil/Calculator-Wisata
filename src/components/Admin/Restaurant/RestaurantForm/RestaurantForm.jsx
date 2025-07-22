@@ -25,7 +25,7 @@ import { useAdminRestaurantContext } from "../../../../context/Admin/AdminRestau
 const RestaurantFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { restaurantData } = useAdminRestaurantContext();
+  const { restaurantData, restModalData } = useAdminRestaurantContext();
   const [editFormActive, setEditFormActive] = useState(false);
   //
   const [restoName, setRestoName] = useState("");
@@ -117,7 +117,7 @@ const RestaurantFormPage = (props) => {
   };
 
   useEffect(() => {
-    if (location.pathname.includes("edit")) {
+    if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleRestaurantSetValue();
     }
@@ -140,7 +140,8 @@ const RestaurantFormPage = (props) => {
         <FormLabel>Nama Restaurant</FormLabel>
         <Input
           placeholder="Contoh: Nama Restaurant"
-          value={restoName}
+          value={props.isModal ? restModalData.name : restoName}
+          isDisabled={props.isModal}
           onChange={(e) => {
             setRestoName(e.target.value);
           }}

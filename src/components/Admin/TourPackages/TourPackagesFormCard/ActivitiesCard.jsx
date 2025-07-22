@@ -9,11 +9,13 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
 import { MainSelectCreatable } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
 import ActivitiesModal from "../TourModal/ActivitiesModal";
 
 const ActivityCard = ({ index, data, onChange, onDelete }) => {
   const [openModal, setOpenModal] = useState(false);
   const { activities } = useAdminPackageContext();
+  const { updateActivityModalData } = useAdminActivityContext();
 
   const [selectedVendor, setSelectedVendor] = useState(
     data.selectedVendor || null
@@ -109,6 +111,9 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
 
             if (value.__isNew__) {
               setOpenModal(true);
+              updateActivityModalData({
+                name: value.value,
+              });
             }
           }}
           isDisabled={!selectedVendor}

@@ -23,7 +23,7 @@ const ActivitiesFormModal = ({ isOpen, onClose }) => {
           <ModalCloseButton />
 
           <ModalBody>
-            <ActivitiesForm />
+            <ActivitiesForm isModal />
           </ModalBody>
         </ModalContent>
       </Modal>

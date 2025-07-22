@@ -22,7 +22,7 @@ import { useAdminActivityContext } from "../../../../context/Admin/AdminActivity
 const ActivityFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { activityData, allActivityVendors, getAllActivityVendors } =
+  const { activityData, allActivityVendors, getAllActivityVendors , activityModalData } =
     useAdminActivityContext();
   const [editFormActive, setEditFormActive] = useState(false);
   const [vendorId, setVendorId] = useState("");
@@ -148,7 +148,7 @@ const ActivityFormPage = (props) => {
   };
 
   useEffect(() => {
-    if (location.pathname.includes("edit")) {
+    if   ( !props.isModal &&  location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleActivitySetValue();
     }
@@ -175,10 +175,11 @@ const ActivityFormPage = (props) => {
         <FormLabel>Nama Aktivitas</FormLabel>
         <Input
           placeholder="Contoh: Trip Adventure"
-          value={name}
+          value={ props.isModal ? activityModalData.name :  name}
           onChange={(e) => {
             setName(e.target.value);
           }}
+          isDisabled={props.isModal ? true : false}
         />
       </Box>
       <Box mb={4}>

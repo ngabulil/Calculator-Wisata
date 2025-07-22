@@ -12,10 +12,12 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useMemo, useEffect, useState } from "react";
 import MainSelect, { MainSelectCreatable } from "../MainSelect";
 import { useAkomodasiContext } from "../../context/AkomodasiContext";
+import { useAdminHotelContext } from "../../context/Admin/AdminHotelContext";
 import HotelFormModal from "../Admin/Hotel/HotelModal/HotelModal";
 
-const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
+const HotelCard = ({ index, onDelete, data, onChange }) => {
   const { hotels } = useAkomodasiContext();
+  const { updateHotelModal } = useAdminHotelContext();
   const [jumlahKamar, setJumlahKamar] = useState(1);
   const [jumlahExtrabed, setJumlahExtrabed] = useState(1);
   const [openModal, setOpenModal] = useState(false);
@@ -112,9 +114,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
     );
   }, [selectedHotelData, data.roomType]);
 
-  const totalHarga =
-    jumlahKamar * hargaPerKamar +
-    (data.useExtrabed ? jumlahExtrabed * hargaExtrabed : 0);
+
 
   useEffect(() => {
     let delayTimer = null;
@@ -174,6 +174,9 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
 
               if (val.__isNew__) {
                 setOpenModal(true);
+                updateHotelModal({
+                  hotelName: val.value,
+                });
               }
             }}
             placeholder="Pilih Hotel"
