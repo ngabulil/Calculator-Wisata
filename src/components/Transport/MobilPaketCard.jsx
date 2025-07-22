@@ -229,7 +229,7 @@ const MobilCard = ({
 
       <TransportFormModal
         isOpen={openModal}
-        onClose={(val) => {
+        onClose={() => {
           onModalClose(false);
           setOpenModal(false);
         }}
