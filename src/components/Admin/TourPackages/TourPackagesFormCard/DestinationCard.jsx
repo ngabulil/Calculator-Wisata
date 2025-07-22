@@ -9,16 +9,20 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import DestinationModal from "../TourModal/DestinationModal";
+import { useAdminDestinationContext } from "../../../../context/Admin/AdminDestinationContext";
 
 const typeWisataOptions = [
   { value: "domestik", label: "Domestik" },
   { value: "asing", label: "Asing" },
 ];
 
-const DestinationCard = ({ index, data, onChange, onDelete }) => {
+const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const { destination } = useAdminPackageContext();
+  const { updateDestinationModalData } = useAdminDestinationContext();
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
   const [selectedType, setSelectedType] = useState(data.selectedType || null);
+  const [openModal, setOpenModal] = useState(false);
 
   const textColor = useColorModeValue("white", "white");
 
@@ -77,13 +81,22 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
         <MainSelectCreatableWithDelete
           options={destinationOptions}
           value={selectedDest}
-          onChange={setSelectedDest}
+          onChange={(value) => {
+            setSelectedDest(value);
+
+            if (value.__isNew__) {
+              setOpenModal(true);
+              updateDestinationModalData({
+                name: value.label,
+              });
+            }
+          }}
           placeholder="Pilih destinasi"
         />
       </Box>
 
       {/* Tipe Wisata */}
-      <Box>
+      {/* <Box>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Tipe Wisata
         </Text>
@@ -92,7 +105,15 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
           value={selectedType}
           onChange={setSelectedType}
         />
-      </Box>
+      </Box> */}
+
+      <DestinationModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose(false);
+        }}
+      />
     </Box>
   );
 };

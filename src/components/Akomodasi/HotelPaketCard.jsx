@@ -10,13 +10,17 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useMemo, useEffect, useState } from "react";
-import MainSelect from "../MainSelect";
+import MainSelect, { MainSelectCreatable } from "../MainSelect";
 import { useAkomodasiContext } from "../../context/AkomodasiContext";
+import { useAdminHotelContext } from "../../context/Admin/AdminHotelContext";
+import HotelFormModal from "../Admin/Hotel/HotelModal/HotelModal";
 
-const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
+const HotelCard = ({ index, onDelete, data, onChange, onModalClose }) => {
   const { hotels } = useAkomodasiContext();
+  const { updateHotelModal } = useAdminHotelContext();
   const [jumlahKamar, setJumlahKamar] = useState(1);
   const [jumlahExtrabed, setJumlahExtrabed] = useState(1);
+  const [openModal, setOpenModal] = useState(false);
 
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
@@ -110,10 +114,6 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
     );
   }, [selectedHotelData, data.roomType]);
 
-  const totalHarga =
-    jumlahKamar * hargaPerKamar +
-    (data.useExtrabed ? jumlahExtrabed * hargaExtrabed : 0);
-
   useEffect(() => {
     let delayTimer = null;
     delayTimer = setTimeout(() => {
@@ -150,7 +150,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           <Text mb={1} fontSize="sm" color="gray.300">
             Pilih Hotel
           </Text>
-          <MainSelect
+          <MainSelectCreatable
             options={hotels.map((hotel) => ({
               value: hotel.id,
               label: hotel.hotelName,
@@ -169,9 +169,13 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
               });
               setJumlahKamar(1);
               setJumlahExtrabed(1);
-            }}
-            onCreateoption={(val) => {
-              console.log(val);
+
+              if (val.__isNew__) {
+                setOpenModal(true);
+                updateHotelModal({
+                  hotelName: val.value,
+                });
+              }
             }}
             placeholder="Pilih Hotel"
           />
@@ -181,7 +185,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           <Text mb={1} fontSize="sm" color="gray.300">
             Tipe Kamar
           </Text>
-          <MainSelect
+          <MainSelectCreatable
             options={roomOptions}
             value={data.roomType}
             onChange={(val) => {
@@ -208,7 +212,7 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
           <Text mb={1} fontSize="sm" color="gray.300">
             Musim
           </Text>
-          <MainSelect
+          <MainSelectCreatable
             options={seasonOptions}
             value={seasonOptions.find((s) => s.value == data.season)}
             onChange={(val) => {
@@ -226,76 +230,9 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
             placeholder="Pilih Musim"
           />
         </Box>
-
-        {!isAdmin && (
-          <Box w="50%">
-            <Text mb={1} fontSize="sm" color="gray.300">
-              Harga per Kamar
-            </Text>
-            <Input
-              value={hargaPerKamar}
-              isReadOnly
-              bg={inputBg}
-              color={textColor}
-              borderColor={borderColor}
-            />{" "}
-          </Box>
-        )}
-
-        {!isAdmin && (
-          <Box w="50%">
-            <Text mb={1} fontSize="sm" color="gray.300">
-              Jumlah Kamar
-            </Text>
-            <Input
-              value={jumlahKamar}
-              onChange={(e) => setJumlahKamar(Number(e.target.value))}
-              bg={inputBg}
-              color={textColor}
-              borderColor={borderColor}
-            />
-          </Box>
-        )}
       </HStack>
 
-      {!isAdmin && (
-        <HStack spacing={4} mb={3}>
-          <Box w="50%">
-            <Text mb={1} fontSize="sm" color="gray.300">
-              Jumlah Kamar
-            </Text>
-            <Input
-              value={jumlahKamar}
-              onChange={(e) => setJumlahKamar(Number(e.target.value))}
-              bg={inputBg}
-              color={textColor}
-              borderColor={borderColor}
-            />
-          </Box>
-        </HStack>
-      )}
-
       <VStack align="start" spacing={2} mb={3}>
-        {!isAdmin && (
-          <HStack align="center" spacing={3}>
-            <Checkbox
-              colorScheme="teal"
-              isChecked={data.useExtrabed || false}
-              onChange={(e) =>
-                onChange({ ...data, useExtrabed: e.target.checked })
-              }
-              isDisabled={hargaExtrabed === 0}
-            >
-              Extrabed?
-            </Checkbox>
-            {hargaExtrabed === 0 && (
-              <Text fontSize="sm" color="orange.300">
-                Tidak tersedia, silahkan tambah di additional
-              </Text>
-            )}
-          </HStack>
-        )}
-
         {data.useExtrabed && (
           <HStack spacing={4} w="100%">
             <Box w="50%">
@@ -327,13 +264,13 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
         )}
       </VStack>
 
-      {!isAdmin && (
-        <Box mt={4}>
-          <Text fontWeight="semibold" color="green.300">
-            Total Harga: Rp {totalHarga.toLocaleString("id-ID")}
-          </Text>
-        </Box>
-      )}
+      <HotelFormModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose?.(false);
+        }}
+      />
     </Box>
   );
 };

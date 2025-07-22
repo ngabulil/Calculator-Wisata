@@ -62,14 +62,11 @@ const InvoicePDF = forwardRef((props, ref) => {
     const processDays = async () => {
       if (selectedPackage?.days?.length > 0) {
         try {
-          // Tetap panggil parseAndMergeDays untuk memastikan struktur data yang konsisten
-          // untuk destinasi, restoran, aktivitas, dan akomodasi/transport tambahan.
-          // parseAndMergeDays menangani 'displayName' yang penting untuk InvoicePDF.
           const merged = await parseAndMergeDays(selectedPackage.days);
           setMergedDays(merged);
         } catch (err) {
-          console.error("Gagal memproses days:", err); //
-          setMergedDays(selectedPackage.days); // fallback jika parsing gagal
+          console.error("Gagal memproses days:", err); 
+          setMergedDays(selectedPackage.days); 
         }
       }
     };
@@ -170,7 +167,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     });
 
     setHotelData(hotels.concat(villas));
-    setVillaData(villas); // Ini tampaknya duplikasi dengan hotelData, mungkin perlu dicek lagi penggunaannya
+    setVillaData(villas);
     setTransportData(transports);
     setAdditionalData(additionals);
 
@@ -213,11 +210,9 @@ const InvoicePDF = forwardRef((props, ref) => {
 
   const actualPax = pax && parseInt(pax) > 0 ? parseInt(pax) : 1;
   const perPax = actualPax > 0 ? breakdown.markup / actualPax : 0;
-  const selling = grandTotal / actualPax;
-
   const totalExpensesFromContext = calculateGrandTotal();
-
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
+  const selling = adjustedGrandTotal / actualPax;
 
   return (
     <Box

@@ -16,8 +16,10 @@ import { useNavigate } from "react-router-dom";
 import { PopoverButton } from "../../../PopoverButton";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
+import { useAdminAuthContext } from "../../../../context/AuthContext";
 
 const TransportCard = (props) => {
+  const { userData } = useAdminAuthContext();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -68,20 +70,27 @@ const TransportCard = (props) => {
         </Flex>
 
         <Flex gap={2} alignItems="center" zIndex={10}>
-          <AppIconText icon="mdi:ticket" bg="blue.700" link={props.vendorLink} text="Vendor" />
+          <AppIconText
+            icon="mdi:ticket"
+            bg="blue.700"
+            link={props.vendorLink}
+            text="Vendor"
+          />
           <Box
             onClick={(e) => {
               e.stopPropagation();
             }}
           >
-            <PopoverButton
-              isOpenButton={false}
-              onEditButton={() => {
-                navigate(`/admin/transport/edit`);
-                props.onEditButton();
-              }}
-              onDeleteButton={props.onDeleteButton}
-            />
+            {userData?.role === "super_admin" && (
+              <PopoverButton
+                isOpenButton={false}
+                onEditButton={() => {
+                  navigate(`/admin/transport/edit`);
+                  props.onEditButton();
+                }}
+                onDeleteButton={props.onDeleteButton}
+              />
+            )}
           </Box>
         </Flex>
       </Flex>

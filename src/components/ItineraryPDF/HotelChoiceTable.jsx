@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import formatRupiah from "../../utils/rupiahFormat";
+// import formatRupiah from "../../utils/rupiahFormat";
 
 const orange = "#FB8C00";
 const gray = "#F5F5F5";
@@ -28,10 +28,10 @@ const tableCellStyle = {
   verticalAlign: "top",
 };
 
-const tablePriceStyle = {
-  padding: "2px 20px 12px 40px",
-  verticalAlign: "top",
-};
+// const tablePriceStyle = {
+//   padding: "2px 20px 12px 40px",
+//   verticalAlign: "top",
+// };
 
 
 
@@ -80,13 +80,6 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
             <Th style={tableHeaderStyle} border="1px solid #ddd">
               <VStack spacing={0}>
                 <Text>PILIHAN AKOMODASI</Text> 
-                <Text fontSize="sm" fontStyle="italic">(3 Malam Akomodasi)</Text> 
-              </VStack>
-            </Th>
-            <Th style={tableHeaderStyle} border="1px solid #ddd" width="200px">
-              <VStack spacing={0}>
-                <Text>HARGA PER MALAM</Text>
-
               </VStack>
             </Th>
           </Tr>
@@ -105,18 +98,6 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
                       {accommodation.name.toUpperCase()} ({accommodation.stars}*)
                     </Text>
                   </VStack>
-                </Td>
-                <Td style={tablePriceStyle}>
-                  <Text 
-                    fontWeight="bold" 
-                    fontSize="lg" 
-                    textAlign="center" 
-                    width="100%"
-                    padding="4px 8px"
-                    borderRadius="4px"
-                  >
-                    {formatRupiah(accommodation.price)}/Malam
-                  </Text>
                 </Td>
               </Tr>
             ))

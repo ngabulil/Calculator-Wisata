@@ -5,19 +5,23 @@ import {
   useImperativeHandle, 
   forwardRef 
 } from "react";
-import { Box, Text, Divider,Button } from "@chakra-ui/react";
+import { Box, Text, Divider, Button, Flex, useToast } from "@chakra-ui/react";
 import HotelChoiceTable from "../components/ItineraryPDF/HotelChoiceTable";
 import ItineraryTable from "../components/ItineraryPDF/ItineraryTable";
 import InclusionExclusion from "../components/ItineraryPDF/InclusionExclusion";
 import { usePackageContext } from "../context/PackageContext";
+import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
 
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
+  const { days: expenseDays } = useExpensesContext();
   const [mergedDays, setMergedDays] = useState([]);
   const [itineraryData, setItineraryData] = useState([]);
+  const [isEditingInclusion, setIsEditingInclusion] = useState(false);
   const { exportAsBlob, downloadPdf } = useExportPdf();
+  const toast = useToast();
   const componentRef = useRef();
 
   useImperativeHandle(ref, () => ({
@@ -56,82 +60,155 @@ const ItineraryPDF = forwardRef((props, ref) => {
         ...(day.activities || []).map(act => act.displayName),
       ];
 
+      const expenseDay = expenseDays[index];
+      const expenseItems = expenseDay?.totals || [];
+
       return {
         day: index + 1,
         title: day.day_name || `Day ${index + 1}`,
         description: day.description_day || day.day_description || "",
         date: day.date,
         activities: activities,
+        expenseItems: expenseItems,
       };
     });
 
     setItineraryData(formattedDays);
   }, [mergedDays]);
 
+  const handleSaveInclusion = () => {
+    toast({
+      title: "Data Tersimpan",
+      description: "Inclusion & Exclusion berhasil disimpan!",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+    });
+    setIsEditingInclusion(false);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingInclusion(false);
+  };
+
   return (
-    <Box
-      ref={componentRef}
-      data-pdf-content
-      width="794px"
-      minHeight="1123px"
-      mx="auto"
-      p="40px"
-      bg="white"
-      display="block !important"
-      fontFamily="Arial, sans-serif"
-      fontSize="14px"
-      lineHeight="1.4"
-      color="#000000"
-      boxSizing="border-box"
-            sx={{
-        "& img": {
-          display: "block !important",
-          maxWidth: "100%",
-          height: "auto",
-        },
-        "& table": {
-          borderCollapse: "collapse",
-          width: "100%",
-          marginBottom: "20px",
-        },
-        "& th, & td": {
-          border: "1px solid #ddd",
-          padding: "8px",
-          textAlign: "left",
-          verticalAlign: "top",
-        },
-        "& th": {
-          backgroundColor: "#FB8C00",
-          color: "#000000",
-          fontWeight: "bold",
-        },
-      }}
-    >
-      <Text
-        fontSize="2xl"
-        fontWeight="bold"
-        mb={2}
-        color="#FB8C00"
-        textAlign="center"
+    <Box maxW="900px" mx="auto" py={8}>
+      {/* Control Panel - Di luar area PDF */}
+      <Flex 
+        justify="space-between" 
+        align="center" 
+        mb={6} 
+        p={4} 
+        bg="gray.50" 
+        borderRadius="md"
+        flexWrap="wrap"
+        gap={3}
       >
-        Travel Itinerary & Quotation
-      </Text>
+        <Text fontSize="lg" fontWeight="bold" color="#FB8C00">
+          Itinerary Controls
+        </Text>
+        
+        <Flex gap={2} flexWrap="wrap">
+          {/* Inclusion/Exclusion Controls */}
+          <Box>
+            {!isEditingInclusion ? (
+              <Button 
+                size="sm" 
+                colorScheme="blue" 
+                onClick={() => setIsEditingInclusion(true)}
+              >
+                Edit Inclusion/Exclusion
+              </Button>
+            ) : (
+              <Flex gap={2}>
+                <Button 
+                  size="sm" 
+                  colorScheme="green" 
+                  onClick={handleSaveInclusion}
+                >
+                  Simpan
+                </Button>
+                <Button 
+                  size="sm" 
+                  colorScheme="gray" 
+                  onClick={handleCancelEdit}
+                >
+                  Batal
+                </Button>
+              </Flex>
+            )}
+          </Box>
+        
+        </Flex>
+      </Flex>
 
-      <Text fontSize="md" textAlign="center" mb={6} color="gray.600">
-        Your Adventure Awaits!
-      </Text>
+      {/* Area PDF - Hanya ini yang akan di-export */}
+      <Box
+        ref={componentRef}
+        data-pdf-content
+        width="794px"
+        minHeight="1123px"
+        mx="auto"
+        p="40px"
+        bg="white"
+        display="block !important"
+        fontFamily="Arial, sans-serif"
+        fontSize="14px"
+        lineHeight="1.4"
+        color="#000000"
+        boxSizing="border-box"
+        sx={{
+          "& img": {
+            display: "block !important",
+            maxWidth: "100%",
+            height: "auto",
+          },
+          "& table": {
+            borderCollapse: "collapse",
+            width: "100%",
+            marginBottom: "20px",
+          },
+          "& th, & td": {
+            border: "1px solid #ddd",
+            padding: "8px",
+            textAlign: "left",
+            verticalAlign: "top",
+          },
+          "& th": {
+            backgroundColor: "#FB8C00",
+            color: "#000000",
+            fontWeight: "bold",
+          },
+        }}
+      >
+        <Text
+          fontSize="2xl"
+          fontWeight="bold"
+          mb={2}
+          color="#FB8C00"
+          textAlign="center"
+        >
+          Travel Itinerary
+        </Text>
 
-      <Divider mb={6} borderColor="#FFA726" />
+        <Divider mb={6} borderColor="#FFA726" />
 
-      <HotelChoiceTable akomodasiDays={mergedDays} />
+        <HotelChoiceTable akomodasiDays={mergedDays} />
 
-      <Divider my={6} borderColor="#FFA726" />
+        <Divider my={6} borderColor="#FFA726" />
 
-      <ItineraryTable   title={`ITINERARY ${selectedPackage?.title || ""}`} days={itineraryData} />
+        <ItineraryTable title={`ITINERARY ${selectedPackage?.title || ""}`} days={itineraryData} />
 
-      <Divider my={6} borderColor="#FFA726" />
+        <Divider my={6} borderColor="#FFA726" />
 
-      <InclusionExclusion />
+        {/* Pass state edit dan handler ke komponen */}
+        <InclusionExclusion 
+          isEditing={isEditingInclusion}
+          onSave={handleSaveInclusion}
+          onCancel={handleCancelEdit}
+          showButtons={false}
+        />
+      </Box>
     </Box>
   );
 });
