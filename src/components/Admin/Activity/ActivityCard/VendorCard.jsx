@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { PopoverButton } from "../../../PopoverButton";
 import formatDateOnly from "../../../../utils/formatDate";
 import { useState } from "react";
+import { useAdminAuthContext } from "../../../../context/AuthContext";
 
 const VendorCard = (props) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const { userData } = useAdminAuthContext();
 
   return (
     <Flex
@@ -60,14 +62,16 @@ const VendorCard = (props) => {
           >
             {formatDateOnly(props.date)}
           </Text>
-          <PopoverButton
-            isOpenButton={false}
-            onEditButton={() => {
-              navigate(`/admin/activity/edit`);
-              props.onEditButton();
-            }}
-            onDeleteButton={props.onDeleteButton}
-          />
+          {userData.role === "super_admin" && (
+            <PopoverButton
+              isOpenButton={false}
+              onEditButton={() => {
+                navigate(`/admin/activity/edit`);
+                props.onEditButton();
+              }}
+              onDeleteButton={props.onDeleteButton}
+            />
+          )}
         </Flex>
       </Flex>
     </Flex>

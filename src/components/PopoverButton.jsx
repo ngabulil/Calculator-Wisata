@@ -9,9 +9,11 @@ import {
   PopoverCloseButton,
   Button,
 } from "@chakra-ui/react";
+import { useAdminAuthContext } from "../context/AuthContext";
 import { Icon } from "@iconify/react";
 
 export const PopoverButton = (props) => {
+  const { userData } = useAdminAuthContext();
   return (
     <Popover placement="bottom-end">
       <PopoverTrigger>
@@ -30,12 +32,19 @@ export const PopoverButton = (props) => {
             Open
           </PopoverBody>
         )}
-        <PopoverBody className="cursor-pointer" onClick={props.onEditButton}>
-          Edit
-        </PopoverBody>
-        <PopoverBody className="cursor-pointer" onClick={props.onDeleteButton}>
-          Delete
-        </PopoverBody>
+        {userData.role === "super_admin" && (
+          <PopoverBody className="cursor-pointer" onClick={props.onEditButton}>
+            Edit
+          </PopoverBody>
+        )}
+        {userData.role === "super_admin" && (
+          <PopoverBody
+            className="cursor-pointer"
+            onClick={props.onDeleteButton}
+          >
+            Delete
+          </PopoverBody>
+        )}
       </PopoverContent>
     </Popover>
   );

@@ -11,6 +11,7 @@ const AdminDestinationContextProvider = ({ children }) => {
   const [allDestination, setAllDestination] = useState([]);
 
   const [destinationData, setDestinationData] = useState([]);
+  const [destModalData, setDestModalData] = useState({});
 
   const getAllDestination = async () => {
     try {
@@ -28,8 +29,16 @@ const AdminDestinationContextProvider = ({ children }) => {
       ...partial,
     }));
   };
+  const updateDestinationModalData = (partial) => {
+    setDestModalData((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
 
   const value = {
+    destModalData,
+    updateDestinationModalData,
     destinationData,
     allDestination,
     setDestinationData,

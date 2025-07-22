@@ -9,6 +9,7 @@ export const useAdminRestaurantContext = () => {
 
 const AdminRestaurantContextProvider = ({ children }) => {
   const [allRestaurant, setAllRestaurant] = useState([]);
+  const [restModalData, setRestModalData] = useState({});
 
   const [restaurantData, setRestaurantData] = useState({
     id: "",
@@ -32,8 +33,16 @@ const AdminRestaurantContextProvider = ({ children }) => {
       ...partial,
     }));
   };
+  const updateRestModalData = (partial) => {
+    setRestModalData((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
 
   const value = {
+    restModalData,
+    updateRestModalData,
     restaurantData,
     allRestaurant,
     setRestaurantData,

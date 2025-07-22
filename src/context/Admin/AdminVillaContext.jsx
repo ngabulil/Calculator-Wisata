@@ -10,6 +10,7 @@ export const useAdminVillaContext = () => {
 
 const AdminVillaContextProvider = ({ children }) => {
   const [roomTypeSelect, SetRoomTypeSelect] = useState([]);
+  const [villaModal, setVillaModal] = useState([]);
   const [villaData, setVillaData] = useState({
     villaName: "",
     stars: "",
@@ -69,9 +70,17 @@ const AdminVillaContextProvider = ({ children }) => {
       ...partial,
     }));
   };
+  const updateVillaModal = (partial) => {
+    setVillaModal((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
 
   const value = {
     villaData,
+    villaModal,
+    updateVillaModal,
     getVilla,
     roomTypeSelect,
     setVillaData,

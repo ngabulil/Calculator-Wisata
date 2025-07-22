@@ -9,7 +9,7 @@ export const useAdminTransportContext = () => {
 
 const AdminTransportContextProvider = ({ children }) => {
   const [allTransport, setAllTransport] = useState([]);
-
+  const [mobilModalData, setMobilModalData] = useState({});
   const [transportData, setTransportData] = useState([]);
 
   const getAllTransport = async () => {
@@ -29,11 +29,20 @@ const AdminTransportContextProvider = ({ children }) => {
     }));
   };
 
+  const updateMobilModalData = (partial) => {
+    setMobilModalData((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
+
   const value = {
     transportData,
+    mobilModalData,
     allTransport,
     setTransportData,
     updateTransportData,
+    updateMobilModalData,
     getAllTransport,
   };
 

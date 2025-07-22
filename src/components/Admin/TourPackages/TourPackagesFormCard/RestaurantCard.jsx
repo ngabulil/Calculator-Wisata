@@ -9,9 +9,13 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import RestaurantModal from "../TourModal/RestaurantModal";
+import { useAdminRestaurantContext } from "../../../../context/Admin/AdminRestaurantContext";
 
-const RestaurantCard = ({ index, data, onChange, onDelete }) => {
+const RestaurantCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const { restaurant } = useAdminPackageContext();
+  const { updateRestModalData } = useAdminRestaurantContext();
+  const [openModal, setOpenModal] = useState(false);
 
   const [selectedResto, setSelectedResto] = useState(
     data.selectedResto || null
@@ -44,18 +48,16 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
     );
   }, [selectedResto, restaurant]);
 
-  const typeWisataOptions = useMemo(() => {
-    const defaultOptions = [
-      { value: "domestik", label: "Domestik" },
-      { value: "asing", label: "Asing" },
-    ];
+  // const typeWisataOptions = useMemo(() => {
+  //   const defaultOptions = [
+  //     { value: "domestik", label: "Domestik" },
+  //     { value: "asing", label: "Asing" },
+  //   ];
 
-    console.log("selectedTypeWisata", selectedTypeWisata);
+  //   if (!selectedTypeWisata) return defaultOptions;
 
-    if (!selectedTypeWisata) return defaultOptions;
-
-    return defaultOptions.filter((opt) => opt.value === selectedTypeWisata);
-  }, [selectedTypeWisata]);
+  //   return defaultOptions.filter((opt) => opt.value === selectedTypeWisata);
+  // }, [selectedTypeWisata]);
 
   useEffect(() => {
     onChange({
@@ -96,6 +98,10 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
             setSelectedResto(val);
             setSelectedPackage(null);
             setSelectedTypeWisata(null);
+            if (val.__isNew__) {
+              setOpenModal(true);
+              updateRestModalData({ name: val.value });
+            }
           }}
           placeholder="Pilih restoran"
         />
@@ -115,7 +121,7 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
             />
           </Box>
 
-          <Box>
+          {/* <Box>
             <Text fontSize="sm" color="gray.300" mb={1}>
               Type Wisata
             </Text>
@@ -125,9 +131,16 @@ const RestaurantCard = ({ index, data, onChange, onDelete }) => {
               onChange={setSelectedTypeWisata}
               placeholder="Pilih jenis wisata"
             />
-          </Box>
+          </Box> */}
         </>
       )}
+      <RestaurantModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose(false);
+        }}
+      />
     </Box>
   );
 };

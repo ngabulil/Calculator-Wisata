@@ -25,9 +25,9 @@ const predefinedStars = [
   { label: "5", value: 5 },
 ];
 
-const VillaForm = () => {
+const VillaForm = (props) => {
   const location = useLocation();
-  const { villaData } = useAdminVillaContext();
+  const { villaData, villaModal } = useAdminVillaContext();
   const toast = useToast();
   //
   const [editFormActive, setEditFormActive] = useState(false);
@@ -49,7 +49,7 @@ const VillaForm = () => {
   const handleVillaCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
-      name: villaName,
+      name: props.isModal ? villaModal.villaName : villaName,
       star: stars,
       link_photo: photoLink,
     };
@@ -121,7 +121,7 @@ const VillaForm = () => {
   };
 
   useEffect(() => {
-    if (location.pathname.includes("edit")) {
+    if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleVillaSetValue();
     }
@@ -143,10 +143,11 @@ const VillaForm = () => {
         <FormLabel>Villa Name</FormLabel>
         <Input
           placeholder="Contoh: Villa Bintang Bali"
-          value={villaName}
+          value={props.isModal ? villaModal.villaName : villaName}
           onChange={(e) => {
             setVillaName(e.target.value);
           }}
+          isDisabled={props.isModal ? true : false}
         />
       </Box>
       <Box mb={4}>

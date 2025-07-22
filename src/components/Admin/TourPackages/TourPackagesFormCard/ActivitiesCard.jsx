@@ -7,11 +7,15 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
-import { MainSelectCreatableWithDelete } from "../../../MainSelect";
+import { MainSelectCreatable } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import { useAdminActivityContext } from "../../../../context/Admin/AdminActivityContext";
+import ActivitiesModal from "../TourModal/ActivitiesModal";
 
-const ActivityCard = ({ index, data, onChange, onDelete }) => {
+const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
+  const [openModal, setOpenModal] = useState(false);
   const { activities } = useAdminPackageContext();
+  const { updateActivityModalData } = useAdminActivityContext();
 
   const [selectedVendor, setSelectedVendor] = useState(
     data.selectedVendor || null
@@ -44,10 +48,10 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
     );
   }, [activities, selectedVendor]);
 
-  const typeWisataOptions = [
-    { value: "domestik", label: "Domestik" },
-    { value: "asing", label: "Asing" },
-  ];
+  // const typeWisataOptions = [
+  //   { value: "domestik", label: "Domestik" },
+  //   { value: "asing", label: "Asing" },
+  // ];
 
   useEffect(() => {
     onChange({
@@ -82,7 +86,7 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
         <Text fontSize="sm" color="gray.300" mb={1}>
           Pilih Vendor
         </Text>
-        <MainSelectCreatableWithDelete
+        <MainSelectCreatable
           options={vendorOptions}
           value={selectedVendor}
           onChange={(val) => {
@@ -99,17 +103,26 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
         <Text fontSize="sm" color="gray.300" mb={1}>
           Pilih Aktivitas
         </Text>
-        <MainSelectCreatableWithDelete
+        <MainSelectCreatable
           options={activityOptions}
           value={selectedActivity}
-          onChange={setSelectedActivity}
+          onChange={(value) => {
+            setSelectedActivity(value);
+
+            if (value.__isNew__) {
+              setOpenModal(true);
+              updateActivityModalData({
+                name: value.value,
+              });
+            }
+          }}
           isDisabled={!selectedVendor}
           placeholder="Pilih aktivitas"
         />
       </Box>
 
       {/* Pilih Tipe Wisata */}
-      <Box>
+      {/* <Box>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Type Wisata
         </Text>
@@ -120,7 +133,14 @@ const ActivityCard = ({ index, data, onChange, onDelete }) => {
           isDisabled={!selectedVendor || !selectedActivity}
           placeholder="Pilih jenis wisata"
         />
-      </Box>
+      </Box> */}
+      <ActivitiesModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose(false);
+        }}
+      />
     </Box>
   );
 };
