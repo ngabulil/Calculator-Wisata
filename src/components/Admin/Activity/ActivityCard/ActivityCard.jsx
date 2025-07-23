@@ -52,7 +52,7 @@ const ActivityCard = (props) => {
       alignItems={"start"}
       bg={"gray.800"}
       p={2}
-      w={"50%"}
+      w={"full"}
       gap={2}
       flexGrow={"1"}
       rounded={"8"}
@@ -80,10 +80,10 @@ const ActivityCard = (props) => {
         >
           {props.name.slice(0, 2).toUpperCase()}
         </Box>
-        <Flex direction={"column"} flexShrink={"0"} gap={1}>
+        <Flex direction={"column"} w={'full'} gap={1}>
           <Flex alignItems={"center"} gap={2}>
             {" "}
-            <Text fontSize={"18px"} fontWeight={"bold"}>
+            <Text fontSize={"18px"} fontWeight={"bold"} >
               {props.name || "  ATV Adventure"}
             </Text>
             <Text
@@ -99,7 +99,7 @@ const ActivityCard = (props) => {
               {formatDateOnly(props.date)}
             </Text>
           </Flex>
-          <Flex gap={2} alignItems={"center"}>
+          <Flex gap={2} direction={'column'} alignItems={"start"} w={'full'}>
             <Text fontSize={"14px"} color={"gray.500"}>
               {props.keterangan || "2 jam keliling desa"}
             </Text>
@@ -110,12 +110,13 @@ const ActivityCard = (props) => {
               py={1}
               px={2}
               rounded={"4px"}
+              
             >
               {props.note || "Sepatu tertutup wajib"}
             </Text>
           </Flex>
         </Flex>
-        <Flex direction={"row"} gap={1} w={"full"} justifyContent={"end"}>
+        <Flex direction={"row"} gap={1} w={"max"}   justifyContent={"end"}>
           <AppIconText
             icon={"mdi:ticket"}
             bg={"blue.700"}
