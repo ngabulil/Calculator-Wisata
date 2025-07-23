@@ -14,7 +14,7 @@ import { useCheckoutContext } from "../context/CheckoutContext";
 import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays"; // Tetap gunakan ini untuk data lain
 import { apiGetUser } from "../services/adminService";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 import useExportPdf from "../hooks/useExportPdf";
 
 const formatCurrency = (amount) => {
@@ -36,7 +36,12 @@ const InvoicePDF = forwardRef((props, ref) => {
     calculateHotelTotal,
     calculateVillaTotal,
   } = useCheckoutContext();
-  const { days: expenseDays, calculateGrandTotal, tourCode, pax } = useExpensesContext();
+  const {
+    days: expenseDays,
+    calculateGrandTotal,
+    tourCode,
+    pax,
+  } = useExpensesContext();
 
   const [hotelData, setHotelData] = useState([]);
   const [villaData, setVillaData] = useState([]);
@@ -44,7 +49,7 @@ const InvoicePDF = forwardRef((props, ref) => {
   const [additionalData, setAdditionalData] = useState([]);
   const [itineraryData, setItineraryData] = useState([]);
   const [mergedDays, setMergedDays] = useState([]);
-  const [adminName, setAdminName] = useState("")
+  const [adminName, setAdminName] = useState("");
 
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const componentRef = useRef();
@@ -55,7 +60,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     },
     async download(filename = `${tourCode}_invoice.pdf`) {
       await downloadPdf(componentRef, filename);
-    }
+    },
   }));
 
   useEffect(() => {
@@ -65,8 +70,8 @@ const InvoicePDF = forwardRef((props, ref) => {
           const merged = await parseAndMergeDays(selectedPackage.days);
           setMergedDays(merged);
         } catch (err) {
-          console.error("Gagal memproses days:", err); 
-          setMergedDays(selectedPackage.days); 
+          console.error("Gagal memproses days:", err);
+          setMergedDays(selectedPackage.days);
         }
       }
     };
@@ -81,7 +86,7 @@ const InvoicePDF = forwardRef((props, ref) => {
         const res = await apiGetUser(token);
         if (res.status === 200) {
           setAdminName(res.result.name);
-        } else{
+        } else {
           console.log("Error", "Failed to fetch admin users", "error");
         }
       } catch (error) {
@@ -173,23 +178,126 @@ const InvoicePDF = forwardRef((props, ref) => {
 
     // Itinerary with kid expenses and expense items
     const itinerary = mergedDays.map((day, index) => {
-      const activities = [
-        ...(day.destinations || []).map((dest) => ({
-          item: dest.displayName,
-          expense: formatCurrency(parseInt(dest.hargaAdult) || 0),
-          kidExpense: formatCurrency(parseInt(dest.hargaChild) || 0),
-        })),
-        ...(day.restaurants || []).map((resto) => ({
-          item: resto.displayName,
-          expense: formatCurrency(parseInt(resto.hargaAdult) || 0),
-          kidExpense: formatCurrency(parseInt(resto.hargaChild) || 0),
-        })),
-        ...(day.activities || []).map((act) => ({
-          item: act.displayName,
-          expense: formatCurrency(parseInt(act.hargaAdult) || 0),
-          kidExpense: formatCurrency(parseInt(act.hargaChild) || 0),
-        })),
-      ];
+      console.log(`Processing day ${index}:`, day); // Debug log
+
+      const activities = [];
+
+      // Process destinations
+      if (day.destinations && Array.isArray(day.destinations)) {
+        day.destinations.forEach((dest) => {
+          const adultQty =
+            parseInt(dest.jumlahadult) || parseInt(dest.jumlahAdult) || 0;
+          const childQty =
+            parseInt(dest.jumlahchild) || parseInt(dest.jumlahChild) || 0;
+          const adultPrice =
+            parseInt(dest.hargaddult) ||
+            parseInt(dest.hargaAdult) ||
+            parseInt(dest.hargaadult) ||
+            0;
+          const childPrice =
+            parseInt(dest.hargachild) ||
+            parseInt(dest.hargaChild) ||
+            parseInt(dest.hargachild) ||
+            0;
+
+          console.log(`Destination ${dest.displayName}:`, {
+            adultQty,
+            childQty,
+            adultPrice,
+            childPrice,
+          }); // Debug log
+
+          activities.push({
+            item: dest.displayName || dest.name || "Unnamed Destination",
+            expense:
+              adultPrice > 0 && adultQty > 0
+                ? formatCurrency(adultPrice * adultQty)
+                : "Rp 0",
+            kidExpense:
+              childPrice > 0 && childQty > 0
+                ? formatCurrency(childPrice * childQty)
+                : "-",
+          });
+        });
+      }
+
+      // Process restaurants
+      if (day.restaurants && Array.isArray(day.restaurants)) {
+        day.restaurants.forEach((resto) => {
+          const adultQty =
+            parseInt(resto.jumlahadult) || parseInt(resto.jumlahAdult) || 0;
+          const childQty =
+            parseInt(resto.jumlahchild) || parseInt(resto.jumlahChild) || 0;
+          const adultPrice =
+            parseInt(resto.hargaddult) ||
+            parseInt(resto.hargaAdult) ||
+            parseInt(resto.hargaadult) ||
+            0;
+          const childPrice =
+            parseInt(resto.hargachild) ||
+            parseInt(resto.hargaChild) ||
+            parseInt(resto.hargachild) ||
+            0;
+
+          console.log(`Restaurant ${resto.displayName}:`, {
+            adultQty,
+            childQty,
+            adultPrice,
+            childPrice,
+          }); // Debug log
+
+          activities.push({
+            item: resto.displayName || resto.name || "Unnamed Restaurant",
+            expense:
+              adultPrice > 0 && adultQty > 0
+                ? formatCurrency(adultPrice * adultQty)
+                : "Rp 0",
+            kidExpense:
+              childPrice > 0 && childQty > 0
+                ? formatCurrency(childPrice * childQty)
+                : "-",
+          });
+        });
+      }
+
+      // Process activities
+      if (day.activities && Array.isArray(day.activities)) {
+        day.activities.forEach((act) => {
+          const adultQty =
+            parseInt(act.jumlahadult) || parseInt(act.jumlahAdult) || 0;
+          const childQty =
+            parseInt(act.jumlahchild) || parseInt(act.jumlahChild) || 0;
+          const adultPrice =
+            parseInt(act.hargaddult) ||
+            parseInt(act.hargaAdult) ||
+            parseInt(act.hargaadult) ||
+            0;
+          const childPrice =
+            parseInt(act.hargachild) ||
+            parseInt(act.hargaChild) ||
+            parseInt(act.hargachild) ||
+            0;
+
+          console.log(`Activity ${act.displayName}:`, {
+            adultQty,
+            childQty,
+            adultPrice,
+            childPrice,
+          }); // Debug log
+
+          activities.push({
+            item: act.displayName || act.name || "Unnamed Activity",
+            expense:
+              adultPrice > 0 && adultQty > 0
+                ? formatCurrency(adultPrice * adultQty)
+                : "Rp 0",
+            kidExpense:
+              childPrice > 0 && childQty > 0
+                ? formatCurrency(childPrice * childQty)
+                : "-",
+          });
+        });
+      }
 
       // Get expense items from ExpensesContext for this day
       const expenseDay = expenseDays[index];
@@ -230,7 +338,11 @@ const InvoicePDF = forwardRef((props, ref) => {
       color="#000000"
       boxSizing="border-box"
     >
-      <InvoiceHeader code={tourCode} totalPax={actualPax} adminName={adminName} />
+      <InvoiceHeader
+        code={tourCode}
+        totalPax={actualPax}
+        adminName={adminName}
+      />
 
       <ItineraryTable days={itineraryData} formatCurrency={formatCurrency} />
 
