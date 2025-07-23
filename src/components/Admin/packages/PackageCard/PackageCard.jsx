@@ -65,9 +65,10 @@ const AppTitleDescription = (props) => {
           >
             {props.title.slice(0, 2).toUpperCase()}
           </Box>
-          <Text fontSize={"24px"} fontWeight={"bold"} noOfLines={1} w={"50%"}>
+          <Text fontSize="24px" fontWeight="bold" w="90%" noOfLines={2}>
             {props.title || "Bali Paket"}
           </Text>
+
         </Flex>
         <Text fontSize={"14px"} color={"gray.500"} noOfLines={4} w={"70%"}>
           {props.description}
