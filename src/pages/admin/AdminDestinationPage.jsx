@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, useToast, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast, Text , Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 
@@ -16,6 +16,7 @@ const AdminDestinationPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
+  const [loading , setLoading] = useState(false);
   const { getAllDestination, allDestination, updateDestinationData } =
     useAdminDestinationContext();
 
@@ -50,7 +51,15 @@ const AdminDestinationPage = () => {
   //
 
   const handleGetAllDestination = async () => {
-    await getAllDestination();
+    setLoading(true);
+    try {
+      await getAllDestination();
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteDestination = async (id) => {
@@ -129,7 +138,11 @@ const AdminDestinationPage = () => {
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {currentDestination.length > 0 ? (
+            {
+              loading ?     
+              <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
+              :
+              currentDestination.length > 0 ? (
               currentDestination.map((destination, index) => {
                 return (
                   <DestinationCard

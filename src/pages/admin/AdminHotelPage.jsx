@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Button, Container, Input } from "@chakra-ui/react";
+import { Box, Text, Flex, Button, Container, Spinner } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import HotelCard from "../../components/Admin/Hotel/HotelCard/HotelCard";
@@ -20,6 +20,7 @@ const AdminHotelPage = () => {
   const navigate = useNavigate();
   const { updateHotelData, getAllHotel } = useAdminHotelContext();
   //
+  const [loading , setLoading] = useState(false);
   const [readHotelActive, setReadHotelActive] = useState(false);
   const [formActive, setFormActive] = useState(false);
   //
@@ -32,12 +33,20 @@ const AdminHotelPage = () => {
   };
 
   const handleGetHotels = async () => {
-    await getAllHotel().then((value) => {
-      if (value.length != 0) {
-        setHotels(value);
-        setRecentHotels(value);
-      }
-    });
+    setLoading(true);
+    try {
+      await getAllHotel().then((value) => {
+        if (value.length != 0) {
+          setHotels(value);
+          setRecentHotels(value);
+        }
+      });
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSearchHotels = (value) => {
@@ -130,7 +139,13 @@ const AdminHotelPage = () => {
         ) : (
           <>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-              {currentHotels.length > 0 ? (
+              {
+              loading ?     
+      
+              <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
+              :
+              
+              currentHotels.length > 0 ? (
                 currentHotels.map((hotel, index) => (
                   <HotelCard
                     key={index}

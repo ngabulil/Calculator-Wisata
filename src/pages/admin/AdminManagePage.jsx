@@ -9,6 +9,7 @@ import {
   Flex,
   Button,
   Container,
+  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
@@ -30,6 +31,7 @@ const AdminManagePage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
+  const [loading , setLoading] = useState(false);
   const { getAllAdmin, updateAdminData, allAdminAccount } =
     useAdminManageContext();
 
@@ -65,7 +67,16 @@ const AdminManagePage = () => {
   };
 
   const handleGetAllAdmin = async () => {
-    await getAllAdmin();
+ 
+    setLoading(true);
+    try {
+      await getAllAdmin();
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteadminAccount = async (id) => {
@@ -170,7 +181,12 @@ const AdminManagePage = () => {
                 </Thead>
               )}
               <Tbody>
-                {currentAdminAccount.length > 0 ? (
+                {
+                  loading ?     
+      
+                  <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
+                :
+                currentAdminAccount.length > 0 ? (
                   currentAdminAccount.map((account, index) => (
                     <AdminAccountCard
                       key={index}

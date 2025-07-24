@@ -6,6 +6,7 @@ import {
   Select,
   useToast,
   Text,
+  Spinner
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
@@ -30,6 +31,7 @@ const AdminActivityPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [mode, setMode] = useState("activity");
+  const [loading , setLoading] = useState(false);
   const [formActive, setFormActive] = useState(false);
   const {
     getAllActivityDetails,
@@ -77,10 +79,26 @@ const AdminActivityPage = () => {
   //
 
   const handleGetActivity = async () => {
-    await getAllActivityDetails();
+    setLoading(true);
+    try {
+      await getAllActivityDetails();
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
   const handleGetVendors = async () => {
-    await getAllActivityVendors();
+    setLoading(true);
+    try {
+      await getAllActivityVendors();
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteActivity = async (id) => {
@@ -206,7 +224,11 @@ const AdminActivityPage = () => {
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"20px"} wrap={"wrap"} w={"full"}>
-              {mode == "activity" ? (
+              {
+              loading ?     
+              <Flex w={'full'} justifyContent={'center'}><Spinner size="xl" color="teal.500" /></Flex>
+              :
+              mode == "activity" ? (
                 currentActivities.length != 0 ? (
                   currentActivities.map((act) => {
                     return (
