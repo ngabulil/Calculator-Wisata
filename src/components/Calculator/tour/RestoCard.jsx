@@ -8,9 +8,10 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import MainSelect from "../../MainSelect";
 import { formatWisatawan } from "../../../utils/formatCalculator";
+import { usePackageContext } from "../../../context/PackageContext";
 
 const wisatawanOptions = [
   { value: "foreign", label: "Asing" },
@@ -29,12 +30,12 @@ const RestoCard = ({
     ...rawData,
     jenis_wisatawan: formatWisatawan(rawData.type_wisata),
   };
+  const { selectedPackage } = usePackageContext();
+  const { totalPaxAdult: jumlahAdult, totalPaxChildren: jumlahChild } =
+    selectedPackage;
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
   const textColor = useColorModeValue("white", "white");
-
-  const [jumlahAdult, setJumlahAdult] = useState(data.jumlahAdult ?? 1);
-  const [jumlahChild, setJumlahChild] = useState(data.jumlahChild ?? 0);
 
   // Normalize restaurants and menus
   const normalizedRestaurants = useMemo(() => {
@@ -113,8 +114,6 @@ const RestoCard = ({
     }
 
     onChange({ ...data, ...updates });
-    setJumlahAdult(1);
-    setJumlahChild(0);
   };
 
   return (
@@ -223,9 +222,8 @@ const RestoCard = ({
             Jumlah Adult
           </Text>
           <Input
-            min={0}
-            value={jumlahAdult}
-            onChange={(e) => setJumlahAdult(Number(e.target.value))}
+            value={jumlahAdult || 0}
+            readOnly
             bg={inputBg}
             color={textColor}
             borderColor={borderColor}
@@ -236,9 +234,8 @@ const RestoCard = ({
             Jumlah Child
           </Text>
           <Input
-            min={0}
-            value={jumlahChild}
-            onChange={(e) => setJumlahChild(Number(e.target.value))}
+            value={jumlahChild || 0}
+            readOnly
             bg={inputBg}
             color={textColor}
             borderColor={borderColor}

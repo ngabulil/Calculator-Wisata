@@ -8,10 +8,10 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import MainSelect from "../../MainSelect";
 import { formatWisatawan } from "../../../utils/formatCalculator";
-import { data } from "react-router-dom";
+import { usePackageContext } from "../../../context/PackageContext";
 
 // Opsi wisatawan
 const wisatawanOptions = [
@@ -25,18 +25,19 @@ const ActivityCard = ({
   data: rawData,
   onChange,
   vendors,
-  dayIndex
+  dayIndex,
 }) => {
   const data = {
     ...rawData,
     jenis_wisatawan: formatWisatawan(rawData.type_wisata),
   };
+  const { selectedPackage } = usePackageContext();
+  const { totalPaxAdult: jumlahAdult, totalPaxChildren: jumlahChild } =
+    selectedPackage;
+    
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
   const textColor = useColorModeValue("white", "white");
-
-  const [jumlahAdult, setJumlahAdult] = useState(data.jumlahAdult ?? 1);
-  const [jumlahChild, setJumlahChild] = useState(data.jumlahChild ?? 0);
 
   // Normalize vendor data without deduplication by name
   const normalizedVendors = useMemo(() => {
@@ -113,8 +114,6 @@ const ActivityCard = ({
       });
 
     onChange({ ...data, ...updates });
-    setJumlahAdult(1);
-    setJumlahChild(0);
   };
 
   return (
@@ -223,9 +222,8 @@ const ActivityCard = ({
             Jumlah Adult
           </Text>
           <Input
-            min={0}
-            value={jumlahAdult}
-            onChange={(e) => setJumlahAdult(Number(e.target.value))}
+            readOnly
+            value={jumlahAdult || 0}
             bg={inputBg}
             color={textColor}
             borderColor={borderColor}
@@ -236,9 +234,8 @@ const ActivityCard = ({
             Jumlah Child
           </Text>
           <Input
-            min={0}
-            value={jumlahChild}
-            onChange={(e) => setJumlahChild(Number(e.target.value))}
+            value={jumlahChild || 0}
+            readOnly
             bg={inputBg}
             color={textColor}
             borderColor={borderColor}
