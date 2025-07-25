@@ -49,8 +49,8 @@ const AppTitleDescription = (props) => {
       alignItems={"start"}
       justifyContent={"space-between"}
     >
-      <Flex direction={"column"} gap={2}>
-        <Flex direction={"row"} alignItems={"center"} gap={4}>
+      <Flex direction={"column"} gap={2} w="max">
+        <Flex direction={"row"} alignItems={"center"} gap={4} w={"full"}>
           <Box
             w={"60px"}
             h={"50px"}
@@ -65,10 +65,9 @@ const AppTitleDescription = (props) => {
           >
             {props.title.slice(0, 2).toUpperCase()}
           </Box>
-          <Text fontSize="24px" fontWeight="bold" w="90%" noOfLines={2}>
+          <Text fontSize="24px" fontWeight="bold" w="full" noOfLines={2}>
             {props.title || "Bali Paket"}
           </Text>
-
         </Flex>
         <Text fontSize={"14px"} color={"gray.500"} noOfLines={4} w={"70%"}>
           {props.description}

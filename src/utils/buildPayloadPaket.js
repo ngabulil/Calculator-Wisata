@@ -39,6 +39,7 @@ export default function buildPayloadPaket(data) {
                 day.data?.tour?.destinations?.map((dest) => ({
                   id_destinasi: dest?.selectedDest?.value,
                   type_wisata: day.data.tour.type_wisata,
+                  description: dest?.description || "",
                 })) ?? [],
 
               activities:
@@ -46,6 +47,7 @@ export default function buildPayloadPaket(data) {
                   id_vendor: act?.selectedVendor?.value,
                   id_activity: act?.selectedActivity?.value,
                   type_wisata: day.data.tour.type_wisata,
+                  description: act?.description || "",
                 })) ?? [],
 
               restaurants:

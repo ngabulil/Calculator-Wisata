@@ -4,6 +4,7 @@ import {
   Text,
   IconButton,
   useColorModeValue,
+  Input,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
   const [selectedType, setSelectedType] = useState(data.selectedType || null);
   const [openModal, setOpenModal] = useState(false);
+  const [description, setDescription] = useState("");
 
   const textColor = useColorModeValue("white", "white");
 
@@ -54,6 +56,7 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
       selectedType,
       id_destinasi: selectedDest?.value,
       type_wisata: selectedType?.value,
+      description: description || "",
     });
   }, [selectedDest, selectedType]);
 
@@ -94,18 +97,19 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
           placeholder="Pilih destinasi"
         />
       </Box>
-
-      {/* Tipe Wisata */}
-      {/* <Box>
+      <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
-          Tipe Wisata
+          Deskripsi Aktivitas
         </Text>
-        <MainSelectCreatableWithDelete
-          options={typeWisataOptions}
-          value={selectedType}
-          onChange={setSelectedType}
+        <Input
+          bg={"gray.700"}
+          value={description || ""}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
+          placeholder="Masukkan deskripsi aktivitas"
         />
-      </Box> */}
+      </Box>
 
       <DestinationModal
         isOpen={openModal}

@@ -3,6 +3,7 @@ import {
   HStack,
   Text,
   IconButton,
+  Input,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
@@ -17,6 +18,7 @@ const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const { activities } = useAdminPackageContext();
   const { updateActivityModalData } = useAdminActivityContext();
 
+  const [description, setDescription] = useState("");
   const [selectedVendor, setSelectedVendor] = useState(
     data.selectedVendor || null
   );
@@ -62,6 +64,7 @@ const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
       id_vendor: selectedVendor?.value,
       id_activity: selectedActivity?.value,
       type_wisata: selectedTypeWisata?.value,
+      description: description || "",
     });
   }, [selectedVendor, selectedActivity, selectedTypeWisata]);
 
@@ -120,20 +123,21 @@ const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
           placeholder="Pilih aktivitas"
         />
       </Box>
-
-      {/* Pilih Tipe Wisata */}
-      {/* <Box>
+      {/*  */}
+      <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
-          Type Wisata
+          Deskripsi Destinasi
         </Text>
-        <MainSelectCreatableWithDelete
-          options={typeWisataOptions}
-          value={selectedTypeWisata}
-          onChange={setSelectedTypeWisata}
-          isDisabled={!selectedVendor || !selectedActivity}
-          placeholder="Pilih jenis wisata"
+        <Input
+          bg={"gray.700"}
+          value={description || ""}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
+          placeholder="Masukkan deskripsi aktivitas"
         />
-      </Box> */}
+      </Box>
+
       <ActivitiesModal
         isOpen={openModal}
         onClose={() => {

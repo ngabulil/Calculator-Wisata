@@ -173,6 +173,7 @@ export default async function parseDays(daysFromApi) {
           },
           id_destinasi: dest.id_destinasi,
           type_wisata: dest.type_wisata,
+          description: dest.description || "",
         };
       })
     );
@@ -325,5 +326,3 @@ export default async function parseDays(daysFromApi) {
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
-
