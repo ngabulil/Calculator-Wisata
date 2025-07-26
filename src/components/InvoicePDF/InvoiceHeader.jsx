@@ -3,7 +3,7 @@ import { Box, Text, HStack, Divider, VStack } from '@chakra-ui/react';
 const orange = "#FFA726";
 const orangeDark = "#FB8C00";
 
-const InvoiceHeader = ({ code, totalPax, adminName }) => (
+const InvoiceHeader = ({ packageName, totalAdult, totalChild, adminName }) => (
   <Box>
     <VStack spacing={1} mb={6}>
       <Text fontSize="2xl" fontWeight="bold" color={orangeDark} textAlign="center" letterSpacing="wide">
@@ -15,10 +15,10 @@ const InvoiceHeader = ({ code, totalPax, adminName }) => (
     
     <Box mb={6} p={2} borderRadius="md" style={{ backgroundColor: orange }}>
       <HStack justify="space-between" mb={2}>
-        <Text fontWeight="bold" fontSize="lg">Code: {code}</Text>
+        <Text fontWeight="bold" fontSize="lg">Code: {packageName}</Text>
       </HStack>
       <HStack justify="space-between">
-        <Text fontWeight="semibold">Total Pax: {totalPax}</Text>
+        <Text fontWeight="semibold">Total Adult: {totalAdult} Total Child: {totalChild}</Text>
         <Text fontWeight="semibold">InputBy: {adminName}</Text>
       </HStack>
     </Box>

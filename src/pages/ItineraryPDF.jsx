@@ -3,7 +3,9 @@ import {
   useEffect, 
   useRef, 
   useImperativeHandle, 
-  forwardRef 
+  forwardRef,
+  useMemo,
+  useCallback
 } from "react";
 import { Box, Text, Divider, Button, Flex, useToast } from "@chakra-ui/react";
 import HotelChoiceTable from "../components/ItineraryPDF/HotelChoiceTable";
@@ -13,16 +15,44 @@ import { usePackageContext } from "../context/PackageContext";
 import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
+import useItineraryReorder from "../hooks/useItineraryReorder";
 
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
   const { days: expenseDays } = useExpensesContext();
-  const [mergedDays, setMergedDays] = useState([]);
-  const [itineraryData, setItineraryData] = useState([]);
+  
+  // Consolidated state untuk mengurangi re-render
+  const [itineraryState, setItineraryState] = useState({
+    mergedDays: [],
+    itineraryData: [],
+    isDataProcessed: false,
+  });
+  
   const [isEditingInclusion, setIsEditingInclusion] = useState(false);
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const toast = useToast();
   const componentRef = useRef();
+
+  // Memoize package ID untuk reorder hook
+  const packageId = useMemo(() => 
+    selectedPackage?.id || selectedPackage?._id
+  , [selectedPackage?.id, selectedPackage?._id]);
+
+  // Initialize reorder hook dengan package ID untuk menyimpan urutan
+  const {
+    days: reorderedDays,
+    originalDays,
+    isReordering,
+    updateDays,
+    moveItemUp,
+    moveItemDown,
+    moveDayUp,
+    moveDayDown,
+    toggleReordering,
+    resetOrder,
+    saveOrder,
+    clearSavedOrder,
+  } = useItineraryReorder([], packageId);
 
   useImperativeHandle(ref, () => ({
     async exportAsBlob() {
@@ -33,50 +63,76 @@ const ItineraryPDF = forwardRef((props, ref) => {
     }
   }));
 
+  // Process days data - dengan optimization dan batching
   useEffect(() => {
+    let isMounted = true;
+
     const processDays = async () => {
-      if (selectedPackage?.days?.length > 0) {
-        try {
-          const merged = await parseAndMergeDays(selectedPackage.days);
-          setMergedDays(merged);
-        } catch (err) {
-          console.error("Gagal memproses days:", err);
-          setMergedDays(selectedPackage.days);
+      if (!selectedPackage?.days?.length) {
+        if (isMounted) {
+          setItineraryState(prev => ({ ...prev, isDataProcessed: true }));
+        }
+        return;
+      }
+
+      try {
+        const merged = await parseAndMergeDays(selectedPackage.days);
+        
+        if (!isMounted) return;
+
+        // Format itinerary data dari mergedDays
+        const formattedDays = merged.map((day, index) => {
+          // Gabungkan semua aktivitas dengan error handling
+          const activities = [
+            ...(day.destinations || []).map(dest => dest.displayName || dest.name || `Destination ${index + 1}`),
+            ...(day.restaurants || []).map(resto => resto.displayName || resto.name || `Restaurant ${index + 1}`),
+            ...(day.activities || []).map(act => act.displayName || act.name || `Activity ${index + 1}`),
+          ].filter(Boolean); // Remove any null/undefined values
+
+          const expenseDay = expenseDays[index];
+          const expenseItems = expenseDay?.totals || [];
+
+          return {
+            day: index + 1,
+            title: day.name || `Day ${index + 1}`,
+            description: day.description_day || day.day_description || "",
+            date: day.date,
+            activities: activities,
+            expenseItems: expenseItems,
+          };
+        });
+
+        // Update state sekaligus
+        setItineraryState({
+          mergedDays: merged,
+          itineraryData: formattedDays,
+          isDataProcessed: true,
+        });
+
+        // Update reorder hook with new data
+        updateDays(formattedDays);
+
+      } catch (err) {
+        console.error("Gagal memproses days:", err);
+        if (isMounted) {
+          setItineraryState({
+            mergedDays: selectedPackage.days || [],
+            itineraryData: [],
+            isDataProcessed: true,
+          });
         }
       }
     };
+
     processDays();
-  }, [selectedPackage]);
 
-  useEffect(() => {
-    if (mergedDays.length === 0) return;
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedPackage?.days, expenseDays, updateDays]);
 
-    // Format itinerary data dari mergedDays
-    const formattedDays = mergedDays.map((day, index) => {
-      // Gabungkan semua aktivitas
-      const activities = [
-        ...(day.destinations || []).map(dest => dest.displayName),
-        ...(day.restaurants || []).map(resto => resto.displayName),
-        ...(day.activities || []).map(act => act.displayName),
-      ];
-
-      const expenseDay = expenseDays[index];
-      const expenseItems = expenseDay?.totals || [];
-
-      return {
-        day: index + 1,
-        title: day.day_name || `Day ${index + 1}`,
-        description: day.description_day || day.day_description || "",
-        date: day.date,
-        activities: activities,
-        expenseItems: expenseItems,
-      };
-    });
-
-    setItineraryData(formattedDays);
-  }, [mergedDays]);
-
-  const handleSaveInclusion = () => {
+  // Memoized handlers untuk inclusion/exclusion
+  const handleSaveInclusion = useCallback(() => {
     toast({
       title: "Data Tersimpan",
       description: "Inclusion & Exclusion berhasil disimpan!",
@@ -85,11 +141,68 @@ const ItineraryPDF = forwardRef((props, ref) => {
       isClosable: true,
     });
     setIsEditingInclusion(false);
-  };
+  }, [toast]);
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setIsEditingInclusion(false);
-  };
+  }, []);
+
+  // Memoized reorder handlers - sama seperti InvoicePDF
+  const handleSaveReorder = useCallback(() => {
+    const success = saveOrder();
+    if (success) {
+      setItineraryState(prev => ({
+        ...prev,
+        itineraryData: [...reorderedDays],
+      }));
+      toggleReordering();
+      toast({
+        title: "Urutan Itinerary Disimpan",
+        description: "Urutan berhasil disimpan dan akan dipertahankan untuk package ini",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Gagal Menyimpan",
+        description: "Terjadi kesalahan saat menyimpan urutan itinerary",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }, [saveOrder, reorderedDays, toggleReordering, toast]);
+
+  const handleCancelReorder = useCallback(() => {
+    resetOrder();
+    toggleReordering();
+  }, [resetOrder, toggleReordering]);
+
+  const handleResetToOriginal = useCallback(() => {
+    clearSavedOrder();
+    toast({
+      title: "Urutan Direset",
+      description: "Urutan itinerary dikembalikan ke urutan asli",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    });
+  }, [clearSavedOrder, toast]);
+
+  // Memoize untuk cek apakah order berbeda dari original
+  const hasOrderChanged = useMemo(() => {
+    return JSON.stringify(reorderedDays) !== JSON.stringify(originalDays);
+  }, [reorderedDays, originalDays]);
+
+  // Show loading jika data belum selesai diproses
+  if (!itineraryState.isDataProcessed) {
+    return (
+      <Box maxW="900px" mx="auto" py={8}>
+        <Text textAlign="center">Loading itinerary data...</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box maxW="900px" mx="auto" py={8}>
@@ -108,7 +221,49 @@ const ItineraryPDF = forwardRef((props, ref) => {
           Itinerary Controls
         </Text>
         
-        <Flex gap={2} flexWrap="wrap">
+        <Flex gap={2} flexWrap="wrap" alignItems="center">
+          {/* Reorder Controls - Enhanced seperti InvoicePDF */}
+          <Box>
+            {!isReordering ? (
+              <Flex gap={2}>
+                <Button 
+                  size="sm" 
+                  colorScheme="orange" 
+                  onClick={toggleReordering}
+                >
+                  Edit Urutan Itinerary
+                </Button>
+                {hasOrderChanged && (
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    variant="outline"
+                    onClick={handleResetToOriginal}
+                  >
+                    Reset ke Urutan Asli
+                  </Button>
+                )}
+              </Flex>
+            ) : (
+              <Flex gap={2}>
+                <Button 
+                  size="sm" 
+                  colorScheme="green" 
+                  onClick={handleSaveReorder}
+                >
+                  Simpan Urutan
+                </Button>
+                <Button 
+                  size="sm" 
+                  colorScheme="red" 
+                  onClick={handleCancelReorder}
+                >
+                  Batal
+                </Button>
+              </Flex>
+            )}
+          </Box>
+
           {/* Inclusion/Exclusion Controls */}
           <Box>
             {!isEditingInclusion ? (
@@ -138,9 +293,17 @@ const ItineraryPDF = forwardRef((props, ref) => {
               </Flex>
             )}
           </Box>
-        
         </Flex>
       </Flex>
+
+      {/* Status indicator untuk saved order - seperti InvoicePDF */}
+      {!isReordering && hasOrderChanged && (
+        <Box mb={4} p={3} bg="blue.50" borderRadius="md" borderLeft="4px solid" borderColor="blue.400">
+          <Text fontSize="sm" color="blue.800">
+            ℹ️ Menampilkan urutan yang telah disimpan. Klik "Reset ke Urutan Asli" untuk mengembalikan ke urutan default.
+          </Text>
+        </Box>
+      )}
 
       {/* Area PDF - Hanya ini yang akan di-export */}
       <Box
@@ -193,15 +356,22 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
         <Divider mb={6} borderColor="#FFA726" />
 
-        <HotelChoiceTable akomodasiDays={mergedDays} />
+        <HotelChoiceTable akomodasiDays={itineraryState.mergedDays} />
 
         <Divider my={6} borderColor="#FFA726" />
 
-        <ItineraryTable title={`ITINERARY ${selectedPackage?.title || ""}`} days={itineraryData} />
+        <ItineraryTable 
+          title={`ITINERARY ${selectedPackage?.title || ""}`} 
+          days={isReordering ? reorderedDays : reorderedDays}
+          isReordering={isReordering}
+          onMoveItemUp={moveItemUp}
+          onMoveItemDown={moveItemDown}
+          onMoveDayUp={moveDayUp}
+          onMoveDayDown={moveDayDown}
+        />
 
         <Divider my={6} borderColor="#FFA726" />
 
-        {/* Pass state edit dan handler ke komponen */}
         <InclusionExclusion 
           isEditing={isEditingInclusion}
           onSave={handleSaveInclusion}

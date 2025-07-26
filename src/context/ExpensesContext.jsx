@@ -1,4 +1,5 @@
 import React from "react";
+import { usePackageContext } from "./PackageContext";
 
 const ExpensesContext = React.createContext();
 
@@ -16,8 +17,7 @@ const ExpensesContextProvider = ({ children }) => {
         },
     ]);
 
-    const [tourCode, setTourCode] = React.useState("");
-    const [pax, setpax] = React.useState(1);
+    const { selectedPackage } = usePackageContext();
 
     const updateDay = (index, updatedDay) => {
         setDays((prev) => {
@@ -65,7 +65,10 @@ const ExpensesContextProvider = ({ children }) => {
             newItemIndex = newDays[dayIndex].totals.length; 
             newDays[dayIndex].totals.push({
                 label: "",
+                description: "",
                 price: null,
+                adultPrice: null,
+                childPrice: null,
                 quantity: 1,
                 unit: "item",
                 isEditing: true, 
@@ -96,17 +99,26 @@ const ExpensesContextProvider = ({ children }) => {
         });
     };
 
-    const calculateDayTotal = (dayIndex) => {
+ const calculateDayTotal = (dayIndex) => {
         const day = days[dayIndex];
         if (!day || !day.totals) return 0;
         
+        // Gunakan nilai dari selectedPackage
+        const totalAdult = selectedPackage?.totalPaxAdult || 1;
+        const totalChild = selectedPackage?.totalPaxChildren || 1;
+        
         return day.totals.reduce((total, item) => {
+            if (item.adultPrice !== null || item.childPrice !== null) {
+                const adultTotal = (item.adultPrice || 0) * totalAdult;
+                const childTotal = (item.childPrice || 0) * totalChild;
+                return total + adultTotal + childTotal;
+            }
+            
             const price = item.price || 0;
             const quantity = item.quantity || 1;
             return total + (price * quantity);
         }, 0);
     };
-
     const calculateGrandTotal = () => {
         return days.reduce((total, _, dayIndex) => {
             return total + calculateDayTotal(dayIndex);
@@ -136,10 +148,6 @@ const ExpensesContextProvider = ({ children }) => {
                 calculateDayTotal,
                 calculateGrandTotal,
                 formatCurrency,
-                tourCode,
-                setTourCode,
-                pax,
-                setpax
             }}
         >
             {children}

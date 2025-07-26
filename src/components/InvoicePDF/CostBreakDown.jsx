@@ -10,6 +10,7 @@ import {
   VStack,
   HStack,
   Divider,
+  Input
 } from "@chakra-ui/react";
 
 const orangeDark = "#FB8C00";
@@ -22,7 +23,7 @@ const tableHeaderStyle = {
   fontSize: "1rem",
   textAlign: "center",
   padding: "2px 40px 12px 10px",
-  verticalAlign: "top", 
+  verticalAlign: "top",
 };
 
 const tableCellStyle = {
@@ -61,12 +62,16 @@ const CostBreakDown = ({
   grandTotal,
   selling,
   formatCurrency,
-  markup
+  markup,
+  totalAdult = 1,
+  exchangeRate,
+  isEditingExchangeRate = false,
+  onExchangeRateChange = () => {},
 }) => {
   const sortByDay = (data) => {
     return [...data].sort((a, b) => {
-      const dayA = parseInt(a.day.replace(/\D/g, '')) || 0;
-      const dayB = parseInt(b.day.replace(/\D/g, '')) || 0;
+      const dayA = parseInt(a.day.replace(/\D/g, "")) || 0;
+      const dayB = parseInt(b.day.replace(/\D/g, "")) || 0;
       return dayA - dayB;
     });
   };
@@ -75,6 +80,22 @@ const CostBreakDown = ({
   const sortedHotelData = sortByDay(hotelData);
   const sortedTransportData = sortByDay(transportData);
   const sortedAdditionalData = sortByDay(additionalData);
+
+  // Calculate totals for each category
+  const hotelTotal = sortedHotelData.reduce((sum, i) => sum + i.total, 0);
+  const transportTotal = sortedTransportData.reduce(
+    (sum, i) => sum + i.price,
+    0
+  );
+  const additionalTotal = sortedAdditionalData.reduce(
+    (sum, i) => sum + i.total,
+    0
+  );
+
+  // Calculate per adult amounts (only use totalAdult for calculations)
+  const hotelPerAdult = totalAdult > 0 ? hotelTotal / totalAdult : 0;
+  const transportPerAdult = totalAdult > 0 ? transportTotal / totalAdult : 0;
+  const additionalPerAdult = totalAdult > 0 ? additionalTotal / totalAdult : 0;
 
   return (
     <VStack spacing={6} align="stretch">
@@ -87,11 +108,13 @@ const CostBreakDown = ({
         <Table variant="simple" size="sm" border="1px solid #e0e0e0">
           <Thead>
             <Tr>
-              <Th style={{...tableHeaderStyle, width: "60px"}}>Day</Th>
-              <Th style={{...tableHeaderStyle, minWidth: "200px"}}>Name</Th>
-              <Th style={{...tableHeaderStyle, width: "60px"}}>Rooms</Th>
-              <Th style={{...tableHeaderStyle, width: "100px"}}>Price/Room</Th>
-              <Th style={{...tableHeaderStyle, width: "100px"}}>TOTAL</Th>
+              <Th style={{ ...tableHeaderStyle, width: "60px" }}>Day</Th>
+              <Th style={{ ...tableHeaderStyle, minWidth: "200px" }}>Name</Th>
+              <Th style={{ ...tableHeaderStyle, width: "60px" }}>Rooms</Th>
+              <Th style={{ ...tableHeaderStyle, width: "100px" }}>
+                Price/Room
+              </Th>
+              <Th style={{ ...tableHeaderStyle, width: "100px" }}>TOTAL</Th>
             </Tr>
           </Thead>
           <Tbody color={"#222"}>
@@ -100,10 +123,10 @@ const CostBreakDown = ({
                 <Td style={narrowColumnStyle}>{item.day}</Td>
                 <Td style={wideColumnStyle}>{item.name}</Td>
                 <Td style={narrowColumnStyle}>{item.rooms}</Td>
-                <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
                   {formatCurrency(item.pricePerNight)}
                 </Td>
-                <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
                   {formatCurrency(item.total)}
                 </Td>
               </Tr>
@@ -112,10 +135,19 @@ const CostBreakDown = ({
               <Td colSpan={4} style={tableTotalStyle}>
                 Total Hotel
               </Td>
-              <Td style={{...tableTotalStyle, textAlign: "left"}}>
-                {formatCurrency(
-                  sortedHotelData.reduce((sum, i) => sum + i.total, 0)
-                )}
+              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                {formatCurrency(hotelTotal)}
+              </Td>
+            </Tr>
+            <Tr>
+              <Td
+                colSpan={4}
+                style={{ ...tableTotalStyle, textAlign: "right" }}
+              >
+                Grand Total
+              </Td>
+              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                {formatCurrency(hotelPerAdult)}
               </Td>
             </Tr>
           </Tbody>
@@ -131,9 +163,11 @@ const CostBreakDown = ({
         <Table variant="simple" size="sm" border="1px solid #e0e0e0">
           <Thead>
             <Tr>
-              <Th style={{...tableHeaderStyle, width: "60px"}}>Day</Th>
-              <Th style={{...tableHeaderStyle, minWidth: "200px"}}>Description</Th>
-              <Th style={{...tableHeaderStyle, width: "100px"}}>Price</Th>
+              <Th style={{ ...tableHeaderStyle, width: "60px" }}>Day</Th>
+              <Th style={{ ...tableHeaderStyle, minWidth: "200px" }}>
+                Description
+              </Th>
+              <Th style={{ ...tableHeaderStyle, width: "100px" }}>Price</Th>
             </Tr>
           </Thead>
           <Tbody color={"#222"}>
@@ -141,7 +175,7 @@ const CostBreakDown = ({
               <Tr key={index}>
                 <Td style={narrowColumnStyle}>{item.day}</Td>
                 <Td style={wideColumnStyle}>{item.description}</Td>
-                <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
                   {formatCurrency(item.price)}
                 </Td>
               </Tr>
@@ -150,10 +184,19 @@ const CostBreakDown = ({
               <Td colSpan={2} style={tableTotalStyle}>
                 Total Transport
               </Td>
-              <Td style={{...tableTotalStyle, textAlign: "left"}}>
-                {formatCurrency(
-                  sortedTransportData.reduce((sum, i) => sum + i.price, 0)
-                )}
+              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                {formatCurrency(transportTotal)}
+              </Td>
+            </Tr>
+            <Tr>
+              <Td
+                colSpan={2}
+                style={{ ...tableTotalStyle, textAlign: "right" }}
+              >
+                Grand Total
+              </Td>
+              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                {formatCurrency(transportPerAdult)}
               </Td>
             </Tr>
           </Tbody>
@@ -170,11 +213,11 @@ const CostBreakDown = ({
           {sortedAdditionalData.length > 0 && (
             <Thead>
               <Tr>
-                <Th style={{...tableHeaderStyle, width: "60px"}}>Day</Th>
-                <Th style={{...tableHeaderStyle, minWidth: "150px"}}>Item</Th>
-                <Th style={{...tableHeaderStyle, width: "60px"}}>Qty</Th>
-                <Th style={{...tableHeaderStyle, width: "100px"}}>Price</Th>
-                <Th style={{...tableHeaderStyle, width: "100px"}}>Total</Th>
+                <Th style={{ ...tableHeaderStyle, width: "60px" }}>Day</Th>
+                <Th style={{ ...tableHeaderStyle, minWidth: "150px" }}>Item</Th>
+                <Th style={{ ...tableHeaderStyle, width: "60px" }}>Qty</Th>
+                <Th style={{ ...tableHeaderStyle, width: "100px" }}>Price</Th>
+                <Th style={{ ...tableHeaderStyle, width: "100px" }}>Total</Th>
               </Tr>
             </Thead>
           )}
@@ -186,10 +229,10 @@ const CostBreakDown = ({
                     <Td style={narrowColumnStyle}>{item.day}</Td>
                     <Td style={wideColumnStyle}>{item.name}</Td>
                     <Td style={narrowColumnStyle}>{item.quantity}</Td>
-                    <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                    <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
                       {formatCurrency(item.price)}
                     </Td>
-                    <Td style={{...narrowColumnStyle, textAlign: "left"}}>
+                    <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
                       {formatCurrency(item.total)}
                     </Td>
                   </Tr>
@@ -198,19 +241,37 @@ const CostBreakDown = ({
                   <Td colSpan={4} style={tableTotalStyle}>
                     Total Tambahan
                   </Td>
-                  <Td style={{...tableTotalStyle, textAlign: "left"}}>
-                    {formatCurrency(
-                      sortedAdditionalData.reduce((sum, i) => sum + i.total, 0)
-                    )}
+                  <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                    {formatCurrency(additionalTotal)}
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td
+                    colSpan={4}
+                    style={{ ...tableTotalStyle, textAlign: "right" }}
+                  >
+                    Grand Total
+                  </Td>
+                  <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                    {formatCurrency(additionalPerAdult)}
                   </Td>
                 </Tr>
               </>
             ) : (
-              <Tr>
-                <Td colSpan={5} style={{...tableCellStyle, textAlign: "center", color: "gray.500"}}>
-                  Tidak ada tambahan
-                </Td>
-              </Tr>
+              <>
+                <Tr>
+                  <Td
+                    colSpan={5}
+                    style={{
+                      ...tableCellStyle,
+                      textAlign: "center",
+                      color: "gray.500",
+                    }}
+                  >
+                    Tidak ada tambahan
+                  </Td>
+                </Tr>
+              </>
             )}
           </Tbody>
         </Table>
@@ -220,7 +281,7 @@ const CostBreakDown = ({
       <Box p={4} borderRadius="md" style={tableGrandTotalStyle}>
         <VStack spacing={2}>
           <HStack justify="space-between" w="100%">
-            <Text>GRAND TOTAL</Text>
+            <Text>TOTAL</Text>
             <Text>{formatCurrency(grandTotal)}</Text>
           </HStack>
           <HStack justify="space-between" w="100%" fontSize="lg">
@@ -228,8 +289,30 @@ const CostBreakDown = ({
             <Text>{formatCurrency(markup)}</Text>
           </HStack>
           <HStack justify="space-between" w="100%">
-            <Text fontWeight="bold">Selling</Text>
+            <Text fontWeight="bold">Grand Total</Text>
             <Text>{formatCurrency(selling)}</Text>
+          </HStack>
+          <HStack justify="space-between" w="100%">
+            <Text>Exchange Rate</Text>
+            {isEditingExchangeRate ? (
+              <Input
+                type="number"
+                value={exchangeRate}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  onExchangeRateChange(value === "" ? "" : Number(value));
+                }}
+                style={{
+                  width: "100px",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  fontWeight: "bold",
+                  textAlign: "right",
+                }}
+              />
+            ) : (
+              <Text fontWeight="bold">{formatCurrency(exchangeRate)}</Text>
+            )}
           </HStack>
         </VStack>
       </Box>
