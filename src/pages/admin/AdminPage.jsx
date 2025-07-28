@@ -75,7 +75,7 @@ const AdminPage = () => {
   const handleCreatePackage = async (payload) => {
     const data = {
       ...payload,
-      name: `${payload.name}_DUPLICATE`,
+      name: `[DUPLICATE] ${payload.name}`,
     };
 
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));

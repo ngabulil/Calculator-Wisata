@@ -64,7 +64,10 @@ const AppTitleDescription = (props) => {
             fontWeight={"bold"}
             flexShrink={"0"}
           >
-            {props.title.slice(0, 2).toUpperCase()}
+            {props.title
+              .replace(/[^a-zA-Z]/g, "")
+              .slice(0, 2)
+              .toUpperCase()}
           </Box>
           <Text fontSize="24px" fontWeight="bold" w="full">
             {props.title || "Bali Paket"}
@@ -107,7 +110,7 @@ const AppTitleDescription = (props) => {
           {formatDateOnly(props.date)}
         </Text>
         <PopoverButton
-          isDuplicated
+          // isDuplicated
           isOpenButton={true}
           onEditButton={() => {
             navigate(`/admin/paket/edit`);
