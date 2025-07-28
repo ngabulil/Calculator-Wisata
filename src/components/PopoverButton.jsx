@@ -32,6 +32,14 @@ export const PopoverButton = (props) => {
             Open
           </PopoverBody>
         )}
+        {props.isDuplicated && (
+          <PopoverBody
+            className="cursor-pointer"
+            onClick={props.onDuplicateButton}
+          >
+            Duplicate
+          </PopoverBody>
+        )}
         {userData.role === "super_admin" && (
           <PopoverBody className="cursor-pointer" onClick={props.onEditButton}>
             Edit

@@ -680,8 +680,6 @@ const PackageFormPage = (props) => {
         days: [...primaryData],
       };
 
-      console.log(primaryData);
-
       const payload = buildPayloadPaket(data);
 
       for (const [key, value] of Object.entries(data)) {

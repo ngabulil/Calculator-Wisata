@@ -29,6 +29,7 @@ const PackageCard = (props) => {
         description={props.description}
         days={props.days}
         date={props.date}
+        onDuplicateButton={props.onDuplicateButton}
         onEditButton={props.onEditButton}
         onDeleteButton={props.onDeleteButton}
         onOpenButton={props.onOpenButton}
@@ -65,11 +66,18 @@ const AppTitleDescription = (props) => {
           >
             {props.title.slice(0, 2).toUpperCase()}
           </Box>
-          <Text fontSize="24px" fontWeight="bold" w="full" noOfLines={2}>
+          <Text fontSize="24px" fontWeight="bold" w="full">
             {props.title || "Bali Paket"}
           </Text>
         </Flex>
-        <Text fontSize={"14px"} color={"gray.500"} noOfLines={4} w={"70%"}>
+        <Text
+          fontSize="14px"
+          color="gray.500"
+          noOfLines={4}
+          w="70%"
+          minW="200px"
+          maxW="500px"
+        >
           {props.description}
         </Text>
       </Flex>
@@ -99,11 +107,13 @@ const AppTitleDescription = (props) => {
           {formatDateOnly(props.date)}
         </Text>
         <PopoverButton
+          isDuplicated
           isOpenButton={true}
           onEditButton={() => {
             navigate(`/admin/paket/edit`);
             props.onEditButton();
           }}
+          onDuplicateButton={props.onDuplicateButton}
           onDeleteButton={props.onDeleteButton}
           onOpenButton={props.onOpenButton}
         />

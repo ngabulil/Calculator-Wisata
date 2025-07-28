@@ -17,7 +17,11 @@ const AdminDestinationContextProvider = ({ children }) => {
     try {
       const response = await apiGetAllDestination();
 
-      setAllDestination(response.result);
+      const sortedResult = response.result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+
+      setAllDestination(sortedResult);
     } catch (error) {
       console.log(error);
     }

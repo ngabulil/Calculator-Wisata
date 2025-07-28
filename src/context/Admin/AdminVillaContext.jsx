@@ -30,7 +30,11 @@ const AdminVillaContextProvider = ({ children }) => {
     try {
       const response = await apiGetAllVilla();
 
-      return response.result;
+      const sortedResult = response.result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+
+      return sortedResult;
     } catch (error) {
       console.log(error);
     }

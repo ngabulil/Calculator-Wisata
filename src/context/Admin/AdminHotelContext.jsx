@@ -27,13 +27,17 @@ const AdminHotelContextProvider = ({ children }) => {
     extrabed: "",
     contractUntil: "",
   });
-
+  
   const getAllHotel = async () => {
     try {
       const response = await apiGetAllHotel();
 
-      setAllHotel(response.result);
-      return response.result;
+      const sortedResult = response.result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+
+      setAllHotel(sortedResult);
+      return sortedResult;
     } catch (error) {
       console.log(error);
     }

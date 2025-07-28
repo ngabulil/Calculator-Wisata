@@ -40,22 +40,29 @@ const AdminActivityContextProvider = ({ children }) => {
         return acc;
       }, {});
 
-      const result = responseDetails.result.map((act) => ({
-        ...act,
-        vendor: vendorMap[act.vendor_id] || null,
-      }));
+      const result = responseDetails.result
+        .map((act) => ({
+          ...act,
+          vendor: vendorMap[act.vendor_id] || null,
+        }))
+        .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
       setAllActivityDetails(result);
     } catch (error) {
       console.log(error);
     }
   };
+
   const getAllActivityVendors = async () => {
     try {
       const response = await apiGetAllActivityVendors();
 
-      setAllActivityVendors(response.result);
-      return response.result;
+      const sortedData = response.result.sort((a, b) => {
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      });
+
+      setAllActivityVendors(sortedData);
+      return sortedData;
     } catch (error) {
       console.log(error);
     }

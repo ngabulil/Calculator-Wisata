@@ -17,8 +17,8 @@ import SearchBar from "../../components/searchBar";
 import { useAdminPackageContext } from "../../context/Admin/AdminPackageContext";
 import toastConfig from "../../utils/toastConfig";
 import { apiDeletePackageFull } from "../../services/packageService";
-
 import { useNavigate } from "react-router-dom";
+import { apiPostPackageFull } from "../../services/packageService";
 import ReactPaginate from "react-paginate";
 
 const ITEMS_PER_PAGE = 8;
@@ -69,6 +69,34 @@ const AdminPage = () => {
       console.error("Error", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreatePackage = async (payload) => {
+    const data = {
+      ...payload,
+      name: `${payload.name}_DUPLICATE`,
+    };
+
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
+
+    try {
+      const res = await apiPostPackageFull(data);
+
+      if (res.status == 201 || res.status == 200) {
+        toast.close(loading);
+        toast(
+          toastConfig("Buat Berhasil", "Paket berhasil dibuat!", "success")
+        );
+        handleGetAllPackageFull();
+      } else {
+        toast.close(loading);
+        toast(toastConfig("Buat Gagal", "Data tidak lengkap!", "error"));
+      }
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      toast.close(loading);
+      toast(toastConfig("Buat Gagal", error.message, "error"));
     }
   };
 
@@ -171,6 +199,9 @@ const AdminPage = () => {
                       description={packageItem.description}
                       days={packageItem.days}
                       date={packageItem.updatedAt}
+                      onDuplicateButton={() => {
+                        handleCreatePackage(packageItem);
+                      }}
                       onOpenButton={() => {
                         setReadPackageActive(true);
                         updatePackageFull(packageItem);
