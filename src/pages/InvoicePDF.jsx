@@ -4,18 +4,21 @@ import {
   useRef,
   useImperativeHandle,
   forwardRef,
+  useMemo,
+  useCallback,
 } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, Button, Input, useToast, Text } from "@chakra-ui/react";
 import InvoiceHeader from "../components/InvoicePDF/InvoiceHeader";
 import ItineraryTable from "../components/InvoicePDF/ItineraryTable";
 import CostBreakDown from "../components/InvoicePDF/CostBreakDown";
 import { usePackageContext } from "../context/PackageContext";
 import { useCheckoutContext } from "../context/CheckoutContext";
 import { useExpensesContext } from "../context/ExpensesContext";
-import { parseAndMergeDays } from "../utils/parseAndMergeDays"; // Tetap gunakan ini untuk data lain
+import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import { apiGetUser } from "../services/adminService";
 import Cookies from "js-cookie";
 import useExportPdf from "../hooks/useExportPdf";
+import useItineraryReorder from "../hooks/useItineraryReorder";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -36,332 +39,583 @@ const InvoicePDF = forwardRef((props, ref) => {
     calculateHotelTotal,
     calculateVillaTotal,
   } = useCheckoutContext();
-  const {
-    days: expenseDays,
-    calculateGrandTotal,
-    tourCode,
-    pax,
-  } = useExpensesContext();
+  const { days: expenseDays, calculateGrandTotal } = useExpensesContext();
 
-  const [hotelData, setHotelData] = useState([]);
-  const [villaData, setVillaData] = useState([]);
-  const [transportData, setTransportData] = useState([]);
-  const [additionalData, setAdditionalData] = useState([]);
-  const [itineraryData, setItineraryData] = useState([]);
-  const [mergedDays, setMergedDays] = useState([]);
-  const [adminName, setAdminName] = useState("");
+  // Consolidated state untuk mengurangi re-render
+  const [invoiceData, setInvoiceData] = useState({
+    hotelData: [],
+    villaData: [],
+    transportData: [],
+    additionalData: [],
+    itineraryData: [],
+    mergedDays: [],
+    isDataProcessed: false,
+  });
+
+  const [exchangeRate, setExchangeRate] = useState(() => {
+    // Initialize dari localStorage langsung
+    const saved = localStorage.getItem("invoiceExchangeRate");
+    return saved ? Number(saved) : 15000;
+  });
+
+  const [isEditingExchange, setIsEditingExchange] = useState(false);
+  const toast = useToast();
 
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const componentRef = useRef();
+
+  // Memoize package ID
+  const packageId = useMemo(
+    () => selectedPackage?.id || selectedPackage?._id,
+    [selectedPackage?.id, selectedPackage?._id]
+  );
+
+  // Initialize reorder hook dengan package ID
+  const {
+    days: reorderedDays,
+    originalDays,
+    isReordering,
+    updateDays,
+    moveItemUp,
+    moveItemDown,
+    moveDayUp,
+    moveDayDown,
+    toggleReordering,
+    resetOrder,
+    saveOrder,
+    clearSavedOrder,
+  } = useItineraryReorder([], packageId);
 
   useImperativeHandle(ref, () => ({
     async exportAsBlob() {
       return exportAsBlob(componentRef);
     },
-    async download(filename = `${tourCode}_invoice.pdf`) {
+    async download(filename = `${selectedPackage?.title || ""}_Quotation.pdf`) {
       await downloadPdf(componentRef, filename);
     },
   }));
 
-  useEffect(() => {
-    const processDays = async () => {
-      if (selectedPackage?.days?.length > 0) {
-        try {
-          const merged = await parseAndMergeDays(selectedPackage.days);
-          setMergedDays(merged);
-        } catch (err) {
-          console.error("Gagal memproses days:", err);
-          setMergedDays(selectedPackage.days);
-        }
-      }
+  // Memoize calculations untuk menghindari perhitungan berulang
+  const calculatedValues = useMemo(() => {
+    const totalAdult =
+      selectedPackage?.totalPaxAdult &&
+      parseInt(selectedPackage.totalPaxAdult) > 0
+        ? parseInt(selectedPackage.totalPaxAdult)
+        : 0;
+    const actualChild =
+      selectedPackage?.totalPaxChildren &&
+      parseInt(selectedPackage.totalPaxChildren) > 0
+        ? parseInt(selectedPackage.totalPaxChildren)
+        : 0;
+    const perAdult = totalAdult > 0 ? breakdown.markup / totalAdult : 0;
+    const totalExpensesFromContext = calculateGrandTotal();
+    const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
+    const selling = adjustedGrandTotal / totalAdult;
+
+    return {
+      totalAdult,
+      actualChild,
+      perAdult,
+      totalExpensesFromContext,
+      adjustedGrandTotal,
+      selling,
     };
+  }, [
+    selectedPackage?.totalPaxAdult,
+    selectedPackage?.totalPaxChildren,
+    breakdown.markup,
+    grandTotal,
+    calculateGrandTotal,
+  ]);
+
+  // Separate adminName state
+  const [adminName, setAdminName] = useState("");
+
+  // Fetch admin data - hanya dipanggil sekali
+  useEffect(() => {
+    let isMounted = true;
 
     const fetchAdmin = async () => {
       const token = Cookies.get("token");
-      if (!token) {
+      if (!token) return;
+
+      try {
+        const res = await apiGetUser(token);
+        if (res.status === 200 && isMounted) {
+          setAdminName(res.result.name);
+        }
+      } catch (error) {
+        console.error("Failed to fetch admin:", error);
+      }
+    };
+
+    fetchAdmin();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Process days data - dengan optimization
+  useEffect(() => {
+    let isMounted = true;
+
+    const processDays = async () => {
+      if (!selectedPackage?.days?.length) {
+        if (isMounted) {
+          setInvoiceData((prev) => ({ ...prev, isDataProcessed: true }));
+        }
         return;
       }
 
       try {
-        const res = await apiGetUser(token);
-        if (res.status === 200) {
-          setAdminName(res.result.name);
-        } else {
-          console.log("Error", "Failed to fetch admin users", "error");
+        const merged = await parseAndMergeDays(selectedPackage.days);
+
+        if (!isMounted) return;
+
+        // Process semua data sekaligus untuk mengurangi state updates
+        const hotels = [];
+        const villas = [];
+        const transports = [];
+        const additionals = [];
+        const itinerary = [];
+
+        merged.forEach((day, dayIndex) => {
+          // Hotel processing
+          day.hotels?.forEach((hotel) => {
+            hotels.push({
+              day: `Day ${dayIndex + 1}`,
+              name: hotel.displayName,
+              rooms: hotel.jumlahKamar || 1,
+              extrabedQty: hotel.useExtrabed ? hotel.jumlahExtrabed || 0 : 0,
+              pricePerNight: hotel.hargaPerKamar || 0,
+              extrabedPrice: hotel.hargaExtrabed || 0,
+              total: calculateHotelTotal([hotel]),
+            });
+          });
+
+          // Villa processing
+          day.villas?.forEach((villa) => {
+            villas.push({
+              day: `Day ${dayIndex + 1}`,
+              name: villa.displayName,
+              rooms: villa.jumlahKamar || 1,
+              extrabedQty: villa.useExtrabed ? villa.jumlahExtrabed || 0 : 0,
+              pricePerNight: villa.hargaPerKamar || 0,
+              extrabedPrice: villa.hargaExtrabed || 0,
+              total: calculateVillaTotal([villa]),
+            });
+          });
+
+          // Transport processing
+          day.mobils?.forEach((mobil) => {
+            const price = parseInt(mobil.harga) || 0;
+            transports.push({
+              day: `Day ${dayIndex + 1}`,
+              description: mobil.mobil?.label || mobil.label,
+              price: price,
+            });
+          });
+
+          // Additional items processing
+          const processAdditionalItems = (items, dayIndex) => {
+            return (
+              items?.map((item) => {
+                const price = parseInt(item.harga) || 0;
+                const quantity = parseInt(item.jumlah) || 1;
+                return {
+                  day: `Day ${dayIndex + 1}`,
+                  name: item.displayName,
+                  quantity: quantity,
+                  price: price,
+                  total: price * quantity,
+                };
+              }) || []
+            );
+          };
+
+          additionals.push(
+            ...processAdditionalItems(day.akomodasi_additionals, dayIndex),
+            ...processAdditionalItems(day.transport_additionals, dayIndex)
+          );
+
+          // Itinerary processing dengan helper function
+          const processActivities = (items, type) => {
+            return (
+              items?.map((item) => {
+                const adultQty =
+                  parseInt(item.jumlahadult || item.jumlahAdult) || 0;
+                const childQty =
+                  parseInt(item.jumlahchild || item.jumlahChild) || 0;
+                const adultPrice =
+                  parseInt(
+                    item.hargaddult || item.hargaAdult || item.hargaadult
+                  ) || 0;
+                const childPrice =
+                  parseInt(
+                    item.hargachild || item.hargaChild || item.hargachild
+                  ) || 0;
+
+                return {
+                  type: "activity",
+                  item: item.displayName || item.name || `Unnamed ${type}`,
+                  expense:
+                    adultPrice > 0 && adultQty > 0
+                      ? formatCurrency(adultPrice * adultQty)
+                      : "Rp 0",
+                  kidExpense:
+                    childPrice > 0 && childQty > 0
+                      ? formatCurrency(childPrice * childQty)
+                      : "-",
+                  // Tambahan data untuk keperluan lain
+                  adultPrice,
+                  childPrice,
+                  adultQty,
+                  childQty,
+                  originalData: item,
+                };
+              }) || []
+            );
+          };
+
+          // Process expense items dari context
+          const processExpenseItems = (expenseItems) => {
+            return (
+              expenseItems?.map((item) => {
+                return {
+                  type: "expense",
+                  item: item.label || item.name || "Unnamed Expense",
+                  label: item.label || item.name || "Unnamed Expense",
+                  description: item.description || "",
+                  price: item.price || 0,
+                  quantity: item.quantity || 1,
+                  adultPrice: item.adultPrice || null,
+                  childPrice: item.childPrice || null,
+                  adultQuantity: item.adultQuantity || 1,
+                  childQuantity: item.childQuantity || 1,
+                  // Calculate display values
+                  expense: (() => {
+                    let total = 0;
+                    if (item.adultPrice !== null || item.childPrice !== null) {
+                      const adultTotal =
+                        (item.adultPrice || 0) * (item.adultQuantity || 1);
+                      const childTotal =
+                        (item.childPrice || 0) * (item.childQuantity || 1);
+                      total = adultTotal + childTotal;
+                    } else {
+                      total = (item.price || 0) * (item.quantity || 1);
+                    }
+                    return total > 0 ? formatCurrency(total) : "Rp 0";
+                  })(),
+                  kidExpense: "-", // Expense items biasanya tidak memiliki kid expense terpisah
+                  originalData: item,
+                };
+              }) || []
+            );
+          };
+
+          const activities = [
+            ...processActivities(day.destinations, "Destination"),
+            ...processActivities(day.restaurants, "Restaurant"),
+            ...processActivities(day.activities, "Activity"),
+          ];
+
+          // Get expense items dari context
+          const expenseDay = expenseDays[dayIndex];
+          const expenseItems = processExpenseItems(expenseDay?.totals || []);
+
+          // Gabungkan activities dan expense items menjadi satu array
+          const unifiedItems = [...activities, ...expenseItems];
+
+          itinerary.push({
+            day: dayIndex + 1,
+            title: day.name || `Day ${dayIndex + 1}`,
+            description: day.description_day || day.day_description || "",
+            date: day.date,
+            items: unifiedItems,
+            activities: activities,
+            expenseItems: expenseItems,
+          });
+        });
+
+        // Update semua state sekaligus
+        setInvoiceData({
+          hotelData: hotels.concat(villas),
+          villaData: villas,
+          transportData: transports,
+          additionalData: additionals.flat(),
+          itineraryData: itinerary,
+          mergedDays: merged,
+          adminName: adminName,
+          isDataProcessed: true,
+        });
+
+        // Update reorder hook
+        updateDays(itinerary);
+      } catch (err) {
+        console.error("Gagal memproses days:", err);
+        if (isMounted) {
+          setInvoiceData((prev) => ({
+            ...prev,
+            mergedDays: selectedPackage.days,
+            isDataProcessed: true,
+          }));
         }
-      } catch (error) {
-        console.log(error);
-        console.log("Error", "Invalid Token", "error");
       }
     };
 
     processDays();
-    fetchAdmin();
-  }, [selectedPackage]);
 
-  useEffect(() => {
-    if (mergedDays.length === 0) return;
+    return () => {
+      isMounted = false;
+    };
+  }, [
+    selectedPackage?.days,
+    calculateHotelTotal,
+    calculateVillaTotal,
+    expenseDays,
+    updateDays,
+  ]);
 
-    const hotels = [];
-    const villas = [];
-    const transports = [];
-    const additionals = [];
-
-    mergedDays.forEach((day, dayIndex) => {
-      // Hotel
-      day.hotels?.forEach((hotel) => {
-        hotels.push({
-          day: `Day ${dayIndex + 1}`,
-          name: hotel.displayName,
-          rooms: hotel.jumlahKamar || 1,
-          extrabedQty: hotel.useExtrabed ? hotel.jumlahExtrabed || 0 : 0,
-          pricePerNight: hotel.hargaPerKamar || 0,
-          extrabedPrice: hotel.hargaExtrabed || 0,
-          total: calculateHotelTotal([hotel]),
-        });
+  // Memoize reorder handlers
+  const handleSaveReorder = useCallback(() => {
+    const success = saveOrder();
+    if (success) {
+      setInvoiceData((prev) => ({
+        ...prev,
+        itineraryData: [...reorderedDays],
+      }));
+      toggleReordering();
+      toast({
+        title: "Urutan Itinerary Disimpan",
+        description:
+          "Urutan berhasil disimpan dan akan dipertahankan untuk package ini",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
       });
-
-      // Villa
-      day.villas?.forEach((villa) => {
-        villas.push({
-          day: `Day ${dayIndex + 1}`,
-          name: villa.displayName,
-          rooms: villa.jumlahKamar || 1,
-          extrabedQty: villa.useExtrabed ? villa.jumlahExtrabed || 0 : 0,
-          pricePerNight: villa.hargaPerKamar || 0,
-          extrabedPrice: villa.hargaExtrabed || 0,
-          total: calculateVillaTotal([villa]),
-        });
+    } else {
+      toast({
+        title: "Gagal Menyimpan",
+        description: "Terjadi kesalahan saat menyimpan urutan itinerary",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
       });
+    }
+  }, [saveOrder, reorderedDays, toggleReordering, toast]);
 
-      // Transport
-      day.mobils?.forEach((mobil) => {
-        const price = parseInt(mobil.harga) || 0; //
-        transports.push({
-          day: `Day ${dayIndex + 1}`,
-          description: mobil.mobil?.label || mobil.label,
-          price: price,
-        });
-      });
+  const handleCancelReorder = useCallback(() => {
+    resetOrder();
+    toggleReordering();
+  }, [resetOrder, toggleReordering]);
 
-      // Akomodasi tambahan
-      day.akomodasi_additionals?.forEach((item) => {
-        const price = parseInt(item.harga) || 0;
-        const quantity = parseInt(item.jumlah) || 1;
-        additionals.push({
-          day: `Day ${dayIndex + 1}`,
-          name: item.displayName,
-          quantity: quantity,
-          price: price,
-          total: price * quantity,
-        });
-      });
-
-      // Transport tambahan
-      day.transport_additionals?.forEach((item) => {
-        const price = parseInt(item.harga) || 0;
-        const quantity = parseInt(item.jumlah) || 1;
-        additionals.push({
-          day: `Day ${dayIndex + 1}`,
-          name: item.displayName,
-          quantity: quantity,
-          price: price,
-          total: price * quantity,
-        });
-      });
+  const handleResetToOriginal = useCallback(() => {
+    clearSavedOrder();
+    toast({
+      title: "Urutan Direset",
+      description: "Urutan itinerary dikembalikan ke urutan asli",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
     });
+  }, [clearSavedOrder, toast]);
 
-    setHotelData(hotels.concat(villas));
-    setVillaData(villas);
-    setTransportData(transports);
-    setAdditionalData(additionals);
-
-    // Itinerary with kid expenses and expense items
-    const itinerary = mergedDays.map((day, index) => {
-      console.log(`Processing day ${index}:`, day); // Debug log
-
-      const activities = [];
-
-      // Process destinations
-      if (day.destinations && Array.isArray(day.destinations)) {
-        day.destinations.forEach((dest) => {
-          const adultQty =
-            parseInt(dest.jumlahadult) || parseInt(dest.jumlahAdult) || 0;
-          const childQty =
-            parseInt(dest.jumlahchild) || parseInt(dest.jumlahChild) || 0;
-          const adultPrice =
-            parseInt(dest.hargaddult) ||
-            parseInt(dest.hargaAdult) ||
-            parseInt(dest.hargaadult) ||
-            0;
-          const childPrice =
-            parseInt(dest.hargachild) ||
-            parseInt(dest.hargaChild) ||
-            parseInt(dest.hargachild) ||
-            0;
-
-          console.log(`Destination ${dest.displayName}:`, {
-            adultQty,
-            childQty,
-            adultPrice,
-            childPrice,
-          }); // Debug log
-
-          activities.push({
-            item: dest.displayName || dest.name || "Unnamed Destination",
-            expense:
-              adultPrice > 0 && adultQty > 0
-                ? formatCurrency(adultPrice * adultQty)
-                : "Rp 0",
-            kidExpense:
-              childPrice > 0 && childQty > 0
-                ? formatCurrency(childPrice * childQty)
-                : "-",
-          });
-        });
-      }
-
-      // Process restaurants
-      if (day.restaurants && Array.isArray(day.restaurants)) {
-        day.restaurants.forEach((resto) => {
-          const adultQty =
-            parseInt(resto.jumlahadult) || parseInt(resto.jumlahAdult) || 0;
-          const childQty =
-            parseInt(resto.jumlahchild) || parseInt(resto.jumlahChild) || 0;
-          const adultPrice =
-            parseInt(resto.hargaddult) ||
-            parseInt(resto.hargaAdult) ||
-            parseInt(resto.hargaadult) ||
-            0;
-          const childPrice =
-            parseInt(resto.hargachild) ||
-            parseInt(resto.hargaChild) ||
-            parseInt(resto.hargachild) ||
-            0;
-
-          console.log(`Restaurant ${resto.displayName}:`, {
-            adultQty,
-            childQty,
-            adultPrice,
-            childPrice,
-          }); // Debug log
-
-          activities.push({
-            item: resto.displayName || resto.name || "Unnamed Restaurant",
-            expense:
-              adultPrice > 0 && adultQty > 0
-                ? formatCurrency(adultPrice * adultQty)
-                : "Rp 0",
-            kidExpense:
-              childPrice > 0 && childQty > 0
-                ? formatCurrency(childPrice * childQty)
-                : "-",
-          });
-        });
-      }
-
-      // Process activities
-      if (day.activities && Array.isArray(day.activities)) {
-        day.activities.forEach((act) => {
-          const adultQty =
-            parseInt(act.jumlahadult) || parseInt(act.jumlahAdult) || 0;
-          const childQty =
-            parseInt(act.jumlahchild) || parseInt(act.jumlahChild) || 0;
-          const adultPrice =
-            parseInt(act.hargaddult) ||
-            parseInt(act.hargaAdult) ||
-            parseInt(act.hargaadult) ||
-            0;
-          const childPrice =
-            parseInt(act.hargachild) ||
-            parseInt(act.hargaChild) ||
-            parseInt(act.hargachild) ||
-            0;
-
-          console.log(`Activity ${act.displayName}:`, {
-            adultQty,
-            childQty,
-            adultPrice,
-            childPrice,
-          }); // Debug log
-
-          activities.push({
-            item: act.displayName || act.name || "Unnamed Activity",
-            expense:
-              adultPrice > 0 && adultQty > 0
-                ? formatCurrency(adultPrice * adultQty)
-                : "Rp 0",
-            kidExpense:
-              childPrice > 0 && childQty > 0
-                ? formatCurrency(childPrice * childQty)
-                : "-",
-          });
-        });
-      }
-
-      // Get expense items from ExpensesContext for this day
-      const expenseDay = expenseDays[index];
-      const expenseItems = expenseDay?.totals || [];
-
-      return {
-        day: index + 1,
-        title: day.day_name || `Day ${index + 1}`,
-        description: day.description_day || day.day_description || "",
-        date: day.date,
-        activities: activities,
-        expenseItems: expenseItems,
-      };
+  // Memoize exchange rate handlers
+  const handleSaveExchangeRate = useCallback(() => {
+    localStorage.setItem("invoiceExchangeRate", exchangeRate.toString());
+    setIsEditingExchange(false);
+    toast({
+      title: "Exchange Rate Disimpan",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
     });
+  }, [exchangeRate, toast]);
 
-    setItineraryData(itinerary);
-  }, [mergedDays, calculateHotelTotal, calculateVillaTotal, expenseDays]);
+  const handleCancelExchangeRate = useCallback(() => {
+    const stored = localStorage.getItem("invoiceExchangeRate");
+    if (stored) setExchangeRate(Number(stored));
+    setIsEditingExchange(false);
+  }, []);
 
-  const actualPax = pax && parseInt(pax) > 0 ? parseInt(pax) : 1;
-  const perPax = actualPax > 0 ? breakdown.markup / actualPax : 0;
-  const totalExpensesFromContext = calculateGrandTotal();
-  const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
-  const selling = adjustedGrandTotal / actualPax;
+  // Memoize untuk cek apakah order berbeda dari original
+  const hasOrderChanged = useMemo(() => {
+    return JSON.stringify(reorderedDays) !== JSON.stringify(originalDays);
+  }, [reorderedDays, originalDays]);
+
+  // Show loading jika data belum selesai diproses
+  if (!invoiceData.isDataProcessed) {
+    return (
+      <Box maxW="900px" mx="auto" py={8}>
+        <Text textAlign="center">Loading invoice data...</Text>
+      </Box>
+    );
+  }
 
   return (
-    <Box
-      ref={componentRef}
-      data-pdf-content
-      width="794px"
-      minHeight="1123px"
-      mx="auto"
-      p="40px"
-      bg="white"
-      display="block !important"
-      fontFamily="Arial, sans-serif"
-      fontSize="14px"
-      lineHeight="1.4"
-      color="#000000"
-      boxSizing="border-box"
-    >
-      <InvoiceHeader
-        code={tourCode}
-        totalPax={actualPax}
-        adminName={adminName}
-      />
+    <Box maxW="900px" mx="auto" py={8}>
+      <Flex
+        justify="space-between"
+        align="center"
+        mb={6}
+        p={4}
+        bg="gray.50"
+        borderRadius="md"
+        flexWrap="wrap"
+        gap={3}
+      >
+        <Text fontSize="lg" fontWeight="bold" color="#FB8C00">
+          Invoice Controls
+        </Text>
 
-      <ItineraryTable days={itineraryData} formatCurrency={formatCurrency} />
+        <Flex gap={2} flexWrap="wrap" alignItems="center">
+          {/* Reorder Controls */}
+          <Box>
+            {!isReordering ? (
+              <Flex gap={2}>
+                <Button
+                  size="sm"
+                  colorScheme="orange"
+                  onClick={toggleReordering}
+                >
+                  Edit Urutan Itinerary
+                </Button>
+                {hasOrderChanged && (
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    variant="outline"
+                    onClick={handleResetToOriginal}
+                  >
+                    Reset ke Urutan Asli
+                  </Button>
+                )}
+              </Flex>
+            ) : (
+              <Flex gap={2}>
+                <Button
+                  size="sm"
+                  colorScheme="green"
+                  onClick={handleSaveReorder}
+                >
+                  Simpan Urutan
+                </Button>
+                <Button
+                  size="sm"
+                  colorScheme="red"
+                  onClick={handleCancelReorder}
+                >
+                  Batal
+                </Button>
+              </Flex>
+            )}
+          </Box>
 
-      <CostBreakDown
-        hotelData={hotelData}
-        villaData={villaData}
-        transportData={transportData}
-        additionalData={additionalData}
-        akomodasiTotal={akomodasiTotal}
-        transportTotal={transportTotal}
-        tourTotal={tourTotal}
-        markup={breakdown.markup}
-        grandTotal={adjustedGrandTotal}
-        originalGrandTotal={grandTotal}
-        totalExpenses={totalExpensesFromContext}
-        perPax={perPax}
-        selling={selling}
-        formatCurrency={formatCurrency}
-      />
+          {/* Exchange Rate Controls */}
+          {!isEditingExchange ? (
+            <Button
+              size="sm"
+              colorScheme="blue"
+              onClick={() => setIsEditingExchange(true)}
+            >
+              Edit Exchange Rate
+            </Button>
+          ) : (
+            <>
+              <Button
+                size="sm"
+                colorScheme="green"
+                onClick={handleSaveExchangeRate}
+              >
+                Simpan
+              </Button>
+              <Button
+                size="sm"
+                colorScheme="red"
+                onClick={handleCancelExchangeRate}
+              >
+                Batal
+              </Button>
+            </>
+          )}
+        </Flex>
+      </Flex>
+
+      {/* Status indicator untuk saved order */}
+      {!isReordering && hasOrderChanged && (
+        <Box
+          mb={4}
+          p={3}
+          bg="blue.50"
+          borderRadius="md"
+          borderLeft="4px solid"
+          borderColor="blue.400"
+        >
+          <Text fontSize="sm" color="blue.800">
+            ℹ️ Menampilkan urutan yang telah disimpan. Klik "Reset ke Urutan
+            Asli" untuk mengembalikan ke urutan default.
+          </Text>
+        </Box>
+      )}
+
+      {/* Area PDF */}
+      <Box
+        ref={componentRef}
+        data-pdf-content
+        width="794px"
+        minHeight="1123px"
+        mx="auto"
+        p="40px"
+        bg="white"
+        display="block !important"
+        fontFamily="Arial, sans-serif"
+        fontSize="14px"
+        lineHeight="1.4"
+        color="#000000"
+        boxSizing="border-box"
+      >
+        <InvoiceHeader
+          totalAdult={calculatedValues.totalAdult}
+          totalChild={calculatedValues.actualChild}
+          adminName={adminName}
+          packageName={selectedPackage?.name}
+        />
+
+        <ItineraryTable
+          days={Array.isArray(reorderedDays) ? reorderedDays : []}
+          formatCurrency={formatCurrency}
+          isReordering={isReordering}
+          onMoveItemUp={moveItemUp}
+          onMoveItemDown={moveItemDown}
+          onMoveDayUp={moveDayUp}
+          onMoveDayDown={moveDayDown}
+          totalAdult={calculatedValues.totalAdult}
+          totalChild={calculatedValues.actualChild}
+        />
+
+        <CostBreakDown
+          hotelData={invoiceData.hotelData}
+          villaData={invoiceData.villaData}
+          transportData={invoiceData.transportData}
+          additionalData={invoiceData.additionalData}
+          akomodasiTotal={akomodasiTotal}
+          transportTotal={transportTotal}
+          tourTotal={tourTotal}
+          markup={breakdown.markup}
+          grandTotal={calculatedValues.adjustedGrandTotal}
+          originalGrandTotal={grandTotal}
+          totalExpenses={calculatedValues.totalExpensesFromContext}
+          perPax={calculatedValues.perAdult}
+          selling={calculatedValues.selling}
+          formatCurrency={formatCurrency}
+          totalAdult={calculatedValues.totalAdult}
+          totalChild={calculatedValues.actualChild}
+          exchangeRate={exchangeRate}
+          isEditingExchangeRate={isEditingExchange}
+          onExchangeRateChange={setExchangeRate}
+        />
+      </Box>
     </Box>
   );
 });

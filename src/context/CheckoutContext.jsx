@@ -72,6 +72,7 @@ const CheckoutContextProvider = ({ children }) => {
       return sum + (dest.hargaAdult || 0) * (dest.jumlahAdult || 0) + (dest.hargaChild || 0) * (dest.jumlahChild || 0);
     }, 0);
     
+    
     const activityTotal = (day.activities || []).reduce((sum, activity) => {
       // Menggunakan hargaAdult dan hargaChild untuk perhitungan
       return sum + (activity.hargaAdult || 0) * (activity.jumlahAdult || 0) + (activity.hargaChild || 0) * (activity.jumlahChild || 0);

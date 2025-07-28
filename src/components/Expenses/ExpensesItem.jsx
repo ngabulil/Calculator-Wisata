@@ -1,7 +1,14 @@
 import {
-  Box, Flex, Text, Input, IconButton, HStack, useColorModeValue
-} from '@chakra-ui/react';
-import { EditIcon, DeleteIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
+  Box,
+  Flex,
+  Text,
+  Input,
+  IconButton,
+  HStack,
+  VStack,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import { EditIcon, DeleteIcon, CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
 const ExpenseItem = ({
   item,
@@ -15,38 +22,71 @@ const ExpenseItem = ({
 }) => {
   const bg = useColorModeValue("gray.700", "gray.800");
 
-  const isEditing = editingItem?.dayIndex === dayIndex && editingItem?.itemIndex === itemIndex;
-  const isNewItem = isEditing && editingItem.isNew; 
+  const isEditing =
+    editingItem?.dayIndex === dayIndex && editingItem?.itemIndex === itemIndex;
+  const isNewItem = isEditing && editingItem.isNew;
 
   const handleCancelEdit = () => {
     if (isNewItem) {
       removeExpenseItem(dayIndex, itemIndex);
     }
-    setEditingItem(null); 
+    setEditingItem(null);
   };
 
   return (
-    <Box
-      bg={bg}
-      rounded="md"
-      p={4}
-      borderWidth="1px"
-      borderColor="gray.200"
-    >
+    <Box bg={bg} rounded="md" p={4} borderWidth="1px" borderColor="gray.200">
       {isEditing ? (
         <HStack spacing={3} align="center">
           <Input
             value={item.label}
-            onChange={(e) => updateExpenseItem(dayIndex, itemIndex, 'label', e.target.value)}
-            placeholder="Label/Deskripsi"
+            onChange={(e) =>
+              updateExpenseItem(dayIndex, itemIndex, "label", e.target.value)
+            }
+            placeholder="Label"
+            flex="1"
+            color={"white"}
+          />
+          <Input
+            value={item.description}
+            onChange={(e) =>
+              updateExpenseItem(
+                dayIndex,
+                itemIndex,
+                "description",
+                e.target.value
+              )
+            }
+            placeholder="Description"
             flex="1"
             color={"white"}
           />
           <Input
             type="number"
-            value={item.price === null ? '' : item.price}
-            onChange={(e) => updateExpenseItem(dayIndex, itemIndex, 'price', e.target.value)}
-            placeholder="Harga"
+            value={item.adultPrice === null ? "" : item.adultPrice}
+            onChange={(e) =>
+              updateExpenseItem(
+                dayIndex,
+                itemIndex,
+                "adultPrice",
+                e.target.value
+              )
+            }
+            placeholder="Price Adult"
+            w="120px"
+            color={"white"}
+          />
+          <Input
+            type="number"
+            value={item.childPrice === null ? "" : item.childPrice}
+            onChange={(e) =>
+              updateExpenseItem(
+                dayIndex,
+                itemIndex,
+                "childPrice",
+                e.target.value
+              )
+            }
+            placeholder="Price Child"
             w="120px"
             color={"white"}
           />
@@ -55,7 +95,7 @@ const ExpenseItem = ({
             colorScheme="green"
             aria-label="Simpan"
             onClick={() => {
-                setEditingItem(null);
+              setEditingItem(null);
             }}
             color={"white"}
           />
@@ -70,20 +110,33 @@ const ExpenseItem = ({
       ) : (
         <Flex justify="space-between" align="center">
           <Box flex="1">
-            <Text fontWeight="medium" color={"white"}>
-              {item.label || 'No label'}
+            <Text fontWeight="bold" fontSize="md" color="white">
+              {item.label || "No label"}
             </Text>
+            {item.description && (
+              <Text fontSize="sm" color="gray.300">
+                {item.description}
+              </Text>
+            )}
           </Box>
+
           <Flex align="center" gap={2}>
-            <Text fontWeight="semibold" color={"white"}>
-              {item.price ? formatCurrency(item.price) : 'Free'}
-            </Text>
+            <VStack mt={1} paddingRight={2}>
+              <Text fontSize="sm" color="gray.200">
+                Adult: {item.adultPrice ? formatCurrency(item.adultPrice) : ""}
+              </Text>
+              <Text fontSize="sm" color="gray.200">
+                Child: {item.childPrice ? formatCurrency(item.childPrice) : "-"}
+              </Text>
+            </VStack>
             <IconButton
               icon={<EditIcon />}
               size="sm"
               colorScheme="blue"
               aria-label="Edit"
-              onClick={() => setEditingItem({ dayIndex, itemIndex, isNew: false })}
+              onClick={() =>
+                setEditingItem({ dayIndex, itemIndex, isNew: false })
+              }
             />
             <IconButton
               icon={<DeleteIcon />}
