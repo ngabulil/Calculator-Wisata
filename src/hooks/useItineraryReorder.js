@@ -1,5 +1,5 @@
 // hooks/useItineraryReorder.js
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 const useItineraryReorder = (initialDays = [], packageId = null) => {
   const [days, setDays] = useState(initialDays);
@@ -12,32 +12,43 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
   }, []);
 
   // Save order to localStorage
-  const saveOrderToStorage = useCallback((orderData, pkgId) => {
-    const key = getStorageKey(pkgId);
-    if (key) {
-      try {
-        localStorage.setItem(key, JSON.stringify(orderData));
-      } catch (error) {
-        console.error('Failed to save itinerary order to localStorage:', error);
+  const saveOrderToStorage = useCallback(
+    (orderData, pkgId) => {
+      const key = getStorageKey(pkgId);
+      if (key) {
+        try {
+          localStorage.setItem(key, JSON.stringify(orderData));
+        } catch (error) {
+          console.error(
+            "Failed to save itinerary order to localStorage:",
+            error
+          );
+        }
       }
-    }
-  }, [getStorageKey]);
+    },
+    [getStorageKey]
+  );
 
   // Load order from localStorage
-  const loadOrderFromStorage = useCallback((pkgId) => {
-    const key = getStorageKey(pkgId);
-    if (key) {
-      try {
-        const saved = localStorage.getItem(key);
-        return saved ? JSON.parse(saved) : null;
-      } catch (error) {
-        console.error('Failed to load itinerary order from localStorage:', error);
-        return null;
+  const loadOrderFromStorage = useCallback(
+    (pkgId) => {
+      const key = getStorageKey(pkgId);
+      if (key) {
+        try {
+          const saved = localStorage.getItem(key);
+          return saved ? JSON.parse(saved) : null;
+        } catch (error) {
+          console.error(
+            "Failed to load itinerary order from localStorage:",
+            error
+          );
+          return null;
+        }
       }
-    }
-    return null;
-  }, [getStorageKey]);
-
+      return null;
+    },
+    [getStorageKey]
+  );
   // Apply saved order to days data
   const applySavedOrder = useCallback((daysData, savedOrder) => {
     if (!savedOrder || !Array.isArray(savedOrder.dayOrder)) {
@@ -45,36 +56,39 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
     }
 
     try {
-      // Reorder days based on saved order
-      const reorderedDays = savedOrder.dayOrder.map(dayOrderInfo => {
-        const originalDay = daysData.find(day => day.day === dayOrderInfo.originalDay);
-        if (!originalDay) return null;
+      const reorderedDays = savedOrder.dayOrder
+        .map((dayOrderInfo) => {
+          const originalDay = daysData.find(
+            (day) => day.day === dayOrderInfo.originalDay
+          );
+          if (!originalDay) return null;
 
-        const reorderedDay = { ...originalDay, day: dayOrderInfo.newDay };
+          const reorderedDay = { ...originalDay, day: dayOrderInfo.newDay };
 
-        // Apply item orders if they exist
-        if (dayOrderInfo.itemOrders) {
-          // Reorder activities
-          if (dayOrderInfo.itemOrders.activities && originalDay.activities) {
-            reorderedDay.activities = dayOrderInfo.itemOrders.activities.map(index => 
-              originalDay.activities[index]
-            ).filter(Boolean);
+          // Apply unified item order if available
+          if (dayOrderInfo.itemOrders?.items && originalDay.items) {
+            reorderedDay.items = dayOrderInfo.itemOrders.items
+              .map((index) => originalDay.items[index])
+              .filter(Boolean);
+
+            // Auto-split ulang activities dan expenseItems untuk kompatibilitas
+            reorderedDay.activities = reorderedDay.items.filter(
+              (item) => item.type === "activity"
+            );
+            reorderedDay.expenseItems = reorderedDay.items.filter(
+              (item) => item.type === "expense"
+            );
           }
 
-          // Reorder expense items
-          if (dayOrderInfo.itemOrders.expenseItems && originalDay.expenseItems) {
-            reorderedDay.expenseItems = dayOrderInfo.itemOrders.expenseItems.map(index => 
-              originalDay.expenseItems[index]
-            ).filter(Boolean);
-          }
-        }
+          return reorderedDay;
+        })
+        .filter(Boolean);
 
-        return reorderedDay;
-      }).filter(Boolean);
-
-      return reorderedDays.length === daysData.length ? reorderedDays : daysData;
+      return reorderedDays.length === daysData.length
+        ? reorderedDays
+        : daysData;
     } catch (error) {
-      console.error('Failed to apply saved order:', error);
+      console.error("Failed to apply saved order:", error);
       return daysData;
     }
   }, []);
@@ -82,34 +96,36 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
   // Generate order data for saving
   const generateOrderData = useCallback((currentDays, originalDays) => {
     const dayOrder = currentDays.map((day, newIndex) => {
-      // Find original day number
-      const originalDay = originalDays.find(orig => 
-        orig.title === day.title && orig.date === day.date
+      // Temukan day asli dari originalDays
+      const originalDay = originalDays.find(
+        (orig) => orig.title === day.title && orig.date === day.date
       );
-      
+
       const orderInfo = {
         originalDay: originalDay ? originalDay.day : day.day,
         newDay: newIndex + 1,
-        itemOrders: {}
+        itemOrders: {},
       };
 
-      // Save activities order
-      if (day.activities && originalDay?.activities) {
-        orderInfo.itemOrders.activities = day.activities.map(activity => 
-          originalDay.activities.findIndex(orig => orig.item === activity.item)
-        ).filter(index => index !== -1);
-      }
+      // Simpan urutan items (unified)
+      if (day.items && originalDay?.items) {
+        orderInfo.itemOrders.items = day.items
+          .map((item) => {
+            return originalDay.items.findIndex((orig) => {
+              if (!orig) return false;
 
-      // Save expense items order - IMPROVED matching
-      if (day.expenseItems && originalDay?.expenseItems) {
-        orderInfo.itemOrders.expenseItems = day.expenseItems.map(expenseItem => 
-          originalDay.expenseItems.findIndex(orig => 
-            // Try multiple fields for matching
-            orig.label === expenseItem.label || 
-            orig.id === expenseItem.id ||
-            (orig.description === expenseItem.description && orig.price === expenseItem.price)
-          )
-        ).filter(index => index !== -1);
+              const matchById = orig.id && item.id && orig.id === item.id;
+              const matchByItem =
+                orig.item === item.item && orig.type === item.type;
+              const matchByDesc =
+                orig.description &&
+                item.description &&
+                orig.description === item.description;
+
+              return matchById || matchByItem || matchByDesc;
+            });
+          })
+          .filter((index) => index !== -1);
       }
 
       return orderInfo;
@@ -117,64 +133,74 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
 
     return {
       dayOrder,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
   }, []);
 
   // Update days when initial data changes
-  const updateDays = useCallback((newDays) => {
-    setOriginalDays(newDays);
-    
-    // Try to load saved order and apply it
-    if (packageId) {
-      const savedOrder = loadOrderFromStorage(packageId);
-      if (savedOrder) {
-        const reorderedDays = applySavedOrder(newDays, savedOrder);
-        setDays(reorderedDays);
-        return;
+  const updateDays = useCallback(
+    (newDays) => {
+      setOriginalDays(newDays);
+
+      // Try to load saved order and apply it
+      if (packageId) {
+        const savedOrder = loadOrderFromStorage(packageId);
+        if (savedOrder) {
+          const reorderedDays = applySavedOrder(newDays, savedOrder);
+          setDays(reorderedDays);
+          return;
+        }
       }
-    }
-    
-    setDays(newDays);
-  }, [packageId, loadOrderFromStorage, applySavedOrder]);
+
+      setDays(newDays);
+    },
+    [packageId, loadOrderFromStorage, applySavedOrder]
+  );
 
   // Move item up within a day - ENHANCED to support all item types
-  const moveItemUp = useCallback((dayIndex, itemIndex, itemType = 'activities') => {
+  const moveItemUp = useCallback((dayIndex, itemIndex) => {
     if (itemIndex === 0) return;
 
-    setDays(prevDays => {
+    setDays((prevDays) => {
       const newDays = [...prevDays];
       const day = { ...newDays[dayIndex] };
-      const items = [...(day[itemType] || [])];
-      
-      // Swap items
-      [items[itemIndex - 1], items[itemIndex]] = [items[itemIndex], items[itemIndex - 1]];
-      
-      day[itemType] = items;
+
+      if (!day.items || itemIndex >= day.items.length) return prevDays;
+
+      const items = [...day.items];
+      [items[itemIndex - 1], items[itemIndex]] = [
+        items[itemIndex],
+        items[itemIndex - 1],
+      ];
+
+      day.items = items;
+      day.activities = items.filter((item) => item.type === "activity");
+      day.expenseItems = items.filter((item) => item.type === "expense");
+
       newDays[dayIndex] = day;
-      
       return newDays;
     });
   }, []);
 
-  // Move item down within a day - ENHANCED to support all item types
-  const moveItemDown = useCallback((dayIndex, itemIndex, itemType = 'activities') => {
-    setDays(prevDays => {
-      const day = prevDays[dayIndex];
-      const items = day[itemType] || [];
-      
-      if (itemIndex >= items.length - 1) return prevDays;
-
+  // Move item down in unified day.items
+  const moveItemDown = useCallback((dayIndex, itemIndex) => {
+    setDays((prevDays) => {
       const newDays = [...prevDays];
-      const newDay = { ...newDays[dayIndex] };
-      const newItems = [...items];
-      
-      // Swap items
-      [newItems[itemIndex], newItems[itemIndex + 1]] = [newItems[itemIndex + 1], newItems[itemIndex]];
-      
-      newDay[itemType] = newItems;
-      newDays[dayIndex] = newDay;
-      
+      const day = { ...newDays[dayIndex] };
+
+      if (!day.items || itemIndex >= day.items.length - 1) return prevDays;
+
+      const items = [...day.items];
+      [items[itemIndex], items[itemIndex + 1]] = [
+        items[itemIndex + 1],
+        items[itemIndex],
+      ];
+
+      day.items = items;
+      day.activities = items.filter((item) => item.type === "activity");
+      day.expenseItems = items.filter((item) => item.type === "expense");
+
+      newDays[dayIndex] = day;
       return newDays;
     });
   }, []);
@@ -183,39 +209,45 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
   const moveDayUp = useCallback((dayIndex) => {
     if (dayIndex === 0) return;
 
-    setDays(prevDays => {
+    setDays((prevDays) => {
       const newDays = [...prevDays];
-      [newDays[dayIndex - 1], newDays[dayIndex]] = [newDays[dayIndex], newDays[dayIndex - 1]];
-      
+      [newDays[dayIndex - 1], newDays[dayIndex]] = [
+        newDays[dayIndex],
+        newDays[dayIndex - 1],
+      ];
+
       // Update day numbers
       newDays.forEach((day, index) => {
         day.day = index + 1;
       });
-      
+
       return newDays;
     });
   }, []);
 
   // Move day down
   const moveDayDown = useCallback((dayIndex) => {
-    setDays(prevDays => {
+    setDays((prevDays) => {
       if (dayIndex >= prevDays.length - 1) return prevDays;
 
       const newDays = [...prevDays];
-      [newDays[dayIndex], newDays[dayIndex + 1]] = [newDays[dayIndex + 1], newDays[dayIndex]];
-      
+      [newDays[dayIndex], newDays[dayIndex + 1]] = [
+        newDays[dayIndex + 1],
+        newDays[dayIndex],
+      ];
+
       // Update day numbers
       newDays.forEach((day, index) => {
         day.day = index + 1;
       });
-      
+
       return newDays;
     });
   }, []);
 
   // Toggle reordering mode
   const toggleReordering = useCallback(() => {
-    setIsReordering(prev => !prev);
+    setIsReordering((prev) => !prev);
   }, []);
 
   // Save current order
@@ -241,7 +273,7 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
         localStorage.removeItem(key);
         setDays([...originalDays]);
       } catch (error) {
-        console.error('Failed to clear saved order:', error);
+        console.error("Failed to clear saved order:", error);
       }
     }
   }, [packageId, getStorageKey, originalDays]);

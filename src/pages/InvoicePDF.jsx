@@ -39,10 +39,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     calculateHotelTotal,
     calculateVillaTotal,
   } = useCheckoutContext();
-  const {
-    days: expenseDays,
-    calculateGrandTotal,
-  } = useExpensesContext();
+  const { days: expenseDays, calculateGrandTotal } = useExpensesContext();
 
   // Consolidated state untuk mengurangi re-render
   const [invoiceData, setInvoiceData] = useState({
@@ -60,7 +57,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     const saved = localStorage.getItem("invoiceExchangeRate");
     return saved ? Number(saved) : 15000;
   });
-  
+
   const [isEditingExchange, setIsEditingExchange] = useState(false);
   const toast = useToast();
 
@@ -68,9 +65,10 @@ const InvoicePDF = forwardRef((props, ref) => {
   const componentRef = useRef();
 
   // Memoize package ID
-  const packageId = useMemo(() => 
-    selectedPackage?.id || selectedPackage?._id
-  , [selectedPackage?.id, selectedPackage?._id]);
+  const packageId = useMemo(
+    () => selectedPackage?.id || selectedPackage?._id,
+    [selectedPackage?.id, selectedPackage?._id]
+  );
 
   // Initialize reorder hook dengan package ID
   const {
@@ -99,12 +97,16 @@ const InvoicePDF = forwardRef((props, ref) => {
 
   // Memoize calculations untuk menghindari perhitungan berulang
   const calculatedValues = useMemo(() => {
-    const totalAdult = selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0 
-      ? parseInt(selectedPackage.totalPaxAdult) 
-      : 1;
-    const actualChild = selectedPackage?.totalPaxChildren && parseInt(selectedPackage.totalPaxChildren) > 0 
-      ? parseInt(selectedPackage.totalPaxChildren) 
-      : 0;
+    const totalAdult =
+      selectedPackage?.totalPaxAdult &&
+      parseInt(selectedPackage.totalPaxAdult) > 0
+        ? parseInt(selectedPackage.totalPaxAdult)
+        : 0;
+    const actualChild =
+      selectedPackage?.totalPaxChildren &&
+      parseInt(selectedPackage.totalPaxChildren) > 0
+        ? parseInt(selectedPackage.totalPaxChildren)
+        : 0;
     const perAdult = totalAdult > 0 ? breakdown.markup / totalAdult : 0;
     const totalExpensesFromContext = calculateGrandTotal();
     const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
@@ -132,7 +134,7 @@ const InvoicePDF = forwardRef((props, ref) => {
   // Fetch admin data - hanya dipanggil sekali
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchAdmin = async () => {
       const token = Cookies.get("token");
       if (!token) return;
@@ -148,7 +150,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     };
 
     fetchAdmin();
-    
+
     return () => {
       isMounted = false;
     };
@@ -161,14 +163,14 @@ const InvoicePDF = forwardRef((props, ref) => {
     const processDays = async () => {
       if (!selectedPackage?.days?.length) {
         if (isMounted) {
-          setInvoiceData(prev => ({ ...prev, isDataProcessed: true }));
+          setInvoiceData((prev) => ({ ...prev, isDataProcessed: true }));
         }
         return;
       }
 
       try {
         const merged = await parseAndMergeDays(selectedPackage.days);
-        
+
         if (!isMounted) return;
 
         // Process semua data sekaligus untuk mengurangi state updates
@@ -217,17 +219,19 @@ const InvoicePDF = forwardRef((props, ref) => {
 
           // Additional items processing
           const processAdditionalItems = (items, dayIndex) => {
-            return items?.map(item => {
-              const price = parseInt(item.harga) || 0;
-              const quantity = parseInt(item.jumlah) || 1;
-              return {
-                day: `Day ${dayIndex + 1}`,
-                name: item.displayName,
-                quantity: quantity,
-                price: price,
-                total: price * quantity,
-              };
-            }) || [];
+            return (
+              items?.map((item) => {
+                const price = parseInt(item.harga) || 0;
+                const quantity = parseInt(item.jumlah) || 1;
+                return {
+                  day: `Day ${dayIndex + 1}`,
+                  name: item.displayName,
+                  quantity: quantity,
+                  price: price,
+                  total: price * quantity,
+                };
+              }) || []
+            );
           };
 
           additionals.push(
@@ -237,26 +241,77 @@ const InvoicePDF = forwardRef((props, ref) => {
 
           // Itinerary processing dengan helper function
           const processActivities = (items, type) => {
-            return items?.map(item => {
-              const adultQty = parseInt(item.jumlahadult || item.jumlahAdult) || 0;
-              const childQty = parseInt(item.jumlahchild || item.jumlahChild) || 0;
-              const adultPrice = parseInt(
-                item.hargaddult || item.hargaAdult || item.hargaadult
-              ) || 0;
-              const childPrice = parseInt(
-                item.hargachild || item.hargaChild || item.hargachild
-              ) || 0;
+            return (
+              items?.map((item) => {
+                const adultQty =
+                  parseInt(item.jumlahadult || item.jumlahAdult) || 0;
+                const childQty =
+                  parseInt(item.jumlahchild || item.jumlahChild) || 0;
+                const adultPrice =
+                  parseInt(
+                    item.hargaddult || item.hargaAdult || item.hargaadult
+                  ) || 0;
+                const childPrice =
+                  parseInt(
+                    item.hargachild || item.hargaChild || item.hargachild
+                  ) || 0;
 
-              return {
-                item: item.displayName || item.name || `Unnamed ${type}`,
-                expense: adultPrice > 0 && adultQty > 0
-                  ? formatCurrency(adultPrice * adultQty)
-                  : "Rp 0",
-                kidExpense: childPrice > 0 && childQty > 0
-                  ? formatCurrency(childPrice * childQty)
-                  : "-",
-              };
-            }) || [];
+                return {
+                  type: "activity",
+                  item: item.displayName || item.name || `Unnamed ${type}`,
+                  expense:
+                    adultPrice > 0 && adultQty > 0
+                      ? formatCurrency(adultPrice * adultQty)
+                      : "Rp 0",
+                  kidExpense:
+                    childPrice > 0 && childQty > 0
+                      ? formatCurrency(childPrice * childQty)
+                      : "-",
+                  // Tambahan data untuk keperluan lain
+                  adultPrice,
+                  childPrice,
+                  adultQty,
+                  childQty,
+                  originalData: item,
+                };
+              }) || []
+            );
+          };
+
+          // Process expense items dari context
+          const processExpenseItems = (expenseItems) => {
+            return (
+              expenseItems?.map((item) => {
+                return {
+                  type: "expense",
+                  item: item.label || item.name || "Unnamed Expense",
+                  label: item.label || item.name || "Unnamed Expense",
+                  description: item.description || "",
+                  price: item.price || 0,
+                  quantity: item.quantity || 1,
+                  adultPrice: item.adultPrice || null,
+                  childPrice: item.childPrice || null,
+                  adultQuantity: item.adultQuantity || 1,
+                  childQuantity: item.childQuantity || 1,
+                  // Calculate display values
+                  expense: (() => {
+                    let total = 0;
+                    if (item.adultPrice !== null || item.childPrice !== null) {
+                      const adultTotal =
+                        (item.adultPrice || 0) * (item.adultQuantity || 1);
+                      const childTotal =
+                        (item.childPrice || 0) * (item.childQuantity || 1);
+                      total = adultTotal + childTotal;
+                    } else {
+                      total = (item.price || 0) * (item.quantity || 1);
+                    }
+                    return total > 0 ? formatCurrency(total) : "Rp 0";
+                  })(),
+                  kidExpense: "-", // Expense items biasanya tidak memiliki kid expense terpisah
+                  originalData: item,
+                };
+              }) || []
+            );
           };
 
           const activities = [
@@ -267,13 +322,17 @@ const InvoicePDF = forwardRef((props, ref) => {
 
           // Get expense items dari context
           const expenseDay = expenseDays[dayIndex];
-          const expenseItems = expenseDay?.totals || [];
+          const expenseItems = processExpenseItems(expenseDay?.totals || []);
+
+          // Gabungkan activities dan expense items menjadi satu array
+          const unifiedItems = [...activities, ...expenseItems];
 
           itinerary.push({
             day: dayIndex + 1,
             title: day.name || `Day ${dayIndex + 1}`,
             description: day.description_day || day.day_description || "",
             date: day.date,
+            items: unifiedItems,
             activities: activities,
             expenseItems: expenseItems,
           });
@@ -287,17 +346,16 @@ const InvoicePDF = forwardRef((props, ref) => {
           additionalData: additionals.flat(),
           itineraryData: itinerary,
           mergedDays: merged,
-          adminName: adminName, // Use separate adminName state
+          adminName: adminName,
           isDataProcessed: true,
         });
 
         // Update reorder hook
         updateDays(itinerary);
-
       } catch (err) {
         console.error("Gagal memproses days:", err);
         if (isMounted) {
-          setInvoiceData(prev => ({
+          setInvoiceData((prev) => ({
             ...prev,
             mergedDays: selectedPackage.days,
             isDataProcessed: true,
@@ -323,14 +381,15 @@ const InvoicePDF = forwardRef((props, ref) => {
   const handleSaveReorder = useCallback(() => {
     const success = saveOrder();
     if (success) {
-      setInvoiceData(prev => ({
+      setInvoiceData((prev) => ({
         ...prev,
         itineraryData: [...reorderedDays],
       }));
       toggleReordering();
       toast({
         title: "Urutan Itinerary Disimpan",
-        description: "Urutan berhasil disimpan dan akan dipertahankan untuk package ini",
+        description:
+          "Urutan berhasil disimpan dan akan dipertahankan untuk package ini",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -485,9 +544,17 @@ const InvoicePDF = forwardRef((props, ref) => {
 
       {/* Status indicator untuk saved order */}
       {!isReordering && hasOrderChanged && (
-        <Box mb={4} p={3} bg="blue.50" borderRadius="md" borderLeft="4px solid" borderColor="blue.400">
+        <Box
+          mb={4}
+          p={3}
+          bg="blue.50"
+          borderRadius="md"
+          borderLeft="4px solid"
+          borderColor="blue.400"
+        >
           <Text fontSize="sm" color="blue.800">
-            ℹ️ Menampilkan urutan yang telah disimpan. Klik "Reset ke Urutan Asli" untuk mengembalikan ke urutan default.
+            ℹ️ Menampilkan urutan yang telah disimpan. Klik "Reset ke Urutan
+            Asli" untuk mengembalikan ke urutan default.
           </Text>
         </Box>
       )}
@@ -515,14 +582,16 @@ const InvoicePDF = forwardRef((props, ref) => {
           packageName={selectedPackage?.name}
         />
 
-        <ItineraryTable 
-          days={isReordering ? reorderedDays : reorderedDays}
+        <ItineraryTable
+          days={Array.isArray(reorderedDays) ? reorderedDays : []}
           formatCurrency={formatCurrency}
           isReordering={isReordering}
           onMoveItemUp={moveItemUp}
           onMoveItemDown={moveItemDown}
           onMoveDayUp={moveDayUp}
           onMoveDayDown={moveDayDown}
+          totalAdult={calculatedValues.totalAdult}
+          totalChild={calculatedValues.actualChild}
         />
 
         <CostBreakDown

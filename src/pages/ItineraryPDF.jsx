@@ -17,11 +17,19 @@ import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
 import useItineraryReorder from "../hooks/useItineraryReorder";
 
+const formatCurrency = (amount) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  }).format(amount);
+};
+
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
   const { days: expenseDays } = useExpensesContext();
   
-  // Consolidated state untuk mengurangi re-render
+  // Consolidated state untuk mengurangi re-render - sama seperti InvoicePDF
   const [itineraryState, setItineraryState] = useState({
     mergedDays: [],
     itineraryData: [],
@@ -37,6 +45,21 @@ const ItineraryPDF = forwardRef((props, ref) => {
   const packageId = useMemo(() => 
     selectedPackage?.id || selectedPackage?._id
   , [selectedPackage?.id, selectedPackage?._id]);
+
+  // Calculate total adults and children - sama seperti InvoicePDF
+  const calculatedValues = useMemo(() => {
+    const totalAdult = selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
+      ? parseInt(selectedPackage.totalPaxAdult)
+      : 1;
+    const actualChild = selectedPackage?.totalPaxChildren && parseInt(selectedPackage.totalPaxChildren) > 0
+      ? parseInt(selectedPackage.totalPaxChildren)
+      : 0;
+
+    return {
+      totalAdult,
+      actualChild,
+    };
+  }, [selectedPackage?.totalPaxAdult, selectedPackage?.totalPaxChildren]);
 
   // Initialize reorder hook dengan package ID untuk menyimpan urutan
   const {
@@ -63,7 +86,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
     }
   }));
 
-  // Process days data - dengan optimization dan batching
+  // Process days data - PERBAIKAN: Gunakan logika yang sama seperti InvoicePDF
   useEffect(() => {
     let isMounted = true;
 
@@ -80,37 +103,104 @@ const ItineraryPDF = forwardRef((props, ref) => {
         
         if (!isMounted) return;
 
-        // Format itinerary data dari mergedDays
-        const formattedDays = merged.map((day, index) => {
-          // Gabungkan semua aktivitas dengan error handling
+        // PERBAIKAN: Gunakan processing yang sama seperti InvoicePDF
+        const itinerary = [];
+
+        merged.forEach((day, dayIndex) => {
+          // Helper function untuk process activities - sama seperti InvoicePDF
+          const processActivities = (items, type) => {
+            return items?.map((item) => {
+              const adultQty = parseInt(item.jumlahadult || item.jumlahAdult) || 0;
+              const childQty = parseInt(item.jumlahchild || item.jumlahChild) || 0;
+              const adultPrice = parseInt(item.hargaddult || item.hargaAdult || item.hargaadult) || 0;
+              const childPrice = parseInt(item.hargachild || item.hargaChild || item.hargachild) || 0;
+
+              return {
+                type: "activity",
+                item: item.displayName || item.name || `Unnamed ${type}`,
+                expense: adultPrice > 0 && adultQty > 0 
+                  ? formatCurrency(adultPrice * adultQty) 
+                  : "Rp 0",
+                kidExpense: childPrice > 0 && childQty > 0 
+                  ? formatCurrency(childPrice * childQty) 
+                  : "-",
+                // Tambahan data untuk keperluan lain
+                adultPrice,
+                childPrice,
+                adultQty,
+                childQty,
+                originalData: item,
+              };
+            }) || [];
+          };
+
+          // Process expense items dari context - sama seperti InvoicePDF
+          const processExpenseItems = (expenseItems) => {
+            return expenseItems?.map((item) => {
+              return {
+                type: "expense",
+                item: item.label || item.name || "Unnamed Expense",
+                label: item.label || item.name || "Unnamed Expense",
+                description: item.description || "",
+                price: item.price || 0,
+                quantity: item.quantity || 1,
+                adultPrice: item.adultPrice || null,
+                childPrice: item.childPrice || null,
+                adultQuantity: item.adultQuantity || 1,
+                childQuantity: item.childQuantity || 1,
+                // Calculate display values
+                expense: (() => {
+                  let total = 0;
+                  if (item.adultPrice !== null || item.childPrice !== null) {
+                    const adultTotal = (item.adultPrice || 0) * (item.adultQuantity || 1);
+                    const childTotal = (item.childPrice || 0) * (item.childQuantity || 1);
+                    total = adultTotal + childTotal;
+                  } else {
+                    total = (item.price || 0) * (item.quantity || 1);
+                  }
+                  return total > 0 ? formatCurrency(total) : "Rp 0";
+                })(),
+                kidExpense: "-", // Expense items biasanya tidak memiliki kid expense terpisah
+                originalData: item,
+              };
+            }) || [];
+          };
+
           const activities = [
-            ...(day.destinations || []).map(dest => dest.displayName || dest.name || `Destination ${index + 1}`),
-            ...(day.restaurants || []).map(resto => resto.displayName || resto.name || `Restaurant ${index + 1}`),
-            ...(day.activities || []).map(act => act.displayName || act.name || `Activity ${index + 1}`),
-          ].filter(Boolean); // Remove any null/undefined values
+            ...processActivities(day.destinations, "Destination"),
+            ...processActivities(day.restaurants, "Restaurant"),
+            ...processActivities(day.activities, "Activity"),
+          ];
 
-          const expenseDay = expenseDays[index];
-          const expenseItems = expenseDay?.totals || [];
+          // Get expense items dari context
+          const expenseDay = expenseDays[dayIndex];
+          const expenseItems = processExpenseItems(expenseDay?.totals || []);
 
-          return {
-            day: index + 1,
-            title: day.name || `Day ${index + 1}`,
+          // PERBAIKAN: Gabungkan activities dan expense items menjadi unified items
+          const unifiedItems = [...activities, ...expenseItems];
+
+          itinerary.push({
+            day: dayIndex + 1,
+            title: day.name || `Day ${dayIndex + 1}`,
             description: day.description_day || day.day_description || "",
             date: day.date,
+            // PERBAIKAN: Tambahkan unified items array
+            items: unifiedItems,
+            // Keep backward compatibility
             activities: activities,
             expenseItems: expenseItems,
-          };
+          });
         });
 
         // Update state sekaligus
         setItineraryState({
           mergedDays: merged,
-          itineraryData: formattedDays,
+          itineraryData: itinerary,
           isDataProcessed: true,
         });
 
         // Update reorder hook with new data
-        updateDays(formattedDays);
+        updateDays(itinerary);
 
       } catch (err) {
         console.error("Gagal memproses days:", err);
@@ -362,12 +452,15 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
         <ItineraryTable 
           title={`ITINERARY ${selectedPackage?.title || ""}`} 
-          days={isReordering ? reorderedDays : reorderedDays}
+          days={Array.isArray(reorderedDays) ? reorderedDays : []}
+          formatCurrency={formatCurrency}
           isReordering={isReordering}
           onMoveItemUp={moveItemUp}
           onMoveItemDown={moveItemDown}
           onMoveDayUp={moveDayUp}
           onMoveDayDown={moveDayDown}
+          totalAdult={calculatedValues.totalAdult}
+          totalChild={calculatedValues.actualChild}
         />
 
         <Divider my={6} borderColor="#FFA726" />

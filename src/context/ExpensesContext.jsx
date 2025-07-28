@@ -104,8 +104,8 @@ const ExpensesContextProvider = ({ children }) => {
         if (!day || !day.totals) return 0;
         
         // Gunakan nilai dari selectedPackage
-        const totalAdult = selectedPackage?.totalPaxAdult || 1;
-        const totalChild = selectedPackage?.totalPaxChildren || 1;
+        const totalAdult = selectedPackage?.totalPaxAdult || 0;
+        const totalChild = selectedPackage?.totalPaxChildren || 0;
         
         return day.totals.reduce((total, item) => {
             if (item.adultPrice !== null || item.childPrice !== null) {
