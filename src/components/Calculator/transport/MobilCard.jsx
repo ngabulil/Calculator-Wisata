@@ -18,8 +18,6 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   const textColor = useColorModeValue("white", "white");
 
   const [jumlah, setJumlah] = useState(data.jumlah || 1);
-  console.log(data);
-  
 
   // Fungsi konversi keterangan ke camelCase yang cocok
   const convertKeteranganToCamel = (k) => {
