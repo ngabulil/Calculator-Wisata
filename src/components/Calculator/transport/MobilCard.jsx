@@ -13,7 +13,6 @@ import { useTransportContext } from "../../../context/TransportContext";
 
 const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   const { mobils } = useTransportContext();
-
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
   const textColor = useColorModeValue("white", "white");
@@ -34,24 +33,19 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   // Format awal dari backend
   const formattedData = {
     ...data,
-    mobil:
-      typeof data.mobil === "object"
-        ? data.mobil
-        : {
-            value: data.id_mobil || data.mobil || null,
-            label:
-              mobils.find((m) => m.id === (data.id_mobil || data.mobil))
-                ?.jenisKendaraan || null,
-          },
+    mobil: {
+      value: data.id_mobil || data.mobil || null,
+      label:
+        mobils.find((m) => m.id === (data.id_mobil || data.mobil))
+          ?.jenisKendaraan || null,
+    },
     keterangan: convertKeteranganToCamel(data.keterangan),
     area: data.id_area || data.area || null, // disimpan sebagai id_area
   };
-
   const selectedMobil = useMemo(
     () => mobils.find((m) => m.id === formattedData.mobil?.value),
     [mobils, formattedData.mobil]
   );
-
   const keteranganOptions = useMemo(() => {
     if (!selectedMobil) return [];
     const map = {
@@ -77,11 +71,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   }, [selectedMobil, formattedData.keterangan]);
 
   const harga = useMemo(() => {
-    if (
-      !selectedMobil ||
-      !formattedData.keterangan ||
-      !formattedData.area
-    )
+    if (!selectedMobil || !formattedData.keterangan || !formattedData.area)
       return 0;
     const found = selectedMobil.keterangan[formattedData.keterangan]?.find(
       (a) => a.id_area === formattedData.area
@@ -131,7 +121,9 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
               onChange({
                 ...formattedData,
                 mobil: val,
+                id_mobil: val?.value || null,
                 keterangan: null,
+                id_area: null,
                 area: null,
                 harga: 0,
                 jumlah: 1,
@@ -156,6 +148,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
                 ...formattedData,
                 keterangan: val?.value || null,
                 area: null,
+                id_area: null,
                 harga: 0,
               })
             }
@@ -180,6 +173,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
               onChange({
                 ...formattedData,
                 area: val?.value || null,
+                id_area: val?.value || null,
               })
             }
             isDisabled={!formattedData.keterangan}
