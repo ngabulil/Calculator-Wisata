@@ -80,11 +80,11 @@ const ActivityCard = (props) => {
         >
           {props.name.slice(0, 2).toUpperCase()}
         </Box>
-        <Flex direction={"column"} w={'full'} gap={1}>
+        <Flex direction={"column"} w={"full"} gap={1}>
           <Flex alignItems={"center"} gap={2}>
             {" "}
-            <Text fontSize={"18px"} fontWeight={"bold"} >
-              {props.name || "  ATV Adventure"}
+            <Text fontSize={"18px"} fontWeight={"bold"}>
+              {props.name || "Nama tidak tersedia"}
             </Text>
             <Text
               minW={"max"}
@@ -99,9 +99,9 @@ const ActivityCard = (props) => {
               {formatDateOnly(props.date)}
             </Text>
           </Flex>
-          <Flex gap={2} direction={'column'} alignItems={"start"} w={'full'}>
+          <Flex gap={2} direction={"column"} alignItems={"start"} w={"80%"}>
             <Text fontSize={"14px"} color={"gray.500"}>
-              {props.keterangan || "2 jam keliling desa"}
+              {props.keterangan || "Keterangan tidak tersedia"}
             </Text>
             <Text
               fontSize={"12px"}
@@ -110,13 +110,12 @@ const ActivityCard = (props) => {
               py={1}
               px={2}
               rounded={"4px"}
-              
             >
-              {props.note || "Sepatu tertutup wajib"}
+              {props.note || "Tidak ada catatan"}
             </Text>
           </Flex>
         </Flex>
-        <Flex direction={"row"} gap={1} w={"max"}   justifyContent={"end"}>
+        <Flex direction={"row"} gap={1} w={"max"} justifyContent={"end"}>
           <AppIconText
             icon={"mdi:ticket"}
             bg={"blue.700"}
