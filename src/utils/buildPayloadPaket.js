@@ -5,70 +5,74 @@ export default function buildPayloadPaket(data) {
     days: data.days.map((day) => ({
       name: day.name,
       description_day: day.description_day,
-      data: {
-        akomodasi: {
-          hotels:
-            day.data?.akomodasi?.hotels?.map((hotel) => ({
-              id_hotel: hotel.hotel.value,
-              id_tipe_kamar: hotel.roomType.value,
-              season: {
-                type: resolveSeason(hotel.season),
-                id_musim: hotel.idMusim,
-              },
-            })) ?? [],
+      data: day.data
+        ? {
+            akomodasi: {
+              hotels:
+                day.data?.akomodasi?.hotels?.map((hotel) => ({
+                  id_hotel: hotel?.hotel?.value,
+                  id_tipe_kamar: hotel?.roomType.value,
+                  season: {
+                    type: resolveSeason(hotel?.season),
+                    id_musim: hotel?.idMusim,
+                  },
+                })) ?? [],
 
-          villas:
-            day.data?.akomodasi?.villas?.map((villa) => ({
-              id_villa: villa.villa.value,
-              id_tipe_kamar: villa.roomType.value,
-              season: {
-                type: resolveSeason(villa.season),
-                id_musim: villa.idMusim,
-              },
-            })) ?? [],
+              villas:
+                day.data?.akomodasi?.villas?.map((villa) => ({
+                  id_villa: villa?.villa?.value,
+                  id_tipe_kamar: villa?.roomType?.value,
+                  season: {
+                    type: resolveSeason(villa?.season),
+                    id_musim: villa?.idMusim,
+                  },
+                })) ?? [],
 
-          additional:
-            day.data?.akomodasi?.additional?.map((item) => ({
-              id_additional: item.selectedInfo.value,
-            })) ?? [],
-        },
+              additional:
+                day.data?.akomodasi?.additional?.map((item) => ({
+                  id_additional: item?.selectedInfo?.value,
+                })) ?? [],
+            },
 
-        tour: {
-          destinations:
-            day.data?.tour?.destinations?.map((dest) => ({
-              id_destinasi: dest.selectedDest.value,
-              type_wisata: dest.selectedType.value,
-            })) ?? [],
+            tour: {
+              destinations:
+                day.data?.tour?.destinations?.map((dest) => ({
+                  id_destinasi: dest?.selectedDest?.value,
+                  type_wisata: day.data.tour.type_wisata,
+                  description: dest?.description || "",
+                })) ?? [],
 
-          activities:
-            day.data?.tour?.activities?.map((act) => ({
-              id_vendor: act.selectedVendor.value,
-              id_activity: act.selectedActivity.value,
-              type_wisata: "domestik",
-            })) ?? [],
+              activities:
+                day.data?.tour?.activities?.map((act) => ({
+                  id_vendor: act?.selectedVendor?.value,
+                  id_activity: act?.selectedActivity?.value,
+                  type_wisata: day.data.tour.type_wisata,
+                  description: act?.description || "",
+                })) ?? [],
 
-          restaurants:
-            day.data?.tour?.restaurants?.map((resto) => ({
-              id_resto: resto.selectedResto.value,
-              id_menu: resto.selectedPackage.value,
-              type_wisata: resto.type_wisata,
-            })) ?? [],
-        },
+              restaurants:
+                day.data?.tour?.restaurants?.map((resto) => ({
+                  id_resto: resto?.selectedResto?.value,
+                  id_menu: resto?.selectedPackage?.value,
+                  type_wisata: day.data.tour.type_wisata,
+                })) ?? [],
+            },
 
-        transport: {
-          mobils:
-            day.data?.transport?.mobils?.map((mobil) => ({
-              id_mobil: mobil.mobil.value,
-              keterangan: mobil.kategori.toLowerCase(),
-              id_area: mobil.id_area,
-            })) ?? [],
+            transport: {
+              mobils:
+                day.data?.transport?.mobils?.map((mobil) => ({
+                  id_mobil: mobil?.mobil?.value,
+                  keterangan: mobil?.kategori?.toLowerCase(),
+                  id_area: mobil?.id_area,
+                })) ?? [],
 
-          additional:
-            day.data?.transport?.additional?.map((item) => ({
-              id_additional: item.selectedInfo.value,
-            })) ?? [],
-        },
-      },
+              additional:
+                day.data?.transport?.additional?.map((item) => ({
+                  id_additional: item?.selectedInfo?.value,
+                })) ?? [],
+            },
+          }
+        : "",
     })),
   };
 }

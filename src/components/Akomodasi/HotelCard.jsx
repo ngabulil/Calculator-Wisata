@@ -170,6 +170,9 @@ const HotelCard = ({ index, onDelete, data, onChange, isAdmin }) => {
               setJumlahKamar(1);
               setJumlahExtrabed(1);
             }}
+            onCreateoption={(val) => {
+              console.log(val);
+            }}
             placeholder="Pilih Hotel"
           />
         </Box>

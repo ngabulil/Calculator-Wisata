@@ -29,6 +29,7 @@ const PackageCard = (props) => {
         description={props.description}
         days={props.days}
         date={props.date}
+        onDuplicateButton={props.onDuplicateButton}
         onEditButton={props.onEditButton}
         onDeleteButton={props.onDeleteButton}
         onOpenButton={props.onOpenButton}
@@ -49,8 +50,8 @@ const AppTitleDescription = (props) => {
       alignItems={"start"}
       justifyContent={"space-between"}
     >
-      <Flex direction={"column"} gap={2}>
-        <Flex direction={"row"} alignItems={"center"} gap={4}>
+      <Flex direction={"column"} gap={2} w="max">
+        <Flex direction={"row"} alignItems={"center"} gap={4} w={"full"}>
           <Box
             w={"60px"}
             h={"50px"}
@@ -63,13 +64,23 @@ const AppTitleDescription = (props) => {
             fontWeight={"bold"}
             flexShrink={"0"}
           >
-            {props.title.slice(0, 2).toUpperCase()}
+            {props.title
+              .replace(/[^a-zA-Z]/g, "")
+              .slice(0, 2)
+              .toUpperCase()}
           </Box>
-          <Text fontSize={"24px"} fontWeight={"bold"} noOfLines={1} w={"50%"}>
+          <Text fontSize="24px" fontWeight="bold" w="full">
             {props.title || "Bali Paket"}
           </Text>
         </Flex>
-        <Text fontSize={"14px"} color={"gray.500"} noOfLines={4} w={"70%"}>
+        <Text
+          fontSize="14px"
+          color="gray.500"
+          noOfLines={4}
+          w="70%"
+          minW="200px"
+          maxW="500px"
+        >
           {props.description}
         </Text>
       </Flex>
@@ -99,11 +110,13 @@ const AppTitleDescription = (props) => {
           {formatDateOnly(props.date)}
         </Text>
         <PopoverButton
+          // isDuplicated
           isOpenButton={true}
           onEditButton={() => {
             navigate(`/admin/paket/edit`);
             props.onEditButton();
           }}
+          onDuplicateButton={props.onDuplicateButton}
           onDeleteButton={props.onDeleteButton}
           onOpenButton={props.onOpenButton}
         />

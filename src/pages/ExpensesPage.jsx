@@ -8,6 +8,8 @@ import {
   useToast,
   useColorModeValue,
   Input,
+  HStack,
+  VStack,
 } from "@chakra-ui/react";
 import { AddIcon, DownloadIcon, ViewIcon } from "@chakra-ui/icons";
 import DayCard from "../components/Expenses/DayCard";
@@ -25,12 +27,9 @@ const ExpensesPage = () => {
     removeExpenseItem,
     updateExpenseItem,
     calculateDayTotal,
-    calculateGrandTotal,
+    // calculateGrandTotal,
     formatCurrency,
-    tourCode,
-    setTourCode,
-    pax,
-    setpax
+    
   } = useExpensesContext();
 
   const [editingItem, setEditingItem] = useState(null);
@@ -66,31 +65,17 @@ const ExpensesPage = () => {
       return;
     }
 
-    if (!tourCode) {
-      toast({
-        title: "Error",
-        description: "Kode Pesanan tidak boleh kosong.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-
     try {
-      const kode_pesanan = tourCode;
-
       const invoiceBlob = await invoiceRef.current.exportAsBlob();
       const itineraryBlob = await itineraryRef.current.exportAsBlob();
 
       const formData = new FormData();
-      formData.append("invoice", invoiceBlob, `${kode_pesanan}_invoice.pdf`);
+      formData.append("invoice", invoiceBlob, `invoice.pdf`);
       formData.append(
         "itinerary",
         itineraryBlob,
-        `${kode_pesanan}_itinerary.pdf`
+        `itinerary.pdf`
       );
-      formData.append("kode_pesanan", kode_pesanan);
 
       const result = await apiPostPesanan(formData);
       console.log("Order created successfully:", result);
@@ -178,7 +163,7 @@ const ExpensesPage = () => {
   return (
     <Box maxW="6xl" mx="auto" p={6} bg={bg} minH="100vh">
       <Box bg={bg} rounded="lg" shadow="lg" p={6}>
-        <Flex justify="space-between" align="center" mb={6}>
+        <Flex justify="space-between" align="center" mb={6} flexWrap="wrap" gap={4}>
           <Text fontSize="2xl" fontWeight="bold" color="white">
             Input Expenses Itinerary
           </Text>
@@ -188,8 +173,8 @@ const ExpensesPage = () => {
               leftIcon={<AddIcon />}
               colorScheme="blue"
               onClick={addDay}
-              variant="solid" // Contoh varian
-              size="md" // Ukuran tombol
+              variant="solid"
+              size="md"
             >
               Hari
             </Button>
@@ -201,17 +186,17 @@ const ExpensesPage = () => {
               variant="solid" 
               size="md"
             >
-              Invoice
+              Quotation
             </Button>
             {/* Tombol "Unduh Invoice" */}
             <Button
               leftIcon={<DownloadIcon />}
               colorScheme="teal"
               onClick={handleDownloadInvoice}
-              variant="outline" // Contoh varian
+              variant="outline"
               size="md"
             >
-              Invoice
+              Quotation
             </Button>
             {/* Tombol "Lihat Itinerary" */}
             <Button
@@ -236,35 +221,6 @@ const ExpensesPage = () => {
           </Flex>
         </Flex>
 
-        {/* Form input kode tur baru */}
-        <Box mb={6}>
-          <Text fontSize="lg" fontWeight="semibold" color="white" mb={2}>
-            Kode Pesanan:
-          </Text>
-          <Input
-            value={tourCode}
-            onChange={(e) => setTourCode(e.target.value)}
-            placeholder="Masukkan Kode Pesanan (contoh: ORD-123)"
-            color="white"
-            borderColor="gray.600"
-            _hover={{ borderColor: "gray.500" }}
-          />
-        </Box>
-        <Box mb={6}>
-          <Text fontSize="lg" fontWeight="semibold" color="white" mb={2}>
-            Jumlah Pax:
-          </Text>
-          <Input
-            value={pax}
-            onChange={(e) => setpax(e.target.value)}
-            placeholder="1"
-            color="white"
-            borderColor="gray.600"
-            type="number"
-            _hover={{ borderColor: "gray.500" }}
-          />
-        </Box>
-
         <Stack spacing={6}>
           {days.map((day, dayIndex) => (
             <DayCard
@@ -284,7 +240,7 @@ const ExpensesPage = () => {
         </Stack>
 
         {/* Grand Total */}
-        {days.length > 0 && (
+        {/* {days.length > 0 && (
           <Box
             mt={8}
             bg={bg}
@@ -302,19 +258,19 @@ const ExpensesPage = () => {
               </Text>
             </Flex>
           </Box>
-        )}
+        )} */}
       </Box>
 
       {/* Komponen PDF disembunyikan dan direferensikan */}
       <Box style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-        <InvoicePDF ref={invoiceRef} totalPax={pax} tourCode={tourCode} />
+        <InvoicePDF ref={invoiceRef} />
         <ItineraryPDF ref={itineraryRef} />
       </Box>
 
       <Flex justify="center" mt={6}>
         <Button
           colorScheme="purple"
-          variant="solid" // Mengubah varian
+          variant="solid" 
           onClick={handleCreateOrder}
           width="100%"
           maxW="400px"

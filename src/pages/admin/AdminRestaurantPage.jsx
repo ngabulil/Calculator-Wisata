@@ -7,6 +7,7 @@ import {
   Textarea,
   Input,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
@@ -26,6 +27,7 @@ const AdminRestaurantPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
+  const [loading , setLoading] = useState(false);
   const { getAllRestaurant, updateRestaurantData, allRestaurant } =
     useAdminRestaurantContext();
 
@@ -55,7 +57,15 @@ const AdminRestaurantPage = () => {
   };
 
   const handleGetAllRestaurant = async () => {
-    await getAllRestaurant();
+    setLoading(true);
+    try {
+      await getAllRestaurant();
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteRestaurant = async (id) => {
@@ -143,7 +153,13 @@ const AdminRestaurantPage = () => {
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-              {currentRestaurant.length > 0 ? (
+              {
+              loading ?     
+      
+              <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
+              :
+                    
+              currentRestaurant.length > 0 ? (
                 currentRestaurant.map((resto, index) => {
                   return (
                     <RestaurantCard

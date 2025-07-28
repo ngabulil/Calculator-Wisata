@@ -24,6 +24,10 @@ const VillaCard = (props) => {
             src={props.photoLink}
             alt="Villa-photos"
             className="object-cover w-full h-[200px] rounded-t-[8px] relative "
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/default-img.jpg";
+            }}
           />
           <Flex
             direction="row"

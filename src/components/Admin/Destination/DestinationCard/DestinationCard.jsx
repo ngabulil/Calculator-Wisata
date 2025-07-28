@@ -16,10 +16,12 @@ import { PopoverButton } from "../../../PopoverButton";
 import formatDateOnly from "../../../../utils/formatDate";
 import { useState } from "react";
 import formatRupiah from "../../../../utils/rupiahFormat";
+import { useAdminAuthContext } from "../../../../context/AuthContext";
 
 const DestinationCard = (props) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { userData } = useAdminAuthContext();
 
   const formattedPrices = [
     {
@@ -104,14 +106,16 @@ const DestinationCard = (props) => {
               e.stopPropagation();
             }}
           >
-            <PopoverButton
-              isOpenButton={false}
-              onEditButton={() => {
-                navigate(`/admin/destination/edit`);
-                props.onEditButton();
-              }}
-              onDeleteButton={props.onDeleteButton}
-            />
+            {userData.role === "super_admin" && (
+              <PopoverButton
+                isOpenButton={false}
+                onEditButton={() => {
+                  navigate(`/admin/destination/edit`);
+                  props.onEditButton();
+                }}
+                onDeleteButton={props.onDeleteButton}
+              />
+            )}
           </Box>
         </Flex>
       </Flex>

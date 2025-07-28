@@ -4,21 +4,27 @@ import {
   Text,
   IconButton,
   useColorModeValue,
+  Input,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
+import DestinationModal from "../TourModal/DestinationModal";
+import { useAdminDestinationContext } from "../../../../context/Admin/AdminDestinationContext";
 
 const typeWisataOptions = [
   { value: "domestik", label: "Domestik" },
   { value: "asing", label: "Asing" },
 ];
 
-const DestinationCard = ({ index, data, onChange, onDelete }) => {
+const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const { destination } = useAdminPackageContext();
+  const { updateDestinationModalData } = useAdminDestinationContext();
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
   const [selectedType, setSelectedType] = useState(data.selectedType || null);
+  const [openModal, setOpenModal] = useState(false);
+  const [description, setDescription] = useState("");
 
   const textColor = useColorModeValue("white", "white");
 
@@ -50,6 +56,7 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
       selectedType,
       id_destinasi: selectedDest?.value,
       type_wisata: selectedType?.value,
+      description: description || "",
     });
   }, [selectedDest, selectedType]);
 
@@ -77,22 +84,40 @@ const DestinationCard = ({ index, data, onChange, onDelete }) => {
         <MainSelectCreatableWithDelete
           options={destinationOptions}
           value={selectedDest}
-          onChange={setSelectedDest}
+          onChange={(value) => {
+            setSelectedDest(value);
+
+            if (value.__isNew__) {
+              setOpenModal(true);
+              updateDestinationModalData({
+                name: value.label,
+              });
+            }
+          }}
           placeholder="Pilih destinasi"
         />
       </Box>
-
-      {/* Tipe Wisata */}
-      <Box>
+      <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
-          Tipe Wisata
+          Deskripsi Aktivitas
         </Text>
-        <MainSelectCreatableWithDelete
-          options={typeWisataOptions}
-          value={selectedType}
-          onChange={setSelectedType}
+        <Input
+          bg={"gray.700"}
+          value={description || ""}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
+          placeholder="Masukkan deskripsi aktivitas"
         />
       </Box>
+
+      <DestinationModal
+        isOpen={openModal}
+        onClose={() => {
+          setOpenModal(false);
+          onModalClose(false);
+        }}
+      />
     </Box>
   );
 };

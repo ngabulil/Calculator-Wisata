@@ -10,6 +10,7 @@ export const useAdminVillaContext = () => {
 
 const AdminVillaContextProvider = ({ children }) => {
   const [roomTypeSelect, SetRoomTypeSelect] = useState([]);
+  const [villaModal, setVillaModal] = useState([]);
   const [villaData, setVillaData] = useState({
     villaName: "",
     stars: "",
@@ -29,7 +30,11 @@ const AdminVillaContextProvider = ({ children }) => {
     try {
       const response = await apiGetAllVilla();
 
-      return response.result;
+      const sortedResult = response.result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+
+      return sortedResult;
     } catch (error) {
       console.log(error);
     }
@@ -69,9 +74,17 @@ const AdminVillaContextProvider = ({ children }) => {
       ...partial,
     }));
   };
+  const updateVillaModal = (partial) => {
+    setVillaModal((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
 
   const value = {
     villaData,
+    villaModal,
+    updateVillaModal,
     getVilla,
     roomTypeSelect,
     setVillaData,

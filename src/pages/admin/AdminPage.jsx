@@ -1,4 +1,13 @@
-import { Box, Text, Flex, Button, Container, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Flex,
+  Button,
+  Container,
+  useToast,
+  Spinner,
+  Center,
+} from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
@@ -9,6 +18,7 @@ import { useAdminPackageContext } from "../../context/Admin/AdminPackageContext"
 import toastConfig from "../../utils/toastConfig";
 import { apiDeletePackageFull } from "../../services/packageService";
 import { useNavigate } from "react-router-dom";
+import { apiPostPackageFull } from "../../services/packageService";
 import ReactPaginate from "react-paginate";
 
 const ITEMS_PER_PAGE = 8;
@@ -17,6 +27,7 @@ const AdminPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [readPackageActive, setReadPackageActive] = useState(false);
   const { getAllPackageFull, packageFull, updateHeadline, updatePackageFull } =
     useAdminPackageContext();
@@ -51,7 +62,42 @@ const AdminPage = () => {
   //
 
   const handleGetAllPackageFull = async () => {
-    await getAllPackageFull();
+    setLoading(true);
+    try {
+      await getAllPackageFull();
+    } catch (error) {
+      console.error("Error", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreatePackage = async (payload) => {
+    const data = {
+      ...payload,
+      name: `[DUPLICATE] ${payload.name}`,
+    };
+
+    const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
+
+    try {
+      const res = await apiPostPackageFull(data);
+
+      if (res.status == 201 || res.status == 200) {
+        toast.close(loading);
+        toast(
+          toastConfig("Buat Berhasil", "Paket berhasil dibuat!", "success")
+        );
+        handleGetAllPackageFull();
+      } else {
+        toast.close(loading);
+        toast(toastConfig("Buat Gagal", "Data tidak lengkap!", "error"));
+      }
+      // eslint-disable-next-line no-unused-vars
+    } catch (error) {
+      toast.close(loading);
+      toast(toastConfig("Buat Gagal", error.message, "error"));
+    }
   };
 
   const handleDeletePackageFull = async (id) => {
@@ -138,7 +184,12 @@ const AdminPage = () => {
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-              {currentPackages.length > 0 ? (
+              {loading ? (
+                <Flex w={"full"} justifyContent={"center"}>
+                  {" "}
+                  <Spinner size="xl" color="teal.500" />
+                </Flex>
+              ) : currentPackages.length > 0 ? (
                 currentPackages.map((packageItem, index) => {
                   return (
                     <PackageCard
@@ -148,6 +199,9 @@ const AdminPage = () => {
                       description={packageItem.description}
                       days={packageItem.days}
                       date={packageItem.updatedAt}
+                      onDuplicateButton={() => {
+                        handleCreatePackage(packageItem);
+                      }}
                       onOpenButton={() => {
                         setReadPackageActive(true);
                         updatePackageFull(packageItem);

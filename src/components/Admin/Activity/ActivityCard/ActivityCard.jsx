@@ -17,10 +17,12 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import formatRupiah from "../../../../utils/rupiahFormat";
 import formatDateOnly from "../../../../utils/formatDate";
+import { useAdminAuthContext } from "../../../../context/AuthContext";
 
 const ActivityCard = (props) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const { userData } = useAdminAuthContext();
 
   const formattedPrices = [
     {
@@ -50,7 +52,7 @@ const ActivityCard = (props) => {
       alignItems={"start"}
       bg={"gray.800"}
       p={2}
-      w={"50%"}
+      w={"full"}
       gap={2}
       flexGrow={"1"}
       rounded={"8"}
@@ -78,11 +80,11 @@ const ActivityCard = (props) => {
         >
           {props.name.slice(0, 2).toUpperCase()}
         </Box>
-        <Flex direction={"column"} flexShrink={"0"} gap={1}>
+        <Flex direction={"column"} w={"full"} gap={1}>
           <Flex alignItems={"center"} gap={2}>
             {" "}
             <Text fontSize={"18px"} fontWeight={"bold"}>
-              {props.name || "  ATV Adventure"}
+              {props.name || "Nama tidak tersedia"}
             </Text>
             <Text
               minW={"max"}
@@ -97,9 +99,9 @@ const ActivityCard = (props) => {
               {formatDateOnly(props.date)}
             </Text>
           </Flex>
-          <Flex gap={2} alignItems={"center"}>
+          <Flex gap={2} direction={"column"} alignItems={"start"} w={"80%"}>
             <Text fontSize={"14px"} color={"gray.500"}>
-              {props.keterangan || "2 jam keliling desa"}
+              {props.keterangan || "Keterangan tidak tersedia"}
             </Text>
             <Text
               fontSize={"12px"}
@@ -109,11 +111,11 @@ const ActivityCard = (props) => {
               px={2}
               rounded={"4px"}
             >
-              {props.note || "Sepatu tertutup wajib"}
+              {props.note || "Tidak ada catatan"}
             </Text>
           </Flex>
         </Flex>
-        <Flex direction={"row"} gap={1} w={"full"} justifyContent={"end"}>
+        <Flex direction={"row"} gap={1} w={"max"} justifyContent={"end"}>
           <AppIconText
             icon={"mdi:ticket"}
             bg={"blue.700"}
@@ -125,14 +127,16 @@ const ActivityCard = (props) => {
               event.stopPropagation();
             }}
           >
-            <PopoverButton
-              isOpenButton={false}
-              onEditButton={() => {
-                navigate(`/admin/activity/edit`);
-                props.onEditButton();
-              }}
-              onDeleteButton={props.onDeleteButton}
-            />
+            {userData.role === "super_admin" && (
+              <PopoverButton
+                isOpenButton={false}
+                onEditButton={() => {
+                  navigate(`/admin/activity/edit`);
+                  props.onEditButton();
+                }}
+                onDeleteButton={props.onDeleteButton}
+              />
+            )}
           </Flex>
         </Flex>
       </Flex>

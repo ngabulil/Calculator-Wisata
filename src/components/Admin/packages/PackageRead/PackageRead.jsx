@@ -102,37 +102,49 @@ const PackageRead = () => {
                       {" "}
                       <AppHeadComponent title={"Hotel"} isChild isOpen>
                         {" "}
-                        {day.hotels.map((hotel) => {
-                          return (
-                            <AppHomeStayCard
-                              isVilla={false}
-                              name={hotel.name}
-                              photos={hotel.link_photo}
-                              star={hotel.star}
-                            />
-                          );
-                        })}
+                        {day.hotels.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.hotels.map((hotel) => {
+                            return (
+                              <AppHomeStayCard
+                                isVilla={false}
+                                name={hotel.name}
+                                photos={hotel.link_photo}
+                                star={hotel.star}
+                              />
+                            );
+                          })
+                        )}
                       </AppHeadComponent>
                       <AppHeadComponent title={"Villa"} isChild isOpen>
                         {" "}
-                        {day.villas.map((villa) => {
-                          return (
-                            <AppHomeStayCard
-                              isVilla={true}
-                              name={villa.name}
-                              photos={villa.link_photo}
-                              star={villa.star}
-                            />
-                          );
-                        })}
+                        {day.villas.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.villas.map((villa) => {
+                            return (
+                              <AppHomeStayCard
+                                isVilla={true}
+                                name={villa.name}
+                                photos={villa.link_photo}
+                                star={villa.star}
+                              />
+                            );
+                          })
+                        )}
                       </AppHeadComponent>
                       <AppHeadComponent title={"Tambahan"} isChild isOpen>
                         {" "}
-                        {day.akomodasi_additionals.map((add, index) => {
-                          return (
-                            <AppAdditionalCard key={index} title={add.name} />
-                          );
-                        })}
+                        {day.akomodasi_additionals.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.akomodasi_additionals.map((add, index) => {
+                            return (
+                              <AppAdditionalCard key={index} title={add.name} />
+                            );
+                          })
+                        )}
                       </AppHeadComponent>
                     </AppHeadComponent>
                     {/* tour packages */}
@@ -143,28 +155,43 @@ const PackageRead = () => {
                       title="Tour"
                     >
                       <AppHeadComponent title={"Destinasi"} isChild isOpen>
-                        {day.destinations.map((dest) => {
-                          return (
-                            <AppDestinationCard
-                              title={dest.name}
-                              subtitle={dest.note}
-                            />
-                          );
-                        })}
+                        {day.destinations.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.destinations.map((dest) => {
+                            return (
+                              <AppDestinationCard
+                                title={dest.name}
+                                subtitle={dest.note}
+                              />
+                            );
+                          })
+                        )}
                       </AppHeadComponent>
                       <AppHeadComponent title={"Aktitvitas"} isChild isOpen>
-                        {day.activities.map((act, index) => {
-                          return (
-                            <AppActivityCard key={index} title={act.name} />
-                          );
-                        })}
+                        {day.activities.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.activities.map((act, index) => {
+                            return (
+                              <AppActivityCard key={index} title={act.name} />
+                            );
+                          })
+                        )}
                       </AppHeadComponent>
                       <AppHeadComponent title={"Restaurant"} isChild isOpen>
-                        {day.restaurants.map((resto, index) => {
-                          return (
-                            <AppRestaurantCard key={index} title={resto.name} />
-                          );
-                        })}
+                        {day.restaurants.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.restaurants.map((resto, index) => {
+                            return (
+                              <AppRestaurantCard
+                                key={index}
+                                title={resto.name}
+                              />
+                            );
+                          })
+                        )}
                       </AppHeadComponent>
                     </AppHeadComponent>
                     {/* transport */}
@@ -175,22 +202,30 @@ const PackageRead = () => {
                       title="Transport"
                     >
                       <AppHeadComponent title={"Mobil"} isChild isOpen>
-                        {day.mobils.map((mobil, index) => {
-                          return (
-                            <AppTransportCard
-                              key={index}
-                              title={mobil.name}
-                              vendor={mobil.vendor}
-                            />
-                          );
-                        })}{" "}
+                        {day.mobils.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.mobils.map((mobil, index) => {
+                            return (
+                              <AppTransportCard
+                                key={index}
+                                title={mobil.name}
+                                vendor={mobil.vendor}
+                              />
+                            );
+                          })
+                        )}{" "}
                       </AppHeadComponent>
                       <AppHeadComponent title={"Tambahan"} isChild isOpen>
-                        {day.akomodasi_additionals.map((add, index) => {
-                          return (
-                            <AppAdditionalCard key={index} title={add.name} />
-                          );
-                        })}
+                        {day.transport_additionals.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.akomodasi_additionals.map((add, index) => {
+                            return (
+                              <AppAdditionalCard key={index} title={add.name} />
+                            );
+                          })
+                        )}
                       </AppHeadComponent>
                     </AppHeadComponent>
                     {/*  */}
@@ -219,6 +254,16 @@ const AppTitleDescription = (props) => {
         </Flex>
       </Flex>
     </Flex>
+  );
+};
+
+const AppEmptyComponent = () => {
+  return (
+    <Box bg={"gray.600"} p={3} rounded={"8px"} w={"full"}>
+      <Text fontSize={"16px"} color={"gray.400"} textAlign={"center"}>
+        {"Data tidak tersedia"}
+      </Text>
+    </Box>
   );
 };
 

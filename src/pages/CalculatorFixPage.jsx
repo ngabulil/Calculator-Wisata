@@ -151,6 +151,38 @@ const CalculatorFixPage = () => {
             />
           </FormControl>
 
+          <HStack spacing={4} mb={4}>
+            <FormControl>
+              <FormLabel color="white">Total Pax Adult</FormLabel>
+              <Input
+                bg="gray.600"
+                color="white"
+                value={selectedPackage.totalPaxAdult || 0}
+                onChange={(e) =>
+                  setSelectedPackage((prev) => ({
+                    ...prev,
+                    totalPaxAdult: parseInt(e.target.value) || 0,
+                  }))
+                }
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel color="white">Total Pax Children</FormLabel>
+              <Input
+                bg="gray.600"
+                color="white"
+                value={selectedPackage.totalPaxChildren || 0}
+                onChange={(e) =>
+                  setSelectedPackage((prev) => ({
+                    ...prev,
+                    totalPaxChildren: parseInt(e.target.value) || 0,
+                  }))
+                }
+              />
+            </FormControl>
+          </HStack>
+
           {/* DAYS */}
           <Box mt={8}>
             <HStack spacing={3} mb={3} flexWrap="wrap">

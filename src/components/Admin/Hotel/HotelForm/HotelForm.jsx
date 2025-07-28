@@ -25,10 +25,10 @@ const predefinedStars = [
   { label: "5", value: 5 },
 ];
 
-const HotelForm = () => {
+const HotelForm = (props) => {
   const toast = useToast();
   const location = useLocation();
-  const { hotelData } = useAdminHotelContext();
+  const { hotelData, hotelModal } = useAdminHotelContext();
   const [stars, setStars] = useState(1);
   const [photoLink, setPhotoLink] = useState("");
 
@@ -50,7 +50,7 @@ const HotelForm = () => {
   const handleHotelCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
-      name: hotelName,
+      name: props.isModal ? hotelModal.hotelName : hotelName,
       star: stars,
       link_photo: photoLink,
     };
@@ -127,7 +127,7 @@ const HotelForm = () => {
   };
 
   useEffect(() => {
-    if (location.pathname.includes("edit")) {
+    if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleHotelSetValue();
     }
@@ -150,7 +150,8 @@ const HotelForm = () => {
         <FormLabel>Hotel Name</FormLabel>
         <Input
           placeholder="Contoh: Hotel Bintang Bali"
-          value={hotelName}
+          value={props.isModal ? hotelModal.hotelName : hotelName}
+          isDisabled={props.isModal}
           onChange={(e) => {
             setHotelName(e.target.value);
           }}

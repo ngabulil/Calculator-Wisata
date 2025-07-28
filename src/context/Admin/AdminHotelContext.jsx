@@ -13,6 +13,7 @@ export const useAdminHotelContext = () => {
 const AdminHotelContextProvider = ({ children }) => {
   const [allHotel, setAllHotel] = useState([]);
   const [roomTypeSelect, SetRoomTypeSelect] = useState([]);
+  const [hotelModal, setHotelModal] = useState({});
   const [hotelData, setHotelData] = useState({
     hotelName: "",
     stars: "",
@@ -26,13 +27,17 @@ const AdminHotelContextProvider = ({ children }) => {
     extrabed: "",
     contractUntil: "",
   });
-
+  
   const getAllHotel = async () => {
     try {
       const response = await apiGetAllHotel();
 
-      setAllHotel(response.result);
-      return response.result;
+      const sortedResult = response.result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+
+      setAllHotel(sortedResult);
+      return sortedResult;
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +67,7 @@ const AdminHotelContextProvider = ({ children }) => {
       SetRoomTypeSelect(roomType);
       return response.result;
     } catch (error) {
-      console.log(error); // Added error logging
+      console.log(error);
     }
   };
 
@@ -73,8 +78,17 @@ const AdminHotelContextProvider = ({ children }) => {
     }));
   };
 
+  const updateHotelModal = (partial) => {
+    setHotelModal((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
+
   const value = {
     hotelData,
+    hotelModal,
+    updateHotelModal,
     allHotel,
     getHotel,
     roomTypeSelect,

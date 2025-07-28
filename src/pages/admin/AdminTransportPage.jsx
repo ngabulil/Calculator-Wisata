@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, useToast, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast, Text, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import TransportCard from "../../components/Admin/Transport/TransportCard/TransportCard";
@@ -16,6 +16,7 @@ const AdminTransportPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
+  const [loading , setLoading] = useState(false);
   const { getAllTransport, allTransport, updateTransportData } =
     useAdminTransportContext();
 
@@ -50,7 +51,15 @@ const AdminTransportPage = () => {
   //
 
   const handleGetAllTransport = async () => {
-    await getAllTransport();
+    setLoading(true);
+    try {
+      await getAllTransport();
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDeleteTransport = async (id) => {
@@ -135,7 +144,12 @@ const AdminTransportPage = () => {
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {currentTransports.length > 0 ? (
+            {
+            loading ?     
+      
+            <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
+            :
+            currentTransports.length > 0 ? (
               currentTransports.map((transport, index) => {
                 return (
                   <TransportCard

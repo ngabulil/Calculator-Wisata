@@ -13,6 +13,7 @@ export const useAdminActivityContext = () => {
 const AdminActivityContextProvider = ({ children }) => {
   const [allActivityDetails, setAllActivityDetails] = useState([]);
   const [allActivityVendors, setAllActivityVendors] = useState([]);
+  const [activityModalData, setActivityModalData] = useState({});
   const [vendorData, setVendorData] = useState({
     id: 0,
     name: "",
@@ -39,22 +40,29 @@ const AdminActivityContextProvider = ({ children }) => {
         return acc;
       }, {});
 
-      const result = responseDetails.result.map((act) => ({
-        ...act,
-        vendor: vendorMap[act.vendor_id] || null,
-      }));
+      const result = responseDetails.result
+        .map((act) => ({
+          ...act,
+          vendor: vendorMap[act.vendor_id] || null,
+        }))
+        .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
 
       setAllActivityDetails(result);
     } catch (error) {
       console.log(error);
     }
   };
+
   const getAllActivityVendors = async () => {
     try {
       const response = await apiGetAllActivityVendors();
 
-      setAllActivityVendors(response.result);
-      return response.result;
+      const sortedData = response.result.sort((a, b) => {
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      });
+
+      setAllActivityVendors(sortedData);
+      return sortedData;
     } catch (error) {
       console.log(error);
     }
@@ -66,6 +74,12 @@ const AdminActivityContextProvider = ({ children }) => {
       ...partial,
     }));
   };
+  const updateActivityModalData = (partial) => {
+    setActivityModalData((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
   const updateVendorData = (data) => {
     setVendorData(data);
   };
@@ -73,6 +87,8 @@ const AdminActivityContextProvider = ({ children }) => {
   const value = {
     activityData,
     vendorData,
+    activityModalData,
+    updateActivityModalData,
     updateVendorData,
     allActivityDetails,
     setActivityData,

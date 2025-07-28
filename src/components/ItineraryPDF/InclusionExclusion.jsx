@@ -58,7 +58,7 @@ const InclusionExclusionTable = ({
     exclusions: [
       "Flight tickets",
       "Shopping, Laundry, Medicine, And any others",
-      "Tipping for Driver ( RM 10 Pax/Day)"
+      "Tipping for Driver"
     ],
     priceChanges: {
       title: "PRICE PROMO VALID FOR PERIOD:",

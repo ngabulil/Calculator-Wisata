@@ -11,12 +11,17 @@ const AdminDestinationContextProvider = ({ children }) => {
   const [allDestination, setAllDestination] = useState([]);
 
   const [destinationData, setDestinationData] = useState([]);
+  const [destModalData, setDestModalData] = useState({});
 
   const getAllDestination = async () => {
     try {
       const response = await apiGetAllDestination();
 
-      setAllDestination(response.result);
+      const sortedResult = response.result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+
+      setAllDestination(sortedResult);
     } catch (error) {
       console.log(error);
     }
@@ -28,8 +33,16 @@ const AdminDestinationContextProvider = ({ children }) => {
       ...partial,
     }));
   };
+  const updateDestinationModalData = (partial) => {
+    setDestModalData((prev) => ({
+      ...prev,
+      ...partial,
+    }));
+  };
 
   const value = {
+    destModalData,
+    updateDestinationModalData,
     destinationData,
     allDestination,
     setDestinationData,

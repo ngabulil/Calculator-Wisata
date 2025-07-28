@@ -75,7 +75,12 @@ const AdminPackageContextProvider = ({ children }) => {
   const getAllPackageFull = async () => {
     try {
       const response = await apiGetAllPackageFull();
-      setPackageFull(response.result);
+
+      const sortedResult = response.result.sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
+      );
+
+      setPackageFull(sortedResult);
     } catch (error) {
       console.log(error);
     }

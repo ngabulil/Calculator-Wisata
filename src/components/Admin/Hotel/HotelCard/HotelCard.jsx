@@ -23,6 +23,10 @@ const HotelCard = (props) => {
             src={props.photoLink}
             alt="hotel-photos"
             className="object-cover w-full h-[200px] rounded-t-[8px] relative "
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "/default-img.jpg";
+            }}
           />
           <Flex
             direction="row"

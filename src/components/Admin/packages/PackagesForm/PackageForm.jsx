@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   Container,
   Box,
@@ -9,6 +10,7 @@ import {
   Flex,
   HStack,
   IconButton,
+  Select,
   Tabs,
   TabList,
   TabPanels,
@@ -20,11 +22,11 @@ import {
 
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 //
-import HotelCard from "../../../Akomodasi/HotelCard";
-import VillaCard from "../../../Akomodasi/VillaCard";
+import HotelCard from "../../../Akomodasi/HotelPaketCard";
+import VillaCard from "../../../Akomodasi/VillaPaketCard";
 import InfoCard from "../../../Akomodasi/InfoCard";
 import InfoTransportCard from "../../../Transport/InfoCard";
-import MobilCard from "../../../Transport/MobilCard";
+import MobilCard from "../../../Transport/MobilPaketCard";
 
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 import { useAkomodasiContext } from "../../../../context/AkomodasiContext";
@@ -47,6 +49,7 @@ import buildPayloadPaket from "../../../../utils/buildPayloadPaket";
 
 const PackageCreateForm = (props) => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [modalTrigger, setModalTrigger] = useState(false);
   const location = useLocation();
   const {
     getAllActivities,
@@ -66,6 +69,18 @@ const PackageCreateForm = (props) => {
 
     setDays(res);
   };
+
+  const [selectedTypeWisata, setSelectedTypeWisata] = useState(
+    days[0]?.data?.tour?.destinations[0]?.type_wisata ||
+      days[0]?.data?.tour?.activities[0]?.type_wisata ||
+      days[0]?.data?.tour?.restaurants[0]?.type_wisata ||
+      null
+  );
+
+  const typeWisataOptions = [
+    { value: "domestik", label: "Domestik" },
+    { value: "asing", label: "Asing" },
+  ];
 
   const handleAddDay = () => {
     setDays((prev) => [
@@ -119,7 +134,7 @@ const PackageCreateForm = (props) => {
       await getAllDestination();
     };
     fetchData();
-  }, []);
+  }, [modalTrigger]);
 
   useEffect(() => {
     props.onChange?.(days);
@@ -131,6 +146,23 @@ const PackageCreateForm = (props) => {
       handleSetValue();
     }
   }, [location.pathname, onePackageFull]);
+
+  useEffect(() => {
+    if (!selectedTypeWisata) return;
+
+    const updatedDays = days.map((day) => ({
+      ...day,
+      data: {
+        ...day.data,
+        tour: {
+          ...day.data.tour,
+          type_wisata: selectedTypeWisata,
+        },
+      },
+    }));
+
+    setDays(updatedDays);
+  }, [selectedTypeWisata]);
 
   return (
     <Container maxW="7xl" px="0">
@@ -221,6 +253,9 @@ const PackageCreateForm = (props) => {
                             isAdmin={true}
                             index={i}
                             data={hotel}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newHotel) => {
                               const updated = [...days];
                               updated[index].data.akomodasi.hotels[i] =
@@ -257,6 +292,9 @@ const PackageCreateForm = (props) => {
                               updated[index].data.akomodasi.villas[i] =
                                 newVilla;
                               setDays(updated);
+                            }}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
                             }}
                             onDelete={() => {
                               const updated = [...days];
@@ -336,6 +374,28 @@ const PackageCreateForm = (props) => {
                     <Text fontWeight="bold" fontSize={"22px"}>
                       Tour
                     </Text>
+
+                    <Box
+                      border="1px solid"
+                      borderColor="gray.600"
+                      p={4}
+                      rounded="md"
+                    >
+                      <Text fontSize="xl" fontWeight="bold" mb={2}>
+                        Type Wisata
+                      </Text>
+                      <Select
+                        placeholder="Pilih Tipe Wisata"
+                        value={selectedTypeWisata}
+                        onChange={(e) => setSelectedTypeWisata(e.target.value)}
+                      >
+                        {typeWisataOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </Select>
+                    </Box>
                     <Box
                       border="1px solid"
                       borderColor="gray.600"
@@ -352,6 +412,9 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={tours}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newInfo) => {
                               const updated = [...days];
                               updated[index].data.tour.destinations[i] =
@@ -399,6 +462,9 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={tours}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newInfo) => {
                               const updated = [...days];
 
@@ -441,6 +507,9 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={tours}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                            }}
                             onChange={(newInfo) => {
                               const updated = [...days];
 
@@ -496,10 +565,17 @@ const PackageCreateForm = (props) => {
                             key={i}
                             index={i}
                             data={mobil}
+                            onModalClose={(val) => {
+                              setModalTrigger(!val);
+                              const updated = [...days];
+
+                              setDays(updated);
+                            }}
                             onChange={(newMobil) => {
                               const updated = [...days];
                               updated[index].data.transport.mobils[i] =
                                 newMobil;
+
                               setDays(updated);
                             }}
                             onDelete={() => {
@@ -595,17 +671,17 @@ const PackageFormPage = (props) => {
     setPrimaryData(data);
   };
   const handleButtonPackage = async () => {
-    const data = {
-      name: namePackages,
-      description: desctiptionPackages,
-      days: [...primaryData],
-    };
-
-    const payload = buildPayloadPaket(data);
-
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
 
     try {
+      const data = {
+        name: namePackages,
+        description: desctiptionPackages,
+        days: [...primaryData],
+      };
+
+      const payload = buildPayloadPaket(data);
+
       for (const [key, value] of Object.entries(data)) {
         if (value === "") {
           toast.close(loading);
@@ -652,7 +728,7 @@ const PackageFormPage = (props) => {
       toast(
         toastConfig(
           editFormActive ? "Edit Gagal " : "Buat Gagal",
-          "Data tidak lengkap!",
+          error.message,
           "error"
         )
       );

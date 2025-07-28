@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   Textarea,
+  Spinner ,
   Input,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
@@ -28,6 +29,7 @@ const AdminVillaPage = () => {
   const { updateVillaData, getAllVilla } = useAdminVillaContext();
   const navigate = useNavigate();
   const [readVillaActive, setReadVillaActive] = useState(false);
+  const [loading , setLoading] = useState(false);
   const [formActive, setFormActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [villas, setVillas] = useState([]);
@@ -38,12 +40,20 @@ const AdminVillaPage = () => {
   };
 
   const handleGetVillas = async () => {
-    await getAllVilla().then((value) => {
-      if (value.length != 0) {
-        setVillas(value);
-        setRecentVillas(value);
-      }
-    });
+    setLoading(true);
+    try {
+      await getAllVilla().then((value) => {
+        if (value.length != 0) {
+          setVillas(value);
+          setRecentVillas(value);
+        }
+      });
+    } catch (error) {
+      console.error("Error", error);
+  
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVillaSearch = (value) => {
@@ -133,7 +143,12 @@ const AdminVillaPage = () => {
           <VillaRead />
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-            {currentVillas.length > 0 ? (
+            {
+            loading ?     
+        
+            <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
+            :
+            currentVillas.length > 0 ? (
               currentVillas.map((villa, index) => (
                 <VillaCard
                   key={index}

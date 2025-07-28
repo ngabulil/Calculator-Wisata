@@ -21,7 +21,7 @@ import { useAdminDestinationContext } from "../../../../context/Admin/AdminDesti
 const DestinationFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { destinationData } = useAdminDestinationContext();
+  const { destinationData, destModalData } = useAdminDestinationContext();
   const [editFormActive, setEditFormActive] = useState(false);
 
   const [name, setName] = useState("");
@@ -44,7 +44,7 @@ const DestinationFormPage = (props) => {
   const handleDestinationCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
-      name: name,
+      name: props.isModal ? destModalData.name : name,
       price_foreign_adult: priceForeignAdult,
       price_foreign_child: priceForeignChild,
       price_domestic_adult: priceDomesticAdult,
@@ -66,6 +66,7 @@ const DestinationFormPage = (props) => {
       const res = await apiPostDestination(data);
 
       if (res.status === 201) {
+        props.onModalClose?.()
         toast.close(loading);
         toast(
           toastConfig(
@@ -136,7 +137,7 @@ const DestinationFormPage = (props) => {
   };
 
   useEffect(() => {
-    if (location.pathname.includes("edit")) {
+    if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleDestinationSetValue();
     }
@@ -159,7 +160,8 @@ const DestinationFormPage = (props) => {
         <FormLabel>Nama Destinasi</FormLabel>
         <Input
           placeholder="Contoh: Garuda Wisnu Kencana"
-          value={name}
+          value={props.isModal ? destModalData.name : name}
+          isDisabled={props.isModal}
           onChange={(e) => {
             setName(e.target.value);
           }}
