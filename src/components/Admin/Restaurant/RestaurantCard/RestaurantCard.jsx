@@ -67,9 +67,9 @@ const RestaurantCard = (props) => {
           </Box>
           <Flex direction={"column"} gap={1} flexGrow={1}>
             <Text fontSize={"18px"} fontWeight={"bold"}>
-              {props.name || "  ATV Adventure"}
+              {props.name || "  Resto Name"}
             </Text>
-            <Text fontSize={"12px"} fontWeight={"nromal"} color={"gray.500"}>
+            <Text fontSize={"14px"} fontWeight={"nromal"} color={"gray.500"}>
               {props.description || "Tidak ada deskripsi"}
             </Text>
           </Flex>
@@ -123,22 +123,34 @@ const AppPackageList = (props) => {
     {
       tourist_type: "Asing",
       category: "Adult",
-      price: props.package.price_foreign_adult,
+      price:
+        props.package.price_foreign_adult == null
+          ? 0
+          : props.package.price_foreign_adult,
     },
     {
       tourist_type: "Asing",
       category: "Child",
-      price: props.package.price_foreign_child,
+      price:
+        props.package.price_foreign_child == null
+          ? 0
+          : props.package.price_foreign_child,
     },
     {
       tourist_type: "Domestik",
       category: "Adult",
-      price: props.package.price_domestic_adult,
+      price:
+        props.package.price_domestic_adult == null
+          ? 0
+          : props.package.price_domestic_adult,
     },
     {
       tourist_type: "Domestik",
       category: "Child",
-      price: props.package.price_domestic_child,
+      price:
+        props.package.price_domestic_child == null
+          ? 0
+          : props.package.price_domestic_child,
     },
   ];
 

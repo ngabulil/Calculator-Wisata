@@ -200,7 +200,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 70"
-            value={priceForeignAdult}
+            value={priceForeignAdult == null ? 0 : priceForeignAdult}
             onChange={(e) => setPriceForeignAdult(e.target.value)}
           />
         </Box>
@@ -210,7 +210,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 50"
-            value={priceForeignChild}
+            value={priceForeignChild == null ? 0 : priceForeignChild}
             onChange={(e) => setPriceForeignChild(e.target.value)}
           />
         </Box>
@@ -220,7 +220,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 55"
-            value={priceDomesticAdult}
+            value={priceDomesticAdult == null ? 0 : priceDomesticAdult}
             onChange={(e) => setPriceDomesticAdult(e.target.value)}
           />
         </Box>
@@ -230,7 +230,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 35"
-            value={priceDomesticChild}
+            value={priceDomesticChild == null ? 0 : priceDomesticChild}
             onChange={(e) => setPriceDomesticChild(e.target.value)}
           />
         </Box>

@@ -34,6 +34,7 @@ const RestaurantFormPage = (props) => {
 
   const handleRestaurantSetValue = () => {
     setRestoName(restaurantData.resto_name);
+    setRestoDescription(restaurantData.description);
   };
 
   const handleRestaurantCreate = async () => {
@@ -43,13 +44,6 @@ const RestaurantFormPage = (props) => {
       description: restoDescription,
       packages: restoPackage,
     };
-
-    for (const [key, value] of Object.entries(data)) {
-      if (value === "") {
-        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
-        return;
-      }
-    }
 
     try {
       const res = await apiPostRestaurant(data);
@@ -87,13 +81,6 @@ const RestaurantFormPage = (props) => {
       description: restoDescription,
       packages: restoPackage,
     };
-
-    for (const [key, value] of Object.entries(data)) {
-      if (value === "") {
-        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
-        return;
-      }
-    }
 
     try {
       const res = await apiPutRestaurant(restaurantData.id, data);
@@ -280,7 +267,9 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Domestik Dewasa</FormLabel>
             <NumberInput
-              value={pkg.price_domestic_adult}
+              value={
+                pkg.price_domestic_adult == null ? 0 : pkg.price_domestic_adult
+              }
               onChange={(val) =>
                 handleChange(index, "price_domestic_adult", val)
               }
@@ -292,7 +281,9 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Domestik Anak</FormLabel>
             <NumberInput
-              value={pkg.price_domestic_child}
+              value={
+                pkg.price_domestic_child == null ? 0 : pkg.price_domestic_child
+              }
               onChange={(val) =>
                 handleChange(index, "price_domestic_child", val)
               }
@@ -304,7 +295,9 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Asing Dewasa</FormLabel>
             <NumberInput
-              value={pkg.price_foreign_adult}
+              value={
+                pkg.price_foreign_adult == null ? 0 : pkg.price_foreign_adult
+              }
               onChange={(val) =>
                 handleChange(index, "price_foreign_adult", val)
               }
@@ -316,7 +309,9 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Asing Anak</FormLabel>
             <NumberInput
-              value={pkg.price_foreign_child}
+              value={
+                pkg.price_foreign_child == null ? 0 : pkg.price_foreign_child
+              }
               onChange={(val) =>
                 handleChange(index, "price_foreign_child", val)
               }
