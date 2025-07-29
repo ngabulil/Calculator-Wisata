@@ -167,6 +167,7 @@ const AdminRestaurantPage = () => {
                       id={resto.id}
                       name={resto.resto_name}
                       packages={resto.packages}
+                      description={resto.description}
                       onEditButton={() => {
                         updateRestaurantData(resto);
                         setFormActive(true);

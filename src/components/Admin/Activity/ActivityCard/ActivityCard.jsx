@@ -101,17 +101,7 @@ const ActivityCard = (props) => {
           </Flex>
           <Flex gap={2} direction={"column"} alignItems={"start"} w={"80%"}>
             <Text fontSize={"14px"} color={"gray.500"}>
-              {props.keterangan || "Keterangan tidak tersedia"}
-            </Text>
-            <Text
-              fontSize={"12px"}
-              color={"gray.400"}
-              bg={"gray.900"}
-              py={1}
-              px={2}
-              rounded={"4px"}
-            >
-              {props.note || "Tidak ada catatan"}
+              {props.description || "Deskripsi tidak tersedia"}
             </Text>
           </Flex>
         </Flex>
@@ -140,7 +130,32 @@ const ActivityCard = (props) => {
           </Flex>
         </Flex>
       </Flex>
-      {open && <AppPriceList data={formattedPrices} />}
+      {open && (
+        <>
+          <Flex direction="column" gap="10px" w="full">
+            <Box bg="teal.600" p="10px" rounded="md">
+              <Text fontSize="sm" color="white">
+                <strong>Keterangan:</strong>{" "}
+                {props.keterangan || "Keterangan tidak tersedia"}
+              </Text>
+            </Box>
+
+            <Box
+              bg="gray.800"
+              p="10px"
+              rounded="md"
+              border="1px solid"
+              borderColor="gray.700"
+            >
+              <Text fontSize="sm" color="gray.200">
+                <strong>Catatan:</strong> {props.note || "Tidak ada catatan"}
+              </Text>
+            </Box>
+          </Flex>
+
+          <AppPriceList data={formattedPrices} />
+        </>
+      )}
     </Flex>
   );
 };

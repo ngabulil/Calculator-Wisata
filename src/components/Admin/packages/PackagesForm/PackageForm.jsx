@@ -66,6 +66,7 @@ const PackageCreateForm = (props) => {
 
   const handleSetValue = async () => {
     const res = await parseDays(onePackageFull.days);
+    console.log(res);
 
     setDays(res);
   };

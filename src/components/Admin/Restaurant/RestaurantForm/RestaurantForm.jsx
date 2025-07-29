@@ -29,6 +29,7 @@ const RestaurantFormPage = (props) => {
   const [editFormActive, setEditFormActive] = useState(false);
   //
   const [restoName, setRestoName] = useState("");
+  const [restoDescription, setRestoDescription] = useState(null);
   const [restoPackage, setRestoPackage] = useState([]);
 
   const handleRestaurantSetValue = () => {
@@ -39,6 +40,7 @@ const RestaurantFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       resto_name: props.isModal ? restModalData.name : restoName,
+      description: restoDescription,
       packages: restoPackage,
     };
 
@@ -82,6 +84,7 @@ const RestaurantFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       resto_name: restoName,
+      description: restoDescription,
       packages: restoPackage,
     };
 
@@ -145,6 +148,17 @@ const RestaurantFormPage = (props) => {
           isDisabled={props.isModal}
           onChange={(e) => {
             setRestoName(e.target.value);
+          }}
+        />
+      </Box>
+      <Box mb={4}>
+        <FormLabel>Deskripsi Restaurant</FormLabel>
+        <Input
+          placeholder="Contoh: Nama Restaurant"
+          value={restoDescription}
+          isDisabled={props.isModal}
+          onChange={(e) => {
+            setRestoDescription(e.target.value);
           }}
         />
       </Box>

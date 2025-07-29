@@ -31,6 +31,7 @@ const DestinationFormPage = (props) => {
   const [priceDomesticChild, setPriceDomesticChild] = useState("");
 
   const [note, setNote] = useState("");
+  const [description, setDescription] = useState(null);
 
   const handleDestinationSetValue = () => {
     setName(destinationData.name);
@@ -50,6 +51,7 @@ const DestinationFormPage = (props) => {
       price_domestic_adult: priceDomesticAdult,
       price_domestic_child: priceDomesticChild,
       note: note,
+      description: description,
     };
 
     try {
@@ -66,7 +68,7 @@ const DestinationFormPage = (props) => {
       const res = await apiPostDestination(data);
 
       if (res.status === 201) {
-        props.onModalClose?.()
+        props.onModalClose?.();
         toast.close(loading);
         toast(
           toastConfig(
@@ -100,6 +102,7 @@ const DestinationFormPage = (props) => {
       price_domestic_adult: priceDomesticAdult,
       price_domestic_child: priceDomesticChild,
       note: note,
+      description: description,
     };
 
     try {
@@ -164,6 +167,16 @@ const DestinationFormPage = (props) => {
           isDisabled={props.isModal}
           onChange={(e) => {
             setName(e.target.value);
+          }}
+        />
+      </Box>
+      <Box mb={4}>
+        <FormLabel>Deskripsi</FormLabel>
+        <Input
+          placeholder="Contoh: Tuliskan Deskripsi Destinasi"
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
           }}
         />
       </Box>

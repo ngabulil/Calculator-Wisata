@@ -31,6 +31,7 @@ const ActivityFormPage = (props) => {
   const [editFormActive, setEditFormActive] = useState(false);
   const [vendorId, setVendorId] = useState("");
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [priceForeignAdult, setPriceForeignAdult] = useState("");
   const [priceForeignChild, setPriceForeignChild] = useState("");
   const [priceDomesticAdult, setPriceDomesticAdult] = useState("");
@@ -42,6 +43,7 @@ const ActivityFormPage = (props) => {
   const handleActivitySetValue = () => {
     setVendorId(activityData.vendor_id);
     setName(activityData.name);
+    setDescription(activityData.description);
     setPriceForeignAdult(activityData.price_foreign_adult);
     setPriceForeignChild(activityData.price_foreign_child);
     setPriceDomesticAdult(activityData.price_domestic_adult);
@@ -56,6 +58,7 @@ const ActivityFormPage = (props) => {
     const data = {
       vendor_id: vendorId,
       name: props.isModal ? activityModalData.name : name,
+      description: description,
       price_foreign_adult: priceForeignAdult,
       price_foreign_child: priceForeignChild,
       price_domestic_adult: priceDomesticAdult,
@@ -79,7 +82,7 @@ const ActivityFormPage = (props) => {
       const res = await apiPostActivityDetails(data);
 
       if (res.status === 201) {
-        props.onModalClose?.()
+        props.onModalClose?.();
         toast.close(loading);
         toast(
           toastConfig(
@@ -109,6 +112,7 @@ const ActivityFormPage = (props) => {
     const data = {
       vendor_id: vendorId,
       name: name,
+      description: description,
       price_foreign_adult: priceForeignAdult,
       price_foreign_child: priceForeignChild,
       price_domestic_adult: priceDomesticAdult,
@@ -185,6 +189,16 @@ const ActivityFormPage = (props) => {
             setName(e.target.value);
           }}
           isDisabled={props.isModal ? true : false}
+        />
+      </Box>
+      <Box mb={4}>
+        <FormLabel>Deskripsi</FormLabel>
+        <Input
+          placeholder="Deskripsikan Aktivitas Anda"
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
         />
       </Box>
       <Box mb={4}>

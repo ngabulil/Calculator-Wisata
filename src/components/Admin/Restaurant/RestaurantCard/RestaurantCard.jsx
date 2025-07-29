@@ -48,7 +48,7 @@ const RestaurantCard = (props) => {
           direction={"row"}
           gap={4}
           w={"full"}
-          alignItems={"center"}
+          alignItems={"start"}
           justifyContent={"start"}
         >
           <Box
@@ -65,9 +65,14 @@ const RestaurantCard = (props) => {
           >
             {props.name.slice(0, 2).toUpperCase() || "RS"}
           </Box>
-          <Text fontSize={"18px"} fontWeight={"bold"}>
-            {props.name || "  ATV Adventure"}
-          </Text>
+          <Flex direction={"column"} gap={1} flexGrow={1}>
+            <Text fontSize={"18px"} fontWeight={"bold"}>
+              {props.name || "  ATV Adventure"}
+            </Text>
+            <Text fontSize={"12px"} fontWeight={"nromal"} color={"gray.500"}>
+              {props.description || "Tidak ada deskripsi"}
+            </Text>
+          </Flex>
         </Flex>
         <Flex alignItems={"center"} gap={2}>
           <Text
@@ -101,6 +106,7 @@ const RestaurantCard = (props) => {
           </Flex>
         </Flex>
       </Flex>
+
       {open && (
         <Flex direction={"column"} gap={3} rounded={4}>
           {props.packages.map((pack) => {
