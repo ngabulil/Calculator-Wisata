@@ -27,22 +27,34 @@ const DestinationCard = (props) => {
     {
       tourist_type: "Asing",
       category: "Adult",
-      price: props.destination.price_foreign_adult,
+      price:
+        props.destination.price_foreign_adult == null
+          ? 0
+          : props.destination.price_foreign_adult,
     },
     {
       tourist_type: "Asing",
       category: "Child",
-      price: props.destination.price_foreign_child,
+      price:
+        props.destination.price_foreign_child == null
+          ? 0
+          : props.destination.price_foreign_child,
     },
     {
       tourist_type: "Domestik",
       category: "Adult",
-      price: props.destination.price_domestic_adult,
+      price:
+        props.destination.price_domestic_adult == null
+          ? 0
+          : props.destination.price_domestic_adult,
     },
     {
       tourist_type: "Domestik",
       category: "Child",
-      price: props.destination.price_domestic_child,
+      price:
+        props.destination.price_domestic_child == null
+          ? 0
+          : props.destination.price_domestic_child,
     },
   ];
   return (

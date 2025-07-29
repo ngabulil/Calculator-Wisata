@@ -28,22 +28,34 @@ const ActivityCard = (props) => {
     {
       tourist_type: "Asing",
       category: "Adult",
-      price: props.act.price_foreign_adult,
+      price:
+        props.act.price_foreign_adult == null
+          ? 0
+          : props.act.price_foreign_adult,
     },
     {
       tourist_type: "Asing",
       category: "Child",
-      price: props.act.price_foreign_child,
+      price:
+        props.act.price_foreign_child == null
+          ? 0
+          : props.act.price_foreign_child,
     },
     {
       tourist_type: "Domestik",
       category: "Adult",
-      price: props.act.price_domestic_adult,
+      price:
+        props.act.price_domestic_adult == null
+          ? 0
+          : props.act.price_domestic_adult,
     },
     {
       tourist_type: "Domestik",
       category: "Child",
-      price: props.act.price_domestic_child,
+      price:
+        props.act.price_domestic_child == null
+          ? 0
+          : props.act.price_domestic_child,
     },
   ];
   return (

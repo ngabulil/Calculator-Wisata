@@ -186,7 +186,10 @@ const AppInformationTable = ({ keterangan }) => {
                     color="green.300"
                     fontWeight="semibold"
                   >
-                    Rp {Number(item.price).toLocaleString("id-ID")}
+                    Rp{" "}
+                    {Number(item.price == null ? 0 : item.price).toLocaleString(
+                      "id-ID"
+                    )}
                   </Td>
                 </Tr>
               ))
