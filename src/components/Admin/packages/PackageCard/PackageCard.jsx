@@ -1,14 +1,4 @@
-import {
-  Box,
-  Flex,
-  Tabs,
-  Tab,
-  TabList,
-  TabPanels,
-  Text,
-  TabPanel,
-} from "@chakra-ui/react";
-
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { PopoverButton } from "../../../PopoverButton";
 import { useNavigate } from "react-router-dom";
 import formatDateOnly from "../../../../utils/formatDate";
@@ -16,13 +6,13 @@ import formatDateOnly from "../../../../utils/formatDate";
 const PackageCard = (props) => {
   return (
     <Box
-      bg={"gray.800"}
+      bg="gray.800"
       p={3}
-      shadow={"xl"}
-      w={"full"}
+      shadow="xl"
+      w="full"
       flexGrow={props.flexGrow}
       rounded={8}
-      display={"flex"}
+      display="flex"
     >
       <AppTitleDescription
         title={props.title}
@@ -42,75 +32,92 @@ export default PackageCard;
 
 const AppTitleDescription = (props) => {
   const navigate = useNavigate();
+
   return (
     <Flex
-      direction={"row"}
+      direction="row"
       gap={4}
-      w={"full"}
-      alignItems={"start"}
-      justifyContent={"space-between"}
+      w="full"
+      alignItems="start"
+      justifyContent="space-between"
+      flexWrap={{ base: "wrap", md: "nowrap" }}
     >
-      <Flex direction={"column"} gap={2} w="max">
-        <Flex direction={"row"} alignItems={"center"} gap={4} w={"full"}>
+      <Flex direction="column" gap={2} flex="1">
+        <Flex direction="row" alignItems="center" gap={4} w="full">
           <Box
-            w={"60px"}
-            h={"50px"}
-            bg={"gray.900"}
+            w="60px"
+            h="50px"
+            bg="gray.900"
             rounded={5}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            fontSize={"18px"}
-            fontWeight={"bold"}
-            flexShrink={"0"}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            fontSize="18px"
+            fontWeight="bold"
+            flexShrink={0}
           >
             {props.title
               .replace(/[^a-zA-Z]/g, "")
               .slice(0, 2)
               .toUpperCase()}
           </Box>
-          <Text fontSize="24px" fontWeight="bold" w="full">
+          <Text
+            fontSize={{ base: "18px", md: "20px" }}
+            fontWeight="bold"
+            wordBreak="break-word"
+            noOfLines={2}
+            maxW={{ base: "100%", md: "400px" }}
+          >
             {props.title || "Bali Paket"}
           </Text>
         </Flex>
+
         <Text
-          fontSize="14px"
-          color="gray.500"
-          noOfLines={4}
-          w="70%"
-          minW="200px"
+          fontSize={{ base: "12px", md: "14px" }}
+          color="gray.400"
+          noOfLines={{ base: 2, md: 4 }}
+          textOverflow="ellipsis"
+          w="100%"
           maxW="500px"
+          overflow="hidden"
         >
           {props.description}
         </Text>
       </Flex>
-      <Flex direction={"row"} alignItems={"center"} w={"max"} gap={2}>
+
+      <Flex
+        direction="row"
+        alignItems="center"
+        flexShrink={0}
+        gap={2}
+        mt={{ base: 2, md: 0 }}
+      >
         <Text
-          minW={"max"}
-          fontSize={"12px"}
-          fontWeight={"bold"}
-          bg={"green.600"}
-          color={"green.200"}
+          fontSize="12px"
+          fontWeight="bold"
+          bg="green.600"
+          color="green.200"
           py={1}
           px={4}
-          rounded={"full"}
+          rounded="full"
+          minW="max"
         >
           {props.days.length} Hari
         </Text>
         <Text
-          minW={"max"}
-          fontSize={"12px"}
-          fontWeight={"bold"}
-          bg={"purple.600"}
-          color={"purple.200"}
+          fontSize="12px"
+          fontWeight="bold"
+          bg="purple.600"
+          color="purple.200"
           py={1}
           px={4}
-          rounded={"full"}
+          rounded="full"
+          minW="max"
         >
           {formatDateOnly(props.date)}
         </Text>
+
         <PopoverButton
-          // isDuplicated
           isOpenButton={true}
           onEditButton={() => {
             navigate(`/admin/paket/edit`);
