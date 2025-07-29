@@ -32,10 +32,10 @@ const ActivityFormPage = (props) => {
   const [vendorId, setVendorId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [priceForeignAdult, setPriceForeignAdult] = useState("");
-  const [priceForeignChild, setPriceForeignChild] = useState("");
-  const [priceDomesticAdult, setPriceDomesticAdult] = useState("");
-  const [priceDomesticChild, setPriceDomesticChild] = useState("");
+  const [priceForeignAdult, setPriceForeignAdult] = useState(null);
+  const [priceForeignChild, setPriceForeignChild] = useState(null);
+  const [priceDomesticAdult, setPriceDomesticAdult] = useState(null);
+  const [priceDomesticChild, setPriceDomesticChild] = useState(null);
   const [keterangan, setKeterangan] = useState("");
   const [note, setNote] = useState("");
   const [valid, setValid] = useState("");
@@ -59,26 +59,23 @@ const ActivityFormPage = (props) => {
       vendor_id: vendorId,
       name: props.isModal ? activityModalData.name : name,
       description: description,
-      price_foreign_adult: priceForeignAdult,
-      price_foreign_child: priceForeignChild,
-      price_domestic_adult: priceDomesticAdult,
-      price_domestic_child: priceDomesticChild,
+      price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+      price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+      price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+      price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
       keterangan: keterangan,
       note: note,
       valid: valid,
     };
 
-    try {
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
+    if (!vendorId)
+      toast(toastConfig("", "Vendor tidak boleh kosong", "warning"));
+    if (!name)
+      toast(toastConfig("", "Nama Aktivitas tidak boleh kosong", "warning"));
+    if (!valid)
+      toast(toastConfig("", "Tanggal Valid tidak boleh kosong", "warning"));
 
+    try {
       const res = await apiPostActivityDetails(data);
 
       if (res.status === 201) {
@@ -109,30 +106,28 @@ const ActivityFormPage = (props) => {
 
   const handleActivityUpdate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
+
+    if (!vendorId)
+      toast(toastConfig("", "Vendor tidak boleh kosong", "warning"));
+    if (!name)
+      toast(toastConfig("", "Nama Aktivitas tidak boleh kosong", "warning"));
+    if (!valid)
+      toast(toastConfig("", "Tanggal Valid tidak boleh kosong", "warning"));
+
     const data = {
       vendor_id: vendorId,
       name: name,
       description: description,
-      price_foreign_adult: priceForeignAdult,
-      price_foreign_child: priceForeignChild,
-      price_domestic_adult: priceDomesticAdult,
-      price_domestic_child: priceDomesticChild,
+      price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+      price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+      price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+      price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
       keterangan: keterangan,
       note: note,
       valid: valid,
     };
 
     try {
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
-
       const res = await apiPutActivityDetails(activityData.id, data);
 
       if (res.status === 200) {
@@ -257,9 +252,10 @@ const ActivityFormPage = (props) => {
           <FormLabel>Price Foreign Adult</FormLabel>
           <Input
             type="number"
-            placeholder="Contoh: 70"
+            placeholder="Contoh: 70000"
             value={priceForeignAdult == null ? 0 : priceForeignAdult}
             onChange={(e) => setPriceForeignAdult(e.target.value)}
+            required
           />
         </Box>
 
@@ -267,7 +263,7 @@ const ActivityFormPage = (props) => {
           <FormLabel>Price Foreign Child</FormLabel>
           <Input
             type="number"
-            placeholder="Contoh: 50"
+            placeholder="Contoh: 50000"
             value={priceForeignChild == null ? 0 : priceForeignChild}
             onChange={(e) => setPriceForeignChild(e.target.value)}
           />
@@ -277,9 +273,10 @@ const ActivityFormPage = (props) => {
           <FormLabel>Price Domestic Adult</FormLabel>
           <Input
             type="number"
-            placeholder="Contoh: 55"
+            placeholder="Contoh: 55000"
             value={priceDomesticAdult == null ? 0 : priceDomesticAdult}
             onChange={(e) => setPriceDomesticAdult(e.target.value)}
+            required
           />
         </Box>
 
@@ -287,7 +284,7 @@ const ActivityFormPage = (props) => {
           <FormLabel>Price Domestic Child</FormLabel>
           <Input
             type="number"
-            placeholder="Contoh: 35"
+            placeholder="Contoh: 35000"
             value={priceDomesticChild == null ? 0 : priceDomesticChild}
             onChange={(e) => setPriceDomesticChild(e.target.value)}
           />

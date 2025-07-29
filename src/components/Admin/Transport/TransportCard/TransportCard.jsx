@@ -61,10 +61,10 @@ const TransportCard = (props) => {
 
           <Flex direction="column" gap={1}>
             <Text fontSize="18px" fontWeight="bold">
-              {props.jenisKendaraan || "Mobil"}
+              {props.jenisKendaraan || "Nama Tidak Tersedia"}
             </Text>
             <Text fontSize="14px" color="gray.300">
-              {props.vendor || "2 jam keliling desa"}
+              {props.vendor || "Vendor Tidak tersedia"}
             </Text>
           </Flex>
         </Flex>

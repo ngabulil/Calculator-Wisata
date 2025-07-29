@@ -39,6 +39,25 @@ const RestaurantFormPage = (props) => {
 
   const handleRestaurantCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
+
+    restoPackage.forEach((item) => {
+      [
+        "price_domestic_adult",
+        "price_domestic_child",
+        "price_foreign_adult",
+        "price_foreign_child",
+      ].forEach((key) => {
+        if (item[key] === "") {
+          item[key] = null;
+        }
+      });
+
+      if (!item.valid) {
+        toast(toastConfig("", "Tanggal Validasi belum diisi", "warning"));
+        return;
+      }
+    });
+
     const data = {
       resto_name: props.isModal ? restModalData.name : restoName,
       description: restoDescription,
@@ -75,6 +94,23 @@ const RestaurantFormPage = (props) => {
   };
 
   const handleRestaurantUpdate = async () => {
+    restoPackage.forEach((item) => {
+      [
+        "price_domestic_adult",
+        "price_domestic_child",
+        "price_foreign_adult",
+        "price_foreign_child",
+      ].forEach((key) => {
+        if (item[key] === "") {
+          item[key] = null;
+        }
+      });
+      if (!item.valid) {
+        toast(toastConfig("", "Tanggal Validasi belum diisi", "warning"));
+        return;
+      }
+    });
+
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       resto_name: restoName,
@@ -209,7 +245,19 @@ const PackageFormList = (props) => {
 
   const handleChange = (index, field, value) => {
     const newPackages = [...packages];
-    newPackages[index][field] = value;
+    const priceFields = [
+      "price_domestic_adult",
+      "price_domestic_child",
+      "price_foreign_adult",
+      "price_foreign_child",
+    ];
+
+    if (priceFields.includes(field)) {
+      newPackages[index][field] = value === null ? "" : Number(value);
+    } else {
+      newPackages[index][field] = value;
+    }
+
     setPackages(newPackages);
     props.onChange(newPackages);
   };
@@ -217,10 +265,14 @@ const PackageFormList = (props) => {
     if (props.isEdit && props.packagesValue?.length > 0) {
       const mappedPackages = props.packagesValue.map((pkg) => ({
         name: pkg.package_name,
-        price_domestic_adult: pkg.price_domestic_adult,
-        price_domestic_child: pkg.price_domestic_child,
-        price_foreign_adult: pkg.price_foreign_adult,
-        price_foreign_child: pkg.price_foreign_child,
+        price_domestic_adult:
+          pkg.price_domestic_adult == null ? 0 : pkg.price_domestic_adult,
+        price_domestic_child:
+          pkg.price_domestic_child == null ? 0 : pkg.price_domestic_child,
+        price_foreign_adult:
+          pkg.price_foreign_adult == null ? 0 : pkg.price_foreign_adult,
+        price_foreign_child:
+          pkg.price_foreign_child == null ? 0 : pkg.price_foreign_child,
         pax: pkg.pax,
         note: pkg.note,
         valid: pkg.valid,
@@ -267,9 +319,7 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Domestik Dewasa</FormLabel>
             <NumberInput
-              value={
-                pkg.price_domestic_adult == null ? 0 : pkg.price_domestic_adult
-              }
+              value={pkg.price_domestic_adult}
               onChange={(val) =>
                 handleChange(index, "price_domestic_adult", val)
               }
@@ -281,9 +331,7 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Domestik Anak</FormLabel>
             <NumberInput
-              value={
-                pkg.price_domestic_child == null ? 0 : pkg.price_domestic_child
-              }
+              value={pkg.price_domestic_child}
               onChange={(val) =>
                 handleChange(index, "price_domestic_child", val)
               }
@@ -295,9 +343,7 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Asing Dewasa</FormLabel>
             <NumberInput
-              value={
-                pkg.price_foreign_adult == null ? 0 : pkg.price_foreign_adult
-              }
+              value={pkg.price_foreign_adult}
               onChange={(val) =>
                 handleChange(index, "price_foreign_adult", val)
               }
@@ -309,9 +355,7 @@ const PackageFormList = (props) => {
           <Box mb={3}>
             <FormLabel>Harga Asing Anak</FormLabel>
             <NumberInput
-              value={
-                pkg.price_foreign_child == null ? 0 : pkg.price_foreign_child
-              }
+              value={pkg.price_foreign_child}
               onChange={(val) =>
                 handleChange(index, "price_foreign_child", val)
               }
@@ -343,6 +387,7 @@ const PackageFormList = (props) => {
             <Input
               type="date"
               value={pkg.valid?.split("T")[0] || ""}
+              required
               onChange={(e) => handleChange(index, "valid", e.target.value)}
             />
           </Box>

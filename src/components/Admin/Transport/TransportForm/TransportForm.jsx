@@ -89,7 +89,7 @@ const TransportForm = (props) => {
     try {
       const data = {
         ...vehicle,
-        name: mobilModalData.name,
+        name: props.isModal ? mobilModalData.name : vehicle.name,
       };
 
       const res = await apiPostMobilFull(props.isModal ? data : vehicle);

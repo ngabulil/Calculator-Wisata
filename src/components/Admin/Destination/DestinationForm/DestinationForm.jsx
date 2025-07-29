@@ -46,25 +46,15 @@ const DestinationFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: props.isModal ? destModalData.name : name,
-      price_foreign_adult: priceForeignAdult,
-      price_foreign_child: priceForeignChild,
-      price_domestic_adult: priceDomesticAdult,
-      price_domestic_child: priceDomesticChild,
+      price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+      price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+      price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+      price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
       note: note,
       description: description,
     };
 
     try {
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
-
       const res = await apiPostDestination(data);
 
       if (res.status === 201) {
@@ -97,25 +87,15 @@ const DestinationFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
-      price_foreign_adult: priceForeignAdult,
-      price_foreign_child: priceForeignChild,
-      price_domestic_adult: priceDomesticAdult,
-      price_domestic_child: priceDomesticChild,
+      price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+      price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+      price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+      price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
       note: note,
       description: description,
     };
 
     try {
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
-
       const res = await apiPutDestination(destinationData.id, data);
 
       if (res.status === 200) {
