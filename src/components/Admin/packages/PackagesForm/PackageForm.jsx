@@ -66,6 +66,7 @@ const PackageCreateForm = (props) => {
 
   const handleSetValue = async () => {
     const res = await parseDays(onePackageFull.days);
+    console.log(res);
 
     setDays(res);
   };
@@ -681,16 +682,6 @@ const PackageFormPage = (props) => {
       };
 
       const payload = buildPayloadPaket(data);
-
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
 
       let res;
 

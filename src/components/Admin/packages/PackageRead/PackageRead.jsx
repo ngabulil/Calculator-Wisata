@@ -332,6 +332,10 @@ const AppHomeStayCard = (props) => (
       src={props.photos || "https://picsum.photos/200/300"}
       alt="hotel"
       className="w-full h-[200px] object-cover rounded-md"
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.src = "/default-img.jpg";
+      }}
     />
 
     <Flex direction="column" gap={1} w="full">

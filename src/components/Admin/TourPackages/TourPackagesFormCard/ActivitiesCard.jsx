@@ -18,7 +18,7 @@ const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const { activities } = useAdminPackageContext();
   const { updateActivityModalData } = useAdminActivityContext();
 
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(data.description || "");
   const [selectedVendor, setSelectedVendor] = useState(
     data.selectedVendor || null
   );
@@ -124,7 +124,7 @@ const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
         />
       </Box>
       {/*  */}
-      <Box mb={3}>
+      {/* <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Deskripsi Destinasi
         </Text>
@@ -136,7 +136,7 @@ const ActivityCard = ({ index, data, onChange, onDelete, onModalClose }) => {
           }}
           placeholder="Masukkan deskripsi aktivitas"
         />
-      </Box>
+      </Box> */}
 
       <ActivitiesModal
         isOpen={openModal}

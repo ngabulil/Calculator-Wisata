@@ -14,12 +14,12 @@ const enrich = (items, parsedItems, nameKey, fallbackPrefix, extraFields = []) =
         item[nameKey]?.name ||
         item[nameKey]?.label ||
         `${fallbackPrefix} ${i + 1}`,
+      description: parsedItem.description || item.description || "",
     };
 
     extraFields.forEach((field) => {
       enriched[field] = parsedItem[field] ?? item[field] ?? 0;
     });
-
     return enriched;
   });
 

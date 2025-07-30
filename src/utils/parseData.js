@@ -1,5 +1,5 @@
 import {
-  apiGetActivityVendorById,
+  // apiGetActivityVendorById,
   apiGetRestaurantById,
   apiGetDestinationById,
 } from "../services/packageService";
@@ -7,6 +7,7 @@ import { apiGetHotel } from "../services/hotelService";
 import { apiGetVilla } from "../services/villaService";
 import { apiGetAdditionalAkomodasiById } from "../services/akomodasiService";
 import { apiGetAdditionalMobilById } from "../services/transport";
+import { apiGetActivityDetailsById } from "../services/activityService";
 
 export const parseData = async (days) => {
   return await Promise.all(
@@ -49,15 +50,15 @@ export const parseData = async (days) => {
         })
       );
 
-      parsedDay.activities = await Promise.all(
-        (day.activities || []).map(async (act) => {
-          const data = await apiGetActivityVendorById(act.id_vendor);
-          return {
-            ...act,
-            ...(data.result || null),
-          };
-        })
-      );
+      // parsedDay.vendor = await Promise.all(
+      //   (day.activities || []).map(async (act) => {
+      //     const data = await apiGetActivityVendorById(act.id_vendor);
+      //     return {
+      //       ...act,
+      //       ...(data.result || null),
+      //     };
+      //   })
+      // );
 
       parsedDay.restaurants = await Promise.all(
         (day.restaurants || []).map(async (resto) => {
@@ -76,6 +77,16 @@ export const parseData = async (days) => {
           };
         })
       );
+
+      parsedDay.activities = await Promise.all(
+        (day.activities || []).map(async (act) => {
+          const data = await apiGetActivityDetailsById(act.id_activity);
+          return {
+            ...act,
+            ...(data.result || null),
+          };
+        })
+      ); 
 
       return parsedDay;
     })

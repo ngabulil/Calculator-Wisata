@@ -6,7 +6,7 @@ import {
   Select,
   useToast,
   Text,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
@@ -31,7 +31,7 @@ const AdminActivityPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [mode, setMode] = useState("activity");
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formActive, setFormActive] = useState(false);
   const {
     getAllActivityDetails,
@@ -84,7 +84,6 @@ const AdminActivityPage = () => {
       await getAllActivityDetails();
     } catch (error) {
       console.error("Error", error);
-  
     } finally {
       setLoading(false);
     }
@@ -95,7 +94,6 @@ const AdminActivityPage = () => {
       await getAllActivityVendors();
     } catch (error) {
       console.error("Error", error);
-  
     } finally {
       setLoading(false);
     }
@@ -224,11 +222,11 @@ const AdminActivityPage = () => {
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"20px"} wrap={"wrap"} w={"full"}>
-              {
-              loading ?     
-              <Flex w={'full'} justifyContent={'center'}><Spinner size="xl" color="teal.500" /></Flex>
-              :
-              mode == "activity" ? (
+              {loading ? (
+                <Flex w={"full"} justifyContent={"center"}>
+                  <Spinner size="xl" color="teal.500" />
+                </Flex>
+              ) : mode == "activity" ? (
                 currentActivities.length != 0 ? (
                   currentActivities.map((act) => {
                     return (
@@ -236,6 +234,7 @@ const AdminActivityPage = () => {
                         key={act.id}
                         act={act}
                         name={act.name}
+                        description={act.description}
                         vendorName={act?.vendor?.name || "Vendor"}
                         keterangan={act.keterangan}
                         note={act.note}

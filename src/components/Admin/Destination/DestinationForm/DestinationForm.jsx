@@ -31,6 +31,7 @@ const DestinationFormPage = (props) => {
   const [priceDomesticChild, setPriceDomesticChild] = useState("");
 
   const [note, setNote] = useState("");
+  const [description, setDescription] = useState(null);
 
   const handleDestinationSetValue = () => {
     setName(destinationData.name);
@@ -45,28 +46,19 @@ const DestinationFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: props.isModal ? destModalData.name : name,
-      price_foreign_adult: priceForeignAdult,
-      price_foreign_child: priceForeignChild,
-      price_domestic_adult: priceDomesticAdult,
-      price_domestic_child: priceDomesticChild,
+      price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+      price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+      price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+      price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
       note: note,
+      description: description,
     };
 
     try {
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
-
       const res = await apiPostDestination(data);
 
       if (res.status === 201) {
-        props.onModalClose?.()
+        props.onModalClose?.();
         toast.close(loading);
         toast(
           toastConfig(
@@ -95,24 +87,15 @@ const DestinationFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       name: name,
-      price_foreign_adult: priceForeignAdult,
-      price_foreign_child: priceForeignChild,
-      price_domestic_adult: priceDomesticAdult,
-      price_domestic_child: priceDomesticChild,
+      price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+      price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+      price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+      price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
       note: note,
+      description: description,
     };
 
     try {
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
-
       const res = await apiPutDestination(destinationData.id, data);
 
       if (res.status === 200) {
@@ -168,6 +151,16 @@ const DestinationFormPage = (props) => {
         />
       </Box>
       <Box mb={4}>
+        <FormLabel>Deskripsi</FormLabel>
+        <Input
+          placeholder="Contoh: Tuliskan Deskripsi Destinasi"
+          value={description}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
+        />
+      </Box>
+      <Box mb={4}>
         <FormLabel>Note</FormLabel>
         <Input
           placeholder="Contoh: Sudah termasuk tiket"
@@ -187,7 +180,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 70"
-            value={priceForeignAdult}
+            value={priceForeignAdult == null ? 0 : priceForeignAdult}
             onChange={(e) => setPriceForeignAdult(e.target.value)}
           />
         </Box>
@@ -197,7 +190,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 50"
-            value={priceForeignChild}
+            value={priceForeignChild == null ? 0 : priceForeignChild}
             onChange={(e) => setPriceForeignChild(e.target.value)}
           />
         </Box>
@@ -207,7 +200,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 55"
-            value={priceDomesticAdult}
+            value={priceDomesticAdult == null ? 0 : priceDomesticAdult}
             onChange={(e) => setPriceDomesticAdult(e.target.value)}
           />
         </Box>
@@ -217,7 +210,7 @@ const DestinationFormPage = (props) => {
           <Input
             type="number"
             placeholder="Contoh: 35"
-            value={priceDomesticChild}
+            value={priceDomesticChild == null ? 0 : priceDomesticChild}
             onChange={(e) => setPriceDomesticChild(e.target.value)}
           />
         </Box>

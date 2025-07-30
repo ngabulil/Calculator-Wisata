@@ -24,7 +24,7 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
   const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
   const [selectedType, setSelectedType] = useState(data.selectedType || null);
   const [openModal, setOpenModal] = useState(false);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(data.description || "");
 
   const textColor = useColorModeValue("white", "white");
 
@@ -97,7 +97,7 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
           placeholder="Pilih destinasi"
         />
       </Box>
-      <Box mb={3}>
+      {/* <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Deskripsi Aktivitas
         </Text>
@@ -109,7 +109,7 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
           }}
           placeholder="Masukkan deskripsi aktivitas"
         />
-      </Box>
+      </Box> */}
 
       <DestinationModal
         isOpen={openModal}

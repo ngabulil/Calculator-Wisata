@@ -28,22 +28,34 @@ const ActivityCard = (props) => {
     {
       tourist_type: "Asing",
       category: "Adult",
-      price: props.act.price_foreign_adult,
+      price:
+        props.act.price_foreign_adult == null
+          ? 0
+          : props.act.price_foreign_adult,
     },
     {
       tourist_type: "Asing",
       category: "Child",
-      price: props.act.price_foreign_child,
+      price:
+        props.act.price_foreign_child == null
+          ? 0
+          : props.act.price_foreign_child,
     },
     {
       tourist_type: "Domestik",
       category: "Adult",
-      price: props.act.price_domestic_adult,
+      price:
+        props.act.price_domestic_adult == null
+          ? 0
+          : props.act.price_domestic_adult,
     },
     {
       tourist_type: "Domestik",
       category: "Child",
-      price: props.act.price_domestic_child,
+      price:
+        props.act.price_domestic_child == null
+          ? 0
+          : props.act.price_domestic_child,
     },
   ];
   return (
@@ -101,17 +113,7 @@ const ActivityCard = (props) => {
           </Flex>
           <Flex gap={2} direction={"column"} alignItems={"start"} w={"80%"}>
             <Text fontSize={"14px"} color={"gray.500"}>
-              {props.keterangan || "Keterangan tidak tersedia"}
-            </Text>
-            <Text
-              fontSize={"12px"}
-              color={"gray.400"}
-              bg={"gray.900"}
-              py={1}
-              px={2}
-              rounded={"4px"}
-            >
-              {props.note || "Tidak ada catatan"}
+              {props.description || "Deskripsi tidak tersedia"}
             </Text>
           </Flex>
         </Flex>
@@ -140,7 +142,32 @@ const ActivityCard = (props) => {
           </Flex>
         </Flex>
       </Flex>
-      {open && <AppPriceList data={formattedPrices} />}
+      {open && (
+        <>
+          <Flex direction="column" gap="10px" w="full">
+            <Box bg="teal.600" p="10px" rounded="md">
+              <Text fontSize="sm" color="white">
+                <strong>Keterangan:</strong>{" "}
+                {props.keterangan || "Keterangan tidak tersedia"}
+              </Text>
+            </Box>
+
+            <Box
+              bg="gray.800"
+              p="10px"
+              rounded="md"
+              border="1px solid"
+              borderColor="gray.700"
+            >
+              <Text fontSize="sm" color="gray.200">
+                <strong>Catatan:</strong> {props.note || "Tidak ada catatan"}
+              </Text>
+            </Box>
+          </Flex>
+
+          <AppPriceList data={formattedPrices} />
+        </>
+      )}
     </Flex>
   );
 };

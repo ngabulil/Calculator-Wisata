@@ -29,25 +29,40 @@ const RestaurantFormPage = (props) => {
   const [editFormActive, setEditFormActive] = useState(false);
   //
   const [restoName, setRestoName] = useState("");
+  const [restoDescription, setRestoDescription] = useState(null);
   const [restoPackage, setRestoPackage] = useState([]);
 
   const handleRestaurantSetValue = () => {
     setRestoName(restaurantData.resto_name);
+    setRestoDescription(restaurantData.description);
   };
 
   const handleRestaurantCreate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
-    const data = {
-      resto_name: props.isModal ? restModalData.name : restoName,
-      packages: restoPackage,
-    };
 
-    for (const [key, value] of Object.entries(data)) {
-      if (value === "") {
-        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
+    restoPackage.forEach((item) => {
+      [
+        "price_domestic_adult",
+        "price_domestic_child",
+        "price_foreign_adult",
+        "price_foreign_child",
+      ].forEach((key) => {
+        if (item[key] === "") {
+          item[key] = null;
+        }
+      });
+
+      if (!item.valid) {
+        toast(toastConfig("", "Tanggal Validasi belum diisi", "warning"));
         return;
       }
-    }
+    });
+
+    const data = {
+      resto_name: props.isModal ? restModalData.name : restoName,
+      description: restoDescription,
+      packages: restoPackage,
+    };
 
     try {
       const res = await apiPostRestaurant(data);
@@ -79,18 +94,29 @@ const RestaurantFormPage = (props) => {
   };
 
   const handleRestaurantUpdate = async () => {
+    restoPackage.forEach((item) => {
+      [
+        "price_domestic_adult",
+        "price_domestic_child",
+        "price_foreign_adult",
+        "price_foreign_child",
+      ].forEach((key) => {
+        if (item[key] === "") {
+          item[key] = null;
+        }
+      });
+      if (!item.valid) {
+        toast(toastConfig("", "Tanggal Validasi belum diisi", "warning"));
+        return;
+      }
+    });
+
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
     const data = {
       resto_name: restoName,
+      description: restoDescription,
       packages: restoPackage,
     };
-
-    for (const [key, value] of Object.entries(data)) {
-      if (value === "") {
-        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
-        return;
-      }
-    }
 
     try {
       const res = await apiPutRestaurant(restaurantData.id, data);
@@ -145,6 +171,17 @@ const RestaurantFormPage = (props) => {
           isDisabled={props.isModal}
           onChange={(e) => {
             setRestoName(e.target.value);
+          }}
+        />
+      </Box>
+      <Box mb={4}>
+        <FormLabel>Deskripsi Restaurant</FormLabel>
+        <Input
+          placeholder="Contoh: Nama Restaurant"
+          value={restoDescription}
+          isDisabled={props.isModal}
+          onChange={(e) => {
+            setRestoDescription(e.target.value);
           }}
         />
       </Box>
@@ -208,7 +245,19 @@ const PackageFormList = (props) => {
 
   const handleChange = (index, field, value) => {
     const newPackages = [...packages];
-    newPackages[index][field] = value;
+    const priceFields = [
+      "price_domestic_adult",
+      "price_domestic_child",
+      "price_foreign_adult",
+      "price_foreign_child",
+    ];
+
+    if (priceFields.includes(field)) {
+      newPackages[index][field] = value === null ? "" : Number(value);
+    } else {
+      newPackages[index][field] = value;
+    }
+
     setPackages(newPackages);
     props.onChange(newPackages);
   };
@@ -216,10 +265,14 @@ const PackageFormList = (props) => {
     if (props.isEdit && props.packagesValue?.length > 0) {
       const mappedPackages = props.packagesValue.map((pkg) => ({
         name: pkg.package_name,
-        price_domestic_adult: pkg.price_domestic_adult,
-        price_domestic_child: pkg.price_domestic_child,
-        price_foreign_adult: pkg.price_foreign_adult,
-        price_foreign_child: pkg.price_foreign_child,
+        price_domestic_adult:
+          pkg.price_domestic_adult == null ? 0 : pkg.price_domestic_adult,
+        price_domestic_child:
+          pkg.price_domestic_child == null ? 0 : pkg.price_domestic_child,
+        price_foreign_adult:
+          pkg.price_foreign_adult == null ? 0 : pkg.price_foreign_adult,
+        price_foreign_child:
+          pkg.price_foreign_child == null ? 0 : pkg.price_foreign_child,
         pax: pkg.pax,
         note: pkg.note,
         valid: pkg.valid,
@@ -334,6 +387,7 @@ const PackageFormList = (props) => {
             <Input
               type="date"
               value={pkg.valid?.split("T")[0] || ""}
+              required
               onChange={(e) => handleChange(index, "valid", e.target.value)}
             />
           </Box>

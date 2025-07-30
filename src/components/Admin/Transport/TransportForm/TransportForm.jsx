@@ -89,13 +89,13 @@ const TransportForm = (props) => {
     try {
       const data = {
         ...vehicle,
-        name: mobilModalData.name,
+        name: props.isModal ? mobilModalData.name : vehicle.name,
       };
 
       const res = await apiPostMobilFull(props.isModal ? data : vehicle);
 
       if (res.status === 201) {
-        props.onModalClose?.({id: res.result.id , name: mobilModalData.name});
+        props.onModalClose?.({ id: res.result.id, name: mobilModalData.name });
         toast.close(loading);
         toast(
           toastConfig(
@@ -242,7 +242,7 @@ const TransportForm = (props) => {
                     }
                   />
                   <NumberInput
-                    value={areaItem.price}
+                    value={areaItem.price == null ? 0 : areaItem.price}
                     onChange={(val) =>
                       handleAreaChange(type, areaIndex, "price", val)
                     }

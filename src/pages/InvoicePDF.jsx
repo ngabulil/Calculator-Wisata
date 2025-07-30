@@ -18,7 +18,7 @@ import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import { apiGetUser } from "../services/adminService";
 import Cookies from "js-cookie";
 import useExportPdf from "../hooks/useExportPdf";
-import useItineraryReorder from "../hooks/useItineraryReorder";
+import useItineraryEditor from "../hooks/useItineraryEditor";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -78,13 +78,13 @@ const InvoicePDF = forwardRef((props, ref) => {
     updateDays,
     moveItemUp,
     moveItemDown,
-    moveDayUp,
-    moveDayDown,
     toggleReordering,
     resetOrder,
     saveOrder,
     clearSavedOrder,
-  } = useItineraryReorder([], packageId);
+    editItemDescription,
+    editItemTitle,
+  } = useItineraryEditor([], packageId);
 
   useImperativeHandle(ref, () => ({
     async exportAsBlob() {
@@ -212,7 +212,7 @@ const InvoicePDF = forwardRef((props, ref) => {
             const price = parseInt(mobil.harga) || 0;
             transports.push({
               day: `Day ${dayIndex + 1}`,
-              description: mobil.mobil?.label || mobil.label,
+              description: mobil.mobil?.label || mobil.label || mobil.displayName || mobil.name,
               price: price,
             });
           });
@@ -259,6 +259,7 @@ const InvoicePDF = forwardRef((props, ref) => {
                 return {
                   type: "activity",
                   item: item.displayName || item.name || `Unnamed ${type}`,
+                  description: item.description || "",
                   expense:
                     adultPrice > 0 && adultQty > 0
                       ? formatCurrency(adultPrice * adultQty)
@@ -588,8 +589,8 @@ const InvoicePDF = forwardRef((props, ref) => {
           isReordering={isReordering}
           onMoveItemUp={moveItemUp}
           onMoveItemDown={moveItemDown}
-          onMoveDayUp={moveDayUp}
-          onMoveDayDown={moveDayDown}
+          onEditItemTitle={editItemTitle}
+          onEditItemDescription={editItemDescription}
           totalAdult={calculatedValues.totalAdult}
           totalChild={calculatedValues.actualChild}
         />

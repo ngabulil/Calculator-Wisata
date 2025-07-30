@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -17,6 +17,9 @@ import { useExpensesContext } from "../context/ExpensesContext";
 import InvoicePDF from "./InvoicePDF";
 import ItineraryPDF from "./ItineraryPDF";
 import { apiPostPesanan } from "../services/pesanan";
+import HotelCard from "../components/Calculator/akomodasi/HotelCard";
+import VillaCard from "../components/Calculator/akomodasi/VillaCard";
+import { useAkomodasiContext } from "../context/AkomodasiContext";
 
 const ExpensesPage = () => {
   const {
@@ -27,10 +30,19 @@ const ExpensesPage = () => {
     removeExpenseItem,
     updateExpenseItem,
     calculateDayTotal,
-    // calculateGrandTotal,
     formatCurrency,
-    
+    // Hotel dan Villa dari context
+    hotelItems,
+    addHotelItem,
+    updateHotelItem,
+    removeHotelItem,
+    villaItems,
+    addVillaItem,
+    updateVillaItem,
+    removeVillaItem,
   } = useExpensesContext();
+  
+  const { getHotels, getVillas } = useAkomodasiContext();
 
   const [editingItem, setEditingItem] = useState(null);
   const toast = useToast();
@@ -49,6 +61,11 @@ const ExpensesPage = () => {
     }
     removeDay(dayIndex);
   };
+
+  useEffect(() => {
+    getHotels();
+    getVillas();
+  }, []);
 
   const invoiceRef = useRef();
   const itineraryRef = useRef();
@@ -71,11 +88,7 @@ const ExpensesPage = () => {
 
       const formData = new FormData();
       formData.append("invoice", invoiceBlob, `invoice.pdf`);
-      formData.append(
-        "itinerary",
-        itineraryBlob,
-        `itinerary.pdf`
-      );
+      formData.append("itinerary", itineraryBlob, `itinerary.pdf`);
 
       const result = await apiPostPesanan(formData);
       console.log("Order created successfully:", result);
@@ -108,7 +121,6 @@ const ExpensesPage = () => {
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
 
-  // Fungsi untuk download langsung invoice
   const handleDownloadInvoice = async () => {
     if (!invoiceRef.current) {
       toast({
@@ -134,7 +146,6 @@ const ExpensesPage = () => {
     }
   };
 
-  // Fungsi untuk download langsung itinerary
   const handleDownloadItinerary = async () => {
     if (!itineraryRef.current) {
       toast({
@@ -160,6 +171,42 @@ const ExpensesPage = () => {
     }
   };
 
+  // Handler untuk hotel menggunakan context
+const handleHotelChange = (index, updatedItem) => {
+  updateHotelItem(index, updatedItem);
+};
+
+const handleVillaChange = (index, updatedItem) => {
+  updateVillaItem(index, updatedItem);
+};
+
+  const handleHotelDelete = (index) => {
+    removeHotelItem(index);
+  };
+
+const handleAddHotel = () => {
+  addHotelItem({
+    jumlahKamar: 1,
+    jumlahExtrabed: 1,
+    useExtrabed: false,
+  });
+};
+
+const handleAddVilla = () => {
+  addVillaItem({
+    jumlahKamar: 1,
+    jumlahExtrabed: 1,
+    useExtrabed: false,
+  });
+};
+
+  const handleVillaDelete = (index) => {
+    removeVillaItem(index);
+  };
+
+  console.log("Hotel Items:", hotelItems);
+  console.log("Villa Items:", villaItems);
+
   return (
     <Box maxW="6xl" mx="auto" p={6} bg={bg} minH="100vh">
       <Box bg={bg} rounded="lg" shadow="lg" p={6}>
@@ -168,7 +215,6 @@ const ExpensesPage = () => {
             Input Expenses Itinerary
           </Text>
           <Flex gap={3} wrap="wrap">
-            {/* Tombol "Day" */}
             <Button
               leftIcon={<AddIcon />}
               colorScheme="blue"
@@ -178,7 +224,6 @@ const ExpensesPage = () => {
             >
               Hari
             </Button>
-            {/* Tombol "Lihat Invoice" */}
             <Button
               leftIcon={<ViewIcon />}
               colorScheme="purple"
@@ -188,7 +233,6 @@ const ExpensesPage = () => {
             >
               Quotation
             </Button>
-            {/* Tombol "Unduh Invoice" */}
             <Button
               leftIcon={<DownloadIcon />}
               colorScheme="teal"
@@ -198,7 +242,6 @@ const ExpensesPage = () => {
             >
               Quotation
             </Button>
-            {/* Tombol "Lihat Itinerary" */}
             <Button
               leftIcon={<ViewIcon />}
               colorScheme="blue"
@@ -208,7 +251,6 @@ const ExpensesPage = () => {
             >
               Itinerary
             </Button>
-            {/* Tombol "Unduh Itinerary" */}
             <Button
               leftIcon={<DownloadIcon />} 
               colorScheme="teal"
@@ -238,27 +280,6 @@ const ExpensesPage = () => {
             />
           ))}
         </Stack>
-
-        {/* Grand Total */}
-        {/* {days.length > 0 && (
-          <Box
-            mt={8}
-            bg={bg}
-            rounded="lg"
-            p={6}
-            borderWidth="1px"
-            borderColor="blue.200"
-          >
-            <Flex justify="space-between" align="center">
-              <Text fontSize="xl" fontWeight="bold" color="green">
-                Total Expenses:
-              </Text>
-              <Text fontSize="2xl" fontWeight="bold" color="green.600">
-                {formatCurrency(calculateGrandTotal())}
-              </Text>
-            </Flex>
-          </Box>
-        )} */}
       </Box>
 
       {/* Komponen PDF disembunyikan dan direferensikan */}
@@ -266,6 +287,54 @@ const ExpensesPage = () => {
         <InvoicePDF ref={invoiceRef} />
         <ItineraryPDF ref={itineraryRef} />
       </Box>
+
+      <Box mt={8}>
+        <Text fontSize="xl" fontWeight="bold" mb={4} color="white">
+          Akomodasi Untuk Perbandingan Harga
+        </Text>
+
+        {/* Hotel Section */}
+        <VStack spacing={4} mb={6} align="stretch">
+          <Text fontSize="lg" fontWeight="semibold" color="white">
+            Hotel Options
+          </Text>
+          {hotelItems.map((item, index) => (
+            <HotelCard
+              key={index}
+              index={index}
+              dayIndex={null}
+              data={item}
+              onDelete={() => handleHotelDelete(index)}
+              onChange={(updatedItem) => handleHotelChange(index, updatedItem)}
+            />
+          ))}
+          <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={handleAddHotel}>
+            Tambah Hotel
+          </Button>
+        </VStack>
+
+        {/* Villa Section */}
+        <VStack spacing={4} align="stretch">
+          <Text fontSize="lg" fontWeight="semibold" color="white">
+            Villa Options
+          </Text>
+          {villaItems.map((item, index) => (
+            <VillaCard
+              key={index}
+              index={index}
+              dayIndex={null}
+              data={item}
+              onDelete={() => handleVillaDelete(index)}
+              onChange={(updatedItem) => handleVillaChange(index, updatedItem)}
+            />
+          ))}
+          <Button leftIcon={<AddIcon />} colorScheme="green" onClick={handleAddVilla}>
+            Tambah Villa
+          </Button>
+        </VStack>
+
+
+      </Box>  
 
       <Flex justify="center" mt={6}>
         <Button

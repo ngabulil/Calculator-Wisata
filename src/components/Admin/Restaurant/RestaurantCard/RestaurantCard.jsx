@@ -48,7 +48,7 @@ const RestaurantCard = (props) => {
           direction={"row"}
           gap={4}
           w={"full"}
-          alignItems={"center"}
+          alignItems={"start"}
           justifyContent={"start"}
         >
           <Box
@@ -65,9 +65,14 @@ const RestaurantCard = (props) => {
           >
             {props.name.slice(0, 2).toUpperCase() || "RS"}
           </Box>
-          <Text fontSize={"18px"} fontWeight={"bold"}>
-            {props.name || "  ATV Adventure"}
-          </Text>
+          <Flex direction={"column"} gap={1} flexGrow={1}>
+            <Text fontSize={"18px"} fontWeight={"bold"}>
+              {props.name || "  Resto Name"}
+            </Text>
+            <Text fontSize={"14px"} fontWeight={"nromal"} color={"gray.500"}>
+              {props.description || "Tidak ada deskripsi"}
+            </Text>
+          </Flex>
         </Flex>
         <Flex alignItems={"center"} gap={2}>
           <Text
@@ -101,6 +106,7 @@ const RestaurantCard = (props) => {
           </Flex>
         </Flex>
       </Flex>
+
       {open && (
         <Flex direction={"column"} gap={3} rounded={4}>
           {props.packages.map((pack) => {
@@ -117,22 +123,34 @@ const AppPackageList = (props) => {
     {
       tourist_type: "Asing",
       category: "Adult",
-      price: props.package.price_foreign_adult,
+      price:
+        props.package.price_foreign_adult == null
+          ? 0
+          : props.package.price_foreign_adult,
     },
     {
       tourist_type: "Asing",
       category: "Child",
-      price: props.package.price_foreign_child,
+      price:
+        props.package.price_foreign_child == null
+          ? 0
+          : props.package.price_foreign_child,
     },
     {
       tourist_type: "Domestik",
       category: "Adult",
-      price: props.package.price_domestic_adult,
+      price:
+        props.package.price_domestic_adult == null
+          ? 0
+          : props.package.price_domestic_adult,
     },
     {
       tourist_type: "Domestik",
       category: "Child",
-      price: props.package.price_domestic_child,
+      price:
+        props.package.price_domestic_child == null
+          ? 0
+          : props.package.price_domestic_child,
     },
   ];
 

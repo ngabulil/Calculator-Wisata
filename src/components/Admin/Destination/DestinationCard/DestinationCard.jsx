@@ -27,22 +27,34 @@ const DestinationCard = (props) => {
     {
       tourist_type: "Asing",
       category: "Adult",
-      price: props.destination.price_foreign_adult,
+      price:
+        props.destination.price_foreign_adult == null
+          ? 0
+          : props.destination.price_foreign_adult,
     },
     {
       tourist_type: "Asing",
       category: "Child",
-      price: props.destination.price_foreign_child,
+      price:
+        props.destination.price_foreign_child == null
+          ? 0
+          : props.destination.price_foreign_child,
     },
     {
       tourist_type: "Domestik",
       category: "Adult",
-      price: props.destination.price_domestic_adult,
+      price:
+        props.destination.price_domestic_adult == null
+          ? 0
+          : props.destination.price_domestic_adult,
     },
     {
       tourist_type: "Domestik",
       category: "Child",
-      price: props.destination.price_domestic_child,
+      price:
+        props.destination.price_domestic_child == null
+          ? 0
+          : props.destination.price_domestic_child,
     },
   ];
   return (
@@ -61,7 +73,7 @@ const DestinationCard = (props) => {
       onClick={() => setOpen(!open)}
     >
       <Flex gap={4} align="start" justify="space-between" w="full">
-        <Flex gap={4} align="center">
+        <Flex gap={4} align="start">
           <Box
             w="60px"
             h="60px"
@@ -80,10 +92,10 @@ const DestinationCard = (props) => {
 
           <Flex direction="column">
             <Text fontSize="lg" fontWeight="bold" color="whiteAlpha.900">
-              {props.name || "Garuda Wisnu Kencana"}
+              {props.name || "Nama tidak tersedia"}
             </Text>
             <Text fontSize="sm" color="whiteAlpha.700">
-              {props.note || "Sudah termasuk tiket"}
+              {props.description || "Tidak ada deskripsi"}
             </Text>
           </Flex>
         </Flex>
@@ -121,7 +133,24 @@ const DestinationCard = (props) => {
       </Flex>
 
       {open && (
-        <Box pt={2} w="full">
+        <Box
+          pt={2}
+          w="full"
+          display={"flex"}
+          flexDirection={"column"}
+          gap={"12px"}
+        >
+          <Box
+            bg="gray.800"
+            p="10px"
+            rounded="md"
+            border="1px solid"
+            borderColor="gray.700"
+          >
+            <Text fontSize="sm" color="gray.200">
+              <strong>Catatan:</strong> {props.note || "Tidak ada catatan"}
+            </Text>
+          </Box>
           <AppPriceList data={formattedPrices} />
         </Box>
       )}

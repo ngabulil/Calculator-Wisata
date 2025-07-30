@@ -117,8 +117,12 @@ const AppTitleDescription = (props) => {
     <Flex direction={"column"} gap={3} w={"full"}>
       <img
         alt="photo-detail"
-        src={props.img || "https://picsum.photos/200/300"}
+        src={props.img}
         className="w-full h-[300px] rounded-[12px] object-cover"
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "/default-img.jpg";
+        }}
       />
       <Flex direction={"column"} gap={5}>
         <Flex direction={"column"} gap={"15px"} w={"60%"} flexShrink={"1"}>

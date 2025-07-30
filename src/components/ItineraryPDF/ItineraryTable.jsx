@@ -59,83 +59,41 @@ const ItineraryTable = ({
     return date.toLocaleDateString('id-ID', options);
   };
 
-  // Helper function untuk render unified item
+  // Helper function untuk render unified item (tanpa harga)
   const renderUnifiedItem = (item, itemIndex, dayIndex, currentDay) => {
     const totalItems = currentDay.items?.length || 0;
     const canMoveUp = itemIndex > 0;
     const canMoveDown = itemIndex < totalItems - 1;
 
-    if (item.type === 'activity') {
-      return (
-        <Tr key={`item-${dayIndex}-${itemIndex}`}>
-          <Td style={itineraryTextStyle} border="1px solid #ddd">
-            <Flex justify="space-between" align="center">
-              <Box flex="1" textAlign="left">
-                <Text>• {item.item}</Text>
-                {item.originalData?.description && (
-                  <Text fontSize="xs" color="gray.600" fontStyle="italic" ml={3}>
-                    {item.originalData.description}
-                  </Text>
-                )}
-              </Box>
-              {isReordering && (
-                <ReorderControls
-                  onMoveUp={() => onMoveItemUp?.(dayIndex, itemIndex)}
-                  onMoveDown={() => onMoveItemDown?.(dayIndex, itemIndex)}
-                  canMoveUp={canMoveUp}
-                  canMoveDown={canMoveDown}
-                  isVisible={isReordering}
-                />
-              )}
-            </Flex>
-          </Td>
-        </Tr>
-      );
-    } else if (item.type === 'expense') {
-      return (
-        <Tr key={`item-${dayIndex}-${itemIndex}`}>
-          <Td style={itineraryTextStyle} border="1px solid #ddd">
-            <Flex justify="space-between" align="center">
-              <Box flex="1" textAlign="left">
-                <Text>• {item.label || item.item || 'Unnamed Item'}</Text>
-                {item.description && (
-                  <Text fontSize="xs" color="gray.600" fontStyle="italic" ml={3}>
-                    {item.description}
-                  </Text>
-                )}
-              </Box>
-              {isReordering && (
-                <ReorderControls
-                  onMoveUp={() => onMoveItemUp?.(dayIndex, itemIndex)}
-                  onMoveDown={() => onMoveItemDown?.(dayIndex, itemIndex)}
-                  canMoveUp={canMoveUp}
-                  canMoveDown={canMoveDown}
-                  isVisible={isReordering}
-                />
-              )}
-            </Flex>
-          </Td>
-        </Tr>
-      );
-    }
-
-    // Return empty row for unknown types instead of null
     return (
       <Tr key={`item-${dayIndex}-${itemIndex}`}>
         <Td style={itineraryTextStyle} border="1px solid #ddd">
-          <Box textAlign="left">
-            <Text>• Unknown item type: {item.type || 'undefined'}</Text>
-            <Text fontSize="xs" color="gray.500" fontStyle="italic" ml={3}>
-              Item data: {JSON.stringify(item, null, 2).substring(0, 100)}...
-            </Text>
-          </Box>
+          <Flex justify="space-between" align="center">
+            <Box flex="1" textAlign="left">
+              <Text>• {item.item || item.label || 'Unnamed Item'}</Text>
+              {(item.originalData?.description || item.description) && (
+                <Text fontSize="xs" color="gray.600" fontStyle="italic" ml={3}>
+                  {item.originalData?.description || item.description}
+                </Text>
+              )}
+            </Box>
+            {isReordering && (
+              <ReorderControls
+                onMoveUp={() => onMoveItemUp?.(dayIndex, itemIndex)}
+                onMoveDown={() => onMoveItemDown?.(dayIndex, itemIndex)}
+                canMoveUp={canMoveUp}
+                canMoveDown={canMoveDown}
+                isVisible={isReordering}
+              />
+            )}
+          </Flex>
         </Td>
       </Tr>
     );
   };
 
-  // Helper function untuk render expense item (backward compatibility)
-  const renderExpenseItem = (expenseItem, dayIndex, itemIndex, currentDay) => {
+  // Helper function untuk render expense item (tanpa harga)
+  const renderExpenseItem = (expenseItem, itemIndex, dayIndex, currentDay) => {
     const { label, description } = expenseItem;
     const totalExpenseItems = currentDay.expenseItems?.length || 0;
     const canMoveUp = itemIndex > 0;
@@ -168,15 +126,20 @@ const ItineraryTable = ({
     );
   };
 
-  // Helper function untuk render activity (backward compatibility)
-  const renderActivity = (activity, dayIndex, itemIndex, currentDay) => {
+  // Helper function untuk render activity (tanpa harga)
+  const renderActivity = (activity, itemIndex, dayIndex, currentDay) => {
     const totalActivities = currentDay.activities?.length || 0;
     const canMoveUp = itemIndex > 0;
     const canMoveDown = itemIndex < totalActivities - 1;
 
     // Handle both string and object activities
-    const activityName = typeof activity === 'string' ? activity : (activity?.displayName || activity?.name || activity?.item || 'Unnamed Activity');
-    const activityDescription = typeof activity === 'object' ? activity?.description : null;
+    const activityName = typeof activity === 'string' 
+      ? activity 
+      : (activity?.displayName || activity?.name || activity?.item || 'Unnamed Activity');
+    
+    const activityDescription = typeof activity === 'object' 
+      ? activity?.description 
+      : null;
 
     return (
       <Tr key={`activity-${dayIndex}-${itemIndex}`}>
@@ -236,14 +199,8 @@ const ItineraryTable = ({
               </Box>
               {isReordering && (
                 <ReorderControls
-                  onMoveUp={() => {
-                    console.log(`Moving day up: dayIndex=${dayIndex}`);
-                    onMoveDayUp?.(dayIndex);
-                  }}
-                  onMoveDown={() => {
-                    console.log(`Moving day down: dayIndex=${dayIndex}`);
-                    onMoveDayDown?.(dayIndex);
-                  }}
+                  onMoveUp={() => onMoveDayUp?.(dayIndex)}
+                  onMoveDown={() => onMoveDayDown?.(dayIndex)}
                   canMoveUp={dayIndex > 0}
                   canMoveDown={dayIndex < days.length - 1}
                   isVisible={isReordering}
@@ -275,7 +232,7 @@ const ItineraryTable = ({
           if (day.activities && Array.isArray(day.activities)) {
             day.activities.forEach((activity, itemIndex) => {
               if (activity !== null && activity !== undefined) {
-                const renderedActivity = renderActivity(activity, dayIndex, itemIndex, day);
+                const renderedActivity = renderActivity(activity, itemIndex, dayIndex, day);
                 if (renderedActivity) {
                   allRows.push(renderedActivity);
                 }
@@ -287,7 +244,7 @@ const ItineraryTable = ({
           if (day.expenseItems && Array.isArray(day.expenseItems)) {
             day.expenseItems.forEach((expenseItem, itemIndex) => {
               if (expenseItem && typeof expenseItem === 'object') {
-                const renderedExpense = renderExpenseItem(expenseItem, dayIndex, itemIndex, day);
+                const renderedExpense = renderExpenseItem(expenseItem, itemIndex, dayIndex, day);
                 if (renderedExpense) {
                   allRows.push(renderedExpense);
                 }
@@ -325,7 +282,6 @@ const ItineraryTable = ({
         </Thead>
         <Tbody color="#222" textAlign="center">
           {days.length > 0 ? (
-            // Render all rows as flat array
             renderAllRows()
           ) : (
             <Tr>

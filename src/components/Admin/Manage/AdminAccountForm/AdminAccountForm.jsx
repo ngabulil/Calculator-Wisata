@@ -38,16 +38,6 @@ const AdminFormPage = (props) => {
     };
 
     try {
-      for (const [key, value] of Object.entries(data)) {
-        if (value === "") {
-          toast.close(loading);
-          toast(
-            toastConfig("Input Error", `${key} tidak boleh kosong`, "error")
-          );
-          return;
-        }
-      }
-
       const res = await apiPostAdmin(data);
 
       if (res.status === 201) {
