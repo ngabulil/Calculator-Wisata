@@ -44,7 +44,7 @@ const CalculatorFixPage = () => {
 
   const { packagesData, getPackages, selectedPackage, setSelectedPackage } =
     usePackageContext();
-
+  
   const {
     days = [],
     name = "",

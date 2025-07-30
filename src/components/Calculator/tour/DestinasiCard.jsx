@@ -92,7 +92,11 @@ const DestinasiCard = ({
   }, [jumlahAdult, jumlahChild, hargaAdult, hargaChild, dayIndex]);
 
   const handleSelectChange = (field, val) => {
-    const updates = { [field]: val?.value ?? null };
+    const updates = {
+      [field]: val?.value ?? null,
+      description: destinasiList.find((d) => d.id === val.value)?.description,
+    };
+    
     onChange({ ...data, ...updates });
   };
 

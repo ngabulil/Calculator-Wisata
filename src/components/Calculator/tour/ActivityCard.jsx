@@ -34,7 +34,7 @@ const ActivityCard = ({
   const { selectedPackage } = usePackageContext();
   const { totalPaxAdult: jumlahAdult, totalPaxChildren: jumlahChild } =
     selectedPackage;
-    
+
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
   const textColor = useColorModeValue("white", "white");
@@ -103,16 +103,20 @@ const ActivityCard = ({
 
   const handleSelectChange = (field, val) => {
     const updates = { [field]: val?.value ?? null };
-    if (field === "id_vendor")
+    if (field === "id_vendor") {
       Object.assign(updates, {
         id_activity: null,
         jenis_wisatawan: null,
       });
-    if (field === "id_activity")
+    }
+    if (field === "id_activity") {
       Object.assign(updates, {
         jenis_wisatawan: null,
+        description: selectedVendor?.activities.find(
+          (a) => a.activity_id === val.value
+        )?.description,
       });
-
+    }
     onChange({ ...data, ...updates });
   };
 

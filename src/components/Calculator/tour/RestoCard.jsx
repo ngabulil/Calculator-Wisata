@@ -105,6 +105,7 @@ const RestoCard = ({
       Object.assign(updates, {
         id_menu: null,
         jenis_wisatawan: null,
+        description: restaurants.find((r) => r.id === val.value)?.description,
       });
     }
     if (field === "id_menu") {
