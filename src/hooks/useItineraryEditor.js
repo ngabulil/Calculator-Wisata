@@ -1,7 +1,7 @@
-// hooks/useItineraryReorder.js
-import { useState, useCallback } from "react";
+// hooks/useItineraryEditor.js
+import { useState, useCallback, useEffect } from "react";
 
-const useItineraryReorder = (initialDays = [], packageId = null) => {
+const useItineraryEditor = (initialDays = [], packageId = null) => {
   const [days, setDays] = useState(initialDays);
   const [originalDays, setOriginalDays] = useState(initialDays);
   const [isReordering, setIsReordering] = useState(false);
@@ -49,6 +49,7 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
     },
     [getStorageKey]
   );
+
   // Apply saved order to days data
   const applySavedOrder = useCallback((daysData, savedOrder) => {
     if (!savedOrder || !Array.isArray(savedOrder.dayOrder)) {
@@ -80,6 +81,43 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
             );
           }
 
+          // Apply edited content if available
+          if (dayOrderInfo.editedContent) {
+            // Apply day-level edits
+            if (dayOrderInfo.editedContent.title) {
+              reorderedDay.title = dayOrderInfo.editedContent.title;
+            }
+            if (dayOrderInfo.editedContent.description) {
+              reorderedDay.description = dayOrderInfo.editedContent.description;
+            }
+
+            // Apply item-level edits
+            if (dayOrderInfo.editedContent.items && reorderedDay.items) {
+              reorderedDay.items = reorderedDay.items.map((item, index) => {
+                const editedItem = dayOrderInfo.editedContent.items[index];
+                if (editedItem) {
+                  return {
+                    ...item,
+                    ...(editedItem.title && { 
+                      item: item.type === 'activity' ? editedItem.title : item.item,
+                      label: item.type === 'expense' ? editedItem.title : item.label 
+                    }),
+                    ...(editedItem.description && { description: editedItem.description })
+                  };
+                }
+                return item;
+              });
+
+              // Update activities and expenseItems arrays
+              reorderedDay.activities = reorderedDay.items.filter(
+                (item) => item.type === "activity"
+              );
+              reorderedDay.expenseItems = reorderedDay.items.filter(
+                (item) => item.type === "expense"
+              );
+            }
+          }
+
           return reorderedDay;
         })
         .filter(Boolean);
@@ -93,7 +131,7 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
     }
   }, []);
 
-  // Generate order data for saving
+  // Generate order data for saving (with edited content)
   const generateOrderData = useCallback((currentDays, originalDays) => {
     const dayOrder = currentDays.map((day, newIndex) => {
       // Temukan day asli dari originalDays
@@ -105,6 +143,11 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
         originalDay: originalDay ? originalDay.day : day.day,
         newDay: newIndex + 1,
         itemOrders: {},
+        editedContent: {
+          title: day.title !== originalDay?.title ? day.title : null,
+          description: day.description !== originalDay?.description ? day.description : null,
+          items: []
+        }
       };
 
       // Simpan urutan items (unified)
@@ -126,6 +169,41 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
             });
           })
           .filter((index) => index !== -1);
+
+        // Simpan edited content untuk setiap item
+        orderInfo.editedContent.items = day.items.map((item, index) => {
+          const originalIndex = orderInfo.itemOrders.items[index];
+          const originalItem = originalIndex !== -1 ? originalDay.items[originalIndex] : null;
+          
+          if (!originalItem) return null;
+
+          const editedItem = {};
+          
+          // Check if title/name changed
+          const currentTitle = item.type === 'activity' ? item.item : item.label;
+          const originalTitle = originalItem.type === 'activity' ? originalItem.item : originalItem.label;
+          
+          if (currentTitle !== originalTitle) {
+            editedItem.title = currentTitle;
+          }
+
+          // Check if description changed
+          if (item.description !== originalItem.description) {
+            editedItem.description = item.description;
+          }
+
+          return Object.keys(editedItem).length > 0 ? editedItem : null;
+        });
+
+        // Remove null entries
+        orderInfo.editedContent.items = orderInfo.editedContent.items.filter(Boolean);
+      }
+
+      // Remove editedContent if no changes
+      if (!orderInfo.editedContent.title && 
+          !orderInfo.editedContent.description && 
+          orderInfo.editedContent.items.length === 0) {
+        delete orderInfo.editedContent;
       }
 
       return orderInfo;
@@ -136,6 +214,29 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
       timestamp: Date.now(),
     };
   }, []);
+
+  // Auto-save function untuk menyimpan perubahan secara otomatis
+  const autoSave = useCallback(() => {
+    if (packageId && days.length > 0 && originalDays.length > 0) {
+      const orderData = generateOrderData(days, originalDays);
+      saveOrderToStorage(orderData, packageId);
+    }
+  }, [days, originalDays, packageId, generateOrderData, saveOrderToStorage]);
+
+  // Effect untuk auto-save ketika ada perubahan pada days
+  useEffect(() => {
+    // Only auto-save if we have meaningful data and we're in editing mode
+    if (isReordering && days.length > 0 && originalDays.length > 0) {
+      // Debounce auto-save to avoid too frequent saves
+      const timeoutId = setTimeout(() => {
+        if (packageId && days.length > 0 && originalDays.length > 0) {
+          const orderData = generateOrderData(days, originalDays);
+          saveOrderToStorage(orderData, packageId);
+        }
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [days, isReordering, packageId, originalDays, generateOrderData, saveOrderToStorage]);
 
   // Update days when initial data changes
   const updateDays = useCallback(
@@ -247,10 +348,20 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
 
   // Toggle reordering mode
   const toggleReordering = useCallback(() => {
-    setIsReordering((prev) => !prev);
-  }, []);
+    setIsReordering((prev) => {
+      const newReordering = !prev;
+      
+      // Auto-save when exiting reordering mode
+      if (!newReordering && packageId && days.length > 0 && originalDays.length > 0) {
+        const orderData = generateOrderData(days, originalDays);
+        saveOrderToStorage(orderData, packageId);
+      }
+      
+      return newReordering;
+    });
+  }, [days, originalDays, packageId, generateOrderData, saveOrderToStorage]);
 
-  // Save current order
+  // Save current order - Enhanced to include edited content
   const saveOrder = useCallback(() => {
     if (packageId) {
       const orderData = generateOrderData(days, originalDays);
@@ -278,6 +389,64 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
     }
   }, [packageId, getStorageKey, originalDays]);
 
+  // Enhanced edit functions with auto-save
+  const editItemTitle = useCallback((dayIndex, itemIndex, newTitle) => {
+    setDays(prevDays => {
+      const newDays = [...prevDays];
+      const day = { ...newDays[dayIndex] };
+      const items = [...day.items];
+      
+      // Update field yang sesuai (item untuk activity, label untuk expense)
+      const item = { ...items[itemIndex] };
+      if (item.type === 'activity') {
+        item.item = newTitle;
+      } else if (item.type === 'expense') {
+        item.label = newTitle;
+      }
+      
+      items[itemIndex] = item;
+      day.items = items;
+      
+      // Update activities and expenseItems arrays
+      day.activities = items.filter((item) => item.type === "activity");
+      day.expenseItems = items.filter((item) => item.type === "expense");
+      
+      newDays[dayIndex] = day;
+      return newDays;
+    });
+  }, []);
+
+  const editItemDescription = useCallback((dayIndex, itemIndex, newDescription) => {
+    setDays(prevDays => {
+      const newDays = [...prevDays];
+      const day = { ...newDays[dayIndex] };
+      const items = [...day.items];
+      
+      const item = { ...items[itemIndex] };
+      item.description = newDescription;
+      
+      items[itemIndex] = item;
+      day.items = items;
+      
+      // Update activities and expenseItems arrays
+      day.activities = items.filter((item) => item.type === "activity");
+      day.expenseItems = items.filter((item) => item.type === "expense");
+      
+      newDays[dayIndex] = day;
+      return newDays;
+    });
+  }, []);
+
+  // Function to manually trigger save (useful for explicit save operations)
+  const saveChanges = useCallback(() => {
+    if (packageId && days.length > 0 && originalDays.length > 0) {
+      const orderData = generateOrderData(days, originalDays);
+      saveOrderToStorage(orderData, packageId);
+      return true;
+    }
+    return false;
+  }, [days, originalDays, packageId, generateOrderData, saveOrderToStorage]);
+
   return {
     days,
     originalDays,
@@ -291,7 +460,11 @@ const useItineraryReorder = (initialDays = [], packageId = null) => {
     resetOrder,
     saveOrder,
     clearSavedOrder,
+    editItemDescription,
+    editItemTitle,
+    saveChanges,
+    autoSave,
   };
 };
 
-export default useItineraryReorder;
+export default useItineraryEditor;

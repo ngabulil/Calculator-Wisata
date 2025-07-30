@@ -17,7 +17,17 @@ const ExpensesContextProvider = ({ children }) => {
         },
     ]);
 
+    // State untuk menyimpan data hotel dan villa
+    const [hotelItems, setHotelItems] = React.useState([]);
+    const [villaItems, setVillaItems] = React.useState([]);
+
     const { selectedPackage } = usePackageContext();
+
+    // Effect untuk initialize empty items jika belum ada data
+    React.useEffect(() => {
+        // Tidak perlu sync dari selectedPackage karena data diambil dari API
+        // Context hanya menyimpan data yang dipilih user dari HotelCard/VillaCard
+    }, [selectedPackage]);
 
     const updateDay = (index, updatedDay) => {
         setDays((prev) => {
@@ -58,7 +68,7 @@ const ExpensesContextProvider = ({ children }) => {
         });
     };
 
-   const addExpenseItem = (dayIndex) => {
+    const addExpenseItem = (dayIndex) => {
         let newItemIndex; 
         setDays((prev) => {
             const newDays = [...prev];
@@ -99,7 +109,43 @@ const ExpensesContextProvider = ({ children }) => {
         });
     };
 
- const calculateDayTotal = (dayIndex) => {
+    // Fungsi untuk mengelola hotel items
+    const addHotelItem = () => {
+        setHotelItems(prev => [...prev, {
+        }]);
+    };
+
+    const updateHotelItem = (index, updatedItem) => {
+        setHotelItems(prev => {
+            const newItems = [...prev];
+            newItems[index] = { ...newItems[index], ...updatedItem };
+            return newItems;
+        });
+    };
+
+    const removeHotelItem = (index) => {
+        setHotelItems(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Fungsi untuk mengelola villa items
+    const addVillaItem = () => {
+        setVillaItems(prev => [...prev, {
+        }]);
+    };
+
+    const updateVillaItem = (index, updatedItem) => {
+        setVillaItems(prev => {
+            const newItems = [...prev];
+            newItems[index] = { ...newItems[index], ...updatedItem };
+            return newItems;
+        });
+    };
+
+    const removeVillaItem = (index) => {
+        setVillaItems(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const calculateDayTotal = (dayIndex) => {
         const day = days[dayIndex];
         if (!day || !day.totals) return 0;
         
@@ -119,9 +165,24 @@ const ExpensesContextProvider = ({ children }) => {
             return total + (price * quantity);
         }, 0);
     };
+
     const calculateGrandTotal = () => {
         return days.reduce((total, _, dayIndex) => {
             return total + calculateDayTotal(dayIndex);
+        }, 0);
+    };
+
+    // Fungsi untuk menghitung total harga hotel
+    const calculateHotelTotal = () => {
+        return hotelItems.reduce((total, item) => {
+            return total + (item.price || 0);
+        }, 0);
+    };
+
+    // Fungsi untuk menghitung total harga villa
+    const calculateVillaTotal = () => {
+        return villaItems.reduce((total, item) => {
+            return total + (item.price || 0);
         }, 0);
     };
 
@@ -148,6 +209,20 @@ const ExpensesContextProvider = ({ children }) => {
                 calculateDayTotal,
                 calculateGrandTotal,
                 formatCurrency,
+                // Hotel management
+                hotelItems,
+                setHotelItems,
+                addHotelItem,
+                updateHotelItem,
+                removeHotelItem,
+                calculateHotelTotal,
+                // Villa management
+                villaItems,
+                setVillaItems,
+                addVillaItem,
+                updateVillaItem,
+                removeVillaItem,
+                calculateVillaTotal,
             }}
         >
             {children}

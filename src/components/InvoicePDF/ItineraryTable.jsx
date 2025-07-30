@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import {
     Box,
     Table,
@@ -8,8 +8,14 @@ import {
     Th,
     Td,
     Text,
-    HStack
+    HStack,
+    Textarea,
+    Input,
+    IconButton,
+    VStack,
+    useToast
 } from '@chakra-ui/react';
+import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import ReorderControls from '../ReorderControls';
 
 const orange = "#FFA726";
@@ -47,11 +53,15 @@ const ItineraryTable = ({
     isReordering = false,
     onMoveItemUp,
     onMoveItemDown,
-    onMoveDayUp,
-    onMoveDayDown,
+    onEditItemTitle,
+    onEditItemDescription,
     totalAdult = 0,
     totalChild = 0
 }) => {
+    const [editingItem, setEditingItem] = useState(null);
+    const [editValues, setEditValues] = useState({ title: '', description: '' });
+    const toast = useToast();
+
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -64,18 +74,54 @@ const ItineraryTable = ({
         return date.toLocaleDateString('id-ID', options);
     };
 
+    const startEditing = useCallback((dayIndex, itemIndex, currentTitle, currentDescription) => {
+        setEditingItem({ dayIndex, itemIndex });
+        setEditValues({ 
+            title: currentTitle || '', 
+            description: currentDescription || '' 
+        });
+    }, []);
+
+    const cancelEditing = useCallback(() => {
+        setEditingItem(null);
+        setEditValues({ title: '', description: '' });
+    }, []);
+
+    const saveEditing = useCallback(() => {
+        if (!editingItem) return;
+
+        const { dayIndex, itemIndex } = editingItem;
+        
+        // Call the parent functions to update the data
+        if (onEditItemTitle && editValues.title.trim() !== '') {
+            onEditItemTitle(dayIndex, itemIndex, editValues.title.trim());
+        }
+        
+        if (onEditItemDescription) {
+            onEditItemDescription(dayIndex, itemIndex, editValues.description.trim());
+        }
+
+        toast({
+            title: "Item Updated",
+            description: "Item name and description have been updated successfully",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+        });
+
+        setEditingItem(null);
+        setEditValues({ title: '', description: '' });
+    }, [editingItem, editValues, onEditItemTitle, onEditItemDescription, toast]);
+
     const calculateTotalExpenses = () => {
         let total = 0;
         
         days.forEach(day => {
-            // Use unified items array if available, otherwise fallback to separate arrays
             const items = day.items || [];
             
             if (items.length > 0) {
-                // Process unified items
                 items.forEach(item => {
                     if (item.type === 'activity') {
-                        // Parse activity expenses
                         if (item.expense && item.expense !== '-' && item.expense !== 'Rp 0') {
                             const expenseStr = item.expense.toString();
                             const amount = parseFloat(
@@ -96,7 +142,6 @@ const ItineraryTable = ({
                             if (!isNaN(amount) && amount > 0) total += amount;
                         }
                     } else if (item.type === 'expense') {
-                        // Parse expense item
                         let totalItemPrice = 0;
                         
                         if (item.adultPrice !== null && item.adultPrice !== undefined) {
@@ -109,7 +154,6 @@ const ItineraryTable = ({
                             totalItemPrice += childTotal;
                         }
                         
-                        // Fallback ke price * quantity jika tidak ada adultPrice/childPrice
                         if ((item.adultPrice === null || item.adultPrice === undefined) && 
                             (item.childPrice === null || item.childPrice === undefined)) {
                             const price = parseFloat(item.price) || 0;
@@ -158,7 +202,6 @@ const ItineraryTable = ({
                             totalItemPrice += childTotal;
                         }
                         
-                        // Fallback ke price * quantity jika tidak ada adultPrice/childPrice
                         if ((expenseItem.adultPrice === null || expenseItem.adultPrice === undefined) && 
                             (expenseItem.childPrice === null || expenseItem.childPrice === undefined)) {
                             const price = parseFloat(expenseItem.price) || 0;
@@ -175,24 +218,117 @@ const ItineraryTable = ({
         return total;
     };
 
-    // Helper function untuk render unified item
+    // Helper function untuk render unified item dengan editing capability
     const renderUnifiedItem = (item, itemIndex, dayIndex, currentDay) => {
         const totalItems = currentDay.items?.length || 0;
         const canMoveUp = itemIndex > 0;
         const canMoveDown = itemIndex < totalItems - 1;
+        const isCurrentlyEditing = editingItem?.dayIndex === dayIndex && editingItem?.itemIndex === itemIndex;
+
+        const renderItemContent = () => {
+            // Show editing interface when in reordering mode OR when specifically editing this item
+            if (isReordering || isCurrentlyEditing) {
+                const itemTitle = item.item || item.label || 'Unnamed Item';
+                const itemDescription = item.description || '';
+                
+                return (
+                    <VStack align="stretch" spacing={2}>
+                        <HStack>
+                            <Text fontSize="sm" fontWeight="bold" minWidth="60px">Name:</Text>
+                            <Input
+                                value={isCurrentlyEditing ? editValues.title : itemTitle}
+                                onChange={(e) => {
+                                    if (isCurrentlyEditing) {
+                                        setEditValues(prev => ({ ...prev, title: e.target.value }));
+                                    } else {
+                                        // Direct update in reordering mode
+                                        onEditItemTitle?.(dayIndex, itemIndex, e.target.value);
+                                    }
+                                }}
+                                size="sm"
+                                placeholder="Enter item name"
+                                bg="white"
+                                border="1px solid"
+                                borderColor="gray.300"
+                            />
+                        </HStack>
+                        <HStack align="flex-start">
+                            <Text fontSize="sm" fontWeight="bold" minWidth="60px">Desc:</Text>
+                            <Textarea
+                                value={isCurrentlyEditing ? editValues.description : itemDescription}
+                                onChange={(e) => {
+                                    if (isCurrentlyEditing) {
+                                        setEditValues(prev => ({ ...prev, description: e.target.value }));
+                                    } else {
+                                        // Direct update in reordering mode
+                                        onEditItemDescription?.(dayIndex, itemIndex, e.target.value);
+                                    }
+                                }}
+                                size="sm"
+                                placeholder="Enter description (optional)"
+                                rows={2}
+                                resize="vertical"
+                                bg="white"
+                                border="1px solid"
+                                borderColor="gray.300"
+                            />
+                        </HStack>
+                        {isCurrentlyEditing && (
+                            <HStack spacing={1}>
+                                <IconButton
+                                    icon={<CheckIcon />}
+                                    size="xs"
+                                    colorScheme="green"
+                                    onClick={saveEditing}
+                                    aria-label="Save changes"
+                                />
+                                <IconButton
+                                    icon={<CloseIcon />}
+                                    size="xs"
+                                    colorScheme="red"
+                                    onClick={cancelEditing}
+                                    aria-label="Cancel editing"
+                                />
+                            </HStack>
+                        )}
+                    </VStack>
+                );
+            }
+
+            // Regular display mode
+            const itemTitle = item.item || item.label || 'Unnamed Item';
+            const itemDescription = item.description || '';
+
+            return (
+                <HStack align="flex-start" spacing={2}>
+                    <Box flex={1}>
+                        <Text>• {itemTitle}</Text>
+                        {itemDescription && (
+                            <Text fontSize="xs" color="gray.600" fontStyle="italic" ml={3}>
+                                {itemDescription}
+                            </Text>
+                        )}
+                    </Box>
+                    <IconButton
+                        icon={<EditIcon />}
+                        size="xs"
+                        variant="ghost"
+                        onClick={() => startEditing(dayIndex, itemIndex, itemTitle, itemDescription)}
+                        aria-label="Edit item"
+                        _hover={{ bg: "gray.100" }}
+                    />
+                </HStack>
+            );
+        };
 
         if (item.type === 'activity') {
             return (
-                <Tr key={`item-${dayIndex}-${itemIndex}`} _hover={{ background: gray }}>
+                <Tr key={`item-${dayIndex}-${itemIndex}`} _hover={{ background: !isCurrentlyEditing && !isReordering ? gray : undefined }}>
                     {isReordering && (
                         <Td style={tableCellStyle}>
                             <ReorderControls
-                                onMoveUp={() => {
-                                    onMoveItemUp?.(dayIndex, itemIndex);
-                                }}
-                                onMoveDown={() => {
-                                    onMoveItemDown?.(dayIndex, itemIndex);
-                                }}
+                                onMoveUp={() => onMoveItemUp?.(dayIndex, itemIndex)}
+                                onMoveDown={() => onMoveItemDown?.(dayIndex, itemIndex)}
                                 canMoveUp={canMoveUp}
                                 canMoveDown={canMoveDown}
                                 isVisible={isReordering}
@@ -200,7 +336,9 @@ const ItineraryTable = ({
                         </Td>
                     )}
                     <Td></Td>
-                    <Td style={tableCellStyle}>• {item.item}</Td>
+                    <Td style={tableCellStyle}>
+                        {renderItemContent()}
+                    </Td>
                     <Td style={tableCellStyle}>
                         {item.expense && item.expense !== 'Rp 0' ? item.expense : '-'}
                     </Td>
@@ -230,16 +368,12 @@ const ItineraryTable = ({
             }
 
             return (
-                <Tr key={`item-${dayIndex}-${itemIndex}`} _hover={{ background: gray }}>
+                <Tr key={`item-${dayIndex}-${itemIndex}`} _hover={{ background: !isCurrentlyEditing && !isReordering ? gray : undefined }}>
                     {isReordering && (
                         <Td style={tableCellStyle}>
                             <ReorderControls
-                                onMoveUp={() => {
-                                    onMoveItemUp?.(dayIndex, itemIndex);
-                                }}
-                                onMoveDown={() => {
-                                    onMoveItemDown?.(dayIndex, itemIndex);
-                                }}
+                                onMoveUp={() => onMoveItemUp?.(dayIndex, itemIndex)}
+                                onMoveDown={() => onMoveItemDown?.(dayIndex, itemIndex)}
                                 canMoveUp={canMoveUp}
                                 canMoveDown={canMoveDown}
                                 isVisible={isReordering}
@@ -248,14 +382,7 @@ const ItineraryTable = ({
                     )}
                     <Td></Td>
                     <Td style={tableCellStyle}>
-                        <Box>
-                            <Text>• {item.label || item.item || 'Unnamed Item'}</Text>
-                            {item.description && (
-                                <Text fontSize="xs" color="gray.600" fontStyle="italic" ml={3}>
-                                    {item.description}
-                                </Text>
-                            )}
-                        </Box>
+                        {renderItemContent()}
                     </Td>
                     <Td style={tableCellStyle}>
                         {fallbackTotal > 0 
@@ -352,29 +479,39 @@ const ItineraryTable = ({
         const canMoveUp = actIndex > 0;
         const canMoveDown = actIndex < totalActivities - 1;
 
-        return (
-            <Tr key={`act-${dayIndex}-${actIndex}`} _hover={{ background: gray }}>
-                {isReordering && (
-                    <Td style={tableCellStyle}>
-                        <ReorderControls
-                            onMoveUp={() => onMoveItemUp?.(dayIndex, actIndex, 'activities')}
-                            onMoveDown={() => onMoveItemDown?.(dayIndex, actIndex, 'activities')}
-                            canMoveUp={canMoveUp}
-                            canMoveDown={canMoveDown}
-                            isVisible={isReordering}
-                        />
-                    </Td>
-                )}
-                <Td></Td>
-                <Td style={tableCellStyle}>• {activity.item}</Td>
+return (
+        <Tr key={`act-${dayIndex}-${actIndex}`} _hover={{ background: gray }}>
+            {isReordering && (
                 <Td style={tableCellStyle}>
-                    {activity.expense && activity.expense !== 'Rp 0' ? activity.expense : '-'}
+                    <ReorderControls
+                        onMoveUp={() => onMoveItemUp?.(dayIndex, actIndex, 'activities')}
+                        onMoveDown={() => onMoveItemDown?.(dayIndex, actIndex, 'activities')}
+                        canMoveUp={canMoveUp}
+                        canMoveDown={canMoveDown}
+                        isVisible={isReordering}
+                    />
                 </Td>
-                <Td style={tableCellStyle}>
-                    {activity.kidExpense && activity.kidExpense !== 'Rp 0' ? activity.kidExpense : '-'}
-                </Td>
-            </Tr>
-        );
+            )}
+            <Td></Td>
+            <Td style={tableCellStyle}>
+                <Box>
+                    <Text>• {activity.item}</Text>
+                    {/* Display description if available */}
+                    {activity.description && (
+                        <Text fontSize="xs" color="gray.600" fontStyle="italic" ml={3}>
+                            {activity.description}
+                        </Text>
+                    )}
+                </Box>
+            </Td>
+            <Td style={tableCellStyle}>
+                {activity.expense && activity.expense !== 'Rp 0' ? activity.expense : '-'}
+            </Td>
+            <Td style={tableCellStyle}>
+                {activity.kidExpense && activity.kidExpense !== 'Rp 0' ? activity.kidExpense : '-'}
+            </Td>
+        </Tr>
+    );
     };
 
     return (
@@ -396,19 +533,7 @@ const ItineraryTable = ({
                             <Tr>
                                 {isReordering && (
                                     <Td style={tableSubHeaderStyle}>
-                                        <ReorderControls
-                                            onMoveUp={() => {
-                                                console.log(`Moving day up: dayIndex=${dayIndex}`);
-                                                onMoveDayUp?.(dayIndex);
-                                            }}
-                                            onMoveDown={() => {
-                                                console.log(`Moving day down: dayIndex=${dayIndex}`);
-                                                onMoveDayDown?.(dayIndex);
-                                            }}
-                                            canMoveUp={dayIndex > 0}
-                                            canMoveDown={dayIndex < days.length - 1}
-                                            isVisible={isReordering}
-                                        />
+
                                     </Td>
                                 )}
                                 <Td textAlign="center" fontWeight="bold" style={tableSubHeaderStyle}>{day.day}</Td>

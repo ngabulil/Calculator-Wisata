@@ -15,7 +15,7 @@ import { usePackageContext } from "../context/PackageContext";
 import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
-import useItineraryReorder from "../hooks/useItineraryReorder";
+import useItineraryEditor from "../hooks/useItineraryEditor";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -72,10 +72,12 @@ const ItineraryPDF = forwardRef((props, ref) => {
     moveDayUp,
     moveDayDown,
     toggleReordering,
-    resetOrder,
+    // resetOrder,
     saveOrder,
     clearSavedOrder,
-  } = useItineraryReorder([], packageId);
+    editItemDescription,
+    editItemTitle,
+  } = useItineraryEditor([], packageId);
 
   useImperativeHandle(ref, () => ({
     async exportAsBlob() {
@@ -264,10 +266,10 @@ const ItineraryPDF = forwardRef((props, ref) => {
     }
   }, [saveOrder, reorderedDays, toggleReordering, toast]);
 
-  const handleCancelReorder = useCallback(() => {
-    resetOrder();
-    toggleReordering();
-  }, [resetOrder, toggleReordering]);
+  // const handleCancelReorder = useCallback(() => {
+  //   resetOrder();
+  //   toggleReordering();
+  // }, [resetOrder, toggleReordering]);
 
   const handleResetToOriginal = useCallback(() => {
     clearSavedOrder();
@@ -343,13 +345,13 @@ const ItineraryPDF = forwardRef((props, ref) => {
                 >
                   Simpan Urutan
                 </Button>
-                <Button 
+                {/* <Button 
                   size="sm" 
                   colorScheme="red" 
                   onClick={handleCancelReorder}
                 >
                   Batal
-                </Button>
+                </Button> */}
               </Flex>
             )}
           </Box>
@@ -451,7 +453,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
         <Divider my={6} borderColor="#FFA726" />
 
         <ItineraryTable 
-          title={`ITINERARY ${selectedPackage?.title || ""}`} 
+          title={`ITINERARY`} 
           days={Array.isArray(reorderedDays) ? reorderedDays : []}
           formatCurrency={formatCurrency}
           isReordering={isReordering}
@@ -459,6 +461,8 @@ const ItineraryPDF = forwardRef((props, ref) => {
           onMoveItemDown={moveItemDown}
           onMoveDayUp={moveDayUp}
           onMoveDayDown={moveDayDown}
+          onEditItemTitle={editItemTitle}
+          onEditItemDescription={editItemDescription} 
           totalAdult={calculatedValues.totalAdult}
           totalChild={calculatedValues.actualChild}
         />
