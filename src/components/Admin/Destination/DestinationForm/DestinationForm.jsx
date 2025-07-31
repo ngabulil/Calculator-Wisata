@@ -40,6 +40,7 @@ const DestinationFormPage = (props) => {
     setPriceDomesticAdult(destinationData.price_domestic_adult);
     setPriceDomesticChild(destinationData.price_domestic_child);
     setNote(destinationData.note);
+    setDescription(destinationData.description || "");
   };
 
   const handleDestinationCreate = async () => {
