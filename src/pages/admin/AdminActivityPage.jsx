@@ -33,6 +33,7 @@ const AdminActivityPage = () => {
   const [mode, setMode] = useState("activity");
   const [loading, setLoading] = useState(false);
   const [formActive, setFormActive] = useState(false);
+  const [selectOption, setSelectOption] = useState("activity");
   const {
     getAllActivityDetails,
     getAllActivityVendors,
@@ -177,8 +178,10 @@ const AdminActivityPage = () => {
                 }}
               />
               <VendorActivityDropdown
+                value={selectOption}
                 onChange={(v) => {
                   setMode(v);
+                  setSelectOption(v);
                 }}
               />
             </Flex>
@@ -193,6 +196,11 @@ const AdminActivityPage = () => {
               }
 
               navigate("/admin/activity");
+              if (mode == "activity") {
+                setSelectOption("activity");
+              } else {
+                setSelectOption("vendor");
+              }
             }}
           >
             {formActive ? (
@@ -328,7 +336,7 @@ const VendorActivityDropdown = (props) => {
   return (
     <Select
       w={"max"}
-      value={selectedOption}
+      value={props.value || selectedOption}
       defaultValue="activity"
       onChange={(e) => {
         setSelectedOption(e.target.value);

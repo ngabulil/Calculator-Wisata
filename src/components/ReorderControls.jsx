@@ -1,5 +1,3 @@
-// components/ReorderControls.jsx
-import React from 'react';
 import { IconButton, HStack, Tooltip } from '@chakra-ui/react';
 import { ChevronUpIcon, ChevronDownIcon } from '@chakra-ui/icons';
 

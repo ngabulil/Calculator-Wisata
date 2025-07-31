@@ -204,9 +204,6 @@ const handleAddVilla = () => {
     removeVillaItem(index);
   };
 
-  console.log("Hotel Items:", hotelItems);
-  console.log("Villa Items:", villaItems);
-
   return (
     <Box maxW="6xl" mx="auto" p={6} bg={bg} minH="100vh">
       <Box bg={bg} rounded="lg" shadow="lg" p={6}>
@@ -290,7 +287,7 @@ const handleAddVilla = () => {
 
       <Box mt={8}>
         <Text fontSize="xl" fontWeight="bold" mb={4} color="white">
-          Akomodasi Untuk Perbandingan Harga
+          Accommodation for Price Comparison
         </Text>
 
         {/* Hotel Section */}
