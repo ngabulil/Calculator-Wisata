@@ -45,12 +45,8 @@ const formatPrice = (price) => {
 const HotelChoiceTable = ({ akomodasiDays }) => {
   const { hotelItems, villaItems, calculateGrandTotal } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
-  const {
-    transportTotal,
-    tourTotal,
-    grandTotal,
-  } = useCheckoutContext();
-  
+  const { transportTotal, tourTotal, grandTotal } = useCheckoutContext();
+
   const [parsedExpensesData, setParsedExpensesData] = useState({
     hotels: [],
     villas: [],
@@ -90,29 +86,40 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
 
         if (mockDaysForHotels.length > 0) {
           const mergedHotelDays = await parseAndMergeDays(mockDaysForHotels);
-          parsedHotels = mergedHotelDays.flatMap(day => 
-            day.hotels?.map(hotel => ({
-              name: hotel?.displayName || hotel?.name || hotel?.hotelName || "Unknown Hotel",
-              stars: hotel?.bintang || hotel?.star || hotel?.stars || "",
-              roomType: hotel?.roomType || "",
-              price: hotel?.hargaPerKamar || hotel?.price || 0,
-              type: "Hotel",
-              originalData: hotel,
-            })) || []
+          parsedHotels = mergedHotelDays.flatMap(
+            (day) =>
+              day.hotels?.map((hotel) => ({
+                name:
+                  hotel?.displayName ||
+                  hotel?.name ||
+                  hotel?.hotelName ||
+                  "Unknown Hotel",
+                stars: hotel?.bintang || hotel?.star || hotel?.stars || "",
+                roomType: hotel?.roomType || "",
+                price: hotel?.hargaPerKamar || hotel?.price || 0,
+                type: "Hotel",
+                originalData: hotel,
+              })) || []
           );
         }
 
         if (mockDaysForVillas.length > 0) {
           const mergedVillaDays = await parseAndMergeDays(mockDaysForVillas);
-          parsedVillas = mergedVillaDays.flatMap(day => 
-            day.villas?.map(villa => ({
-              name: villa?.displayName || villa?.name || villa?.villaName || "Unknown Villa",
-              stars: villa?.bintang || villa?.star_rating || villa?.star || "",
-              roomType: villa?.roomType || "",
-              price: villa?.hargaPerKamar || villa?.price || 0,
-              type: "Villa",
-              originalData: villa,
-            })) || []
+          parsedVillas = mergedVillaDays.flatMap(
+            (day) =>
+              day.villas?.map((villa) => ({
+                name:
+                  villa?.displayName ||
+                  villa?.name ||
+                  villa?.villaName ||
+                  "Unknown Villa",
+                stars:
+                  villa?.bintang || villa?.star_rating || villa?.star || "",
+                roomType: villa?.roomType || "",
+                price: villa?.hargaPerKamar || villa?.price || 0,
+                type: "Villa",
+                originalData: villa,
+              })) || []
           );
         }
 
@@ -152,29 +159,32 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
 
   // Calculate total price per pax similar to InvoicePDF
   const calculatedTotalPerPax = useMemo(() => {
-    const totalAdult = selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
-      ? parseInt(selectedPackage.totalPaxAdult)
-      : 1; // Default to 1 to avoid division by zero
-      
+    const totalAdult =
+      selectedPackage?.totalPaxAdult &&
+      parseInt(selectedPackage.totalPaxAdult) > 0
+        ? parseInt(selectedPackage.totalPaxAdult)
+        : 1; // Default to 1 to avoid division by zero
+
     const totalExpensesFromContext = calculateGrandTotal();
     const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
-    
-    return adjustedGrandTotal / totalAdult;
-  }, [
-    selectedPackage?.totalPaxAdult,
-    grandTotal,
-    calculateGrandTotal,
-  ]);
 
-  // Calculate alternative prices for rows 2 and beyond
+    return adjustedGrandTotal / totalAdult;
+  }, [selectedPackage?.totalPaxAdult, grandTotal, calculateGrandTotal]);
+
   const calculateAlternativePrice = (hotelPrice) => {
-    const totalAdult = selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
-      ? parseInt(selectedPackage.totalPaxAdult)
-      : 1;
-      
+    const totalAdult =
+      selectedPackage?.totalPaxAdult &&
+      parseInt(selectedPackage.totalPaxAdult) > 0
+        ? parseInt(selectedPackage.totalPaxAdult)
+        : 1;
+
+    const numberOfDays = selectedPackage?.days?.length || 0;
+    const accommodationDays = numberOfDays > 0 ? numberOfDays - 1 : 1;
+    const totalHotelPrice = hotelPrice * accommodationDays;
     const totalExpensesFromContext = calculateGrandTotal();
-    const alternativeTotal = hotelPrice + tourTotal + transportTotal + totalExpensesFromContext;
-    
+    const alternativeTotal =
+      totalHotelPrice + tourTotal + transportTotal + totalExpensesFromContext;
+
     return alternativeTotal / totalAdult;
   };
 
@@ -187,7 +197,10 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         if (day?.hotels) {
           day.hotels.forEach((hotel) => {
             const hotelName =
-              hotel?.displayName || hotel?.name || hotel?.hotel?.label || "Unknown Hotel";
+              hotel?.displayName ||
+              hotel?.name ||
+              hotel?.hotel?.label ||
+              "Unknown Hotel";
             const stars = hotel?.bintang || hotel?.star || "";
             const roomType = hotel?.roomType || "";
 
@@ -205,8 +218,12 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         if (day?.villas) {
           day.villas.forEach((villa) => {
             const villaName =
-              villa?.displayName || villa?.name || villa?.villaName || "Unknown Villa";
-            const stars = villa?.bintang || villa?.star_rating || villa?.star || "";
+              villa?.displayName ||
+              villa?.name ||
+              villa?.villaName ||
+              "Unknown Villa";
+            const stars =
+              villa?.bintang || villa?.star_rating || villa?.star || "";
             const roomType = villa?.roomType || "";
 
             packageAccommodations.push({
@@ -243,7 +260,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     ].slice(0, 5); // max 5
 
     return [
-      ...(packageAccommodations.slice(0, 1) || []), 
+      ...(packageAccommodations.slice(0, 1) || []),
       ...expensesAccommodations,
     ];
   }, [akomodasiDays, parsedExpensesData]);
@@ -252,21 +269,25 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
   const hasItems = useMemo(() => {
     // Check if allAccommodations has any real data (not just empty placeholders)
     const hasRealAccommodations = allAccommodations.length > 0;
-    
-    // Check if there are any non-empty package accommodations
-    const hasPackageAccommodations = Array.isArray(akomodasiDays) && 
-      akomodasiDays.some(day => 
-        (day?.hotels && day.hotels.length > 0) || 
-        (day?.villas && day.villas.length > 0)
-      );
-    
-    // Check if there are expenses accommodations
-    const hasExpensesAccommodations = (
-      parsedExpensesData.hotels.length > 0 || 
-      parsedExpensesData.villas.length > 0
-    );
 
-    return hasRealAccommodations && (hasPackageAccommodations || hasExpensesAccommodations);
+    // Check if there are any non-empty package accommodations
+    const hasPackageAccommodations =
+      Array.isArray(akomodasiDays) &&
+      akomodasiDays.some(
+        (day) =>
+          (day?.hotels && day.hotels.length > 0) ||
+          (day?.villas && day.villas.length > 0)
+      );
+
+    // Check if there are expenses accommodations
+    const hasExpensesAccommodations =
+      parsedExpensesData.hotels.length > 0 ||
+      parsedExpensesData.villas.length > 0;
+
+    return (
+      hasRealAccommodations &&
+      (hasPackageAccommodations || hasExpensesAccommodations)
+    );
   }, [akomodasiDays, parsedExpensesData, allAccommodations]);
 
   // Show loading state
@@ -321,10 +342,9 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
               </Td>
               <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
                 {/* Baris pertama: total dari checkout context, baris lainnya: perhitungan alternatif */}
-                {index === 0 
-                  ? formatPrice(calculatedTotalPerPax) 
-                  : formatPrice(calculateAlternativePrice(item.price))
-                }
+                {index === 0
+                  ? formatPrice(calculatedTotalPerPax)
+                  : formatPrice(calculateAlternativePrice(item.price))}
               </Td>
             </Tr>
           ))}
