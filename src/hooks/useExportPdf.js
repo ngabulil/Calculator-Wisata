@@ -8,30 +8,21 @@ const useExportPdf = () => {
     }
 
     const input = componentRef.current;
-    const canvas = await html2canvas(input, { scale: 1 });
+    const canvas = await html2canvas(input, { scale: 2 });
     const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
 
-    const imgWidth = 210;
-    const pageHeight = 297;
+    const imgWidth = 210; // A4 width in mm
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    let heightLeft = imgHeight;
-    let position = 0;
+    const pdf = new jsPDF("p", "mm", [imgHeight + 20, imgWidth]); // Tinggi dinamis + 20mm padding
 
-    pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    const marginLeft = 0;
+    const marginTop = 10;
 
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-    }
-
+    pdf.addImage(imgData, "PNG", marginLeft, marginTop, imgWidth, imgHeight);
     return pdf.output("blob");
   };
 
-  const downloadPdf = async (componentRef, filename = "document.pdf") => {
+  const downloadPdf = async (componentRef, filename = "receipt.pdf") => {
     const blob = await exportAsBlob(componentRef);
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -43,9 +34,9 @@ const useExportPdf = () => {
     URL.revokeObjectURL(url);
   };
 
-  return { 
-    exportAsBlob, 
-    downloadPdf 
+  return {
+    exportAsBlob,
+    downloadPdf,
   };
 };
 
