@@ -178,8 +178,12 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         ? parseInt(selectedPackage.totalPaxAdult)
         : 1;
 
-    const numberOfDays = selectedPackage?.days?.length || 0;
-    const accommodationDays = numberOfDays > 0 ? numberOfDays - 1 : 1;
+    const accommodationDays = selectedPackage?.days?.reduce((count, day) => {
+        const hasHotel = Array.isArray(day.hotels) && day.hotels.length > 0;
+        const hasVilla = Array.isArray(day.villa) && day.villa.length > 0;
+        return hasHotel || hasVilla ? count + 1 : count;
+      }, 0) || 1;
+      console.log("Accommodation Days:", accommodationDays);
     const totalHotelPrice = hotelPrice * accommodationDays;
     const totalExpensesFromContext = calculateGrandTotal();
     const alternativeTotal =
