@@ -43,7 +43,7 @@ const formatPrice = (price) => {
 };
 
 const HotelChoiceTable = ({ akomodasiDays }) => {
-  const { hotelItems, villaItems, calculateGrandTotal } = useExpensesContext();
+  const { hotelItems, villaItems, calculateGrandTotal,  accommodationMarkup } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
   const { transportTotal, tourTotal, grandTotal } = useCheckoutContext();
 
@@ -96,7 +96,11 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
                   "Unknown Hotel",
                 stars: hotel?.bintang || hotel?.star || hotel?.stars || "",
                 roomType: hotel?.roomType || "",
-                price: hotel?.hargaPerKamar || hotel?.price || 0,
+                price:
+                  (hotel?.jumlahKamar || 1) * (hotel?.hargaPerKamar || 0) +
+                  (hotel?.useExtrabed
+                    ? (hotel?.jumlahExtrabed || 0) * (hotel?.hargaExtrabed || 0)
+                    : 0),
                 type: "Hotel",
                 originalData: hotel,
               })) || []
@@ -116,7 +120,9 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
                 stars:
                   villa?.bintang || villa?.star_rating || villa?.star || "",
                 roomType: villa?.roomType || "",
-                price: villa?.hargaPerKamar || villa?.price || 0,
+                price:
+                  (villa?.jumlahKamar || 1) * (villa?.hargaPerKamar || 0) +
+                  (villa?.useExtrabed ? (villa?.jumlahExtrabed || 0) * (villa?.hargaExtrabed || 0) : 0),
                 type: "Villa",
                 originalData: villa,
               })) || []
@@ -157,6 +163,14 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     };
   }, [hotelItems, villaItems]);
 
+  const applyMarkup = (price, markup) => {
+  if (!markup) return price;
+  if (markup.type === "percent") {
+    return price + (price * (markup.value / 100));
+  }
+  return price + (markup.value || 0);
+};
+
   // Calculate total price per pax similar to InvoicePDF
   const calculatedTotalPerPax = useMemo(() => {
     const totalAdult =
@@ -178,9 +192,13 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         ? parseInt(selectedPackage.totalPaxAdult)
         : 1;
 
-    const numberOfDays = selectedPackage?.days?.length || 0;
-    const accommodationDays = numberOfDays > 0 ? numberOfDays - 1 : 1;
-    const totalHotelPrice = hotelPrice * accommodationDays;
+  const accommodationDays = selectedPackage?.days?.reduce((count, day) => {
+    const hasHotel = Array.isArray(day.hotels) && day.hotels.length > 0;
+    const hasVilla = Array.isArray(day.villa) && day.villa.length > 0;
+    return hasHotel || hasVilla ? count + 1 : count;
+  }, 0) || 1;
+    const markedUpPrice = applyMarkup(hotelPrice, accommodationMarkup);
+    const totalHotelPrice = markedUpPrice * accommodationDays;
     const totalExpensesFromContext = calculateGrandTotal();
     const alternativeTotal =
       totalHotelPrice + tourTotal + transportTotal + totalExpensesFromContext;
@@ -301,7 +319,6 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     );
   }
 
-  // Don't render table if no items
   if (!hasItems) {
     return null;
   }

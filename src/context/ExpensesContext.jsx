@@ -14,12 +14,14 @@ const ExpensesContextProvider = ({ children }) => {
             day_name: "Day 1",
             day_description: "",
             totals: [],
+            markup: { type: "percent", value: 0 },
         },
     ]);
 
     // State untuk menyimpan data hotel dan villa
     const [hotelItems, setHotelItems] = React.useState([]);
     const [villaItems, setVillaItems] = React.useState([]);
+    const [accommodationMarkup, setAccommodationMarkup] = React.useState({ type: "percent", value: 0 });
 
     const { selectedPackage } = usePackageContext();
 
@@ -35,6 +37,17 @@ const ExpensesContextProvider = ({ children }) => {
             newDays[index] = { ...newDays[index], ...updatedDay };
             return newDays;
         });
+    };
+
+    const applyMarkup = (price, markup) => {
+        if (markup.type === "percent") {
+            return price + (price * (markup.value / 100));
+        }
+        return price + markup.value;
+    };
+
+    const updateAccommodationMarkup = (markup) => {
+        setAccommodationMarkup(markup);
     };
 
     const addDay = () => {
@@ -174,16 +187,18 @@ const ExpensesContextProvider = ({ children }) => {
 
     // Fungsi untuk menghitung total harga hotel
     const calculateHotelTotal = () => {
-        return hotelItems.reduce((total, item) => {
-            return total + (item.price || 0);
+        const total = hotelItems.reduce((acc, item) => {
+            return acc + (item.price || 0);
         }, 0);
+        return applyMarkup(total, accommodationMarkup);
     };
 
-    // Fungsi untuk menghitung total harga villa
+    // Modifikasi fungsi untuk menghitung total harga villa agar menggunakan markup baru
     const calculateVillaTotal = () => {
-        return villaItems.reduce((total, item) => {
-            return total + (item.price || 0);
+        const total = villaItems.reduce((acc, item) => {
+            return acc + (item.price || 0);
         }, 0);
+        return applyMarkup(total, accommodationMarkup);
     };
 
     const formatCurrency = (amount) => {
@@ -223,6 +238,8 @@ const ExpensesContextProvider = ({ children }) => {
                 updateVillaItem,
                 removeVillaItem,
                 calculateVillaTotal,
+                accommodationMarkup,
+                updateAccommodationMarkup,
             }}
         >
             {children}

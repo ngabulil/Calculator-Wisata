@@ -40,6 +40,8 @@ const ExpensesPage = () => {
     addVillaItem,
     updateVillaItem,
     removeVillaItem,
+    accommodationMarkup,
+    updateAccommodationMarkup,
   } = useExpensesContext();
   
   const { getHotels, getVillas } = useAkomodasiContext();
@@ -285,9 +287,12 @@ const handleAddVilla = () => {
         <ItineraryPDF ref={itineraryRef} />
       </Box>
 
-      <Box mt={8}>
-        <Text fontSize="xl" fontWeight="bold" mb={4} color="white">
+      <Box mt={8} spacing={6}>
+        <Text fontSize="xl" fontWeight="bold" mb={1} color="white">
           Accommodation for Price Comparison
+        </Text>
+        <Text fontSize="xs" fontWeight="bold" mb={4} color="grey">
+          *Note: Markup and extra bed will be applied for all days
         </Text>
 
         {/* Hotel Section */}
@@ -329,9 +334,24 @@ const handleAddVilla = () => {
             Tambah Villa
           </Button>
         </VStack>
-
-
-      </Box>  
+      </Box>
+      <Box mb={4} mt={6}>
+        <Text fontWeight="bold" color="white">Markup Akomodasi (%)</Text>
+        <Input
+          type="number"
+          placeholder="Masukkan markup (contoh: 10 untuk 10%)"
+          value={accommodationMarkup.value}
+          onChange={(e) =>
+            updateAccommodationMarkup({ type: "percent", value: parseFloat(e.target.value) })
+          }
+          width="200px"
+          mt={2}
+          color="white"
+          bg="gray.600"
+          _placeholder={{ color: "gray.300" }}
+        />
+      </Box>
+  
 
       <Flex justify="center" mt={6}>
         <Button
