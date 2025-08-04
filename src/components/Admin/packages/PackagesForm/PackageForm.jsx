@@ -66,7 +66,6 @@ const PackageCreateForm = (props) => {
 
   const handleSetValue = async () => {
     const res = await parseDays(onePackageFull.days);
-    console.log(res);
 
     setDays(res);
   };
@@ -75,40 +74,44 @@ const PackageCreateForm = (props) => {
     days[0]?.data?.tour?.destinations[0]?.type_wisata ||
       days[0]?.data?.tour?.activities[0]?.type_wisata ||
       days[0]?.data?.tour?.restaurants[0]?.type_wisata ||
-      null
+      ""
   );
 
   const typeWisataOptions = [
     { value: "domestik", label: "Domestik" },
     { value: "asing", label: "Asing" },
   ];
-
   const handleAddDay = () => {
-    setDays((prev) => [
-      ...prev,
-      {
-        name: "",
-        description_day: "",
-        data: {
-          akomodasi: {
-            hotels: [],
-            villas: [],
-            additional: [],
-          },
-          tour: {
-            destinations: [],
-            activities: [],
-            restaurants: [],
-          },
-          transport: {
-            mobils: [],
-            additional: [],
+    console.log('tess')
+    setDays((prev) => {
+      const updated = [
+        ...prev,
+        {
+          name: "",
+          description_day: "",
+          data: {
+            akomodasi: {
+              hotels: [],
+              villas: [],
+              additional: [],
+            },
+            tour: {
+              destinations: [],
+              activities: [],
+              restaurants: [],
+              type_wisata: "",
+            },
+            transport: {
+              mobils: [],
+              additional: [],
+            },
           },
         },
-      },
-    ]);
+      ];
 
-    setActiveIndex(days.length);
+      setActiveIndex(updated.length - 1);
+      return updated;
+    });
   };
 
   const handleRemoveDay = (index) => {
@@ -151,18 +154,23 @@ const PackageCreateForm = (props) => {
   useEffect(() => {
     if (!selectedTypeWisata) return;
 
-    const updatedDays = days.map((day) => ({
-      ...day,
-      data: {
-        ...day.data,
-        tour: {
-          ...day.data.tour,
-          type_wisata: selectedTypeWisata,
+    const updatedDays = days.map((day) => {
+      if (day.data.tour.type_wisata) return day;
+
+      return {
+        ...day,
+        data: {
+          ...day.data,
+          tour: {
+            ...day.data.tour,
+            type_wisata: selectedTypeWisata,
+          },
         },
-      },
-    }));
+      };
+    });
 
     setDays(updatedDays);
+    props.onChange?.(updatedDays);
   }, [selectedTypeWisata]);
 
   return (
@@ -198,9 +206,20 @@ const PackageCreateForm = (props) => {
                     bg={"gray.900"}
                     rounded={"12px"}
                   >
-                    <Text fontWeight="semibold">
-                      Nama untuk Day {index + 1}
-                    </Text>
+                    <HStack justify="space-between">
+                      <Text fontWeight="semibold">
+                        Nama untuk Day {index + 1}
+                      </Text>
+                      {days.length > 1 && (
+                        <IconButton
+                          icon={<DeleteIcon />}
+                          size="sm"
+                          colorScheme="red"
+                          variant="ghost"
+                          onClick={() => handleRemoveDay(index)}
+                        />
+                      )}
+                    </HStack>
                     <Input
                       value={day.name}
                       placeholder="Contoh: Hari Pertama di Bali"
@@ -214,15 +233,6 @@ const PackageCreateForm = (props) => {
                       <Text fontWeight="semibold">
                         Deskripsi untuk Day {index + 1}
                       </Text>
-                      {days.length > 1 && (
-                        <IconButton
-                          icon={<DeleteIcon />}
-                          size="sm"
-                          colorScheme="red"
-                          variant="ghost"
-                          onClick={() => handleRemoveDay(index)}
-                        />
-                      )}
                     </HStack>
                     <Textarea
                       value={day.description_day}
@@ -675,6 +685,28 @@ const PackageFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
 
     try {
+      const hasMissingTypeWisata = primaryData.some((day) => {
+        const type_wisata = day.data.tour.type_wisata;
+        return (
+          (day.data.tour.destinations.length > 0 ||
+            day.data.tour.activities.length > 0 ||
+            day.data.tour.restaurants.length > 0) &&
+          !type_wisata
+        );
+      });
+
+      if (hasMissingTypeWisata) {
+        toast.close(loading);
+        toast(
+          toastConfig(
+            "Info",
+            "Silakan pilih tipe wisata karena Anda sudah mengisi salah satu data tour",
+            "warning"
+          )
+        );
+        return;
+      }
+
       const data = {
         name: namePackages,
         description: desctiptionPackages,
