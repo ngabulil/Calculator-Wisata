@@ -176,6 +176,7 @@ const AdminPage = () => {
         {formActive ? (
           <PackageFormPage
             onChange={() => {
+              navigate("/admin/paket");
               setFormActive(false);
               handleGetAllPackageFull();
             }}
