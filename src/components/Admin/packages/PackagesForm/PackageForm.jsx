@@ -65,13 +65,37 @@ const PackageCreateForm = (props) => {
   const [loading, setLoading] = useState(false);
   // eslint-disable-next-line no-unused-vars
   const [editFormActive, setEditFormActive] = useState(false);
-
   const handleSetValue = async () => {
     setLoading(true);
 
     try {
+      const firstDay = days[0]?.data?.tour;
+      const typeFromDestinations = firstDay?.destinations?.[0]?.type_wisata;
+      const typeFromActivities = firstDay?.activities?.[0]?.type_wisata;
+      const typeFromRestaurants = firstDay?.restaurants?.[0]?.type_wisata;
+
+      const foundType =
+        typeFromDestinations || typeFromActivities || typeFromRestaurants || "";
+
+      setSelectedTypeWisata(foundType);
+
       const res = await parseDays(onePackageFull.days);
-      setDays(res);
+      setDays(
+        res.map((day) => {
+          if (day.data.tour.type_wisata) return day;
+
+          return {
+            ...day,
+            data: {
+              ...day.data,
+              tour: {
+                ...day.data.tour,
+                type_wisata: foundType,
+              },
+            },
+          };
+        })
+      );
     } catch (err) {
       console.error("Failed to parse days:", err);
     } finally {
@@ -79,12 +103,7 @@ const PackageCreateForm = (props) => {
     }
   };
 
-  const [selectedTypeWisata, setSelectedTypeWisata] = useState(
-    days[0]?.data?.tour?.destinations[0]?.type_wisata ||
-      days[0]?.data?.tour?.activities[0]?.type_wisata ||
-      days[0]?.data?.tour?.restaurants[0]?.type_wisata ||
-      ""
-  );
+  const [selectedTypeWisata, setSelectedTypeWisata] = useState("");
 
   const typeWisataOptions = [
     { value: "domestik", label: "Domestik" },
@@ -720,6 +739,7 @@ const PackageFormPage = (props) => {
     try {
       const hasMissingTypeWisata = primaryData.some((day) => {
         const type_wisata = day.data.tour.type_wisata;
+
         return (
           (day.data.tour.destinations.length > 0 ||
             day.data.tour.activities.length > 0 ||

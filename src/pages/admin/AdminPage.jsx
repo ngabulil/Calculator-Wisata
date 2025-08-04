@@ -156,6 +156,7 @@ const AdminPage = () => {
               updatePackageFull("");
               if (formActive) {
                 navigate("/admin/paket");
+                handleGetAllPackageFull();
               }
               if (readPackageActive) {
                 setReadPackageActive(false);
