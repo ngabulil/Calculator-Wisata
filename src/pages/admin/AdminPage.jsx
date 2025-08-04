@@ -153,8 +153,8 @@ const AdminPage = () => {
           <Button
             bg={"blue.500"}
             onClick={() => {
+              updatePackageFull("");
               if (formActive) {
-                updatePackageFull("");
                 navigate("/admin/paket");
               }
               if (readPackageActive) {

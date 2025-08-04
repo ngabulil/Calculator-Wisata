@@ -66,7 +66,6 @@ const PackageCreateForm = (props) => {
 
   const handleSetValue = async () => {
     const res = await parseDays(onePackageFull.days);
-    console.log(res);
 
     setDays(res);
   };
@@ -198,9 +197,20 @@ const PackageCreateForm = (props) => {
                     bg={"gray.900"}
                     rounded={"12px"}
                   >
-                    <Text fontWeight="semibold">
-                      Nama untuk Day {index + 1}
-                    </Text>
+                    <HStack justify="space-between">
+                      <Text fontWeight="semibold">
+                        Nama untuk Day {index + 1}
+                      </Text>
+                      {days.length > 1 && (
+                        <IconButton
+                          icon={<DeleteIcon />}
+                          size="sm"
+                          colorScheme="red"
+                          variant="ghost"
+                          onClick={() => handleRemoveDay(index)}
+                        />
+                      )}
+                    </HStack>
                     <Input
                       value={day.name}
                       placeholder="Contoh: Hari Pertama di Bali"
@@ -214,15 +224,6 @@ const PackageCreateForm = (props) => {
                       <Text fontWeight="semibold">
                         Deskripsi untuk Day {index + 1}
                       </Text>
-                      {days.length > 1 && (
-                        <IconButton
-                          icon={<DeleteIcon />}
-                          size="sm"
-                          colorScheme="red"
-                          variant="ghost"
-                          onClick={() => handleRemoveDay(index)}
-                        />
-                      )}
                     </HStack>
                     <Textarea
                       value={day.description_day}
