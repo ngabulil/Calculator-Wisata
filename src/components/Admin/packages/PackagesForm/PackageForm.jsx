@@ -125,7 +125,7 @@ const PackageCreateForm = (props) => {
               destinations: [],
               activities: [],
               restaurants: [],
-              type_wisata: "",
+              type_wisata: selectedTypeWisata || "",
             },
             transport: {
               mobils: [],
@@ -768,6 +768,8 @@ const PackageFormPage = (props) => {
           !type_wisata
         );
       });
+
+      console.log(primaryData);
 
       if (hasMissingTypeWisata) {
         toast.close(loading);
