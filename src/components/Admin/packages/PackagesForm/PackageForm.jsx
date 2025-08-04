@@ -69,8 +69,10 @@ const PackageCreateForm = (props) => {
     setLoading(true);
 
     try {
-      const firstDay = days[0]?.data?.tour;
-      const typeFromDestinations = firstDay?.destinations?.[0]?.type_wisata;
+      const res = await parseDays(onePackageFull.days);
+
+      const firstDay = res[0]?.data?.tour;
+      const typeFromDestinations = firstDay?.destinations?.[0].type_wisata;
       const typeFromActivities = firstDay?.activities?.[0]?.type_wisata;
       const typeFromRestaurants = firstDay?.restaurants?.[0]?.type_wisata;
 
@@ -79,11 +81,8 @@ const PackageCreateForm = (props) => {
 
       setSelectedTypeWisata(foundType);
 
-      const res = await parseDays(onePackageFull.days);
       setDays(
         res.map((day) => {
-          if (day.data.tour.type_wisata) return day;
-
           return {
             ...day,
             data: {
@@ -182,8 +181,6 @@ const PackageCreateForm = (props) => {
     if (!selectedTypeWisata) return;
 
     const updatedDays = days.map((day) => {
-      if (day.data.tour.type_wisata) return day;
-
       return {
         ...day,
         data: {
