@@ -72,7 +72,7 @@ const PackageCreateForm = (props) => {
       const res = await parseDays(onePackageFull.days);
 
       const firstDay = res[0]?.data?.tour;
-      const typeFromDestinations = firstDay?.destinations?.[0].type_wisata;
+      const typeFromDestinations = firstDay?.destinations?.[0]?.type_wisata;
       const typeFromActivities = firstDay?.activities?.[0]?.type_wisata;
       const typeFromRestaurants = firstDay?.restaurants?.[0]?.type_wisata;
 
@@ -174,6 +174,30 @@ const PackageCreateForm = (props) => {
     if (location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleSetValue();
+    } else {
+      setDays([
+        {
+          name: "",
+          description_day: "",
+          data: {
+            akomodasi: {
+              hotels: [],
+              villas: [],
+              additional: [],
+            },
+            tour: {
+              destinations: [],
+              activities: [],
+              restaurants: [],
+              type_wisata: "",
+            },
+            transport: {
+              mobils: [],
+              additional: [],
+            },
+          },
+        },
+      ]);
     }
   }, [location.pathname, onePackageFull]);
 
