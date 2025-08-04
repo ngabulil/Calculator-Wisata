@@ -74,40 +74,44 @@ const PackageCreateForm = (props) => {
     days[0]?.data?.tour?.destinations[0]?.type_wisata ||
       days[0]?.data?.tour?.activities[0]?.type_wisata ||
       days[0]?.data?.tour?.restaurants[0]?.type_wisata ||
-      null
+      ""
   );
 
   const typeWisataOptions = [
     { value: "domestik", label: "Domestik" },
     { value: "asing", label: "Asing" },
   ];
-
   const handleAddDay = () => {
-    setDays((prev) => [
-      ...prev,
-      {
-        name: "",
-        description_day: "",
-        data: {
-          akomodasi: {
-            hotels: [],
-            villas: [],
-            additional: [],
-          },
-          tour: {
-            destinations: [],
-            activities: [],
-            restaurants: [],
-          },
-          transport: {
-            mobils: [],
-            additional: [],
+    console.log('tess')
+    setDays((prev) => {
+      const updated = [
+        ...prev,
+        {
+          name: "",
+          description_day: "",
+          data: {
+            akomodasi: {
+              hotels: [],
+              villas: [],
+              additional: [],
+            },
+            tour: {
+              destinations: [],
+              activities: [],
+              restaurants: [],
+              type_wisata: "",
+            },
+            transport: {
+              mobils: [],
+              additional: [],
+            },
           },
         },
-      },
-    ]);
+      ];
 
-    setActiveIndex(days.length);
+      setActiveIndex(updated.length - 1);
+      return updated;
+    });
   };
 
   const handleRemoveDay = (index) => {
@@ -150,18 +154,23 @@ const PackageCreateForm = (props) => {
   useEffect(() => {
     if (!selectedTypeWisata) return;
 
-    const updatedDays = days.map((day) => ({
-      ...day,
-      data: {
-        ...day.data,
-        tour: {
-          ...day.data.tour,
-          type_wisata: selectedTypeWisata,
+    const updatedDays = days.map((day) => {
+      if (day.data.tour.type_wisata) return day;
+
+      return {
+        ...day,
+        data: {
+          ...day.data,
+          tour: {
+            ...day.data.tour,
+            type_wisata: selectedTypeWisata,
+          },
         },
-      },
-    }));
+      };
+    });
 
     setDays(updatedDays);
+    props.onChange?.(updatedDays);
   }, [selectedTypeWisata]);
 
   return (
@@ -677,7 +686,7 @@ const PackageFormPage = (props) => {
 
     try {
       const hasMissingTypeWisata = primaryData.some((day) => {
-        const { type_wisata } = day.data.tour;
+        const type_wisata = day.data.tour.type_wisata;
         return (
           (day.data.tour.destinations.length > 0 ||
             day.data.tour.activities.length > 0 ||
@@ -687,10 +696,11 @@ const PackageFormPage = (props) => {
       });
 
       if (hasMissingTypeWisata) {
+        toast.close(loading);
         toast(
           toastConfig(
             "Info",
-            "Silakan pilih tipe wisata karena Anda sudah mengisi data destinasi, aktivitas, atau restoran.",
+            "Silakan pilih tipe wisata karena Anda sudah mengisi salah satu data tour",
             "warning"
           )
         );
