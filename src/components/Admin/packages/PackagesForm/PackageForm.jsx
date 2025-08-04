@@ -676,6 +676,27 @@ const PackageFormPage = (props) => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
 
     try {
+      const hasMissingTypeWisata = primaryData.some((day) => {
+        const { type_wisata } = day.data.tour;
+        return (
+          (day.data.tour.destinations.length > 0 ||
+            day.data.tour.activities.length > 0 ||
+            day.data.tour.restaurants.length > 0) &&
+          !type_wisata
+        );
+      });
+
+      if (hasMissingTypeWisata) {
+        toast(
+          toastConfig(
+            "Info",
+            "Silakan pilih tipe wisata karena Anda sudah mengisi data destinasi, aktivitas, atau restoran.",
+            "warning"
+          )
+        );
+        return;
+      }
+
       const data = {
         name: namePackages,
         description: desctiptionPackages,
