@@ -176,6 +176,7 @@ const AdminPage = () => {
         {formActive ? (
           <PackageFormPage
             onChange={() => {
+              navigate("/admin/paket");
               setFormActive(false);
               handleGetAllPackageFull();
             }}
@@ -256,6 +257,7 @@ const AdminPage = () => {
             nextLabel=">"
             breakLabel="..."
             containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            activeClassName="page-item-active"
           />
         </Box>
       )}

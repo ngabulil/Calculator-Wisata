@@ -5,7 +5,7 @@ import {
   Button,
   Container,
   Textarea,
-  Spinner ,
+  Spinner,
   Input,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
@@ -29,7 +29,7 @@ const AdminVillaPage = () => {
   const { updateVillaData, getAllVilla } = useAdminVillaContext();
   const navigate = useNavigate();
   const [readVillaActive, setReadVillaActive] = useState(false);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formActive, setFormActive] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [villas, setVillas] = useState([]);
@@ -50,7 +50,6 @@ const AdminVillaPage = () => {
       });
     } catch (error) {
       console.error("Error", error);
-  
     } finally {
       setLoading(false);
     }
@@ -143,12 +142,12 @@ const AdminVillaPage = () => {
           <VillaRead />
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-            {
-            loading ?     
-        
-            <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
-            :
-            currentVillas.length > 0 ? (
+            {loading ? (
+              <Flex w={"full"} justifyContent={"center"}>
+                {" "}
+                <Spinner size="xl" color="teal.500" />
+              </Flex>
+            ) : currentVillas.length > 0 ? (
               currentVillas.map((villa, index) => (
                 <VillaCard
                   key={index}
@@ -202,6 +201,7 @@ const AdminVillaPage = () => {
               nextLabel=">"
               breakLabel="..."
               containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none"
+              activeClassName="page-item-active"
             />
           </Box>
         )}

@@ -20,7 +20,7 @@ const AdminHotelPage = () => {
   const navigate = useNavigate();
   const { updateHotelData, getAllHotel } = useAdminHotelContext();
   //
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [readHotelActive, setReadHotelActive] = useState(false);
   const [formActive, setFormActive] = useState(false);
   //
@@ -43,7 +43,6 @@ const AdminHotelPage = () => {
       });
     } catch (error) {
       console.error("Error", error);
-  
     } finally {
       setLoading(false);
     }
@@ -139,13 +138,12 @@ const AdminHotelPage = () => {
         ) : (
           <>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
-              {
-              loading ?     
-      
-              <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
-              :
-              
-              currentHotels.length > 0 ? (
+              {loading ? (
+                <Flex w={"full"} justifyContent={"center"}>
+                  {" "}
+                  <Spinner size="xl" color="teal.500" />
+                </Flex>
+              ) : currentHotels.length > 0 ? (
                 currentHotels.map((hotel, index) => (
                   <HotelCard
                     key={index}
@@ -203,6 +201,7 @@ const AdminHotelPage = () => {
                   nextLabel=">"
                   breakLabel="..."
                   containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+                  activeClassName="page-item-active"
                 />
               </Box>
             )}
