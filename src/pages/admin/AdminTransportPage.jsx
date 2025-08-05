@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Input, useToast, Text, Spinner } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  useToast,
+  Text,
+  Spinner,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import TransportCard from "../../components/Admin/Transport/TransportCard/TransportCard";
@@ -16,7 +24,7 @@ const AdminTransportPage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { getAllTransport, allTransport, updateTransportData } =
     useAdminTransportContext();
 
@@ -56,7 +64,6 @@ const AdminTransportPage = () => {
       await getAllTransport();
     } catch (error) {
       console.error("Error", error);
-  
     } finally {
       setLoading(false);
     }
@@ -83,7 +90,7 @@ const AdminTransportPage = () => {
           toastConfig("Hapus Gagal", "Transportasi Gagal Dihapus", "error")
         );
       }
-    // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
       toast.close(loading);
       toast(toastConfig("Hapus Gagal", "Transportasi Gagal Dihapus", "error"));
@@ -144,12 +151,12 @@ const AdminTransportPage = () => {
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
-            {
-            loading ?     
-      
-            <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
-            :
-            currentTransports.length > 0 ? (
+            {loading ? (
+              <Flex w={"full"} justifyContent={"center"}>
+                {" "}
+                <Spinner size="xl" color="teal.500" />
+              </Flex>
+            ) : currentTransports.length > 0 ? (
               currentTransports.map((transport, index) => {
                 return (
                   <TransportCard
@@ -204,6 +211,7 @@ const AdminTransportPage = () => {
             nextLabel=">"
             breakLabel="..."
             containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            activeClassName="page-item-active"
           />
         </Box>
       )}

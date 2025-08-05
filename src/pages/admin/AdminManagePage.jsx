@@ -237,6 +237,7 @@ const AdminManagePage = () => {
             nextLabel=">"
             breakLabel="..."
             containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            activeClassName="page-item-active"
           />
         </Box>
       )}

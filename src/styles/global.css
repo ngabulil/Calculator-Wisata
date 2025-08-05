@@ -39,3 +39,11 @@ button:focus {
   opacity: 0.55;
   color: white !important;
 }
+
+.page-item-active {
+  padding: 4px 12px;
+  border-radius: 100%;
+  background-color: #2d3748;
+  color: #edf2f7;
+  font-weight: 700;
+}
