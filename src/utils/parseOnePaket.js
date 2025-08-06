@@ -41,31 +41,33 @@ export const parsePaketDays = async (days) => {
         })
       );
 
-      parsedDay.destinations = await Promise.all(
-        (day.destinations || []).map(async (dest) => {
-          const data = await apiGetDestinationById(dest.id_destinasi);
-          return {
-            ...(data.result || null),
-          };
-        })
-      );
-
-      parsedDay.activities = await Promise.all(
-        (day.activities || []).map(async (act) => {
-          const data = await apiGetActivityVendorById(act.id_vendor);
-          return {
-            ...act,
-            ...(data.result || null),
-          };
-        })
-      );
-
-      parsedDay.restaurants = await Promise.all(
-        (day.restaurants || []).map(async (resto) => {
-          const data = await apiGetRestaurantById(resto.id_resto);
-          return {
-            ...(data.result || null),
-          };
+      parsedDay.tours = await Promise.all(
+        (day.data.tours || []).map(async (item) => {
+          if (item.id_destinasi) {
+            const data = await apiGetDestinationById(item.id_destinasi);
+            return {
+              type: "destination",
+              ...(data.result || {}),
+            };
+          } else if (item.id_activity) {
+            const data = await apiGetActivityVendorById(item.id_vendor);
+            return {
+              type: "activity",
+              ...item,
+              ...(data.result || {}),
+            };
+          } else if (item.id_resto) {
+            const data = await apiGetRestaurantById(item.id_resto);
+            return {
+              type: "restaurant",
+              ...(data.result || {}),
+            };
+          } else {
+            return {
+              type: "unknown",
+              ...item,
+            };
+          }
         })
       );
 

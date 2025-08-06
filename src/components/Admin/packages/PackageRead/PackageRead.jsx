@@ -155,45 +155,52 @@ const PackageRead = () => {
                       title="Tour"
                     >
                       <AppHeadComponent title={"Destinasi"} isChild isOpen>
-                        {day.destinations.length <= 0 ? (
+                        {day.tours.filter((t) => t.type === "destination")
+                          .length <= 0 ? (
                           <AppEmptyComponent />
                         ) : (
-                          day.destinations.map((dest) => {
-                            return (
+                          day.tours
+                            .filter((t) => t.type === "destination")
+                            .map((dest, index) => (
                               <AppDestinationCard
+                                key={index}
                                 title={dest.name}
                                 subtitle={dest.note}
                               />
-                            );
-                          })
+                            ))
                         )}
                       </AppHeadComponent>
-                      <AppHeadComponent title={"Aktitvitas"} isChild isOpen>
-                        {day.activities.length <= 0 ? (
+
+                      <AppHeadComponent title={"Aktivitas"} isChild isOpen>
+                        {day.tours.filter((t) => t.type === "activity")
+                          .length <= 0 ? (
                           <AppEmptyComponent />
                         ) : (
-                          day.activities.map((act, index) => {
-                            return (
+                          day.tours
+                            .filter((t) => t.type === "activity")
+                            .map((act, index) => (
                               <AppActivityCard key={index} title={act.name} />
-                            );
-                          })
+                            ))
                         )}
                       </AppHeadComponent>
+
                       <AppHeadComponent title={"Restaurant"} isChild isOpen>
-                        {day.restaurants.length <= 0 ? (
+                        {day.tours.filter((t) => t.type === "restaurant")
+                          .length <= 0 ? (
                           <AppEmptyComponent />
                         ) : (
-                          day.restaurants.map((resto, index) => {
-                            return (
+                          day.tours
+                            .filter((t) => t.type === "restaurant")
+                            .map((resto, index) => (
                               <AppRestaurantCard
                                 key={index}
                                 title={resto.name}
                               />
-                            );
-                          })
+                            ))
                         )}
                       </AppHeadComponent>
                     </AppHeadComponent>
+
                     {/* transport */}
                     <AppHeadComponent
                       bg={"gray.700"}
