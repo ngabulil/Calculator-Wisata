@@ -15,7 +15,7 @@ export const parsePaketDays = async (days) => {
       const parsedDay = { ...day };
 
       parsedDay.hotels = await Promise.all(
-        (day.hotels || []).map(async (hotel) => {
+        (day.data.akomodasi.hotels || []).map(async (hotel) => {
           const data = await apiGetHotel(hotel.id_hotel);
           return {
             ...(data.result || null),
@@ -24,7 +24,7 @@ export const parsePaketDays = async (days) => {
       );
 
       parsedDay.villas = await Promise.all(
-        (day.villas || []).map(async (villa) => {
+        (day.data.akomodasi.villas || []).map(async (villa) => {
           const data = await apiGetVilla(villa.id_villa);
           return {
             ...(data.result || null),
@@ -33,7 +33,7 @@ export const parsePaketDays = async (days) => {
       );
 
       parsedDay.akomodasi_additionals = await Promise.all(
-        (day.akomodasi_additionals || []).map(async (item) => {
+        (day.data.akomodasi.additional || []).map(async (item) => {
           const data = await apiGetAdditionalAkomodasiById(item.id_additional);
           return {
             ...(data.result || null),
@@ -70,7 +70,7 @@ export const parsePaketDays = async (days) => {
       );
 
       parsedDay.mobils = await Promise.all(
-        (day.mobils || []).map(async (mobil) => {
+        (day.data.transport.mobils || []).map(async (mobil) => {
           const data = await apiGetMobilById(mobil.id_mobil);
           return {
             ...(data.result || null),
@@ -79,7 +79,7 @@ export const parsePaketDays = async (days) => {
       );
 
       parsedDay.transport_additionals = await Promise.all(
-        (day.transport_additionals || []).map(async (item) => {
+        (day.data.transport.additional || []).map(async (item) => {
           const data = await apiGetAdditionalMobilById(item.id_additional);
           return {
             ...(data.result || null),

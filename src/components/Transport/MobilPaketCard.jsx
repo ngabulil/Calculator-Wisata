@@ -53,15 +53,6 @@ const MobilCard = ({
   const areaOptions = useMemo(() => {
     if (!selectedMobil || !data.kategori) return [];
 
-    console.log(
-      "Selected Mobil:",
-      selectedMobil.keterangan[data.kategori]?.map((area) => ({
-        value: area.area,
-        label: area.area,
-        id: area.id_area,
-      }))
-    );
-
     return (
       selectedMobil.keterangan[data.kategori]?.map((area) => ({
         value: area.area,
