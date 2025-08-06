@@ -317,13 +317,13 @@ const cardBaseStyle = {
   },
 };
 const cardDestStyle = {
-  bg: "blue.900",
+  bg: "green.800",
   rounded: "12px",
   p: 3,
   w: "30%",
   transition: "all 0.2s ease-in-out",
   _hover: {
-    bg: "blue.500",
+    bg: "green.600",
     cursor: "pointer",
     transform: "translateY(-2px)",
   },
