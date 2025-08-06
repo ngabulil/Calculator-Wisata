@@ -73,8 +73,6 @@ const PackageCreateForm = (props) => {
 
       setSelectedTypeWisata(res[0].data.type_wisata);
 
-      console.log(res[0].data.tours)
-
       setDays(res);
     } catch (err) {
       console.error("Failed to parse days:", err);
