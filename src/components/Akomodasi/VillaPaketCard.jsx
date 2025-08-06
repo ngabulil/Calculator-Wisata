@@ -226,7 +226,7 @@ const VillaCard = ({ index, onDelete, data, onChange, onModalClose }) => {
           </Text>
           <MainSelectCreatable
             options={seasonOptions}
-            value={seasonOptions.find((s) => s.idMusim == data.idMusim)}
+            value={seasonOptions.find((s) => s.value == data.season)}
             onChange={(val) => {
               onChange({
                 ...data,

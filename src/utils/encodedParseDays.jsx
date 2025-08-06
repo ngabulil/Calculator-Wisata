@@ -152,7 +152,7 @@ export default async function parseDays(daysFromApi) {
       })
     );
 
-    const tours = await Promise.all(
+    const rawTours = await Promise.all(
       (day.data.tours || []).map(async (item) => {
         const type = item.id_destinasi
           ? "destination"
@@ -258,10 +258,11 @@ export default async function parseDays(daysFromApi) {
           };
         }
 
-        // fallback
         return item;
       })
     );
+
+    const tours = rawTours.sort((a, b) => a.no - b.no);
 
     const mobils = await Promise.all(
       (day.data.transport.mobils || []).map(async (mobil) => {

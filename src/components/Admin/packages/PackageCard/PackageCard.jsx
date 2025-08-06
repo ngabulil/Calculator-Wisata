@@ -104,7 +104,7 @@ const AppTitleDescription = (props) => {
         >
           {props.days.length} Hari
         </Text>
-        <Text
+        {/* <Text
           fontSize="12px"
           fontWeight="bold"
           bg="purple.600"
@@ -115,7 +115,7 @@ const AppTitleDescription = (props) => {
           minW="max"
         >
           {formatDateOnly(props.date)}
-        </Text>
+        </Text> */}
 
         <PopoverButton
           isOpenButton={true}

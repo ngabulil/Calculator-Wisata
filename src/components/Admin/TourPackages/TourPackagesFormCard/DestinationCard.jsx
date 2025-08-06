@@ -64,7 +64,7 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
     <Box bg="gray.600" p={4} rounded="md">
       <HStack justify="space-between" mb={3}>
         <Text fontWeight="bold" color={textColor}>
-          Destinasi {index + 1}
+        {index + 1}. Destinasi 
         </Text>
         <IconButton
           size="xs"
