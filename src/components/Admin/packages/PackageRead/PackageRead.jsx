@@ -154,51 +154,43 @@ const PackageRead = () => {
                       rounded={8}
                       title="Tour"
                     >
-                      <AppHeadComponent title={"Destinasi"} isChild isOpen>
-                        {day.tours.filter((t) => t.type === "destination")
-                          .length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.tours
-                            .filter((t) => t.type === "destination")
-                            .map((dest, index) => (
-                              <AppDestinationCard
-                                key={index}
-                                title={dest.name}
-                                subtitle={dest.note}
-                              />
-                            ))
-                        )}
-                      </AppHeadComponent>
+                      {day.tours.length <= 0 ? (
+                        <AppEmptyComponent />
+                      ) : (
+                        day.tours
+                          .sort((a, b) => a.no - b.no)
+                          .map((item, index) => {
+                            if (item.type === "destination") {
+                              return (
+                                <AppDestinationCard
+                                  key={index}
+                                  title={`${item.no}. ${item.name}`}
+                                  subtitle={item.note}
+                                />
+                              );
+                            }
 
-                      <AppHeadComponent title={"Aktivitas"} isChild isOpen>
-                        {day.tours.filter((t) => t.type === "activity")
-                          .length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.tours
-                            .filter((t) => t.type === "activity")
-                            .map((act, index) => (
-                              <AppActivityCard key={index} title={act.name} />
-                            ))
-                        )}
-                      </AppHeadComponent>
+                            if (item.type === "activity") {
+                              return (
+                                <AppActivityCard
+                                  key={index}
+                                  title={`${item.no}. ${item.name}`}
+                                />
+                              );
+                            }
 
-                      <AppHeadComponent title={"Restaurant"} isChild isOpen>
-                        {day.tours.filter((t) => t.type === "restaurant")
-                          .length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.tours
-                            .filter((t) => t.type === "restaurant")
-                            .map((resto, index) => (
-                              <AppRestaurantCard
-                                key={index}
-                                title={resto.name}
-                              />
-                            ))
-                        )}
-                      </AppHeadComponent>
+                            if (item.type === "restaurant") {
+                              return (
+                                <AppRestaurantCard
+                                  key={index}
+                                  title={`${item.no}. ${item.name}`}
+                                />
+                              );
+                            }
+
+                            return null;
+                          })
+                      )}
                     </AppHeadComponent>
 
                     {/* transport */}
@@ -324,6 +316,42 @@ const cardBaseStyle = {
     transform: "translateY(-2px)",
   },
 };
+const cardDestStyle = {
+  bg: "blue.900",
+  rounded: "12px",
+  p: 3,
+  w: "30%",
+  transition: "all 0.2s ease-in-out",
+  _hover: {
+    bg: "blue.500",
+    cursor: "pointer",
+    transform: "translateY(-2px)",
+  },
+};
+const cardActStyle = {
+  bg: "red.800",
+  rounded: "12px",
+  p: 3,
+  w: "30%",
+  transition: "all 0.2s ease-in-out",
+  _hover: {
+    bg: "red.600",
+    cursor: "pointer",
+    transform: "translateY(-2px)",
+  },
+};
+const cardRestStyle = {
+  bg: "purple.800",
+  rounded: "12px",
+  p: 3,
+  w: "30%",
+  transition: "all 0.2s ease-in-out",
+  _hover: {
+    bg: "purple.600",
+    cursor: "pointer",
+    transform: "translateY(-2px)",
+  },
+};
 
 const AppHomeStayCard = (props) => (
   <Flex direction="column" gap={3} align="start" {...cardBaseStyle}>
@@ -397,7 +425,7 @@ const AppTransportCard = (props) => (
 );
 
 const AppRestaurantCard = (props) => (
-  <Flex align="center" gap={3} {...cardBaseStyle}>
+  <Flex align="center" gap={3} {...cardRestStyle} w={"full"}>
     <Icon
       icon="famicons:restaurant-sharp"
       className="text-white text-[32px] p-[6px] border border-white rounded-full"
@@ -414,7 +442,7 @@ const AppRestaurantCard = (props) => (
 );
 
 const AppDestinationCard = (props) => (
-  <Flex align="center" gap={3} {...cardBaseStyle}>
+  <Flex align="center" gap={3} {...cardDestStyle} w={"full"}>
     <Icon
       icon="fluent:people-queue-32-filled"
       className="text-white text-[32px] p-[6px] border border-white rounded-full"
@@ -431,7 +459,7 @@ const AppDestinationCard = (props) => (
 );
 
 const AppActivityCard = (props) => (
-  <Flex align="center" gap={3} {...cardBaseStyle}>
+  <Flex align="center" gap={3} {...cardActStyle} w={"full"}>
     <Icon
       icon="ic:round-local-activity"
       className="text-white text-[32px] p-[6px] border border-white rounded-full"

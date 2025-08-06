@@ -47,12 +47,14 @@ export const parsePaketDays = async (days) => {
             const data = await apiGetDestinationById(item.id_destinasi);
             return {
               type: "destination",
+              no: item.no,
               ...(data.result || {}),
             };
           } else if (item.id_activity) {
             const data = await apiGetActivityVendorById(item.id_vendor);
             return {
               type: "activity",
+              no: item.no,
               ...item,
               ...(data.result || {}),
             };
@@ -60,6 +62,7 @@ export const parsePaketDays = async (days) => {
             const data = await apiGetRestaurantById(item.id_resto);
             return {
               type: "restaurant",
+              no: item.no,
               ...(data.result || {}),
             };
           } else {
