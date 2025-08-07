@@ -124,7 +124,7 @@ const ActivityCard = ({
     <Box bg="gray.600" p={4} rounded="md">
       <HStack justify="space-between" mb={3}>
         <Text fontWeight="bold" color={textColor}>
-          Aktivitas {index + 1}
+          [{index + 1}] Aktivitas
         </Text>
         <IconButton
           size="xs"

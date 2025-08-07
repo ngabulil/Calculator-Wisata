@@ -159,7 +159,7 @@ const TransportTabContent = ({ dayIndex }) => {
       </Button>
 
       {/* MARKUP */}
-      <Box>
+      {/* <Box>
         <Text fontWeight="bold" mb={2}>
           Markup
         </Text>
@@ -189,7 +189,7 @@ const TransportTabContent = ({ dayIndex }) => {
             }}
           />
         </HStack>
-      </Box>
+      </Box> */}
 
       {/* Total Hari Ini */}
       <Box fontWeight="bold" mt={4}>

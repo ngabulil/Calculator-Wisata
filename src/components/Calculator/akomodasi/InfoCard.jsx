@@ -14,9 +14,13 @@ import {
   apiPostAdditionalAkomodasi,
 } from "../../../services/akomodasiService";
 import { MainSelectCreatableWithDelete } from "../../MainSelect";
+import { usePackageContext } from "../../../context/PackageContext";
 
 const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   const { additional, setAdditional } = useAkomodasiContext();
+  const { selectedPackage } = usePackageContext();
+  const { totalPaxAdult: jumlahAdult, totalPaxChildren: jumlahChild } =
+    selectedPackage;
 
   const infoOptions = useMemo(
     () =>
@@ -49,7 +53,10 @@ const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
     if (fields.selectedInfo) {
       updated.nama = fields.selectedInfo.label;
       updated.id_additional = fields.selectedInfo.value;
-      if ((data.harga === undefined || data.harga === 0) && fields.selectedInfo.defaultPrice) {
+      if (
+        (data.harga === undefined || data.harga === 0) &&
+        fields.selectedInfo.defaultPrice
+      ) {
         updated.harga = fields.selectedInfo.defaultPrice;
       }
     }
@@ -83,6 +90,11 @@ const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
       });
     }
   }, [selectedInfo, dayIndex]);
+
+  useEffect(() => {
+    const totalPax = (jumlahAdult || 0) + (jumlahChild || 0);
+    handleUpdate({ jumlah: totalPax });
+  }, [jumlahAdult, jumlahChild]);
 
   const handleCreate = async (inputValue) => {
     try {
