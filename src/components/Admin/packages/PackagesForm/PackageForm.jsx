@@ -71,30 +71,9 @@ const PackageCreateForm = (props) => {
     try {
       const res = await parseDays(onePackageFull.days);
 
-      const firstDay = res[0]?.data?.tour;
-      const typeFromDestinations = firstDay?.destinations?.[0]?.type_wisata;
-      const typeFromActivities = firstDay?.activities?.[0]?.type_wisata;
-      const typeFromRestaurants = firstDay?.restaurants?.[0]?.type_wisata;
+      setSelectedTypeWisata(res[0].data.type_wisata);
 
-      const foundType =
-        typeFromDestinations || typeFromActivities || typeFromRestaurants || "";
-
-      setSelectedTypeWisata(foundType);
-
-      setDays(
-        res.map((day) => {
-          return {
-            ...day,
-            data: {
-              ...day.data,
-              tour: {
-                ...day.data.tour,
-                type_wisata: foundType,
-              },
-            },
-          };
-        })
-      );
+      setDays(res);
     } catch (err) {
       console.error("Failed to parse days:", err);
     } finally {
@@ -121,12 +100,8 @@ const PackageCreateForm = (props) => {
               villas: [],
               additional: [],
             },
-            tour: {
-              destinations: [],
-              activities: [],
-              restaurants: [],
-              type_wisata: selectedTypeWisata || "",
-            },
+            tours: [],
+            type_wisata: selectedTypeWisata,
             transport: {
               mobils: [],
               additional: [],
@@ -185,12 +160,8 @@ const PackageCreateForm = (props) => {
               villas: [],
               additional: [],
             },
-            tour: {
-              destinations: [],
-              activities: [],
-              restaurants: [],
-              type_wisata: "",
-            },
+            tours: [],
+            type_wisata: "",
             transport: {
               mobils: [],
               additional: [],
@@ -209,10 +180,7 @@ const PackageCreateForm = (props) => {
         ...day,
         data: {
           ...day.data,
-          tour: {
-            ...day.data.tour,
-            type_wisata: selectedTypeWisata,
-          },
+          type_wisata: selectedTypeWisata,
         },
       };
     });
@@ -468,154 +436,147 @@ const PackageCreateForm = (props) => {
                           ))}
                         </Select>
                       </Box>
-                      <Box
-                        border="1px solid"
-                        borderColor="gray.600"
-                        p={4}
-                        rounded="md"
-                      >
-                        <Text fontSize="xl" fontWeight="bold" mb={2}>
-                          Tour Destination
-                        </Text>
+                      <HStack spacing={4} mb={4}>
+                        <Button
+                          variant="outline"
+                          colorScheme="blue"
+                          w={"full"}
+                          onClick={() => {
+                            const updated = [...days];
+                            updated[index].data.tours.push({
+                              no: updated[index].data.tours.length + 1,
+                              id_destinasi: null,
+                              type_wisata: "",
+                            });
+                            setDays(updated);
+                          }}
+                        >
+                          Tambah Destinasi
+                        </Button>
 
-                        <VStack spacing={2} align="stretch">
-                          {day.data.tour.destinations.map((tours, i) => (
-                            <DestinationCard
-                              key={i}
-                              index={i}
-                              data={tours}
-                              onModalClose={(val) => {
-                                setModalTrigger(!val);
-                              }}
-                              onChange={(newInfo) => {
-                                const updated = [...days];
-                                updated[index].data.tour.destinations[i] =
-                                  newInfo;
+                        <Button
+                          variant="outline"
+                          w={"full"}
+                          colorScheme="purple"
+                          onClick={() => {
+                            const updated = [...days];
+                            updated[index].data.tours.push({
+                              no: updated[index].data.tours.length + 1,
+                              id_resto: null,
+                              id_menu: null,
+                              type_wisata: "",
+                            });
+                            setDays(updated);
+                          }}
+                        >
+                          Tambah Restaurant
+                        </Button>
 
-                                setDays(updated);
-                              }}
-                              onDelete={() => {
-                                const updated = [...days];
-                                updated[index].data.tour.destinations.splice(
-                                  i,
-                                  1
-                                );
+                        <Button
+                          variant="outline"
+                          colorScheme="red"
+                          w={"full"}
+                          onClick={() => {
+                            const updated = [...days];
+                            updated[index].data.tours.push({
+                              no: updated[index].data.tours.length + 1,
+                              id_vendor: null,
+                              id_activity: null,
+                              type_wisata: "",
+                            });
+                            setDays(updated);
+                          }}
+                        >
+                          Tambah Aktivitas
+                        </Button>
+                      </HStack>
 
-                                setDays(updated);
-                              }}
-                            />
-                          ))}
-                          <Button
-                            variant="outline"
-                            colorScheme="blue"
-                            onClick={() => {
+                      {/*  TOUR ITEMS  */}
+
+                      <VStack spacing={4} align="stretch">
+                        {Array.isArray(day.data.tours) &&
+                          day.data.tours?.map((tourItem, i) => {
+                            const handleChange = (newInfo) => {
                               const updated = [...days];
-                              updated[index].data.tour.destinations.push({});
+                              updated[index].data.tours[i] = newInfo;
                               setDays(updated);
-                            }}
-                          >
-                            Tambah Destinasi
-                          </Button>
-                        </VStack>
-                      </Box>
-                      <Box
-                        border="1px solid"
-                        borderColor="gray.600"
-                        p={4}
-                        rounded="md"
-                      >
-                        <Text fontSize="xl" fontWeight="bold" mb={2}>
-                          Tour Restaurant
-                        </Text>
+                            };
 
-                        <VStack spacing={2} align="stretch">
-                          {day.data.tour.restaurants.map((tours, i) => (
-                            <RestaurantCard
-                              key={i}
-                              index={i}
-                              data={tours}
-                              onModalClose={(val) => {
-                                setModalTrigger(!val);
-                              }}
-                              onChange={(newInfo) => {
-                                const updated = [...days];
-
-                                updated[index].data.tour.restaurants[i] =
-                                  newInfo;
-                                setDays(updated);
-                              }}
-                              onDelete={() => {
-                                const updated = [...days];
-                                updated[index].data.tour.restaurants.splice(
-                                  i,
-                                  1
-                                );
-                                setDays(updated);
-                              }}
-                            />
-                          ))}
-                          <Button
-                            variant="outline"
-                            colorScheme="purple"
-                            onClick={() => {
+                            const handleDelete = () => {
                               const updated = [...days];
-                              updated[index].data.tour.restaurants.push({});
+                              updated[index].data.tours.splice(i, 1);
                               setDays(updated);
-                            }}
-                          >
-                            Tambah Restaurant
-                          </Button>
-                        </VStack>
-                      </Box>
-                      <Box
-                        border="1px solid"
-                        borderColor="gray.600"
-                        p={4}
-                        rounded="md"
-                      >
-                        <Text fontSize="xl" fontWeight="bold" mb={2}>
-                          Tour Activity
-                        </Text>
+                            };
 
-                        <VStack spacing={2} align="stretch">
-                          {day.data.tour.activities.map((tours, i) => (
-                            <ActivityCard
-                              key={i}
-                              index={i}
-                              data={tours}
-                              onModalClose={(val) => {
-                                setModalTrigger(!val);
-                              }}
-                              onChange={(newInfo) => {
-                                const updated = [...days];
+                            if ("id_destinasi" in tourItem) {
+                              return (
+                                <Box
+                                  key={i}
+                                  border="1px solid"
+                                  borderColor="gray.600"
+                                  p={4}
+                                  rounded="md"
+                                >
+                                  <DestinationCard
+                                    index={i}
+                                    data={tourItem}
+                                    onModalClose={(val) =>
+                                      setModalTrigger(!val)
+                                    }
+                                    onChange={handleChange}
+                                    onDelete={handleDelete}
+                                  />
+                                </Box>
+                              );
+                            }
 
-                                updated[index].data.tour.activities[i] =
-                                  newInfo;
-                                setDays(updated);
-                              }}
-                              onDelete={() => {
-                                const updated = [...days];
-                                updated[index].data.tour.activities.splice(
-                                  i,
-                                  1
-                                );
-                                setDays(updated);
-                              }}
-                            />
-                          ))}
-                          <Button
-                            variant="outline"
-                            colorScheme="red"
-                            onClick={() => {
-                              const updated = [...days];
-                              updated[index].data.tour.activities.push({});
-                              setDays(updated);
-                            }}
-                          >
-                            Tambah Aktivitas
-                          </Button>
-                        </VStack>
-                      </Box>
+                            if ("id_activity" in tourItem) {
+                              return (
+                                <Box
+                                  key={i}
+                                  border="1px solid"
+                                  borderColor="gray.600"
+                                  p={4}
+                                  rounded="md"
+                                >
+                                  <ActivityCard
+                                    index={i}
+                                    data={tourItem}
+                                    onModalClose={(val) =>
+                                      setModalTrigger(!val)
+                                    }
+                                    onChange={handleChange}
+                                    onDelete={handleDelete}
+                                  />
+                                </Box>
+                              );
+                            }
+
+                            if ("id_resto" in tourItem) {
+                              return (
+                                <Box
+                                  key={i}
+                                  border="1px solid"
+                                  borderColor="gray.600"
+                                  p={4}
+                                  rounded="md"
+                                >
+                                  <RestaurantCard
+                                    index={i}
+                                    data={tourItem}
+                                    onModalClose={(val) =>
+                                      setModalTrigger(!val)
+                                    }
+                                    onChange={handleChange}
+                                    onDelete={handleDelete}
+                                  />
+                                </Box>
+                              );
+                            }
+
+                            return null;
+                          })}
+                      </VStack>
                     </Flex>
                     {/* Transport */}
                     <Flex
@@ -759,17 +720,10 @@ const PackageFormPage = (props) => {
 
     try {
       const hasMissingTypeWisata = primaryData.some((day) => {
-        const type_wisata = day.data.tour.type_wisata;
+        const type_wisata = day.data.type_wisata;
 
-        return (
-          (day.data.tour.destinations.length > 0 ||
-            day.data.tour.activities.length > 0 ||
-            day.data.tour.restaurants.length > 0) &&
-          !type_wisata
-        );
+        return day.data.type_wisata.length > 0 && !type_wisata;
       });
-
-      console.log(primaryData);
 
       if (hasMissingTypeWisata) {
         toast.close(loading);

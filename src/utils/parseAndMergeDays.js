@@ -23,6 +23,30 @@ const enrich = (items, parsedItems, nameKey, fallbackPrefix, extraFields = []) =
     return enriched;
   });
 
+   const enrichTourItems = (items, parsedItems) => 
+    (items || []).map((item, i) => {
+      const parsedItem = parsedItems?.[i] || {};
+      
+      let displayName = parsedItem.name || item.name || '';
+      if (!displayName) {
+        if (item.id_destinasi) {
+          displayName = item.destinasi?.name || `Destination ${i + 1}`;
+        } else if (item.id_activity) {
+          displayName = item.aktivitas?.name || `Activity ${i + 1}`;
+        } else if (item.id_resto) {
+          displayName = item.resto?.name || `Restaurant ${i + 1}`;
+        } else {
+          displayName = `Tour Item ${i + 1}`;
+        }
+      }
+
+      return {
+        ...item,
+        displayName,
+        description: parsedItem.description || item.description || ""
+      };
+    });
+
   const merged = rawDays.map((rawDay, index) => {
     const parsedDay = parsedDays[index] || {};
 
@@ -37,9 +61,13 @@ const enrich = (items, parsedItems, nameKey, fallbackPrefix, extraFields = []) =
       activities: enrich(rawDay.activities, parsedDay.activities, "aktivitas", "Aktivitas"),
       transport_additionals: enrich(rawDay.transport_additionals, parsedDay.transport_additionals, null, "Tambahan Transportasi"),
       akomodasi_additionals: enrich(rawDay.akomodasi_additionals, parsedDay.akomodasi_additionals, null, "Tambahan Akomodasi"),
+      tours: enrichTourItems(
+        rawDay.tours || rawDay.tour, 
+        parsedDay.tours || parsedDay.tour
+      )
     };
   });
-
+  
   return merged;
 }
 

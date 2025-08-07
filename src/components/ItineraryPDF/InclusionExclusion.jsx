@@ -66,11 +66,7 @@ const InclusionExclusionTable = ({
         "Promo Valid Until June 2025"
       ]
     },
-    otherProvisions: [
-      "We at Bali Sundaram Travel are not responsible for delays or cancellations",
-      "Flight Schedules for both Arrivals and Departures so that you can change the Package Schedule",
-      "Tour that has been programmed."
-    ]
+    otherProvisions: "We at Bali Sundaram Travel are not responsible for delays or cancellations Flight Schedules for both Arrivals and Departures so that you can change the Package Schedule Tour that has been programmed."
   };
 
   const [editData, setEditData] = useState(defaultData);
@@ -387,13 +383,23 @@ const InclusionExclusionTable = ({
             <Tr>
               <Td style={tableCellStyle} textAlign="center">
                 {isEditing ? (
-                  renderEditableList(editData.otherProvisions, 'otherProvisions')
+              <Textarea
+                value={editData.otherProvisions}
+                onChange={(e) =>
+                  setEditData(prev => ({
+                    ...prev,
+                    otherProvisions: e.target.value
+                  }))
+                }
+                    size="sm"
+                    resize="vertical"
+                    minH="100px"
+                    px={2}
+                  />
                 ) : (
-                  <VStack spacing={2} fontSize="sm" align="flex-start">
-                    {editData.otherProvisions.map((item, index) => (
-                      <Text key={index}>• {item}</Text>
-                    ))}
-                  </VStack>
+                  <Text fontSize="sm" textAlign="center" lineHeight="2" px="10" w="100%">
+                    {editData.otherProvisions}
+                  </Text>
                 )}
               </Td>
             </Tr>

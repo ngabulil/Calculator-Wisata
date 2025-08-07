@@ -10,7 +10,6 @@ const DayBreakdown = ({ days, formatCurrency }) => {
   const accentColor = useColorModeValue("teal.300", "teal.400");
 
   const {
-    breakdown,
     dayTotals,
     detailedBreakdown,
     akomodasiTotal,
@@ -41,7 +40,6 @@ useEffect(() => {
         akomodasiTotal={akomodasiTotal}
         transportTotal={transportTotal}
         tourTotal={tourTotal}
-        markup={breakdown.markup}
         formatCurrency={formatCurrency}
       />
       <DayDetails

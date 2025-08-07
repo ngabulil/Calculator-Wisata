@@ -15,7 +15,7 @@ export const parsePaketDays = async (days) => {
       const parsedDay = { ...day };
 
       parsedDay.hotels = await Promise.all(
-        (day.hotels || []).map(async (hotel) => {
+        (day.data.akomodasi.hotels || []).map(async (hotel) => {
           const data = await apiGetHotel(hotel.id_hotel);
           return {
             ...(data.result || null),
@@ -24,7 +24,7 @@ export const parsePaketDays = async (days) => {
       );
 
       parsedDay.villas = await Promise.all(
-        (day.villas || []).map(async (villa) => {
+        (day.data.akomodasi.villas || []).map(async (villa) => {
           const data = await apiGetVilla(villa.id_villa);
           return {
             ...(data.result || null),
@@ -33,7 +33,7 @@ export const parsePaketDays = async (days) => {
       );
 
       parsedDay.akomodasi_additionals = await Promise.all(
-        (day.akomodasi_additionals || []).map(async (item) => {
+        (day.data.akomodasi.additional || []).map(async (item) => {
           const data = await apiGetAdditionalAkomodasiById(item.id_additional);
           return {
             ...(data.result || null),
@@ -41,36 +41,41 @@ export const parsePaketDays = async (days) => {
         })
       );
 
-      parsedDay.destinations = await Promise.all(
-        (day.destinations || []).map(async (dest) => {
-          const data = await apiGetDestinationById(dest.id_destinasi);
-          return {
-            ...(data.result || null),
-          };
-        })
-      );
-
-      parsedDay.activities = await Promise.all(
-        (day.activities || []).map(async (act) => {
-          const data = await apiGetActivityVendorById(act.id_vendor);
-          return {
-            ...act,
-            ...(data.result || null),
-          };
-        })
-      );
-
-      parsedDay.restaurants = await Promise.all(
-        (day.restaurants || []).map(async (resto) => {
-          const data = await apiGetRestaurantById(resto.id_resto);
-          return {
-            ...(data.result || null),
-          };
+      parsedDay.tours = await Promise.all(
+        (day.data.tours || []).map(async (item) => {
+          if (item.id_destinasi) {
+            const data = await apiGetDestinationById(item.id_destinasi);
+            return {
+              type: "destination",
+              no: item.no,
+              ...(data.result || {}),
+            };
+          } else if (item.id_activity) {
+            const data = await apiGetActivityVendorById(item.id_vendor);
+            return {
+              type: "activity",
+              no: item.no,
+              ...item,
+              ...(data.result || {}),
+            };
+          } else if (item.id_resto) {
+            const data = await apiGetRestaurantById(item.id_resto);
+            return {
+              type: "restaurant",
+              no: item.no,
+              ...(data.result || {}),
+            };
+          } else {
+            return {
+              type: "unknown",
+              ...item,
+            };
+          }
         })
       );
 
       parsedDay.mobils = await Promise.all(
-        (day.mobils || []).map(async (mobil) => {
+        (day.data.transport.mobils || []).map(async (mobil) => {
           const data = await apiGetMobilById(mobil.id_mobil);
           return {
             ...(data.result || null),
@@ -79,7 +84,7 @@ export const parsePaketDays = async (days) => {
       );
 
       parsedDay.transport_additionals = await Promise.all(
-        (day.transport_additionals || []).map(async (item) => {
+        (day.data.transport.additional || []).map(async (item) => {
           const data = await apiGetAdditionalMobilById(item.id_additional);
           return {
             ...(data.result || null),

@@ -41,31 +41,25 @@ export const parseData = async (days) => {
         })
       );
 
-      parsedDay.destinations = await Promise.all(
-        (day.destinations || []).map(async (dest) => {
-          const data = await apiGetDestinationById(dest.id_destinasi);
-          return {
-            ...(data.result || null),
-          };
-        })
-      );
-
-      // parsedDay.vendor = await Promise.all(
-      //   (day.activities || []).map(async (act) => {
-      //     const data = await apiGetActivityVendorById(act.id_vendor);
-      //     return {
-      //       ...act,
-      //       ...(data.result || null),
-      //     };
-      //   })
-      // );
-
-      parsedDay.restaurants = await Promise.all(
-        (day.restaurants || []).map(async (resto) => {
-          const data = await apiGetRestaurantById(resto.id_resto);
-          return {
-            ...(data.result || null),
-          };
+      parsedDay.tour = await Promise.all(
+        (day.tour || []).map(async (item) => {
+          try {
+            if (item.id_destinasi) {
+              const res = await apiGetDestinationById(item.id_destinasi);
+              return res.result || {};
+            } else if (item.id_resto) {
+              const res = await apiGetRestaurantById(item.id_resto);
+              return res.result || {};
+            } else if (item.id_activity) {
+              const res = await apiGetActivityDetailsById(item.id_activity);
+              return res.result || {};
+            } else {
+              return {};
+            }
+          } catch (err) {
+            console.warn("Failed to fetch tour item", err);
+            return {};
+          }
         })
       );
 
@@ -77,16 +71,6 @@ export const parseData = async (days) => {
           };
         })
       );
-
-      parsedDay.activities = await Promise.all(
-        (day.activities || []).map(async (act) => {
-          const data = await apiGetActivityDetailsById(act.id_activity);
-          return {
-            ...act,
-            ...(data.result || null),
-          };
-        })
-      ); 
 
       return parsedDay;
     })

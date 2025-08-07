@@ -17,7 +17,6 @@ import {
 const DayDetails = ({
   mergedDays,
   dayTotals,
-  detailedBreakdown,
   formatCurrency,
   accentColor,
 }) => {
@@ -29,7 +28,6 @@ const DayDetails = ({
       <Accordion allowMultiple>
         {mergedDays.map((day, index) => {
           const dayTotal = dayTotals[index] || 0;
-          const dayBreakdown = detailedBreakdown[index] || {};
 
           return (
             <AccordionItem
@@ -64,21 +62,6 @@ const DayDetails = ({
                   {renderSection("Transportasi", day.mobils, accentColor, formatCurrency, renderTransport)}
                   {renderSection("Tambahan Transportasi", day.transport_additionals, accentColor, formatCurrency, renderAdditional)}
                   {renderTourSection(day, accentColor, formatCurrency)}
-                  {dayBreakdown.markup > 0 && (
-                    <Box>
-                      <HStack
-                        justify="space-between"
-                        fontSize="sm"
-                        color="orange.300"
-                      >
-                        <Text>Markup</Text>
-                        <Text fontWeight="bold">
-                          {formatCurrency(dayBreakdown.markup)}
-                        </Text>
-                      </HStack>
-                      <Divider my={2} />
-                    </Box>
-                  )}
                   <HStack justify="space-between" fontWeight="bold">
                     <Text>Total Hari {index + 1}</Text>
                     <Text color={accentColor}>{formatCurrency(dayTotal)}</Text>
@@ -156,87 +139,38 @@ const renderTransport = (item, i, formatCurrency) => (
 );
 
 const renderTourSection = (day, accentColor, formatCurrency) => {
-  const { restaurants, destinations, activities } = day;
-
-  if (
-    (!restaurants || restaurants.length === 0) &&
-    (!destinations || destinations.length === 0) &&
-    (!activities || activities.length === 0)
-  ) {
-    return null;
-  }
-
+  const tours = day.tours || [];
   return (
     <Box>
       <Text fontWeight="bold" fontSize="sm" mb={2} color={accentColor}>
-        Tour
+        Tour ({tours.length} item)
       </Text>
 
-      {restaurants?.length > 0 && (
-        <>
-          <Text fontSize="xs" mb={1} pl={2} color="gray.400">
-            Restoran:
-          </Text>
-          {restaurants.map((item, i) => (
-            <HStack key={i} justify="space-between" fontSize="sm" pl={4}>
-              <Text>{item.displayName}</Text>
-              <Text fontWeight="bold">
-                {formatCurrency(
-                  (item.hargaAdult || 0) * (item.jumlahAdult || 0) +
-                  (item.hargaChild || 0) * (item.jumlahChild || 0)
-                )}
-              </Text>
-            </HStack>
-          ))}
-        </>
-      )}
+      {tours.map((item, i) => {
+        let total = 0;
+        let displayName = item.displayName || item.nama || 'Unknown Item';
 
-      {destinations?.length > 0 && (
-        <>
-          <Text fontSize="xs" mb={1} pl={2} color="gray.400" mt={restaurants?.length > 0 ? 2 : 0}>
-            Destinasi:
-          </Text>
-          {destinations.map((item, i) => (
-            <HStack key={i} justify="space-between" fontSize="sm" pl={4}>
-              <Text>{item.displayName}</Text>
-              <Text fontWeight="bold">
-                {formatCurrency(
-                  (item.hargaAdult || 0) * (item.jumlahAdult || 0) +
-                  (item.hargaChild || 0) * (item.jumlahChild || 0)
-                )}
-              </Text>
-            </HStack>
-          ))}
-        </>
-      )}
-
-      {activities?.length > 0 && (
-        <>
-          <Text
-            fontSize="xs"
-            mb={1}
-            pl={2}
-            color="gray.400"
-            mt={restaurants?.length || destinations?.length ? 2 : 0}
-          >
-            Aktivitas:
-          </Text>
-          {activities.map((item, i) => (
-            <HStack key={i} justify="space-between" fontSize="sm" pl={4}>
-              <Text>
-                {item.displayName}
-                {item.jumlah > 1 && ` (x${item.jumlah})`}
-              </Text>
-              <Text fontWeight="bold">
-                {formatCurrency(
-                  (item.hargaAdult || 0) * (item.jumlahAdult || 0) +
-                  (item.hargaChild || 0) * (item.jumlahChild || 0)
-                )}
-              </Text>
-            </HStack>
-          ))}
-        </>
-      )}
+        if (item.jenis_wisatawan) {
+          const hargaAdult = parseFloat(item.hargaAdult) || 0;
+          const hargaChild = parseFloat(item.hargaChild) || 0;
+          const jumlahAdult = parseInt(item.jumlahAdult) || 0;
+          const jumlahChild = parseInt(item.jumlahChild) || 0;
+          
+          total = (hargaAdult * jumlahAdult) + (hargaChild * jumlahChild);
+        }
+        else if (item.harga && item.jumlah) {
+          total = (parseFloat(item.harga) || 0) * (parseInt(item.jumlah) || 1);
+        }
+        
+        return (
+          <HStack key={i} justify="space-between" fontSize="sm" pl={4}>
+            <Text>
+              {displayName}
+            </Text>
+            <Text fontWeight="bold">{formatCurrency(total)}</Text>
+          </HStack>
+        );
+      })}
 
       <Divider my={2} />
     </Box>

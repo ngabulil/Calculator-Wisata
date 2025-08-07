@@ -14,11 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { usePackageContext } from "../context/PackageContext";
 
-// Lazy load components untuk code splitting
 const DayBreakDown = React.lazy(() => import("../components/Checkout/DayBreakDown/DayBreakDown"));
 const CheckoutSummary = React.lazy(() => import("../components/Checkout/CheckoutSummary"));
 
-// Loading skeleton components
 const DayBreakDownSkeleton = () => (
   <VStack spacing={4} align="stretch">
     {[1, 2, 3].map((index) => (

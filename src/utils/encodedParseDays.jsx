@@ -56,8 +56,6 @@ export default async function parseDays(daysFromApi) {
           (item) => item.id_area === id_area
         );
 
-        console.log(foundKeteranganKey);
-
         const packageName = matchedItem?.area ?? defaultLabel;
 
         return packageName;
@@ -71,7 +69,7 @@ export default async function parseDays(daysFromApi) {
 
   const parseDay = async (day) => {
     const hotels = await Promise.all(
-      (day.hotels || []).map(async (hotel) => {
+      (day.data.akomodasi.hotels || []).map(async (hotel) => {
         const hotelLabel = await getLabel(
           apiGetHotel,
           hotel.id_hotel,
@@ -88,7 +86,7 @@ export default async function parseDays(daysFromApi) {
           jumlahKamar: 1,
           jumlahExtrabed: 1,
           hargaPerKamar: 0,
-          hargaExtrabed: 300000,
+          hargaExtrabed: 0,
           hotel: { value: hotel.id_hotel, label: hotelLabel },
           roomType: {
             value: hotel.id_tipe_kamar,
@@ -105,7 +103,7 @@ export default async function parseDays(daysFromApi) {
     );
 
     const villas = await Promise.all(
-      (day.villas || []).map(async (villa) => {
+      (day.data.akomodasi.villas || []).map(async (villa) => {
         const villaLabel = await getLabel(
           apiGetVilla,
           villa.id_villa,
@@ -122,7 +120,7 @@ export default async function parseDays(daysFromApi) {
           jumlahKamar: 1,
           jumlahExtrabed: 1,
           hargaPerKamar: 0,
-          hargaExtrabed: 400000,
+          hargaExtrabed: 0,
           villa: { value: villa.id_villa, label: villaLabel },
           roomType: {
             value: villa.id_tipe_kamar,
@@ -139,7 +137,7 @@ export default async function parseDays(daysFromApi) {
     );
 
     const akomodasiAdditionals = await Promise.all(
-      (day.akomodasi_additionals || []).map(async (add) => {
+      (day.data.akomodasi.additional || []).map(async (add) => {
         const label = await getLabel(
           apiGetAdditionalAkomodasiById,
           add.id_additional,
@@ -154,101 +152,120 @@ export default async function parseDays(daysFromApi) {
       })
     );
 
-    const destinations = await Promise.all(
-      (day.destinations || []).map(async (dest) => {
-        const label = await getLabel(
-          apiGetDestinationById,
-          dest.id_destinasi,
-          `Destinasi ${dest.id_destinasi}`
-        );
-        return {
-          selectedDest: {
-            value: dest.id_destinasi,
-            label,
-            originalData: {},
-          },
-          selectedType: {
-            value: dest.type_wisata,
-            label: capitalizeFirst(dest.type_wisata),
-          },
-          id_destinasi: dest.id_destinasi,
-          type_wisata: dest.type_wisata,
-          description: dest.description || "",
-        };
+    const rawTours = await Promise.all(
+      (day.data.tours || []).map(async (item) => {
+        const type = item.id_destinasi
+          ? "destination"
+          : item.id_activity
+          ? "activity"
+          : item.id_resto
+          ? "restaurant"
+          : "unknown";
+
+        const baseType = item.type_wisata || "";
+
+        if (type === "destination") {
+          const label = await getLabel(
+            apiGetDestinationById,
+            item.id_destinasi,
+            `Destinasi ${item.id_destinasi}`
+          );
+
+          return {
+            no: item.no,
+            selectedDest: {
+              value: item.id_destinasi,
+              label,
+              originalData: {},
+            },
+            selectedType: {
+              value: baseType,
+              label: capitalizeFirst(baseType),
+            },
+            id_destinasi: item.id_destinasi,
+            type_wisata: baseType,
+            description: item.description || "",
+          };
+        }
+
+        if (type === "activity") {
+          const labelVendor = await getLabel(
+            apiGetActivityVendorById,
+            item.id_vendor,
+            `Vendor ${item.id_vendor}`
+          );
+
+          const labelActivity = await getLabel(
+            apiGetActivityDetailsById,
+            item.id_activity,
+            `Activity ${item.id_activity}`
+          );
+
+          return {
+            no: item.no,
+            selectedVendor: {
+              value: item.id_vendor,
+              label: labelVendor,
+            },
+            selectedActivity: {
+              value: item.id_activity,
+              label: labelActivity,
+              fullData: {},
+            },
+            selectedTypeWisata: {
+              value: baseType,
+              label: capitalizeFirst(baseType),
+            },
+            id_vendor: item.id_vendor,
+            id_activity: item.id_activity,
+            type_wisata: baseType,
+            description: item.description || "",
+          };
+        }
+
+        if (type === "restaurant") {
+          const labelResto = await getLabel(
+            apiGetRestaurantById,
+            item.id_resto,
+            `Restoran ${item.id_resto}`
+          );
+
+          const labelMenu = await getLabelRestoMenu(
+            apiGetAllRestaurant,
+            item.id_resto,
+            item.id_menu,
+            `Menu ${item.id_menu}`
+          );
+
+          return {
+            no: item.no,
+            selectedResto: {
+              value: item.id_resto,
+              label: labelResto,
+            },
+            selectedPackage: {
+              value: item.id_menu,
+              label: labelMenu,
+              fullData: {},
+            },
+            selectedTypeWisata: {
+              value: baseType,
+              label: capitalizeFirst(baseType),
+            },
+            id_resto: item.id_resto,
+            id_package: item.id_menu,
+            type_wisata: baseType,
+          };
+        }
+
+        return item;
       })
     );
 
-    const activities = await Promise.all(
-      (day.activities || []).map(async (act) => {
-        const label = await getLabel(
-          apiGetActivityVendorById,
-          act.id_vendor,
-          `Activity ${act.id_activity}`
-        );
-
-        const labelAct = await getLabel(
-          apiGetActivityDetailsById,
-          act.id_activity,
-          `Activity label`
-        );
-
-        return {
-          selectedVendor: {
-            value: act.id_vendor,
-            label: label,
-          },
-          selectedTypeWisata: {
-            value: act.type_wisata,
-            label: capitalizeFirst(act.type_wisata),
-          },
-          selectedActivity: {
-            value: act.id_activity,
-            label: labelAct,
-            fullData: {},
-          },
-          id_vendor: act.id_vendor,
-          id_activity: act.id_activity,
-        };
-      })
-    );
-
-    const restaurants = await Promise.all(
-      (day.restaurants || []).map(async (resto) => {
-        const label = await getLabel(
-          apiGetRestaurantById,
-          resto.id_resto,
-          `Menu ${resto.id_menu}`
-        );
-
-        const labelMenu = await getLabelRestoMenu(
-          apiGetAllRestaurant,
-          resto.id_resto,
-          resto.id_menu,
-          `Menu nich`
-        );
-
-        return {
-          selectedResto: {
-            value: resto.id_resto,
-            label: label,
-          },
-          selectedTypeWisata: {
-            value: resto.type_wisata,
-            label: capitalizeFirst(resto.type_wisata),
-          },
-          selectedPackage: {
-            value: resto.id_menu,
-            label: labelMenu,
-            fullData: {},
-          },
-          id_resto: resto.id_resto,
-          id_package: resto.id_menu,
-        };
-      })
-    );
+    const tours = rawTours.sort((a, b) => a.no - b.no);
 
     const mobils = await Promise.all(
-      (day.mobils || []).map(async (mobil) => {
+      (day.data.transport.mobils || []).map(async (mobil) => {
         const label = await getLabel(
           apiGetMobilById,
           mobil.id_mobil,
@@ -282,7 +299,7 @@ export default async function parseDays(daysFromApi) {
     );
 
     const transportAdditionals = await Promise.all(
-      (day.transport_additionals || []).map(async (add) => {
+      (day.data.transport.additional || []).map(async (add) => {
         const label = await getLabel(
           apiGetAdditionalMobilById,
           add.id_additional,
@@ -297,6 +314,10 @@ export default async function parseDays(daysFromApi) {
       })
     );
 
+    const tourTypeWisata =
+      tours.find((t) => t.type_wisata && t.type_wisata !== "")?.type_wisata ||
+      "";
+
     return {
       name: day.name,
       description_day: day.description_day,
@@ -306,11 +327,8 @@ export default async function parseDays(daysFromApi) {
           villas,
           additional: akomodasiAdditionals,
         },
-        tour: {
-          destinations,
-          activities,
-          restaurants,
-        },
+        tours: tours,
+        type_wisata: tourTypeWisata,
         transport: {
           mobils,
           additional: transportAdditionals,

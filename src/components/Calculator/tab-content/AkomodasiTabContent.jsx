@@ -210,7 +210,7 @@ const AkomodasiTabContent = ({ dayIndex }) => {
       </Button>
 
       {/* MARKUP */}
-      <Box>
+      {/* <Box>
         <Text fontWeight="bold" mb={2}>
           Markup
         </Text>
@@ -240,7 +240,7 @@ const AkomodasiTabContent = ({ dayIndex }) => {
             }}
           />
         </HStack>
-      </Box>
+      </Box> */}
 
       <Box fontWeight="bold" mt={4}>
         Total Hari Ini: Rp {total.toLocaleString("id-ID")}

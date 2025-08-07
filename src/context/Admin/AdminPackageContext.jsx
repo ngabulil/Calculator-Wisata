@@ -34,11 +34,7 @@ const AdminPackageContextProvider = ({ children }) => {
           villas: [],
           additional: [],
         },
-        tour: {
-          destinations: [],
-          activities: [],
-          restaurants: [],
-        },
+        tours: [],
         transport: {
           mobils: [],
           additional: [],

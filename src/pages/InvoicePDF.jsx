@@ -38,6 +38,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     breakdown,
     calculateHotelTotal,
     calculateVillaTotal,
+    userMarkupAmount,
   } = useCheckoutContext();
   const { days: expenseDays, calculateGrandTotal } = useExpensesContext();
 
@@ -279,6 +280,10 @@ const InvoicePDF = forwardRef((props, ref) => {
             );
           };
 
+          const tourActivities = day.tours 
+            ? processActivities(day.tours, "Tour Item") 
+            : [];
+
           // Process expense items dari context
           const processExpenseItems = (expenseItems) => {
             return (
@@ -308,18 +313,20 @@ const InvoicePDF = forwardRef((props, ref) => {
                     }
                     return total > 0 ? formatCurrency(total) : "Rp 0";
                   })(),
-                  kidExpense: "-", // Expense items biasanya tidak memiliki kid expense terpisah
+                  kidExpense: "-", 
                   originalData: item,
                 };
               }) || []
             );
           };
 
-          const activities = [
+        const activities = [
+          ...(day.tours ? tourActivities : [
             ...processActivities(day.destinations, "Destination"),
             ...processActivities(day.restaurants, "Restaurant"),
-            ...processActivities(day.activities, "Activity"),
-          ];
+            ...processActivities(day.activities, "Activity")
+          ])
+        ];
 
           // Get expense items dari context
           const expenseDay = expenseDays[dayIndex];
@@ -604,7 +611,7 @@ const InvoicePDF = forwardRef((props, ref) => {
           akomodasiTotal={akomodasiTotal}
           transportTotal={transportTotal}
           tourTotal={tourTotal}
-          markup={breakdown.markup}
+          markup={userMarkupAmount}
           grandTotal={calculatedValues.adjustedGrandTotal}
           originalGrandTotal={grandTotal}
           totalExpenses={calculatedValues.totalExpensesFromContext}

@@ -34,29 +34,47 @@ export default function buildPayloadPaket(data) {
                 })) ?? [],
             },
 
-            tour: {
-              destinations:
-                day.data?.tour?.destinations?.map((dest) => ({
-                  id_destinasi: dest?.selectedDest?.value,
-                  type_wisata: day.data.tour.type_wisata,
-                  description: dest?.description || "",
-                })) ?? [],
+            tours:
+              day.data?.tours?.map((tourItem) => {
+                const base = {
+                  no: tourItem.no,
+                  type_wisata: day.data.type_wisata || "",
+                };
 
-              activities:
-                day.data?.tour?.activities?.map((act) => ({
-                  id_vendor: act?.selectedVendor?.value,
-                  id_activity: act?.selectedActivity?.value,
-                  type_wisata: day.data.tour.type_wisata,
-                  description: act?.description || "",
-                })) ?? [],
+                // Destination
+                if (tourItem.selectedDest?.value || tourItem.id_destinasi) {
+                  return {
+                    ...base,
+                    id_destinasi:
+                      tourItem.selectedDest?.value || tourItem.id_destinasi,
+                  };
+                }
 
-              restaurants:
-                day.data?.tour?.restaurants?.map((resto) => ({
-                  id_resto: resto?.selectedResto?.value,
-                  id_menu: resto?.selectedPackage?.value,
-                  type_wisata: day.data.tour.type_wisata,
-                })) ?? [],
-            },
+                // Activity
+                if (tourItem.selectedActivity?.value || tourItem.id_activity) {
+                  return {
+                    ...base,
+                    id_vendor:
+                      tourItem.selectedVendor?.value || tourItem.id_vendor,
+                    id_activity:
+                      tourItem.selectedActivity?.value || tourItem.id_activity,
+                  };
+                }
+
+                // Restaurant
+                if (tourItem.selectedResto?.value || tourItem.id_resto) {
+                  return {
+                    ...base,
+                    id_resto:
+                      tourItem.selectedResto?.value || tourItem.id_resto,
+                    id_menu:
+                      tourItem.selectedPackage?.value || tourItem.id_menu,
+                  };
+                }
+
+                // Default fallback (tidak dikenali)
+                return base;
+              }) ?? [],
 
             transport: {
               mobils:
