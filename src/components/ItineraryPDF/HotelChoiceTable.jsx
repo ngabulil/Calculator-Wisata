@@ -33,37 +33,27 @@ const tableCellStyle = {
   verticalAlign: "top",
 };
 
-const formatPrice = (price) => {
-  if (!price || price === 0) return "-";
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-  }).format(price);
-};
 
 const HotelChoiceTable = ({ akomodasiDays }) => {
-  const { hotelItems, villaItems, calculateGrandTotal,  accommodationMarkup } = useExpensesContext();
+  const { hotelItems, villaItems, calculateGrandTotal, formatCurrency } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
-  const { transportTotal, tourTotal, grandTotal } = useCheckoutContext();
+  const { transportTotal, tourTotal, grandTotal, userMarkup } = useCheckoutContext();
 
   const [parsedExpensesData, setParsedExpensesData] = useState({
     hotels: [],
     villas: [],
     isLoading: true,
-  });
+  });  
 
-  // Parse expenses context data using parseAndMergeDays
   useEffect(() => {
     let isMounted = true;
-
+    
     const parseExpensesData = async () => {
       try {
-        // Create mock days structure for parsing
         const mockDaysForHotels = hotelItems.map((hotel, index) => ({
           id: `hotel-day-${index}`,
           name: `Hotel Day ${index + 1}`,
-          hotels: [hotel], // Each hotel item as a day
+          hotels: [{ ...hotel }],  
           villas: [],
           destinations: [],
           restaurants: [],
@@ -74,13 +64,12 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
           id: `villa-day-${index}`,
           name: `Villa Day ${index + 1}`,
           hotels: [],
-          villas: [villa], // Each villa item as a day
+           villas: [{ ...villa }],
           destinations: [],
           restaurants: [],
           activities: [],
         }));
 
-        // Parse hotels and villas separately
         let parsedHotels = [];
         let parsedVillas = [];
 
@@ -163,15 +152,17 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     };
   }, [hotelItems, villaItems]);
 
-  const applyMarkup = (price, markup) => {
-  if (!markup) return price;
-  if (markup.type === "percent") {
-    return price + (price * (markup.value / 100));
-  }
-  return price + (markup.value || 0);
-};
+ const calculateUserMarkupAmount = (subtotal) => {
+    if (!userMarkup.value || userMarkup.value <= 0) return 0;
+    
+    if (userMarkup.type === 'percent') {
+      return (subtotal * userMarkup.value) / 100;
+    } else {
+      return userMarkup.value;
+    }
+  };
 
-  // Calculate total price per pax similar to InvoicePDF
+  // Calculate total price per pax - menggunakan grandTotal dari CheckoutContext
   const calculatedTotalPerPax = useMemo(() => {
     const totalAdult =
       selectedPackage?.totalPaxAdult &&
@@ -180,6 +171,8 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         : 1; // Default to 1 to avoid division by zero
 
     const totalExpensesFromContext = calculateGrandTotal();
+    
+    // Grand total sudah termasuk markup dari CheckoutContext
     const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
 
     return adjustedGrandTotal / totalAdult;
@@ -192,16 +185,25 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         ? parseInt(selectedPackage.totalPaxAdult)
         : 1;
 
-  const accommodationDays = selectedPackage?.days?.reduce((count, day) => {
-    const hasHotel = Array.isArray(day.hotels) && day.hotels.length > 0;
-    const hasVilla = Array.isArray(day.villa) && day.villa.length > 0;
-    return hasHotel || hasVilla ? count + 1 : count;
-  }, 0) || 1;
-    const markedUpPrice = applyMarkup(hotelPrice, accommodationMarkup);
-    const totalHotelPrice = markedUpPrice * accommodationDays;
+    // Hitung jumlah hari akomodasi
+    const accommodationDays = selectedPackage?.days?.reduce((count, day) => {
+      const hasHotel = Array.isArray(day.hotels) && day.hotels.length > 0;
+      const hasVilla = Array.isArray(day.villa) && day.villa.length > 0;
+      return hasHotel || hasVilla ? count + 1 : count;
+    }, 0) || 1;
+
+    // Total harga hotel untuk semua hari
+    const totalHotelPrice = hotelPrice * accommodationDays;
+    
+    // Subtotal sebelum markup (hotel + tour + transport + expenses)
     const totalExpensesFromContext = calculateGrandTotal();
-    const alternativeTotal =
-      totalHotelPrice + tourTotal + transportTotal + totalExpensesFromContext;
+    const subtotalBeforeMarkup = totalHotelPrice + tourTotal + transportTotal + totalExpensesFromContext;
+    
+    // Hitung user markup berdasarkan subtotal
+    const markupAmount = calculateUserMarkupAmount(subtotalBeforeMarkup);
+    
+    // Total dengan markup
+    const alternativeTotal = subtotalBeforeMarkup + markupAmount;
 
     return alternativeTotal / totalAdult;
   };
@@ -360,8 +362,8 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
               <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
                 {/* Baris pertama: total dari checkout context, baris lainnya: perhitungan alternatif */}
                 {index === 0
-                  ? formatPrice(calculatedTotalPerPax)
-                  : formatPrice(calculateAlternativePrice(item.price))}
+                  ? formatCurrency(calculatedTotalPerPax)
+                  : formatCurrency(calculateAlternativePrice(item.price))}
               </Td>
             </Tr>
           ))}

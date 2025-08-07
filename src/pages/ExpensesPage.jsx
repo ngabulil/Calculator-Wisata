@@ -10,6 +10,7 @@ import {
   Input,
   HStack,
   VStack,
+  Select,
 } from "@chakra-ui/react";
 import { AddIcon, DownloadIcon, ViewIcon } from "@chakra-ui/icons";
 import DayCard from "../components/Expenses/DayCard";
@@ -31,17 +32,21 @@ const ExpensesPage = () => {
     updateExpenseItem,
     calculateDayTotal,
     formatCurrency,
-    // Hotel dan Villa dari context
+    // Hotel dan Villa dari context - UPDATED
     hotelItems,
-    addHotelItem,
+    tempHotelItems,
+    addTempHotelItem,
+    updateTempHotelItem,
+    removeTempHotelItem,
     updateHotelItem,
     removeHotelItem,
     villaItems,
-    addVillaItem,
+    tempVillaItems,
+    addTempVillaItem,
+    updateTempVillaItem,
+    removeTempVillaItem,
     updateVillaItem,
     removeVillaItem,
-    accommodationMarkup,
-    updateAccommodationMarkup,
   } = useExpensesContext();
   
   const { getHotels, getVillas } = useAkomodasiContext();
@@ -173,34 +178,41 @@ const ExpensesPage = () => {
     }
   };
 
-  // Handler untuk hotel menggunakan context
-const handleHotelChange = (index, updatedItem) => {
-  updateHotelItem(index, updatedItem);
-};
+  const handleAddHotel = () => {
+    addTempHotelItem(); 
+  };
 
-const handleVillaChange = (index, updatedItem) => {
-  updateVillaItem(index, updatedItem);
-};
+  const handleAddVilla = () => {
+    addTempVillaItem(); 
+  };
+
+  const handleTempHotelChange = (tempId, updatedItem) => {
+    updateTempHotelItem(tempId, updatedItem);
+  };
+
+  const handleTempVillaChange = (tempId, updatedItem) => {
+    updateTempVillaItem(tempId, updatedItem);
+  };
+
+  const handleHotelChange = (index, updatedItem) => {
+    updateHotelItem(index, updatedItem);
+  };
+
+  const handleVillaChange = (index, updatedItem) => {
+    updateVillaItem(index, updatedItem);
+  };
+
+  const handleTempHotelDelete = (tempId) => {
+    removeTempHotelItem(tempId);
+  };
+
+  const handleTempVillaDelete = (tempId) => {
+    removeTempVillaItem(tempId);
+  };
 
   const handleHotelDelete = (index) => {
     removeHotelItem(index);
   };
-
-const handleAddHotel = () => {
-  addHotelItem({
-    jumlahKamar: 1,
-    jumlahExtrabed: 1,
-    useExtrabed: false,
-  });
-};
-
-const handleAddVilla = () => {
-  addVillaItem({
-    jumlahKamar: 1,
-    jumlahExtrabed: 1,
-    useExtrabed: false,
-  });
-};
 
   const handleVillaDelete = (index) => {
     removeVillaItem(index);
@@ -300,16 +312,33 @@ const handleAddVilla = () => {
           <Text fontSize="lg" fontWeight="semibold" color="white">
             Hotel Options
           </Text>
+          
           {hotelItems.map((item, index) => (
             <HotelCard
-              key={index}
+              key={`permanent-${index}`}
               index={index}
               dayIndex={null}
               data={item}
               onDelete={() => handleHotelDelete(index)}
               onChange={(updatedItem) => handleHotelChange(index, updatedItem)}
+              isTemporary={false}
+              displayName={`Hotel ${index + 1}`}
             />
           ))}
+          
+          {tempHotelItems.map((item, tempIndex) => (
+            <HotelCard
+              key={`temp-${item.tempId}`}
+              index={item.tempId}
+              dayIndex={null}
+              data={item}
+              onDelete={() => handleTempHotelDelete(item.tempId)}
+              onChange={(updatedItem) => handleTempHotelChange(item.tempId, updatedItem)}
+              isTemporary={true}
+              displayName={`Hotel ${hotelItems.length + tempIndex + 1}`}
+            />
+          ))}
+          
           <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={handleAddHotel}>
             Tambah Hotel
           </Button>
@@ -320,39 +349,39 @@ const handleAddVilla = () => {
           <Text fontSize="lg" fontWeight="semibold" color="white">
             Villa Options
           </Text>
+          
           {villaItems.map((item, index) => (
             <VillaCard
-              key={index}
+              key={`permanent-${index}`}
               index={index}
               dayIndex={null}
               data={item}
               onDelete={() => handleVillaDelete(index)}
               onChange={(updatedItem) => handleVillaChange(index, updatedItem)}
+              isTemporary={false}
+              displayName={`Villa ${index + 1}`}
             />
           ))}
+          
+          {tempVillaItems.map((item, tempIndex) => (
+            <VillaCard
+              key={`temp-${item.tempId}`}
+              index={item.tempId}
+              dayIndex={null}
+              data={item}
+              onDelete={() => handleTempVillaDelete(item.tempId)}
+              onChange={(updatedItem) => handleTempVillaChange(item.tempId, updatedItem)}
+              isTemporary={true}
+              displayName={`Villa ${villaItems.length + tempIndex + 1}`}
+            />
+          ))}
+          
           <Button leftIcon={<AddIcon />} colorScheme="green" onClick={handleAddVilla}>
             Tambah Villa
           </Button>
         </VStack>
       </Box>
-      <Box mb={4} mt={6}>
-        <Text fontWeight="bold" color="white">Markup Akomodasi (%)</Text>
-        <Input
-          type="number"
-          placeholder="Masukkan markup (contoh: 10 untuk 10%)"
-          value={accommodationMarkup.value}
-          onChange={(e) =>
-            updateAccommodationMarkup({ type: "percent", value: parseFloat(e.target.value) })
-          }
-          width="200px"
-          mt={2}
-          color="white"
-          bg="gray.600"
-          _placeholder={{ color: "gray.300" }}
-        />
-      </Box>
-  
-
+      
       <Flex justify="center" mt={6}>
         <Button
           colorScheme="purple"

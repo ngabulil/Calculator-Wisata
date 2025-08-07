@@ -18,6 +18,13 @@ const CheckoutContextProvider = ({ children }) => {
   });
   const [dayTotals, setDayTotals] = useState([]);
   const [detailedBreakdown, setDetailedBreakdown] = useState([]);
+  
+  // State untuk user markup input
+  const [userMarkup, setUserMarkup] = useState({
+    type: 'percent', // 'percent' atau 'fixed'
+    value: 0
+  });
+  
   const { selectedPackage } = usePackageContext();
 
   // Helper function untuk menghitung total hotel per hari
@@ -60,33 +67,40 @@ const CheckoutContextProvider = ({ children }) => {
     return mobilTotal + additionalTransportTotal;
   };
 
-  // Helper function untuk menghitung total tour per hari
   const calculateTourTotal = (day) => {
-    const restaurantTotal = (day.restaurants || []).reduce((sum, resto) => {
-      // Menggunakan hargaAdult dan hargaChild untuk perhitungan
-      return sum + (resto.hargaAdult || 0) * (resto.jumlahAdult || 0) + (resto.hargaChild || 0) * (resto.jumlahChild || 0);
+    const tours = day.tours || day.tour || [];
+
+    return tours.reduce((sum, item) => {
+      if (item.jenis_wisatawan) {
+        const adultPrice = item.hargaAdult || 0;
+        const childPrice = item.hargaChild || 0;
+        const adultCount = item.jumlahAdult || 0;
+        const childCount = item.jumlahChild || 0;
+        
+        return sum + (adultPrice * adultCount) + (childPrice * childCount);
+      }
+      if (item.harga && item.jumlah) {
+        return sum + (item.harga * item.jumlah);
+      }
+      
+      return sum;
     }, 0);
-    
-    const destinationTotal = (day.destinations || []).reduce((sum, dest) => {
-      // Menggunakan hargaAdult dan hargaChild untuk perhitungan
-      return sum + (dest.hargaAdult || 0) * (dest.jumlahAdult || 0) + (dest.hargaChild || 0) * (dest.jumlahChild || 0);
-    }, 0);
-    
-    
-    const activityTotal = (day.activities || []).reduce((sum, activity) => {
-      // Menggunakan hargaAdult dan hargaChild untuk perhitungan
-      return sum + (activity.hargaAdult || 0) * (activity.jumlahAdult || 0) + (activity.hargaChild || 0) * (activity.jumlahChild || 0);
-    }, 0);
-    
-    return restaurantTotal + destinationTotal + activityTotal;
   };
 
-  // Helper function untuk menghitung markup per hari
-  const calculateDayMarkup = (day, daySubTotal) => {
-    const markup = day.markup || {};
-    return markup.type === "percent" 
-      ? ((markup.value || 0) * daySubTotal) / 100
-      : (markup.value || 0);
+  const calculateUserMarkup = (subtotal) => {
+    if (!userMarkup.value || userMarkup.value <= 0) return 0;
+    
+    if (userMarkup.type === 'percent') {
+      return (subtotal * userMarkup.value) / 100;
+    } else {
+      return userMarkup.value;
+    }
+  };
+
+  // Function untuk update user markup
+  const updateUserMarkup = (type, value) => {
+    const numericValue = parseFloat(value) || 0;
+    setUserMarkup({ type, value: numericValue });
   };
 
   useEffect(() => {
@@ -109,39 +123,30 @@ const CheckoutContextProvider = ({ children }) => {
     let totalAdditionals = 0;
     let totalTransports = 0;
     let totalTours = 0;
-    let totalMarkup = 0;
     const calculatedDayTotals = [];
     const calculatedDetailedBreakdown = [];
 
+    // Hitung total per kategori dan per hari (tanpa user markup)
     selectedPackage.days.forEach((day, index) => {
-      // Calculate totals for this day
       const dayHotelTotal = calculateHotelTotal(day.hotels);
       const dayVillaTotal = calculateVillaTotal(day.villas);
       const dayAdditionalTotal = calculateAdditionalTotal(day.akomodasi_additionals);
       const dayTransportTotal = calculateTransportTotal(day);
       const dayTourTotal = calculateTourTotal(day);
-      
-      // Calculate subtotal for this day (before markup)
+
+      // Day subtotal tidak termasuk user markup
       const daySubTotal = dayHotelTotal + dayVillaTotal + dayAdditionalTotal + 
                          dayTransportTotal + dayTourTotal;
       
-      // Calculate markup for this day
-      const dayMarkupTotal = calculateDayMarkup(day, daySubTotal);
-      
-      // Calculate total for this day
-      const dayTotal = daySubTotal + dayMarkupTotal;
-
-      // Add to overall totals
       totalHotels += dayHotelTotal;
       totalVillas += dayVillaTotal;
       totalAdditionals += dayAdditionalTotal;
       totalTransports += dayTransportTotal;
       totalTours += dayTourTotal;
-      totalMarkup += dayMarkupTotal;
 
-      calculatedDayTotals.push(dayTotal);
-      
-      // Store detailed breakdown for this day
+      // Day total = day subtotal (tidak termasuk user markup)
+      calculatedDayTotals.push(daySubTotal);
+
       calculatedDetailedBreakdown.push({
         dayIndex: index,
         hotels: dayHotelTotal,
@@ -149,11 +154,15 @@ const CheckoutContextProvider = ({ children }) => {
         additionals: dayAdditionalTotal,
         transports: dayTransportTotal,
         tours: dayTourTotal,
-        markup: dayMarkupTotal,
         subtotal: daySubTotal,
-        total: dayTotal,
+        total: daySubTotal, // Total hari tidak termasuk user markup
       });
     });
+
+    // // Hitung user markup berdasarkan total keseluruhan
+    // const subtotalBeforeMarkup = totalHotels + totalVillas + totalAdditionals + 
+    //                             totalTransports + totalTours;
+    // const calculatedUserMarkup = calculateUserMarkup(subtotalBeforeMarkup);
 
     setBreakdown({
       hotels: totalHotels,
@@ -161,18 +170,20 @@ const CheckoutContextProvider = ({ children }) => {
       additionals: totalAdditionals,
       transports: totalTransports,
       tours: totalTours,
-      markup: totalMarkup,
+      markup: 0,
     });
 
     setDayTotals(calculatedDayTotals);
     setDetailedBreakdown(calculatedDetailedBreakdown);
-  }, [selectedPackage]);
+  }, [selectedPackage, userMarkup]); 
 
-  // Calculate grand totals
   const akomodasiTotal = breakdown.hotels + breakdown.villas + breakdown.additionals;
   const transportTotal = breakdown.transports;
   const tourTotal = breakdown.tours;
-  const grandTotal = akomodasiTotal + transportTotal + tourTotal + breakdown.markup;
+
+  const subtotalBeforeUserMarkup = akomodasiTotal + transportTotal + tourTotal;
+  const userMarkupAmount = calculateUserMarkup(subtotalBeforeUserMarkup);
+  const grandTotal = subtotalBeforeUserMarkup + userMarkupAmount;
 
   const value = {
     breakdown,
@@ -182,6 +193,10 @@ const CheckoutContextProvider = ({ children }) => {
     akomodasiTotal,
     transportTotal,
     tourTotal,
+    userMarkup,
+    userMarkupAmount,
+    subtotalBeforeUserMarkup,
+    updateUserMarkup,
     calculateHotelTotal,
     calculateVillaTotal,
     calculateAdditionalTotal,
