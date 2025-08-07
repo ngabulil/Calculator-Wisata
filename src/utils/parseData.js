@@ -41,27 +41,27 @@ export const parseData = async (days) => {
         })
       );
 
-parsedDay.tour = await Promise.all(
-  (day.tour || []).map(async (item) => {
-    try {
-      if (item.id_destinasi) {
-        const res = await apiGetDestinationById(item.id_destinasi);
-        return res.result || {};
-      } else if (item.id_resto) {
-        const res = await apiGetRestaurantById(item.id_resto);
-        return res.result || {};
-      } else if (item.id_activity) {
-        const res = await apiGetActivityDetailsById(item.id_activity);
-        return res.result || {};
-      } else {
-        return {};
-      }
-    } catch (err) {
-      console.warn("Failed to fetch tour item", err);
-      return {};
-    }
-  })
-);
+      parsedDay.tour = await Promise.all(
+        (day.tour || []).map(async (item) => {
+          try {
+            if (item.id_destinasi) {
+              const res = await apiGetDestinationById(item.id_destinasi);
+              return res.result || {};
+            } else if (item.id_resto) {
+              const res = await apiGetRestaurantById(item.id_resto);
+              return res.result || {};
+            } else if (item.id_activity) {
+              const res = await apiGetActivityDetailsById(item.id_activity);
+              return res.result || {};
+            } else {
+              return {};
+            }
+          } catch (err) {
+            console.warn("Failed to fetch tour item", err);
+            return {};
+          }
+        })
+      );
 
       parsedDay.transport_additionals = await Promise.all(
         (day.transport_additionals || []).map(async (item) => {

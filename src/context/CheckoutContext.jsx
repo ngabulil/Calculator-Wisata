@@ -126,7 +126,6 @@ const CheckoutContextProvider = ({ children }) => {
     const calculatedDayTotals = [];
     const calculatedDetailedBreakdown = [];
 
-    // Hitung total per kategori dan per hari (tanpa user markup)
     selectedPackage.days.forEach((day, index) => {
       const dayHotelTotal = calculateHotelTotal(day.hotels);
       const dayVillaTotal = calculateVillaTotal(day.villas);
@@ -134,7 +133,6 @@ const CheckoutContextProvider = ({ children }) => {
       const dayTransportTotal = calculateTransportTotal(day);
       const dayTourTotal = calculateTourTotal(day);
 
-      // Day subtotal tidak termasuk user markup
       const daySubTotal = dayHotelTotal + dayVillaTotal + dayAdditionalTotal + 
                          dayTransportTotal + dayTourTotal;
       
@@ -144,7 +142,6 @@ const CheckoutContextProvider = ({ children }) => {
       totalTransports += dayTransportTotal;
       totalTours += dayTourTotal;
 
-      // Day total = day subtotal (tidak termasuk user markup)
       calculatedDayTotals.push(daySubTotal);
 
       calculatedDetailedBreakdown.push({
@@ -155,14 +152,9 @@ const CheckoutContextProvider = ({ children }) => {
         transports: dayTransportTotal,
         tours: dayTourTotal,
         subtotal: daySubTotal,
-        total: daySubTotal, // Total hari tidak termasuk user markup
+        total: daySubTotal,
       });
     });
-
-    // // Hitung user markup berdasarkan total keseluruhan
-    // const subtotalBeforeMarkup = totalHotels + totalVillas + totalAdditionals + 
-    //                             totalTransports + totalTours;
-    // const calculatedUserMarkup = calculateUserMarkup(subtotalBeforeMarkup);
 
     setBreakdown({
       hotels: totalHotels,
