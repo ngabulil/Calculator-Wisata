@@ -44,7 +44,7 @@ const CalculatorFixPage = () => {
 
   const { packagesData, getPackages, selectedPackage, setSelectedPackage } =
     usePackageContext();
-  
+
   const {
     days = [],
     name = "",
@@ -92,6 +92,30 @@ const CalculatorFixPage = () => {
     }
   };
 
+  useEffect(() => {
+    const firstDay = days[0];
+    if (firstDay?.date) {
+      const baseDate = new Date(firstDay.date);
+
+      const updatedDays = days.map((day, index) => {
+        if (index === 0) return day; // skip first day, already set manually
+
+        const newDate = new Date(baseDate);
+        newDate.setDate(newDate.getDate() + index); // index 1 = +1 day, etc.
+
+        return {
+          ...day,
+          date: newDate.toISOString().split("T")[0], // format to yyyy-mm-dd
+        };
+      });
+
+      setSelectedPackage((prev) => ({
+        ...prev,
+        days: updatedDays,
+      }));
+    }
+  }, [days[0]?.date]);
+
   return (
     <Box minH="100vh" bg={bg} position="relative">
       <Container maxW="7xl" py={3}>
@@ -111,6 +135,8 @@ const CalculatorFixPage = () => {
                   ...found,
                   title: found.name,
                   name: found.name,
+                  totalPaxAdult: found.totalPaxAdult || 0,
+                  totalPaxChildren: found.totalPaxChildren || 0,
                   days: found.days || [],
                 });
                 setActiveDayId(found.id);

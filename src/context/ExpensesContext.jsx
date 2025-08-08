@@ -14,21 +14,20 @@ const ExpensesContextProvider = ({ children }) => {
             day_name: "Day 1",
             day_description: "",
             totals: [],
-            markup: { type: "percent", value: 0 },
         },
     ]);
 
-    // State untuk menyimpan data hotel dan villa
     const [hotelItems, setHotelItems] = React.useState([]);
     const [villaItems, setVillaItems] = React.useState([]);
     const [accommodationMarkup, setAccommodationMarkup] = React.useState({ type: "percent", value: 0 });
+    
+    // State untuk menyimpan hotel yang sedang dalam proses input
+    const [tempHotelItems, setTempHotelItems] = React.useState([]);
+    const [tempVillaItems, setTempVillaItems] = React.useState([]);
 
     const { selectedPackage } = usePackageContext();
 
-    // Effect untuk initialize empty items jika belum ada data
     React.useEffect(() => {
-        // Tidak perlu sync dari selectedPackage karena data diambil dari API
-        // Context hanya menyimpan data yang dipilih user dari HotelCard/VillaCard
     }, [selectedPackage]);
 
     const updateDay = (index, updatedDay) => {
@@ -122,12 +121,46 @@ const ExpensesContextProvider = ({ children }) => {
         });
     };
 
-    // Fungsi untuk mengelola hotel items
-    const addHotelItem = () => {
-        setHotelItems(prev => [...prev, {
+    // Fungsi untuk mengelola hotel items - MODIFIED
+    const addTempHotelItem = () => {
+        const tempId = Date.now(); // Generate unique temporary ID
+        setTempHotelItems(prev => [...prev, {
+            tempId,
+            isTemporary: true
         }]);
+        return tempId;
     };
 
+    const updateTempHotelItem = (tempId, updatedItem) => {
+        setTempHotelItems(prev => {
+            const newItems = [...prev];
+            const index = newItems.findIndex(item => item.tempId === tempId);
+            if (index !== -1) {
+                newItems[index] = { ...newItems[index], ...updatedItem };
+                
+                // Check if item has price and should be moved to permanent array
+                const item = newItems[index];
+                if (item.hargaPerKamar && item.hargaPerKamar > 0) {
+                    // Move to permanent array
+                    const permanentItem = { ...item };
+                    delete permanentItem.tempId;
+                    delete permanentItem.isTemporary;
+                    
+                    setHotelItems(prevHotels => [...prevHotels, permanentItem]);
+                    
+                    // Remove from temporary array
+                    setTempHotelItems(prevTemp => prevTemp.filter(tempItem => tempItem.tempId !== tempId));
+                }
+            }
+            return newItems;
+        });
+    };
+
+    const removeTempHotelItem = (tempId) => {
+        setTempHotelItems(prev => prev.filter(item => item.tempId !== tempId));
+    };
+
+    // Fungsi untuk hotel permanent (sudah ada harga)
     const updateHotelItem = (index, updatedItem) => {
         setHotelItems(prev => {
             const newItems = [...prev];
@@ -140,10 +173,43 @@ const ExpensesContextProvider = ({ children }) => {
         setHotelItems(prev => prev.filter((_, i) => i !== index));
     };
 
-    // Fungsi untuk mengelola villa items
-    const addVillaItem = () => {
-        setVillaItems(prev => [...prev, {
+    // Fungsi untuk mengelola villa items - MODIFIED (similar pattern)
+    const addTempVillaItem = () => {
+        const tempId = Date.now();
+        setTempVillaItems(prev => [...prev, {
+            tempId,
+            isTemporary: true
         }]);
+        return tempId;
+    };
+
+    const updateTempVillaItem = (tempId, updatedItem) => {
+        setTempVillaItems(prev => {
+            const newItems = [...prev];
+            const index = newItems.findIndex(item => item.tempId === tempId);
+            if (index !== -1) {
+                newItems[index] = { ...newItems[index], ...updatedItem };
+                
+                // Check if item has price and should be moved to permanent array
+                const item = newItems[index];
+                if (item.hargaPerKamar && item.hargaPerKamar > 0) {
+                    // Move to permanent array
+                    const permanentItem = { ...item };
+                    delete permanentItem.tempId;
+                    delete permanentItem.isTemporary;
+                    
+                    setVillaItems(prevVillas => [...prevVillas, permanentItem]);
+                    
+                    // Remove from temporary array
+                    setTempVillaItems(prevTemp => prevTemp.filter(tempItem => tempItem.tempId !== tempId));
+                }
+            }
+            return newItems;
+        });
+    };
+
+    const removeTempVillaItem = (tempId) => {
+        setTempVillaItems(prev => prev.filter(item => item.tempId !== tempId));
     };
 
     const updateVillaItem = (index, updatedItem) => {
@@ -224,17 +290,23 @@ const ExpensesContextProvider = ({ children }) => {
                 calculateDayTotal,
                 calculateGrandTotal,
                 formatCurrency,
-                // Hotel management
+                // Hotel management - UPDATED
                 hotelItems,
                 setHotelItems,
-                addHotelItem,
+                addTempHotelItem, // New function
+                updateTempHotelItem, // New function
+                removeTempHotelItem, // New function
+                tempHotelItems, // New state
                 updateHotelItem,
                 removeHotelItem,
                 calculateHotelTotal,
-                // Villa management
+                // Villa management - UPDATED
                 villaItems,
                 setVillaItems,
-                addVillaItem,
+                addTempVillaItem, // New function
+                updateTempVillaItem, // New function
+                removeTempVillaItem, // New function
+                tempVillaItems, // New state
                 updateVillaItem,
                 removeVillaItem,
                 calculateVillaTotal,

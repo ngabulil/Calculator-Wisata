@@ -72,7 +72,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
     moveDayUp,
     moveDayDown,
     toggleReordering,
-    // resetOrder,
+    resetOrder,
     saveOrder,
     clearSavedOrder,
     editItemDescription,
@@ -135,6 +135,9 @@ const ItineraryPDF = forwardRef((props, ref) => {
               };
             }) || [];
           };
+          const tourActivities = day.tours 
+            ? processActivities(day.tours, "Tour Item") 
+            : [];
 
           // Process expense items dari context - sama seperti InvoicePDF
           const processExpenseItems = (expenseItems) => {
@@ -168,11 +171,13 @@ const ItineraryPDF = forwardRef((props, ref) => {
             }) || [];
           };
 
-          const activities = [
+        const activities = [
+          ...(day.tours ? tourActivities : [
             ...processActivities(day.destinations, "Destination"),
             ...processActivities(day.restaurants, "Restaurant"),
-            ...processActivities(day.activities, "Activity"),
-          ];
+            ...processActivities(day.activities, "Activity")
+          ])
+        ];
 
           // Get expense items dari context
           const expenseDay = expenseDays[dayIndex];
@@ -266,10 +271,10 @@ const ItineraryPDF = forwardRef((props, ref) => {
     }
   }, [saveOrder, reorderedDays, toggleReordering, toast]);
 
-  // const handleCancelReorder = useCallback(() => {
-  //   resetOrder();
-  //   toggleReordering();
-  // }, [resetOrder, toggleReordering]);
+  const handleCancelReorder = useCallback(() => {
+    resetOrder();
+    toggleReordering();
+  }, [resetOrder, toggleReordering]);
 
   const handleResetToOriginal = useCallback(() => {
     clearSavedOrder();
@@ -345,13 +350,13 @@ const ItineraryPDF = forwardRef((props, ref) => {
                 >
                   Simpan Urutan
                 </Button>
-                {/* <Button 
+                <Button 
                   size="sm" 
                   colorScheme="red" 
                   onClick={handleCancelReorder}
                 >
                   Batal
-                </Button> */}
+                </Button>
               </Flex>
             )}
           </Box>

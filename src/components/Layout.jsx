@@ -13,6 +13,7 @@ import { useExpensesContext } from "../context/ExpensesContext";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 import { CloseIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { useGrandTotalContext } from "../context/GrandTotalContext";
 
 const Layout = ({ children }) => {
   const bg = useColorModeValue("gray.50", "gray.900");
@@ -21,6 +22,7 @@ const Layout = ({ children }) => {
   // Mengambil grandTotal dari useCheckoutContext
   const { grandTotal } = useCheckoutContext();
   const { calculateGrandTotal } = useExpensesContext();
+  const { akomodasiTotal, tourTotal, transportTotal } = useGrandTotalContext();
   const [isVisible, setIsVisible] = useState(true);
 
   const isCalculatorPage = location.pathname === "/calculator";
@@ -52,7 +54,11 @@ const Layout = ({ children }) => {
                 <Text fontWeight="bold">
                   Grand Total: Rp{" "}
                   {/* Menampilkan grandTotal yang diambil dari context */}
-                  {(grandTotal + calculateGrandTotal()).toLocaleString("id-ID")}
+                  {[akomodasiTotal, tourTotal, transportTotal]
+                    .flat()
+                    .reduce((sum, num) => sum + num, 0)
+                    .toLocaleString("id-ID")}
+                  {/* {(grandTotal + calculateGrandTotal()).toLocaleString("id-ID")} */}
                 </Text>
                 <HStack spacing={3}>
                   <Button

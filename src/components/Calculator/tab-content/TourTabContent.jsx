@@ -27,7 +27,8 @@ const TourTabContent = ({ dayIndex }) => {
   const { selectedPackage, setSelectedPackage } = usePackageContext();
   const { setTourTotal } = useGrandTotalContext();
 
-  const currentDay = selectedPackage.days?.[dayIndex] || {};
+  const currentDay = selectedPackage.days?.[dayIndex] || { tour: [] };
+
   const [markupState, setMarkupState] = useState(
     currentDay.markup || { type: "percent", value: 0 }
   );
@@ -62,31 +63,15 @@ const TourTabContent = ({ dayIndex }) => {
   };
 
   const total = useMemo(() => {
-    const totalDestinasi = (currentDay.destinations || []).reduce((sum, d) => {
-      return (
-        sum +
-        (d.hargaAdult || 0) * (d.jumlahAdult || 0) +
-        (d.hargaChild || 0) * (d.jumlahChild || 0)
-      );
-    }, 0);
+    const tourItems = currentDay.tour || [];
 
-    const totalActivity = (currentDay.activities || []).reduce((sum, a) => {
-      return (
-        sum +
-        (a.hargaAdult || 0) * (a.jumlahAdult || 0) +
-        (a.hargaChild || 0) * (a.jumlahChild || 0)
-      );
+    const subtotal = tourItems.reduce((sum, item) => {
+      const hargaAdult = item.hargaAdult || 0;
+      const hargaChild = item.hargaChild || 0;
+      const jumlahAdult = item.jumlahAdult || 0;
+      const jumlahChild = item.jumlahChild || 0;
+      return sum + hargaAdult * jumlahAdult + hargaChild * jumlahChild;
     }, 0);
-
-    const totalResto = (currentDay.restaurants || []).reduce((sum, r) => {
-      return (
-        sum +
-        (r.hargaAdult || 0) * (r.jumlahAdult || 0) +
-        (r.hargaChild || 0) * (r.jumlahChild || 0)
-      );
-    }, 0);
-
-    const subtotal = totalDestinasi + totalActivity + totalResto;
 
     const markup =
       markupState.type === "percent"
@@ -94,12 +79,7 @@ const TourTabContent = ({ dayIndex }) => {
         : markupState.value;
 
     return subtotal + markup;
-  }, [
-    currentDay.destinations,
-    currentDay.activities,
-    currentDay.restaurants,
-    markupState,
-  ]);
+  }, [currentDay.tour, markupState]);
 
   useEffect(() => {
     setTourTotal((prev) => {
@@ -113,8 +93,121 @@ const TourTabContent = ({ dayIndex }) => {
 
   return (
     <VStack spacing={6} align="stretch">
+      {(currentDay.tour || []).map((item, i) => {
+        if (item.id_destinasi || item.id_destinasi === null) {
+          return (
+            <DestinasiCard
+              key={i}
+              index={i}
+              dayIndex={dayIndex}
+              data={item}
+              destinasiList={tiketsData}
+              onChange={(newItem) => {
+                updatePackageDay((d) => {
+                  const tour = [...(d.tour || [])];
+                  tour[i] = newItem;
+                  return { ...d, tour };
+                });
+              }}
+              onDelete={() => {
+                updatePackageDay((d) => {
+                  const tour = [...(d.tour || [])];
+                  tour.splice(i, 1);
+                  return { ...d, tour };
+                });
+              }}
+            />
+          );
+        } else if (item.id_activity || item.id_activity === null) {
+          return (
+            <ActivityCard
+              key={i}
+              index={i}
+              dayIndex={dayIndex}
+              data={item}
+              vendors={activitesData}
+              onChange={(newItem) => {
+                updatePackageDay((d) => {
+                  const tour = [...(d.tour || [])];
+                  tour[i] = newItem;
+                  return { ...d, tour };
+                });
+              }}
+              onDelete={() => {
+                updatePackageDay((d) => {
+                  const tour = [...(d.tour || [])];
+                  tour.splice(i, 1);
+                  return { ...d, tour };
+                });
+              }}
+            />
+          );
+        } else if (item.id_resto || item.id_resto === null) {
+          return (
+            <RestoCard
+              key={i}
+              index={i}
+              dayIndex={dayIndex}
+              data={item}
+              restaurants={restaurantsData}
+              onChange={(newItem) => {
+                updatePackageDay((d) => {
+                  const tour = [...(d.tour || [])];
+                  tour[i] = newItem;
+                  return { ...d, tour };
+                });
+              }}
+              onDelete={() => {
+                updatePackageDay((d) => {
+                  const tour = [...(d.tour || [])];
+                  tour.splice(i, 1);
+                  return { ...d, tour };
+                });
+              }}
+            />
+          );
+        }
+      })}
+      <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3}>
+        <Button
+          size="sm"
+          colorScheme="teal"
+          onClick={() => {
+            updatePackageDay((d) => ({
+              ...d,
+              tour: [...(d.tour || []), { id_destinasi: null }],
+            }));
+          }}
+        >
+          Tambah Destinasi
+        </Button>
+        <Button
+          size="sm"
+          colorScheme="teal"
+          onClick={() => {
+            updatePackageDay((d) => ({
+              ...d,
+              tour: [...(d.tour || []), { id_activity: null }],
+            }));
+          }}
+        >
+          Tambah Aktivitas
+        </Button>
+        <Button
+          size="sm"
+          colorScheme="teal"
+          onClick={() => {
+            updatePackageDay((d) => ({
+              ...d,
+              tour: [...(d.tour || []), { id_resto: null }],
+            }));
+          }}
+        >
+          Tambah Resto
+        </Button>
+      </Box>
       {/* === DESTINASI === */}
-      {(currentDay.destinations || []).map((item, i) => (
+      {/* {(currentDay.destinations || []).map((item, i) => (
         <DestinasiCard
           dayIndex={dayIndex}
           key={i}
@@ -136,8 +229,8 @@ const TourTabContent = ({ dayIndex }) => {
             });
           }}
         />
-      ))}
-      <Button
+      ))} */}
+      {/* <Button
         size="sm"
         colorScheme="teal"
         onClick={() => {
@@ -148,10 +241,10 @@ const TourTabContent = ({ dayIndex }) => {
         }}
       >
         Tambah Destinasi
-      </Button>
+      </Button> */}
 
       {/* === AKTIVITAS === */}
-      {(currentDay.activities || []).map((item, i) => (
+      {/* {(currentDay.activities || []).map((item, i) => (
         <ActivityCard
           dayIndex={dayIndex}
           key={i}
@@ -173,8 +266,8 @@ const TourTabContent = ({ dayIndex }) => {
             });
           }}
         />
-      ))}
-      <Button
+      ))} */}
+      {/* <Button
         size="sm"
         colorScheme="teal"
         onClick={() => {
@@ -185,10 +278,10 @@ const TourTabContent = ({ dayIndex }) => {
         }}
       >
         Tambah Aktivitas
-      </Button>
+      </Button> */}
 
       {/* === RESTO === */}
-      {(currentDay.restaurants || []).map((item, i) => (
+      {/* {(currentDay.restaurants || []).map((item, i) => (
         <RestoCard
           dayIndex={dayIndex}
           key={i}
@@ -210,8 +303,8 @@ const TourTabContent = ({ dayIndex }) => {
             });
           }}
         />
-      ))}
-      <Button
+      ))} */}
+      {/* <Button
         size="sm"
         colorScheme="teal"
         onClick={() => {
@@ -222,10 +315,10 @@ const TourTabContent = ({ dayIndex }) => {
         }}
       >
         Tambah Resto
-      </Button>
+      </Button> */}
 
       {/* === MARKUP === */}
-      <Box>
+      {/* <Box>
         <Text fontWeight="bold" mb={2}>
           Markup
         </Text>
@@ -255,7 +348,7 @@ const TourTabContent = ({ dayIndex }) => {
             }}
           />
         </HStack>
-      </Box>
+      </Box> */}
 
       {/* === TOTAL === */}
       <Box fontWeight="bold" mt={4}>
