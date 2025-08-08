@@ -149,32 +149,10 @@ const PackageCreateForm = (props) => {
     if (location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleSetValue();
-    } else {
-      setDays([
-        {
-          name: "",
-          description_day: "",
-          data: {
-            akomodasi: {
-              hotels: [],
-              villas: [],
-              additional: [],
-            },
-            tours: [],
-            type_wisata: "",
-            transport: {
-              mobils: [],
-              additional: [],
-            },
-          },
-        },
-      ]);
     }
   }, [location.pathname, onePackageFull]);
 
   useEffect(() => {
-    if (!selectedTypeWisata) return;
-
     const updatedDays = days.map((day) => {
       return {
         ...day,
@@ -186,6 +164,7 @@ const PackageCreateForm = (props) => {
     });
 
     setDays(updatedDays);
+
     props.onChange?.(updatedDays);
   }, [selectedTypeWisata]);
 
@@ -425,9 +404,9 @@ const PackageCreateForm = (props) => {
                         <Select
                           placeholder="Pilih Tipe Wisata"
                           value={selectedTypeWisata}
-                          onChange={(e) =>
-                            setSelectedTypeWisata(e.target.value)
-                          }
+                          onChange={(e) => {
+                            setSelectedTypeWisata(e.target.value);
+                          }}
                         >
                           {typeWisataOptions.map((option) => (
                             <option key={option.value} value={option.value}>
@@ -722,17 +701,25 @@ const PackageFormPage = (props) => {
       const hasMissingTypeWisata = primaryData.some((day) => {
         const type_wisata = day.data.type_wisata;
 
-        return day.data.type_wisata.length > 0 && !type_wisata;
+        return day.data.tours.length > 0 && type_wisata == "";
       });
 
       if (hasMissingTypeWisata) {
         toast.close(loading);
+        toast(toastConfig("Info", "Silakan pilih tipe wisata", "warning"));
+        return;
+      }
+
+      if (namePackages === "") {
+        toast.close(loading);
+        toast(toastConfig("Info", "Nama paket tidak boleh kosong", "warning"));
+        return;
+      }
+
+      if (desctiptionPackages === "") {
+        toast.close(loading);
         toast(
-          toastConfig(
-            "Info",
-            "Silakan pilih tipe wisata karena Anda sudah mengisi salah satu data tour",
-            "warning"
-          )
+          toastConfig("Info", "Deskripsi paket tidak boleh kosong", "warning")
         );
         return;
       }

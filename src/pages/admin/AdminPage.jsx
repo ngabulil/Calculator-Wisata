@@ -29,8 +29,13 @@ const AdminPage = () => {
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [readPackageActive, setReadPackageActive] = useState(false);
-  const { getAllPackageFull, packageFull, updateHeadline, updatePackageFull } =
-    useAdminPackageContext();
+  const {
+    getAllPackageFull,
+    packageFull,
+    updateHeadline,
+    updatePackageFull,
+    setDays,
+  } = useAdminPackageContext();
   // handle pagination
   const [packages, setPackages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -154,6 +159,25 @@ const AdminPage = () => {
             bg={"blue.500"}
             onClick={() => {
               updatePackageFull("");
+              setDays([
+                {
+                  name: "",
+                  description_day: "",
+                  data: {
+                    akomodasi: {
+                      hotels: [],
+                      villas: [],
+                      additional: [],
+                    },
+                    tours: [],
+                    type_wisata: "",
+                    transport: {
+                      mobils: [],
+                      additional: [],
+                    },
+                  },
+                },
+              ]);
               if (formActive) {
                 navigate("/admin/paket");
                 handleGetAllPackageFull();

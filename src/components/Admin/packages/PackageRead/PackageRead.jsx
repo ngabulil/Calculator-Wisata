@@ -8,6 +8,7 @@ import {
   Text,
   TabPanel,
   Container,
+  Spinner,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 
@@ -17,12 +18,20 @@ import { useEffect, useState } from "react";
 
 const PackageRead = () => {
   const { onePackageFull } = useAdminPackageContext();
+  const [loading, setLoading] = useState(false);
   const [paketDay, setPaketDay] = useState([]);
 
   const handlePaketRead = async () => {
-    const data = await parsePaketDays(onePackageFull.days);
+    try {
+      setLoading(true);
 
-    setPaketDay(data);
+      const data = await parsePaketDays(onePackageFull.days);
+      setPaketDay(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -75,163 +84,175 @@ const PackageRead = () => {
           </TabList>
 
           <TabPanels>
-            {paketDay.map((day, index) => {
-              return (
-                <TabPanel
-                  key={index}
-                  p={2}
-                  bg={"gray.900"}
-                  roundedBottom={"12px"}
-                >
-                  <Flex direction={"column"} gap={4}>
-                    <Flex direction={"column"} gap={2}>
-                      <Text fontSize={"24px"} fontWeight={"bold"}>
-                        {day.name}
-                      </Text>
-                      <Text fontSize={"14px"} w={"70%"}>
-                        {day.description_day}
-                      </Text>
+            {loading ? (
+              <Flex w="full" justifyContent="center" py={10}>
+                <Spinner size="xl" color="teal.500" />
+              </Flex>
+            ) : (
+              paketDay.map((day, index) => {
+                return (
+                  <TabPanel
+                    key={index}
+                    p={2}
+                    bg={"gray.900"}
+                    roundedBottom={"12px"}
+                  >
+                    <Flex direction={"column"} gap={4}>
+                      <Flex direction={"column"} gap={2}>
+                        <Text fontSize={"24px"} fontWeight={"bold"}>
+                          {day.name}
+                        </Text>
+                        <Text fontSize={"14px"} w={"70%"}>
+                          {day.description_day}
+                        </Text>
+                      </Flex>
+                      {/* Accomodation */}
+                      <AppHeadComponent
+                        bg={"gray.700"}
+                        p="4"
+                        rounded={8}
+                        title="Akomodasi"
+                      >
+                        {" "}
+                        <AppHeadComponent title={"Hotel"} isChild isOpen>
+                          {" "}
+                          {day.hotels.length <= 0 ? (
+                            <AppEmptyComponent />
+                          ) : (
+                            day.hotels.map((hotel) => {
+                              return (
+                                <AppHomeStayCard
+                                  isVilla={false}
+                                  name={hotel.name}
+                                  photos={hotel.link_photo}
+                                  star={hotel.star}
+                                />
+                              );
+                            })
+                          )}
+                        </AppHeadComponent>
+                        <AppHeadComponent title={"Villa"} isChild isOpen>
+                          {" "}
+                          {day.villas.length <= 0 ? (
+                            <AppEmptyComponent />
+                          ) : (
+                            day.villas.map((villa) => {
+                              return (
+                                <AppHomeStayCard
+                                  isVilla={true}
+                                  name={villa.name}
+                                  photos={villa.link_photo}
+                                  star={villa.star}
+                                />
+                              );
+                            })
+                          )}
+                        </AppHeadComponent>
+                        <AppHeadComponent title={"Tambahan"} isChild isOpen>
+                          {" "}
+                          {day.akomodasi_additionals.length <= 0 ? (
+                            <AppEmptyComponent />
+                          ) : (
+                            day.akomodasi_additionals.map((add, index) => {
+                              return (
+                                <AppAdditionalCard
+                                  key={index}
+                                  title={add.name}
+                                />
+                              );
+                            })
+                          )}
+                        </AppHeadComponent>
+                      </AppHeadComponent>
+                      {/* tour packages */}
+                      <AppHeadComponent
+                        bg={"gray.700"}
+                        p="4"
+                        rounded={8}
+                        title="Tour"
+                      >
+                        {day.tours.length <= 0 ? (
+                          <AppEmptyComponent />
+                        ) : (
+                          day.tours
+                            .sort((a, b) => a.no - b.no)
+                            .map((item, index) => {
+                              if (item.type === "destination") {
+                                return (
+                                  <AppDestinationCard
+                                    key={index}
+                                    title={`${item.no}. ${item.name}`}
+                                    subtitle={item.note}
+                                  />
+                                );
+                              }
+
+                              if (item.type === "activity") {
+                                return (
+                                  <AppActivityCard
+                                    key={index}
+                                    title={`${item.no}. ${item.name}`}
+                                  />
+                                );
+                              }
+
+                              if (item.type === "restaurant") {
+                                return (
+                                  <AppRestaurantCard
+                                    key={index}
+                                    title={`${item.no}. ${item.name}`}
+                                  />
+                                );
+                              }
+
+                              return null;
+                            })
+                        )}
+                      </AppHeadComponent>
+
+                      {/* transport */}
+                      <AppHeadComponent
+                        bg={"gray.700"}
+                        p="4"
+                        rounded={8}
+                        title="Transport"
+                      >
+                        <AppHeadComponent title={"Mobil"} isChild isOpen>
+                          {day.mobils.length <= 0 ? (
+                            <AppEmptyComponent />
+                          ) : (
+                            day.mobils.map((mobil, index) => {
+                              return (
+                                <AppTransportCard
+                                  key={index}
+                                  title={mobil.name}
+                                  vendor={mobil.vendor}
+                                />
+                              );
+                            })
+                          )}{" "}
+                        </AppHeadComponent>
+                        <AppHeadComponent title={"Tambahan"} isChild isOpen>
+                          {day.transport_additionals.length <= 0 ? (
+                            <AppEmptyComponent />
+                          ) : (
+                            day.akomodasi_additionals.map((add, index) => {
+                              return (
+                                <AppAdditionalCard
+                                  key={index}
+                                  title={add.name}
+                                />
+                              );
+                            })
+                          )}
+                        </AppHeadComponent>
+                      </AppHeadComponent>
+                      {/*  */}
                     </Flex>
-                    {/* Accomodation */}
-                    <AppHeadComponent
-                      bg={"gray.700"}
-                      p="4"
-                      rounded={8}
-                      title="Akomodasi"
-                    >
-                      {" "}
-                      <AppHeadComponent title={"Hotel"} isChild isOpen>
-                        {" "}
-                        {day.hotels.length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.hotels.map((hotel) => {
-                            return (
-                              <AppHomeStayCard
-                                isVilla={false}
-                                name={hotel.name}
-                                photos={hotel.link_photo}
-                                star={hotel.star}
-                              />
-                            );
-                          })
-                        )}
-                      </AppHeadComponent>
-                      <AppHeadComponent title={"Villa"} isChild isOpen>
-                        {" "}
-                        {day.villas.length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.villas.map((villa) => {
-                            return (
-                              <AppHomeStayCard
-                                isVilla={true}
-                                name={villa.name}
-                                photos={villa.link_photo}
-                                star={villa.star}
-                              />
-                            );
-                          })
-                        )}
-                      </AppHeadComponent>
-                      <AppHeadComponent title={"Tambahan"} isChild isOpen>
-                        {" "}
-                        {day.akomodasi_additionals.length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.akomodasi_additionals.map((add, index) => {
-                            return (
-                              <AppAdditionalCard key={index} title={add.name} />
-                            );
-                          })
-                        )}
-                      </AppHeadComponent>
-                    </AppHeadComponent>
-                    {/* tour packages */}
-                    <AppHeadComponent
-                      bg={"gray.700"}
-                      p="4"
-                      rounded={8}
-                      title="Tour"
-                    >
-                      {day.tours.length <= 0 ? (
-                        <AppEmptyComponent />
-                      ) : (
-                        day.tours
-                          .sort((a, b) => a.no - b.no)
-                          .map((item, index) => {
-                            if (item.type === "destination") {
-                              return (
-                                <AppDestinationCard
-                                  key={index}
-                                  title={`${item.no}. ${item.name}`}
-                                  subtitle={item.note}
-                                />
-                              );
-                            }
-
-                            if (item.type === "activity") {
-                              return (
-                                <AppActivityCard
-                                  key={index}
-                                  title={`${item.no}. ${item.name}`}
-                                />
-                              );
-                            }
-
-                            if (item.type === "restaurant") {
-                              return (
-                                <AppRestaurantCard
-                                  key={index}
-                                  title={`${item.no}. ${item.name}`}
-                                />
-                              );
-                            }
-
-                            return null;
-                          })
-                      )}
-                    </AppHeadComponent>
-
-                    {/* transport */}
-                    <AppHeadComponent
-                      bg={"gray.700"}
-                      p="4"
-                      rounded={8}
-                      title="Transport"
-                    >
-                      <AppHeadComponent title={"Mobil"} isChild isOpen>
-                        {day.mobils.length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.mobils.map((mobil, index) => {
-                            return (
-                              <AppTransportCard
-                                key={index}
-                                title={mobil.name}
-                                vendor={mobil.vendor}
-                              />
-                            );
-                          })
-                        )}{" "}
-                      </AppHeadComponent>
-                      <AppHeadComponent title={"Tambahan"} isChild isOpen>
-                        {day.transport_additionals.length <= 0 ? (
-                          <AppEmptyComponent />
-                        ) : (
-                          day.akomodasi_additionals.map((add, index) => {
-                            return (
-                              <AppAdditionalCard key={index} title={add.name} />
-                            );
-                          })
-                        )}
-                      </AppHeadComponent>
-                    </AppHeadComponent>
-                    {/*  */}
-                  </Flex>
-                </TabPanel>
-              );
-            })}
+                  </TabPanel>
+                );
+              })
+            )}
           </TabPanels>
         </Tabs>
       </Flex>

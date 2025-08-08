@@ -72,11 +72,12 @@ const AdminPackageContextProvider = ({ children }) => {
     try {
       const response = await apiGetAllPackageFull();
 
-      const sortedResult = response.result.sort(
-        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
-      );
+      const sortedWithDays = response.result.map((pkg) => ({
+        ...pkg,
+        days: pkg.days?.sort((dayA, dayB) => dayA.id - dayB.id) || [],
+      }));
 
-      setPackageFull(sortedResult);
+      setPackageFull(sortedWithDays);
     } catch (error) {
       console.log(error);
     }
