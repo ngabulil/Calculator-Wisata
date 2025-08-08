@@ -38,7 +38,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     breakdown,
     calculateHotelTotal,
     calculateVillaTotal,
-    userMarkupAmount,
+    totalMarkup
   } = useCheckoutContext();
   const { days: expenseDays, calculateGrandTotal } = useExpensesContext();
 
@@ -611,7 +611,7 @@ const InvoicePDF = forwardRef((props, ref) => {
           akomodasiTotal={akomodasiTotal}
           transportTotal={transportTotal}
           tourTotal={tourTotal}
-          markup={userMarkupAmount}
+          markup={totalMarkup}
           grandTotal={calculatedValues.adjustedGrandTotal}
           originalGrandTotal={grandTotal}
           totalExpenses={calculatedValues.totalExpensesFromContext}

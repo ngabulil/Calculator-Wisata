@@ -74,8 +74,8 @@ const CheckoutSummary = ({ formatCurrency }) => {
         <Divider my={2} />
 
         {/* Input markup dengan select dan fungsionalitas */}
-        <HStack justify="space-between" fontSize="sm" mt={2}>
-          <Text>Markup</Text>
+        <HStack justify="space-between" fontSize="12px" mt={2}>
+          <Text>Markup Per Pax</Text>
           <Flex align="center" gap={3}>
             <Select 
               value={userMarkup.type} 
