@@ -74,7 +74,23 @@ const AdminPackageContextProvider = ({ children }) => {
 
       const sortedWithDays = response.result.map((pkg) => ({
         ...pkg,
-        days: pkg.days?.sort((dayA, dayB) => dayA.id - dayB.id) || [],
+        days: (pkg.days?.sort((dayA, dayB) => dayA.id - dayB.id) || []).map(
+          (day) => {
+            // Urutkan tours sesuai nomor jika ada, kalau kosong pakai index
+            const fixedTours = (day.data?.tours || []).map((tour, idx) => ({
+              ...tour,
+              no: tour.no && tour.no !== 0 ? tour.no : idx + 1,
+            }));
+
+            return {
+              ...day,
+              data: {
+                ...day.data,
+                tours: fixedTours,
+              },
+            };
+          }
+        ),
       }));
 
       setPackageFull(sortedWithDays);

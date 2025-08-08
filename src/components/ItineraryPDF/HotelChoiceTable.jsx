@@ -203,7 +203,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     const markupAmount = calculateUserMarkupAmount(subtotalBeforeMarkup);
     
     // Total dengan markup
-    const alternativeTotal = subtotalBeforeMarkup + markupAmount;
+    const alternativeTotal = subtotalBeforeMarkup + (markupAmount * selectedPackage?.totalPaxAdult || 1);
 
     return alternativeTotal / totalAdult;
   };

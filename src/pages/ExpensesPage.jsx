@@ -326,7 +326,7 @@ const ExpensesPage = () => {
             />
           ))}
           
-          {tempHotelItems.map((item, tempIndex) => (
+          {tempHotelItems.map((item) => (
             <HotelCard
               key={`temp-${item.tempId}`}
               index={item.tempId}
@@ -335,7 +335,7 @@ const ExpensesPage = () => {
               onDelete={() => handleTempHotelDelete(item.tempId)}
               onChange={(updatedItem) => handleTempHotelChange(item.tempId, updatedItem)}
               isTemporary={true}
-              displayName={`Hotel ${hotelItems.length + tempIndex + 1}`}
+              displayName={`Hotel`}
             />
           ))}
           
@@ -363,7 +363,7 @@ const ExpensesPage = () => {
             />
           ))}
           
-          {tempVillaItems.map((item, tempIndex) => (
+          {tempVillaItems.map((item) => (
             <VillaCard
               key={`temp-${item.tempId}`}
               index={item.tempId}
@@ -372,7 +372,7 @@ const ExpensesPage = () => {
               onDelete={() => handleTempVillaDelete(item.tempId)}
               onChange={(updatedItem) => handleTempVillaChange(item.tempId, updatedItem)}
               isTemporary={true}
-              displayName={`Villa ${villaItems.length + tempIndex + 1}`}
+              displayName={`Villa`}
             />
           ))}
           
