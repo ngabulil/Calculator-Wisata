@@ -19,10 +19,11 @@ const PackageContextProvider = ({ children }) => {
       const formatted = response.result.map((item) => {
         return {
           ...item,
-          days: item.days.map((day) => {
+          days: item.days
+          .sort((a, b) => a.id - b.id)
+          .map((day) => {
             const formattedDay = { ...day };
             delete formattedDay.data;
-
             return {
               ...formattedDay,
               hotels: day.data.akomodasi.hotels,
