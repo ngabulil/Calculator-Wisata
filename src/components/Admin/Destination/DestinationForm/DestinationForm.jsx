@@ -256,7 +256,7 @@ const DestinationFormPage = (props) => {
       </Flex>
       <Button
         w={"full"}
-        bg={"blue.500"}
+        bg={"teal.600"}
         onClick={
           editFormActive ? handleDestinationUpdate : handleDestinationCreate
         }

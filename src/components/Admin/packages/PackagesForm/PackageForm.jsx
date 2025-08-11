@@ -850,7 +850,7 @@ const PackageFormPage = (props) => {
           />
         </Flex>
         <PackageCreateForm onChange={handleonChangeData} />
-        <Button w={"full"} colorScheme="blue" onClick={handleButtonPackage}>
+        <Button w={"full"} background="teal.600" onClick={handleButtonPackage}>
           {editFormActive ? "Edit Paket" : "Buat Paket"}
         </Button>
       </Box>

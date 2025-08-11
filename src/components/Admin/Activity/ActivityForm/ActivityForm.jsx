@@ -339,7 +339,7 @@ const ActivityFormPage = (props) => {
       </Flex>
       <Button
         w={"full"}
-        bg={"blue.500"}
+        bg={"teal.600"}
         onClick={editFormActive ? handleActivityUpdate : handleActivityCreate}
       >
         {editFormActive ? "Update Aktivitas" : "Create Aktivitas"}

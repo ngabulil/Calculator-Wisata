@@ -173,7 +173,7 @@ const VillaForm = (props) => {
 
       <Button
         w={"full"}
-        bg={"blue.500"}
+        bg={"teal.600"}
         onClick={editFormActive ? handleVillaUpdate : handleVillaCreate}
       >
         {editFormActive ? "Update Villa" : "Create Villa"}

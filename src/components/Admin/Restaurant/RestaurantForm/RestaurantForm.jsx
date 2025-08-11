@@ -219,7 +219,7 @@ const RestaurantFormPage = (props) => {
 
       <Button
         w={"full"}
-        bg={"blue.500"}
+        bg={"teal.600"}
         mt={4}
         onClick={
           editFormActive ? handleRestaurantUpdate : handleRestaurantCreate

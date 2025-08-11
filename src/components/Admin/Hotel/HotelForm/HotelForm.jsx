@@ -162,7 +162,7 @@ const HotelForm = (props) => {
       </Box>
       <Button
         w={"full"}
-        bg={"blue.500"}
+        bg={"teal.600"}
         onClick={editFormActive ? handleHotelUpdate : handleHotelCreate}
       >
         {editFormActive ? "Update Hotel" : "Create Hotel"}

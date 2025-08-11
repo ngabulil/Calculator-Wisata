@@ -80,8 +80,8 @@ const RestaurantCard = (props) => {
             minW={"max"}
             fontSize={"12px"}
             fontWeight={"bold"}
-            bg={"green.600"}
-            color={"green.200"}
+            bg={props.bgIcon || "green.600"}
+            color={"white"}
             py={1}
             px={4}
             rounded={"full"}
