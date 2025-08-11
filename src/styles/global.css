@@ -54,7 +54,6 @@ button:focus {
   align-items: center;
   justify-content: center;
   width: auto;
-  padding: 0 10px;
   border-radius: 4px;
   height: 32px;
   border: 1px solid #555;
@@ -89,4 +88,5 @@ button:focus {
   height: 100%;
   text-decoration: none;
   color: inherit;
+  padding: 0 10px;
 }

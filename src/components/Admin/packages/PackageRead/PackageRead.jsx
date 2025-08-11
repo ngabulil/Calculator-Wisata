@@ -338,37 +338,37 @@ const cardBaseStyle = {
   },
 };
 const cardDestStyle = {
-  bg: "green.800",
+  bg: "green.600",
   rounded: "12px",
   p: 3,
   w: "30%",
   transition: "all 0.2s ease-in-out",
   _hover: {
-    bg: "green.600",
+    bg: "green.800",
     cursor: "pointer",
     transform: "translateY(-2px)",
   },
 };
 const cardActStyle = {
-  bg: "red.800",
+  bg: "red.600",
   rounded: "12px",
   p: 3,
   w: "30%",
   transition: "all 0.2s ease-in-out",
   _hover: {
-    bg: "red.600",
+    bg: "red.800",
     cursor: "pointer",
     transform: "translateY(-2px)",
   },
 };
 const cardRestStyle = {
-  bg: "purple.800",
+  bg: "purple.600",
   rounded: "12px",
   p: 3,
   w: "30%",
   transition: "all 0.2s ease-in-out",
   _hover: {
-    bg: "purple.600",
+    bg: "purple.800",
     cursor: "pointer",
     transform: "translateY(-2px)",
   },

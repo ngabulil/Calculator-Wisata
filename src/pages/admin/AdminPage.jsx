@@ -9,7 +9,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
 import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
 import PackageRead from "../../components/Admin/packages/PackageRead/PackageRead";
@@ -44,8 +44,10 @@ const AdminPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [recentPackages, setRecentPackages] = useState([]);
 
-  const offset = currentPage * ITEMS_PER_PAGE;
-  const currentPackages = packages.slice(offset, offset + ITEMS_PER_PAGE);
+  const currentPackages = useMemo(() => {
+    const offset = currentPage * ITEMS_PER_PAGE;
+    return packages.slice(offset, offset + ITEMS_PER_PAGE);
+  }, [currentPage, packages]);
   const pageCount = Math.ceil(packages.length / ITEMS_PER_PAGE);
 
   const handlePageChange = (selectedItem) => {
@@ -233,7 +235,7 @@ const AdminPage = () => {
                     <PackageCard
                       flexGrow={currentPackages.length % 4 != 0 ? 0 : 1}
                       bgIcon={colorPallete[index % colorPallete.length]}
-                      key={index}
+                      key={packageItem.id}
                       title={packageItem.name}
                       description={packageItem.description}
                       days={packageItem.days}
