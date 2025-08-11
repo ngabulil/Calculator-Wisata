@@ -40,10 +40,53 @@ button:focus {
   color: white !important;
 }
 
-.page-item-active {
-  padding: 4px 12px;
-  border-radius: 100%;
-  background-color: #2d3748;
-  color: #edf2f7;
-  font-weight: 700;
+.pagination {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 5px;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  padding: 0 10px;
+  border-radius: 4px;
+  height: 32px;
+  border: 1px solid #555;
+  background-color: #1a202c;
+  color: #ddd;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.pagination li:hover {
+  background-color: #171923;
+}
+
+.pagination li.page-item-active {
+  background-color: teal;
+  border-color: teal;
+  color: white;
+}
+
+.pagination li.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
 }
