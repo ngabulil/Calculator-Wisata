@@ -113,7 +113,7 @@ const AdminVillaPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               if (formActive) {
                 updateVillaData(null);

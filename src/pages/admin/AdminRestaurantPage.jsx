@@ -20,6 +20,7 @@ import { apiDeleteRestaurant } from "../../services/restaurantService";
 import { useNavigate } from "react-router-dom";
 import RestaurantFormPage from "../../components/Admin/Restaurant/RestaurantForm/RestaurantForm";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
 
 const ITEMS_PER_PAGE = 7;
 
@@ -129,7 +130,7 @@ const AdminRestaurantPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               setFormActive(!formActive);
 
@@ -170,6 +171,7 @@ const AdminRestaurantPage = () => {
                 currentRestaurant.map((resto, index) => {
                   return (
                     <RestaurantCard
+                      bgIcon={colorPallete[index % colorPallete.length]}
                       key={index}
                       id={resto.id}
                       name={resto.resto_name}

@@ -20,6 +20,7 @@ import { apiDeletePackageFull } from "../../services/packageService";
 import { useNavigate } from "react-router-dom";
 import { apiPostPackageFull } from "../../services/packageService";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -162,7 +163,7 @@ const AdminPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               // updatePackageFull("");
 
@@ -231,6 +232,7 @@ const AdminPage = () => {
                   return (
                     <PackageCard
                       flexGrow={currentPackages.length % 4 != 0 ? 0 : 1}
+                      bgIcon={colorPallete[index % colorPallete.length]}
                       key={index}
                       title={packageItem.name}
                       description={packageItem.description}

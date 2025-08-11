@@ -34,7 +34,7 @@ const VendorCard = (props) => {
           <Box
             w={"60px"}
             h={"50px"}
-            bg={"gray.700"}
+            bg={props.bgIcon || "gray.700"}
             rounded={5}
             display={"flex"}
             justifyContent={"center"}
@@ -54,8 +54,8 @@ const VendorCard = (props) => {
             minW={"max"}
             fontSize={"12px"}
             fontWeight={"bold"}
-            bg={"purple.600"}
-            color={"purple.200"}
+            bg={props.bgIcon || "purple.600"}
+            color={"white"}
             py={1}
             px={4}
             rounded={"full"}

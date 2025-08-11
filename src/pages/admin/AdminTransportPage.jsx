@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { apiDeleteMobilFull } from "../../services/transport";
 import toastConfig from "../../utils/toastConfig";
 import ReactPaginate from "react-paginate";
-
+import colorPallete from "../../utils/colorPallete";
 const ITEMS_PER_PAGE = 7;
 
 const AdminTransportPage = () => {
@@ -130,7 +130,7 @@ const AdminTransportPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               if (formActive) {
                 updateTransportData(null);
@@ -168,6 +168,7 @@ const AdminTransportPage = () => {
               currentTransports.map((transport, index) => {
                 return (
                   <TransportCard
+                    bgIcon={colorPallete[index % colorPallete.length]}
                     key={index}
                     jenisKendaraan={transport.jenisKendaraan}
                     vendor={transport.vendor}

@@ -55,7 +55,7 @@ const RestaurantCard = (props) => {
           <Box
             w={"40px"}
             h={"40px"}
-            bg={"gray.900"}
+            bg={props.bgIcon || "gray.900"}
             rounded={5}
             display={"flex"}
             justifyContent={"center"}

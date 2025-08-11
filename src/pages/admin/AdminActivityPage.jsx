@@ -24,6 +24,7 @@ import ActivityFormPage from "../../components/Admin/Activity/ActivityForm/Activ
 import VendorFormPage from "../../components/Admin/Activity/ActivityForm/VendorForm";
 import VendorCard from "../../components/Admin/Activity/ActivityCard/VendorCard";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
 
 const ITEMS_PER_PAGE = 7;
 
@@ -194,7 +195,7 @@ const AdminActivityPage = () => {
             </Flex>
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               setFormActive(!formActive);
 
@@ -252,9 +253,10 @@ const AdminActivityPage = () => {
                 </Flex>
               ) : mode == "activity" ? (
                 currentActivities.length != 0 ? (
-                  currentActivities.map((act) => {
+                  currentActivities.map((act, index) => {
                     return (
                       <ActivityCard
+                        bgIcon={colorPallete[index % colorPallete.length]}
                         key={act.id}
                         act={act}
                         name={act.name}
@@ -288,9 +290,10 @@ const AdminActivityPage = () => {
                   </Box>
                 )
               ) : currentActivities.length != 0 ? (
-                currentActivities.map((ven) => {
+                currentActivities.map((ven, index) => {
                   return (
                     <VendorCard
+                      bgIcon={colorPallete[index % colorPallete.length]}
                       key={ven.id}
                       name={ven.name}
                       date={ven.updatedAt}
@@ -356,7 +359,7 @@ const VendorActivityDropdown = (props) => {
       w={"max"}
       value={props.value || selectedOption}
       defaultValue="activity"
-      backgroundColor={"blue.800"}
+      backgroundColor={"teal.800"}
       onChange={(e) => {
         setSelectedOption(e.target.value);
         props.onChange(e.target.value);

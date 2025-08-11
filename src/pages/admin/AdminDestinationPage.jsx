@@ -18,6 +18,7 @@ import DestinationCard from "../../components/Admin/Destination/DestinationCard/
 import toastConfig from "../../utils/toastConfig";
 import DestinationFormPage from "../../components/Admin/Destination/DestinationForm/DestinationForm";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
 
 const ITEMS_PER_PAGE = 7;
 const AdminDestinationPage = () => {
@@ -124,7 +125,7 @@ const AdminDestinationPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               if (formActive) {
                 updateDestinationData(null);
@@ -164,6 +165,7 @@ const AdminDestinationPage = () => {
               currentDestination.map((destination, index) => {
                 return (
                   <DestinationCard
+                    bgIcon={colorPallete[index % colorPallete.length]}
                     key={index}
                     name={destination.name}
                     description={destination.description}
