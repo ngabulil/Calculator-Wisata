@@ -356,6 +356,7 @@ const VendorActivityDropdown = (props) => {
       w={"max"}
       value={props.value || selectedOption}
       defaultValue="activity"
+      backgroundColor={"blue.800"}
       onChange={(e) => {
         setSelectedOption(e.target.value);
         props.onChange(e.target.value);

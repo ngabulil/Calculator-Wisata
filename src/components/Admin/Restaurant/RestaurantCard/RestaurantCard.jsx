@@ -17,6 +17,7 @@ import { Icon } from "@iconify/react";
 import { useState } from "react";
 import formatRupiah from "../../../../utils/rupiahFormat";
 import { useAdminAuthContext } from "../../../../context/AuthContext";
+import formatDateOnly from "../../../../utils/formatDate";
 
 const RestaurantCard = (props) => {
   const [open, setOpen] = useState(false);
@@ -172,9 +173,18 @@ const AppPackageList = (props) => {
     >
       <Flex direction={"row"} gap={2}>
         <Text fontSize={"14px"} fontWeight={"bold"}>
-          {props.package.package_name || "Package Name"}
+          {props.package.package_name || props.package.name || "Package Name"}
         </Text>
-        <AppIconText icon={"mdi:restaurant"} text="1 Pax" bg={"gray.600"} />
+        <AppIconText
+          icon={"mdi:restaurant"}
+          text={props.package.pax}
+          bg={"teal.600"}
+        />
+        <AppIconText
+          icon={"mdi:restaurant"}
+          text={formatDateOnly(props.package.valid)}
+          bg={"purple.600"}
+        />
       </Flex>
       {/*  */}
       <Flex direction={"column"} gap={2}>

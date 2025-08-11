@@ -96,7 +96,7 @@ const HotelInfoCard = (props) => {
       <Flex direction={"column"} w={"full"} gap={1}>
         {props.extraBed.length > 0 && (
           <Text
-            bg={"gray.600"}
+            bg={"teal.600"}
             py={1}
             px={3}
             rounded={"full"}
@@ -109,14 +109,17 @@ const HotelInfoCard = (props) => {
 
         <Flex
           direction={"row"}
-          alignItems={"center"}
+          alignItems={"start"}
+          gap={4}
           justifyContent={"space-between"}
           w={"full"}
           fontSize={"20px"}
           fontWeight="bold"
         >
-          <Text>{props.name} </Text>
-          <Flex>
+          <Text padding={0} lineHeight={1.2} fontSize={"18px"}>
+            {props.name}{" "}
+          </Text>
+          <Flex py={1.5}>
             {Array.from({ length: parseInt(props.stars) }, (_, i) => {
               return (
                 <Icon
