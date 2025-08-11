@@ -29,11 +29,13 @@ const AdminPage = () => {
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [readPackageActive, setReadPackageActive] = useState(false);
+  const [draftPaket, setDraftPaket] = useState(false);
   const {
     getAllPackageFull,
     packageFull,
     updateHeadline,
     updatePackageFull,
+    updatePackageDraft,
     setDays,
   } = useAdminPackageContext();
   // handle pagination
@@ -127,6 +129,10 @@ const AdminPage = () => {
     }
   };
 
+  const handleDraftPackage = (data) => {
+    updatePackageDraft(data);
+  };
+
   useEffect(() => {
     handleGetAllPackageFull();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,6 +164,36 @@ const AdminPage = () => {
           <Button
             bg={"blue.500"}
             onClick={() => {
+              // updatePackageFull("");
+
+              if (formActive) {
+                navigate("/admin/paket");
+                handleGetAllPackageFull();
+                handleDraftPackage(draftPaket);
+              }
+              if (readPackageActive) {
+                setReadPackageActive(false);
+              } else {
+                setFormActive(!formActive);
+              }
+            }}
+          >
+            {formActive || readPackageActive ? (
+              <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
+            ) : (
+              <AddIcon pr={"5px"} />
+            )}{" "}
+            {formActive || readPackageActive ? "Back" : "Create"}
+          </Button>
+        </Flex>
+        {formActive ? (
+          <PackageFormPage
+            onDraft={(data) => setDraftPaket(data)}
+            onChange={() => {
+              navigate("/admin/paket");
+              setFormActive(false);
+              handleGetAllPackageFull();
+              handleDraftPackage("");
               updatePackageFull("");
               setDays([
                 {
@@ -178,31 +214,6 @@ const AdminPage = () => {
                   },
                 },
               ]);
-              if (formActive) {
-                navigate("/admin/paket");
-                handleGetAllPackageFull();
-              }
-              if (readPackageActive) {
-                setReadPackageActive(false);
-              } else {
-                setFormActive(!formActive);
-              }
-            }}
-          >
-            {formActive || readPackageActive ? (
-              <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
-            ) : (
-              <AddIcon pr={"5px"} />
-            )}{" "}
-            {formActive || readPackageActive ? "Back" : "Create"}
-          </Button>
-        </Flex>
-        {formActive ? (
-          <PackageFormPage
-            onChange={() => {
-              navigate("/admin/paket");
-              setFormActive(false);
-              handleGetAllPackageFull();
             }}
           />
         ) : readPackageActive ? (
