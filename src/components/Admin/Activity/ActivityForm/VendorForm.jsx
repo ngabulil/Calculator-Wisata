@@ -20,13 +20,17 @@ import { useAdminActivityContext } from "../../../../context/Admin/AdminActivity
 const VendorFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { vendorData } = useAdminActivityContext();
+  const { vendorData, vendorDraft } = useAdminActivityContext();
   const [editFormActive, setEditFormActive] = useState(false);
 
   const [name, setName] = useState("");
 
   const handleVendorSetValue = () => {
     setName(vendorData.name);
+  };
+
+  const handleVendorDraft = () => {
+    setName(vendorDraft?.name || "");
   };
 
   const handleVendorCreate = async () => {
@@ -95,8 +99,19 @@ const VendorFormPage = (props) => {
     if (location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleVendorSetValue();
+    } else {
+      handleVendorDraft();
     }
   }, [location.pathname, vendorData]);
+
+  useEffect(() => {
+    if (!location.pathname.includes("edit")) {
+      const data = {
+        name: name,
+      };
+      props.onDraft(data);
+    }
+  }, [name]);
 
   return (
     <Container

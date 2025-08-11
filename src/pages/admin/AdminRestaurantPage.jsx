@@ -28,8 +28,13 @@ const AdminRestaurantPage = () => {
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { getAllRestaurant, updateRestaurantData, allRestaurant } =
-    useAdminRestaurantContext();
+  const [resDraft, setResDraft] = useState({});
+  const {
+    getAllRestaurant,
+    updateRestaurantData,
+    allRestaurant,
+    setRestaurantDraft,
+  } = useAdminRestaurantContext();
 
   // handle pagination
   const [restaurant, setRestaurant] = useState([]);
@@ -131,6 +136,8 @@ const AdminRestaurantPage = () => {
               if (formActive) {
                 updateRestaurantData([]);
                 navigate("/admin/restaurant");
+                setRestaurantDraft(resDraft);
+                console.log(resDraft);
               }
             }}
           >
@@ -147,7 +154,9 @@ const AdminRestaurantPage = () => {
             onChange={() => {
               setFormActive(false);
               handleGetAllRestaurant();
+              setRestaurantDraft({});
             }}
+            onDraft={(draft) => setResDraft(draft)}
           />
         ) : (
           <Flex gap={6}>

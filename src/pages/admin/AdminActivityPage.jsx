@@ -41,6 +41,8 @@ const AdminActivityPage = () => {
     allActivityDetails,
     updateActivityData,
     updateVendorData,
+    setActivityDraft,
+    setVendorDraft,
   } = useAdminActivityContext();
 
   // handle pagination
@@ -52,6 +54,11 @@ const AdminActivityPage = () => {
   const currentActivities = activities.slice(offset, offset + ITEMS_PER_PAGE);
   const pageCount = Math.ceil(activities.length / ITEMS_PER_PAGE);
 
+  // draft state
+  const [actDraft, setActDraft] = useState({});
+  const [venDraft, setVenDraft] = useState({});
+
+  //
   const handlePageChange = (selectedItem) => {
     setCurrentPage(selectedItem.selected);
   };
@@ -191,8 +198,13 @@ const AdminActivityPage = () => {
             onClick={() => {
               setFormActive(!formActive);
 
-              if (formActive) {
+              if (formActive && mode == "activity") {
                 updateActivityData([]);
+                setActivityDraft(actDraft);
+              }
+              if (formActive && mode == "vendor") {
+                updateVendorData([]);
+                setVendorDraft(venDraft);
               }
 
               navigate("/admin/activity");
@@ -217,14 +229,18 @@ const AdminActivityPage = () => {
               onChange={() => {
                 setFormActive(false);
                 handleGetActivity();
+                setActivityDraft({});
               }}
+              onDraft={(data) => setActDraft(data)}
             />
           ) : (
             <VendorFormPage
               onChange={() => {
                 setFormActive(false);
                 handleGetVendors();
+                setVendorDraft({});
               }}
+              onDraft={(data) => setVenDraft(data)}
             />
           )
         ) : (

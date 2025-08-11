@@ -27,6 +27,7 @@ const ActivityFormPage = (props) => {
     allActivityVendors,
     getAllActivityVendors,
     activityModalData,
+    activityDraft,
   } = useAdminActivityContext();
   const [editFormActive, setEditFormActive] = useState(false);
   const [vendorId, setVendorId] = useState("");
@@ -51,6 +52,19 @@ const ActivityFormPage = (props) => {
     setKeterangan(activityData.keterangan);
     setNote(activityData.note);
     setValid(activityData.valid);
+  };
+
+  const handleActivityDraft = () => {
+    setVendorId(activityDraft.vendor_id);
+    setName(activityDraft.name);
+    setDescription(activityDraft.description);
+    setPriceForeignAdult(activityDraft.price_foreign_adult);
+    setPriceForeignChild(activityDraft.price_foreign_child);
+    setPriceDomesticAdult(activityDraft.price_domestic_adult);
+    setPriceDomesticChild(activityDraft.price_domestic_child);
+    setKeterangan(activityDraft.keterangan);
+    setNote(activityDraft.note);
+    setValid(activityDraft.valid);
   };
 
   const handleActivityCreate = async () => {
@@ -155,8 +169,41 @@ const ActivityFormPage = (props) => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleActivitySetValue();
+    } else {
+      handleActivityDraft();
     }
   }, [location.pathname, activityData]);
+
+  useEffect(() => {
+    if (!location.pathname.includes("edit")) {
+      const data = {
+        vendor_id: vendorId,
+        name: props.isModal ? activityModalData.name : name,
+        description: description,
+        price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+        price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+        price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+        price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
+        keterangan: keterangan,
+        note: note,
+        valid: valid,
+      };
+
+      props.onDraft(data);
+    }
+  }, [
+    activityData,
+    vendorId,
+    name,
+    description,
+    priceForeignAdult,
+    priceForeignChild,
+    priceDomesticAdult,
+    priceDomesticChild,
+    keterangan,
+    note,
+    valid,
+  ]);
 
   useEffect(() => {
     getAllActivityVendors();

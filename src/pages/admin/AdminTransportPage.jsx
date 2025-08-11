@@ -25,8 +25,13 @@ const AdminTransportPage = () => {
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { getAllTransport, allTransport, updateTransportData } =
-    useAdminTransportContext();
+  const [transDraft, setTransDraft] = useState({});
+  const {
+    getAllTransport,
+    allTransport,
+    updateTransportData,
+    setTransportDraft,
+  } = useAdminTransportContext();
 
   // handle pagination
   const [transports, setTransports] = useState([]);
@@ -130,6 +135,7 @@ const AdminTransportPage = () => {
               if (formActive) {
                 updateTransportData(null);
                 navigate("/admin/transport");
+                setTransportDraft(transDraft);
               }
               setFormActive(!formActive);
             }}
@@ -147,7 +153,9 @@ const AdminTransportPage = () => {
             onChange={() => {
               setFormActive(false);
               handleGetAllTransport();
+              setTransportDraft({});
             }}
+            onDraft={(data) => setTransDraft(data)}
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>

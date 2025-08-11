@@ -10,6 +10,7 @@ export const useAdminDestinationContext = () => {
 const AdminDestinationContextProvider = ({ children }) => {
   const [allDestination, setAllDestination] = useState([]);
 
+  const [destinationDraft, setDestinationDraft] = useState([]);
   const [destinationData, setDestinationData] = useState([]);
   const [destModalData, setDestModalData] = useState({});
 
@@ -41,6 +42,8 @@ const AdminDestinationContextProvider = ({ children }) => {
   };
 
   const value = {
+    destinationDraft,
+    setDestinationDraft,
     destModalData,
     updateDestinationModalData,
     destinationData,

@@ -25,10 +25,15 @@ const AdminDestinationPage = () => {
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { getAllDestination, allDestination, updateDestinationData } =
-    useAdminDestinationContext();
+  const {
+    getAllDestination,
+    allDestination,
+    updateDestinationData,
+    setDestinationDraft,
+  } = useAdminDestinationContext();
 
   // handle pagination
+  const [destDraft, setDestDraft] = useState([]);
   const [destination, setDestination] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [recentDestination, setRecentDestination] = useState([]);
@@ -124,6 +129,7 @@ const AdminDestinationPage = () => {
               if (formActive) {
                 updateDestinationData(null);
                 navigate("/admin/destination");
+                setDestinationDraft(destDraft);
               }
               setFormActive(!formActive);
             }}
@@ -141,6 +147,10 @@ const AdminDestinationPage = () => {
             onChange={() => {
               setFormActive(false);
               handleGetAllDestination();
+              setDestinationDraft({});
+            }}
+            onDraft={(data) => {
+              setDestDraft(data);
             }}
           />
         ) : (
