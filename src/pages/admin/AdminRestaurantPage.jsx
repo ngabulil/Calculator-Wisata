@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
-import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
+
 import RestaurantCard from "../../components/Admin/Restaurant/RestaurantCard/RestaurantCard";
 import SearchBar from "../../components/searchBar";
 import { useAdminRestaurantContext } from "../../context/Admin/AdminRestaurantContext";
@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import RestaurantFormPage from "../../components/Admin/Restaurant/RestaurantForm/RestaurantForm";
 import ReactPaginate from "react-paginate";
 import colorPallete from "../../utils/colorPallete";
+import SkeleteonList from "../../components/Admin/SkeletonList";
 
 const ITEMS_PER_PAGE = 7;
 
@@ -163,10 +164,7 @@ const AdminRestaurantPage = () => {
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  {" "}
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeleteonList />
               ) : currentRestaurant.length > 0 ? (
                 currentRestaurant.map((resto, index) => {
                   return (

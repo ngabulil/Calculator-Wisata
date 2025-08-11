@@ -25,6 +25,7 @@ import VendorFormPage from "../../components/Admin/Activity/ActivityForm/VendorF
 import VendorCard from "../../components/Admin/Activity/ActivityCard/VendorCard";
 import ReactPaginate from "react-paginate";
 import colorPallete from "../../utils/colorPallete";
+import SkeleteonList from "../../components/Admin/SkeletonList";
 
 const ITEMS_PER_PAGE = 7;
 
@@ -248,9 +249,7 @@ const AdminActivityPage = () => {
           <Flex gap={6}>
             <Flex direction={"row"} gap={"20px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeleteonList />
               ) : mode == "activity" ? (
                 currentActivities.length != 0 ? (
                   currentActivities.map((act, index) => {

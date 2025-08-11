@@ -1,13 +1,4 @@
-import {
-  Box,
-  Text,
-  Flex,
-  Button,
-  Container,
-  useToast,
-  Spinner,
-  Center,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, Button, Container, useToast } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
 import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
@@ -21,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { apiPostPackageFull } from "../../services/packageService";
 import ReactPaginate from "react-paginate";
 import colorPallete from "../../utils/colorPallete";
+import SkeletonList from "../../components/Admin/SkeletonList";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -225,15 +217,12 @@ const AdminPage = () => {
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  {" "}
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeletonList />
               ) : currentPackages.length > 0 ? (
                 currentPackages.map((packageItem, index) => {
                   return (
                     <PackageCard
-                      flexGrow={currentPackages.length % 4 != 0 ? 0 : 1}
+                      flexGrow={currentPackages.length % 4 !== 0 ? 0 : 1}
                       bgIcon={colorPallete[index % colorPallete.length]}
                       key={packageItem.id}
                       title={packageItem.name}
@@ -265,11 +254,11 @@ const AdminPage = () => {
                 <Box
                   w="full"
                   textAlign="center"
-                  bg={"gray.800"}
+                  bg="gray.800"
                   p={5}
                   rounded={2}
                 >
-                  <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                  <Text fontSize="xl" color="gray.500" fontWeight="bold">
                     Paket Tidak Ditemukan
                   </Text>
                 </Box>

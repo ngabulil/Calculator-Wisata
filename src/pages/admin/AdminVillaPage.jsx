@@ -21,6 +21,7 @@ import { apiDeleteVilla } from "../../services/villaService";
 import toastConfig from "../../utils/toastConfig";
 import { useToast } from "@chakra-ui/react";
 import VillaRead from "../../components/Admin/Villa/VillaRead/VillaRead";
+import SkeleteonGridList from "../../components/Admin/SkeletonGridList";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -143,10 +144,7 @@ const AdminVillaPage = () => {
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
             {loading ? (
-              <Flex w={"full"} justifyContent={"center"}>
-                {" "}
-                <Spinner size="xl" color="teal.500" />
-              </Flex>
+              <SkeleteonGridList />
             ) : currentVillas.length > 0 ? (
               currentVillas.map((villa, index) => (
                 <VillaCard

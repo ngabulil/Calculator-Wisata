@@ -18,6 +18,7 @@ import { apiDeleteMobilFull } from "../../services/transport";
 import toastConfig from "../../utils/toastConfig";
 import ReactPaginate from "react-paginate";
 import colorPallete from "../../utils/colorPallete";
+import SkeletonList from "../../components/Admin/SkeletonList";
 const ITEMS_PER_PAGE = 7;
 
 const AdminTransportPage = () => {
@@ -160,10 +161,7 @@ const AdminTransportPage = () => {
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
             {loading ? (
-              <Flex w={"full"} justifyContent={"center"}>
-                {" "}
-                <Spinner size="xl" color="teal.500" />
-              </Flex>
+              <SkeletonList />
             ) : currentTransports.length > 0 ? (
               currentTransports.map((transport, index) => {
                 return (

@@ -12,6 +12,7 @@ import { useToast } from "@chakra-ui/react";
 import toastConfig from "../../utils/toastConfig";
 import { apiDeleteHotel } from "../../services/hotelService";
 import HotelRead from "../../components/Admin/Hotel/HotelRead/HotelRead";
+import SkeleteonGridList from "../../components/Admin/SkeletonGridList";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -57,7 +58,6 @@ const AdminHotelPage = () => {
         return hotel.hotelName.toLowerCase().includes(query);
       });
       setHotels(villaFiltered);
-      console.log(villaFiltered);
     }
   };
 
@@ -139,10 +139,7 @@ const AdminHotelPage = () => {
           <>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  {" "}
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeleteonGridList />
               ) : currentHotels.length > 0 ? (
                 currentHotels.map((hotel, index) => (
                   <HotelCard

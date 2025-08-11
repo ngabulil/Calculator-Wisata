@@ -1,15 +1,7 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  useToast,
-  Text,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-
+import SkeletonList from "../../components/Admin/SkeletonList";
 import SearchBar from "../../components/searchBar";
 import { useAdminDestinationContext } from "../../context/Admin/AdminDestinationContext";
 import { useNavigate } from "react-router-dom";
@@ -157,10 +149,7 @@ const AdminDestinationPage = () => {
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
             {loading ? (
-              <Flex w={"full"} justifyContent={"center"}>
-                {" "}
-                <Spinner size="xl" color="teal.500" />
-              </Flex>
+              <SkeletonList />
             ) : currentDestination.length > 0 ? (
               currentDestination.map((destination, index) => {
                 return (
