@@ -7,10 +7,6 @@ import {
   Stack,
   useToast,
   useColorModeValue,
-  Input,
-  HStack,
-  VStack,
-  Select,
 } from "@chakra-ui/react";
 import { AddIcon, DownloadIcon, ViewIcon } from "@chakra-ui/icons";
 import DayCard from "../components/Expenses/DayCard";
@@ -18,9 +14,9 @@ import { useExpensesContext } from "../context/ExpensesContext";
 import InvoicePDF from "./InvoicePDF";
 import ItineraryPDF from "./ItineraryPDF";
 import { apiPostPesanan } from "../services/pesanan";
-import HotelCard from "../components/Calculator/akomodasi/HotelCard";
-import VillaCard from "../components/Calculator/akomodasi/VillaCard";
 import { useAkomodasiContext } from "../context/AkomodasiContext";
+import { usePackageContext } from "../context/PackageContext";
+import PaketCard from "../components/Expenses/PaketCard";
 
 const ExpensesPage = () => {
   const {
@@ -32,24 +28,10 @@ const ExpensesPage = () => {
     updateExpenseItem,
     calculateDayTotal,
     formatCurrency,
-    // Hotel dan Villa dari context - UPDATED
-    hotelItems,
-    tempHotelItems,
-    addTempHotelItem,
-    updateTempHotelItem,
-    removeTempHotelItem,
-    updateHotelItem,
-    removeHotelItem,
-    villaItems,
-    tempVillaItems,
-    addTempVillaItem,
-    updateTempVillaItem,
-    removeTempVillaItem,
-    updateVillaItem,
-    removeVillaItem,
   } = useExpensesContext();
   
   const { getHotels, getVillas } = useAkomodasiContext();
+  const { packagesData, getPackages } = usePackageContext();
 
   const [editingItem, setEditingItem] = useState(null);
   const toast = useToast();
@@ -72,6 +54,7 @@ const ExpensesPage = () => {
   useEffect(() => {
     getHotels();
     getVillas();
+    getPackages();
   }, []);
 
   const invoiceRef = useRef();
@@ -178,46 +161,6 @@ const ExpensesPage = () => {
     }
   };
 
-  const handleAddHotel = () => {
-    addTempHotelItem(); 
-  };
-
-  const handleAddVilla = () => {
-    addTempVillaItem(); 
-  };
-
-  const handleTempHotelChange = (tempId, updatedItem) => {
-    updateTempHotelItem(tempId, updatedItem);
-  };
-
-  const handleTempVillaChange = (tempId, updatedItem) => {
-    updateTempVillaItem(tempId, updatedItem);
-  };
-
-  const handleHotelChange = (index, updatedItem) => {
-    updateHotelItem(index, updatedItem);
-  };
-
-  const handleVillaChange = (index, updatedItem) => {
-    updateVillaItem(index, updatedItem);
-  };
-
-  const handleTempHotelDelete = (tempId) => {
-    removeTempHotelItem(tempId);
-  };
-
-  const handleTempVillaDelete = (tempId) => {
-    removeTempVillaItem(tempId);
-  };
-
-  const handleHotelDelete = (index) => {
-    removeHotelItem(index);
-  };
-
-  const handleVillaDelete = (index) => {
-    removeVillaItem(index);
-  };
-
   return (
     <Box maxW="6xl" mx="auto" p={6} bg={bg} minH="100vh">
       <Box bg={bg} rounded="lg" shadow="lg" p={6}>
@@ -226,49 +169,19 @@ const ExpensesPage = () => {
             Input Expenses Itinerary
           </Text>
           <Flex gap={3} wrap="wrap">
-            <Button
-              leftIcon={<AddIcon />}
-              colorScheme="blue"
-              onClick={addDay}
-              variant="solid"
-              size="md"
-            >
+            <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={addDay}>
               Hari
             </Button>
-            <Button
-              leftIcon={<ViewIcon />}
-              colorScheme="purple"
-              onClick={handleViewPdf}
-              variant="solid" 
-              size="md"
-            >
+            <Button leftIcon={<ViewIcon />} colorScheme="purple" onClick={handleViewPdf}>
               Quotation
             </Button>
-            <Button
-              leftIcon={<DownloadIcon />}
-              colorScheme="teal"
-              onClick={handleDownloadInvoice}
-              variant="outline"
-              size="md"
-            >
+            <Button leftIcon={<DownloadIcon />} colorScheme="teal" onClick={handleDownloadInvoice} variant="outline">
               Quotation
             </Button>
-            <Button
-              leftIcon={<ViewIcon />}
-              colorScheme="blue"
-              onClick={handleViewItineraryPdf}
-              variant="solid" 
-              size="md"
-            >
+            <Button leftIcon={<ViewIcon />} colorScheme="blue" onClick={handleViewItineraryPdf}>
               Itinerary
             </Button>
-            <Button
-              leftIcon={<DownloadIcon />} 
-              colorScheme="teal"
-              onClick={handleDownloadItinerary}
-              variant="outline"
-              size="md"
-            >
+            <Button leftIcon={<DownloadIcon />} colorScheme="teal" onClick={handleDownloadItinerary} variant="outline">
               Itinerary
             </Button>
           </Flex>
@@ -293,99 +206,18 @@ const ExpensesPage = () => {
         </Stack>
       </Box>
 
-      {/* Komponen PDF disembunyikan dan direferensikan */}
+      {/* PDF hidden */}
       <Box style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
         <InvoicePDF ref={invoiceRef} />
         <ItineraryPDF ref={itineraryRef} />
       </Box>
 
-      <Box mt={8} spacing={6}>
-        <Text fontSize="xl" fontWeight="bold" mb={1} color="white">
-          Accommodation for Price Comparison
-        </Text>
-        <Text fontSize="xs" fontWeight="bold" mb={4} color="grey">
-          *Note: Markup and extra bed will be applied for all days
-        </Text>
+     <PaketCard packagesData={packagesData} />
 
-        {/* Hotel Section */}
-        <VStack spacing={4} mb={6} align="stretch">
-          <Text fontSize="lg" fontWeight="semibold" color="white">
-            Hotel Options
-          </Text>
-          
-          {hotelItems.map((item, index) => (
-            <HotelCard
-              key={`permanent-${index}`}
-              index={index}
-              dayIndex={null}
-              data={item}
-              onDelete={() => handleHotelDelete(index)}
-              onChange={(updatedItem) => handleHotelChange(index, updatedItem)}
-              isTemporary={false}
-              displayName={`Hotel ${index + 1}`}
-            />
-          ))}
-          
-          {tempHotelItems.map((item) => (
-            <HotelCard
-              key={`temp-${item.tempId}`}
-              index={item.tempId}
-              dayIndex={null}
-              data={item}
-              onDelete={() => handleTempHotelDelete(item.tempId)}
-              onChange={(updatedItem) => handleTempHotelChange(item.tempId, updatedItem)}
-              isTemporary={true}
-              displayName={`Hotel`}
-            />
-          ))}
-          
-          <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={handleAddHotel}>
-            Tambah Hotel
-          </Button>
-        </VStack>
-
-        {/* Villa Section */}
-        <VStack spacing={4} align="stretch">
-          <Text fontSize="lg" fontWeight="semibold" color="white">
-            Villa Options
-          </Text>
-          
-          {villaItems.map((item, index) => (
-            <VillaCard
-              key={`permanent-${index}`}
-              index={index}
-              dayIndex={null}
-              data={item}
-              onDelete={() => handleVillaDelete(index)}
-              onChange={(updatedItem) => handleVillaChange(index, updatedItem)}
-              isTemporary={false}
-              displayName={`Villa ${index + 1}`}
-            />
-          ))}
-          
-          {tempVillaItems.map((item) => (
-            <VillaCard
-              key={`temp-${item.tempId}`}
-              index={item.tempId}
-              dayIndex={null}
-              data={item}
-              onDelete={() => handleTempVillaDelete(item.tempId)}
-              onChange={(updatedItem) => handleTempVillaChange(item.tempId, updatedItem)}
-              isTemporary={true}
-              displayName={`Villa`}
-            />
-          ))}
-          
-          <Button leftIcon={<AddIcon />} colorScheme="green" onClick={handleAddVilla}>
-            Tambah Villa
-          </Button>
-        </VStack>
-      </Box>
-      
       <Flex justify="center" mt={6}>
         <Button
           colorScheme="purple"
-          variant="solid" 
+          variant="solid"
           onClick={handleCreateOrder}
           width="100%"
           maxW="400px"

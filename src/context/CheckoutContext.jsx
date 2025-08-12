@@ -19,15 +19,13 @@ const CheckoutContextProvider = ({ children }) => {
   const [dayTotals, setDayTotals] = useState([]);
   const [detailedBreakdown, setDetailedBreakdown] = useState([]);
   
-  // State untuk user markup input
   const [userMarkup, setUserMarkup] = useState({
-    type: 'percent', // 'percent' atau 'fixed'
+    type: 'percent',
     value: 0
   });
   
   const { selectedPackage } = usePackageContext();
 
-  // Helper function untuk menghitung total hotel per hari
   const calculateHotelTotal = (hotels = []) => {
     return hotels.reduce((sum, hotel) => {
       const roomCost = (hotel.jumlahKamar || 0) * (hotel.hargaPerKamar || 0);
@@ -37,7 +35,6 @@ const CheckoutContextProvider = ({ children }) => {
     }, 0);
   };
 
-  // Helper function untuk menghitung total villa per hari
   const calculateVillaTotal = (villas = []) => {
     return villas.reduce((sum, villa) => {
       const roomCost = (villa.jumlahKamar || 0) * (villa.hargaPerKamar || 0);
@@ -47,14 +44,12 @@ const CheckoutContextProvider = ({ children }) => {
     }, 0);
   };
 
-  // Helper function untuk menghitung total additional accommodation
   const calculateAdditionalTotal = (additionals = []) => {
     return additionals.reduce((sum, item) => {
       return sum + (item.harga || 0) * (item.jumlah || 1);
     }, 0);
   };
 
-  // Helper function untuk menghitung total transport per hari
   const calculateTransportTotal = (day) => {
     const mobilTotal = (day.mobils || []).reduce((sum, mobil) => {
       return sum + (mobil.harga || 0);
@@ -97,7 +92,6 @@ const CheckoutContextProvider = ({ children }) => {
     }
   };
 
-  // Function untuk update user markup
   const updateUserMarkup = (type, value) => {
     const numericValue = parseFloat(value) || 0;
     setUserMarkup({ type, value: numericValue });
@@ -176,7 +170,7 @@ const CheckoutContextProvider = ({ children }) => {
   const subtotalBeforeUserMarkup = akomodasiTotal + transportTotal + tourTotal;
   const userMarkupAmount = calculateUserMarkup(subtotalBeforeUserMarkup);
   const totalMarkup = userMarkupAmount * selectedPackage.totalPaxAdult;
-  const grandTotal = subtotalBeforeUserMarkup + (userMarkupAmount * selectedPackage.totalPaxAdult || 1);
+  const grandTotal = subtotalBeforeUserMarkup + (userMarkupAmount * (selectedPackage.totalPaxAdult ?? 1));
 
   const value = {
     breakdown,
