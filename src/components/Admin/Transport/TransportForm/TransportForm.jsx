@@ -35,7 +35,8 @@ const TransportForm = (props) => {
     },
   });
 
-  const { transportData, mobilModalData } = useAdminTransportContext();
+  const { transportData, mobilModalData, transportDraft } =
+    useAdminTransportContext();
   const toast = useToast();
   const location = useLocation();
   const [editFormActive, setEditFormActive] = useState(false);
@@ -72,7 +73,7 @@ const TransportForm = (props) => {
 
   const handleTransportSetValue = () => {
     setVehicle({
-      name: transportData.jenisKendaraan,
+      name: transportData.jenisKendaraan || transportDraft?.name,
       vendor: transportData.vendor,
       vendor_link: transportData.vendor_link,
       keterangan: {
@@ -80,6 +81,20 @@ const TransportForm = (props) => {
         halfDay: transportData.keterangan.halfDay || [],
         inOut: transportData.keterangan.inOut || [],
         menginap: transportData.keterangan.menginap || [],
+      },
+    });
+  };
+
+  const handleTransportDraft = () => {
+    setVehicle({
+      name: transportDraft?.jenisKendaraan || transportDraft?.name,
+      vendor: transportDraft?.vendor,
+      vendor_link: transportDraft?.vendor_link,
+      keterangan: {
+        fullDay: transportDraft?.keterangan?.fullDay || [],
+        halfDay: transportDraft?.keterangan?.halfDay || [],
+        inOut: transportDraft?.keterangan?.inOut || [],
+        menginap: transportDraft?.keterangan?.menginap || [],
       },
     });
   };
@@ -162,8 +177,21 @@ const TransportForm = (props) => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleTransportSetValue();
+    } else {
+      handleTransportDraft();
     }
   }, [location.pathname, transportData]);
+
+  useEffect(() => {
+    if (!location.pathname.includes("edit")) {
+      const data = {
+        ...vehicle,
+        name: props.isModal ? mobilModalData.name : vehicle.name,
+      };
+
+      props.onDraft(data);
+    }
+  }, [vehicle]);
 
   return (
     <VStack spacing={8} align="stretch">
@@ -264,7 +292,7 @@ const TransportForm = (props) => {
 
         <Button
           w={"full"}
-          bg={"blue.500"}
+          bg={"teal.600"}
           onClick={
             editFormActive ? handleTransportUpdate : handleTransportCreate
           }

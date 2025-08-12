@@ -21,6 +21,7 @@ import { apiDeleteVilla } from "../../services/villaService";
 import toastConfig from "../../utils/toastConfig";
 import { useToast } from "@chakra-ui/react";
 import VillaRead from "../../components/Admin/Villa/VillaRead/VillaRead";
+import SkeleteonGridList from "../../components/Admin/SkeletonGridList";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -113,7 +114,7 @@ const AdminVillaPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               if (formActive) {
                 updateVillaData(null);
@@ -143,10 +144,7 @@ const AdminVillaPage = () => {
         ) : (
           <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
             {loading ? (
-              <Flex w={"full"} justifyContent={"center"}>
-                {" "}
-                <Spinner size="xl" color="teal.500" />
-              </Flex>
+              <SkeleteonGridList />
             ) : currentVillas.length > 0 ? (
               currentVillas.map((villa, index) => (
                 <VillaCard
@@ -197,11 +195,12 @@ const AdminVillaPage = () => {
               onPageChange={handlePageChange}
               pageRangeDisplayed={3}
               marginPagesDisplayed={1}
-              previousLabel="<"
-              nextLabel=">"
+              previousLabel="Previous"
+              nextLabel="Next"
               breakLabel="..."
-              containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none"
+              containerClassName="pagination"
               activeClassName="page-item-active"
+              disabledClassName="disabled"
             />
           </Box>
         )}

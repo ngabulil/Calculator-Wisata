@@ -12,6 +12,7 @@ import { useToast } from "@chakra-ui/react";
 import toastConfig from "../../utils/toastConfig";
 import { apiDeleteHotel } from "../../services/hotelService";
 import HotelRead from "../../components/Admin/Hotel/HotelRead/HotelRead";
+import SkeleteonGridList from "../../components/Admin/SkeletonGridList";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -57,7 +58,6 @@ const AdminHotelPage = () => {
         return hotel.hotelName.toLowerCase().includes(query);
       });
       setHotels(villaFiltered);
-      console.log(villaFiltered);
     }
   };
 
@@ -107,7 +107,7 @@ const AdminHotelPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               if (formActive) {
                 updateHotelData(null);
@@ -139,10 +139,7 @@ const AdminHotelPage = () => {
           <>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  {" "}
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeleteonGridList />
               ) : currentHotels.length > 0 ? (
                 currentHotels.map((hotel, index) => (
                   <HotelCard
@@ -197,11 +194,12 @@ const AdminHotelPage = () => {
                   onPageChange={handlePageChange}
                   pageRangeDisplayed={3}
                   marginPagesDisplayed={1}
-                  previousLabel="<"
-                  nextLabel=">"
+                  previousLabel="Previous"
+                  nextLabel="Next"
                   breakLabel="..."
-                  containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+                  containerClassName="pagination"
                   activeClassName="page-item-active"
+                  disabledClassName="disabled"
                 />
               </Box>
             )}

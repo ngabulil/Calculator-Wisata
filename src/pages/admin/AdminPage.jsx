@@ -1,15 +1,6 @@
-import {
-  Box,
-  Text,
-  Flex,
-  Button,
-  Container,
-  useToast,
-  Spinner,
-  Center,
-} from "@chakra-ui/react";
+import { Box, Text, Flex, Button, Container, useToast } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import PackageCard from "../../components/Admin/packages/PackageCard/PackageCard";
 import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
 import PackageRead from "../../components/Admin/packages/PackageRead/PackageRead";
@@ -20,6 +11,8 @@ import { apiDeletePackageFull } from "../../services/packageService";
 import { useNavigate } from "react-router-dom";
 import { apiPostPackageFull } from "../../services/packageService";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
+import SkeletonList from "../../components/Admin/SkeletonList";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -29,11 +22,13 @@ const AdminPage = () => {
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [readPackageActive, setReadPackageActive] = useState(false);
+  const [draftPaket, setDraftPaket] = useState(false);
   const {
     getAllPackageFull,
     packageFull,
     updateHeadline,
     updatePackageFull,
+    updatePackageDraft,
     setDays,
   } = useAdminPackageContext();
   // handle pagination
@@ -41,8 +36,10 @@ const AdminPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [recentPackages, setRecentPackages] = useState([]);
 
-  const offset = currentPage * ITEMS_PER_PAGE;
-  const currentPackages = packages.slice(offset, offset + ITEMS_PER_PAGE);
+  const currentPackages = useMemo(() => {
+    const offset = currentPage * ITEMS_PER_PAGE;
+    return packages.slice(offset, offset + ITEMS_PER_PAGE);
+  }, [currentPage, packages]);
   const pageCount = Math.ceil(packages.length / ITEMS_PER_PAGE);
 
   const handlePageChange = (selectedItem) => {
@@ -127,6 +124,10 @@ const AdminPage = () => {
     }
   };
 
+  const handleDraftPackage = (data) => {
+    updatePackageDraft(data);
+  };
+
   useEffect(() => {
     handleGetAllPackageFull();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,8 +157,38 @@ const AdminPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
+              // updatePackageFull("");
+
+              if (formActive) {
+                navigate("/admin/paket");
+                handleGetAllPackageFull();
+                handleDraftPackage(draftPaket);
+              }
+              if (readPackageActive) {
+                setReadPackageActive(false);
+              } else {
+                setFormActive(!formActive);
+              }
+            }}
+          >
+            {formActive || readPackageActive ? (
+              <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
+            ) : (
+              <AddIcon pr={"5px"} />
+            )}{" "}
+            {formActive || readPackageActive ? "Back" : "Create"}
+          </Button>
+        </Flex>
+        {formActive ? (
+          <PackageFormPage
+            onDraft={(data) => setDraftPaket(data)}
+            onChange={() => {
+              navigate("/admin/paket");
+              setFormActive(false);
+              handleGetAllPackageFull();
+              handleDraftPackage("");
               updatePackageFull("");
               setDays([
                 {
@@ -178,31 +209,6 @@ const AdminPage = () => {
                   },
                 },
               ]);
-              if (formActive) {
-                navigate("/admin/paket");
-                handleGetAllPackageFull();
-              }
-              if (readPackageActive) {
-                setReadPackageActive(false);
-              } else {
-                setFormActive(!formActive);
-              }
-            }}
-          >
-            {formActive || readPackageActive ? (
-              <ChevronLeftIcon fontSize={"25px"} pr={"5px"} />
-            ) : (
-              <AddIcon pr={"5px"} />
-            )}{" "}
-            {formActive || readPackageActive ? "Back" : "Create"}
-          </Button>
-        </Flex>
-        {formActive ? (
-          <PackageFormPage
-            onChange={() => {
-              navigate("/admin/paket");
-              setFormActive(false);
-              handleGetAllPackageFull();
             }}
           />
         ) : readPackageActive ? (
@@ -211,16 +217,14 @@ const AdminPage = () => {
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  {" "}
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeletonList />
               ) : currentPackages.length > 0 ? (
                 currentPackages.map((packageItem, index) => {
                   return (
                     <PackageCard
-                      flexGrow={currentPackages.length % 4 != 0 ? 0 : 1}
-                      key={index}
+                      flexGrow={currentPackages.length % 4 !== 0 ? 0 : 1}
+                      bgIcon={colorPallete[index % colorPallete.length]}
+                      key={packageItem.id}
                       title={packageItem.name}
                       description={packageItem.description}
                       days={packageItem.days}
@@ -250,11 +254,11 @@ const AdminPage = () => {
                 <Box
                   w="full"
                   textAlign="center"
-                  bg={"gray.800"}
+                  bg="gray.800"
                   p={5}
                   rounded={2}
                 >
-                  <Text fontSize="xl" color="gray.500" fontWeight={"bold"}>
+                  <Text fontSize="xl" color="gray.500" fontWeight="bold">
                     Paket Tidak Ditemukan
                   </Text>
                 </Box>
@@ -277,11 +281,12 @@ const AdminPage = () => {
             onPageChange={handlePageChange}
             pageRangeDisplayed={3}
             marginPagesDisplayed={1}
-            previousLabel="<"
-            nextLabel=">"
+            previousLabel="Previous"
+            nextLabel="Next"
             breakLabel="..."
-            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            containerClassName="pagination"
             activeClassName="page-item-active"
+            disabledClassName="disabled"
           />
         </Box>
       )}

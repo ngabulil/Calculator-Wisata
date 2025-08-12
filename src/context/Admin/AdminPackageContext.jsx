@@ -20,6 +20,7 @@ const AdminPackageContextProvider = ({ children }) => {
   const [destination, setDestination] = React.useState([]);
   const [packageFull, setPackageFull] = React.useState([]);
   const [onePackageFull, setOnePackageFull] = React.useState([]);
+  const [packageDraft, setPackageDraft] = React.useState([]);
   const [headline, setHeadline] = React.useState({
     name: "",
     description: "",
@@ -64,6 +65,10 @@ const AdminPackageContextProvider = ({ children }) => {
 
   const updatePackageFull = (data) => {
     setOnePackageFull(data);
+  };
+
+  const updatePackageDraft = (data) => {
+    setPackageDraft(data);
   };
 
   // fetch functions
@@ -126,6 +131,8 @@ const AdminPackageContextProvider = ({ children }) => {
 
   const value = {
     days,
+    packageDraft,
+    updatePackageDraft,
     updateDay,
     setDays,
     activities,

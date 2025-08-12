@@ -77,7 +77,7 @@ const DestinationCard = (props) => {
           <Box
             w="60px"
             h="60px"
-            bg="gray.900"
+            bg={props.bgIcon || '"gray.900"'}
             borderRadius="md"
             display="flex"
             justifyContent="center"
@@ -105,8 +105,8 @@ const DestinationCard = (props) => {
             minW={"max"}
             fontSize={"12px"}
             fontWeight={"bold"}
-            bg={"purple.600"}
-            color={"purple.200"}
+            bg={props.bgIcon || "purple.600"}
+            color={"white"}
             py={1}
             px={4}
             rounded={"full"}

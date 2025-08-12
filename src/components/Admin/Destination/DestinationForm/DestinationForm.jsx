@@ -21,7 +21,8 @@ import { useAdminDestinationContext } from "../../../../context/Admin/AdminDesti
 const DestinationFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { destinationData, destModalData } = useAdminDestinationContext();
+  const { destinationData, destModalData, destinationDraft } =
+    useAdminDestinationContext();
   const [editFormActive, setEditFormActive] = useState(false);
 
   const [name, setName] = useState("");
@@ -41,6 +42,16 @@ const DestinationFormPage = (props) => {
     setPriceDomesticChild(destinationData.price_domestic_child);
     setNote(destinationData.note);
     setDescription(destinationData.description || "");
+  };
+
+  const handleDestinationDraft = () => {
+    setName(destinationDraft.name);
+    setPriceForeignAdult(destinationDraft.price_foreign_adult);
+    setPriceForeignChild(destinationDraft.price_foreign_child);
+    setPriceDomesticAdult(destinationDraft.price_domestic_adult);
+    setPriceDomesticChild(destinationDraft.price_domestic_child);
+    setNote(destinationDraft.note);
+    setDescription(destinationDraft.description || "");
   };
 
   const handleDestinationCreate = async () => {
@@ -124,8 +135,35 @@ const DestinationFormPage = (props) => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleDestinationSetValue();
+    } else {
+      console.log("draft", destinationDraft);
+      handleDestinationDraft();
     }
   }, [location.pathname, destinationData]);
+
+  useEffect(() => {
+    if (!location.pathname.includes("edit")) {
+      const data = {
+        name: props.isModal ? destModalData.name : name,
+        price_foreign_adult: priceForeignAdult == "" ? 0 : priceForeignAdult,
+        price_foreign_child: priceForeignChild == "" ? 0 : priceForeignChild,
+        price_domestic_adult: priceDomesticAdult == "" ? 0 : priceDomesticAdult,
+        price_domestic_child: priceDomesticChild == "" ? 0 : priceDomesticChild,
+        note: note,
+        description: description,
+      };
+
+      props.onDraft(data);
+    }
+  }, [
+    name,
+    note,
+    description,
+    priceForeignAdult,
+    priceForeignChild,
+    priceDomesticAdult,
+    priceDomesticChild,
+  ]);
 
   return (
     <Container
@@ -218,7 +256,7 @@ const DestinationFormPage = (props) => {
       </Flex>
       <Button
         w={"full"}
-        bg={"blue.500"}
+        bg={"teal.600"}
         onClick={
           editFormActive ? handleDestinationUpdate : handleDestinationCreate
         }

@@ -11,6 +11,7 @@ const AdminTransportContextProvider = ({ children }) => {
   const [allTransport, setAllTransport] = useState([]);
   const [mobilModalData, setMobilModalData] = useState({});
   const [transportData, setTransportData] = useState([]);
+  const [transportDraft, setTransportDraft] = useState({});
 
   const getAllTransport = async () => {
     try {
@@ -38,6 +39,8 @@ const AdminTransportContextProvider = ({ children }) => {
 
   const value = {
     transportData,
+    transportDraft,
+    setTransportDraft,
     mobilModalData,
     allTransport,
     setTransportData,

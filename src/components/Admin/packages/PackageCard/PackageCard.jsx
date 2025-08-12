@@ -16,6 +16,7 @@ const PackageCard = (props) => {
     >
       <AppTitleDescription
         title={props.title}
+        bgIcon={props.bgIcon}
         description={props.description}
         days={props.days}
         date={props.date}
@@ -47,7 +48,7 @@ const AppTitleDescription = (props) => {
           <Box
             w="60px"
             h="50px"
-            bg="gray.900"
+            bg={props.bgIcon || "gray.900"}
             rounded={5}
             display="flex"
             justifyContent="center"
@@ -95,8 +96,8 @@ const AppTitleDescription = (props) => {
         <Text
           fontSize="12px"
           fontWeight="bold"
-          bg="green.600"
-          color="green.200"
+          bg={props.bgIcon || "green.600"}
+          color="white"
           py={1}
           px={4}
           rounded="full"

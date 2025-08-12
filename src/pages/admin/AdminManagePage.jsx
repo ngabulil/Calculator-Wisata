@@ -31,7 +31,7 @@ const AdminManagePage = () => {
   const toast = useToast();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { getAllAdmin, updateAdminData, allAdminAccount } =
     useAdminManageContext();
 
@@ -67,13 +67,11 @@ const AdminManagePage = () => {
   };
 
   const handleGetAllAdmin = async () => {
- 
     setLoading(true);
     try {
       await getAllAdmin();
     } catch (error) {
       console.error("Error", error);
-  
     } finally {
       setLoading(false);
     }
@@ -138,7 +136,7 @@ const AdminManagePage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               setFormActive(!formActive);
 
@@ -181,12 +179,12 @@ const AdminManagePage = () => {
                 </Thead>
               )}
               <Tbody>
-                {
-                  loading ?     
-      
-                  <Flex w={'full'} justifyContent={'center'}> <Spinner size="xl" color="teal.500" /></Flex>
-                :
-                currentAdminAccount.length > 0 ? (
+                {loading ? (
+                  <Flex w={"full"} justifyContent={"center"}>
+                    {" "}
+                    <Spinner size="xl" color="teal.500" />
+                  </Flex>
+                ) : currentAdminAccount.length > 0 ? (
                   currentAdminAccount.map((account, index) => (
                     <AdminAccountCard
                       key={index}
@@ -233,11 +231,12 @@ const AdminManagePage = () => {
             onPageChange={handlePageChange}
             pageRangeDisplayed={3}
             marginPagesDisplayed={1}
-            previousLabel="<"
-            nextLabel=">"
+            previousLabel="Previous"
+            nextLabel="Next"
             breakLabel="..."
-            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            containerClassName="pagination"
             activeClassName="page-item-active"
+            disabledClassName="disabled"
           />
         </Box>
       )}

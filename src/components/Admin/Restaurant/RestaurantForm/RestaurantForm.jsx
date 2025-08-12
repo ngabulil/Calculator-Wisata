@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import {
   Box,
   Input,
@@ -25,7 +25,8 @@ import { useAdminRestaurantContext } from "../../../../context/Admin/AdminRestau
 const RestaurantFormPage = (props) => {
   const location = useLocation();
   const toast = useToast();
-  const { restaurantData, restModalData } = useAdminRestaurantContext();
+  const { restaurantData, restModalData, restaurantDraft } =
+    useAdminRestaurantContext();
   const [editFormActive, setEditFormActive] = useState(false);
   //
   const [restoName, setRestoName] = useState("");
@@ -35,6 +36,11 @@ const RestaurantFormPage = (props) => {
   const handleRestaurantSetValue = () => {
     setRestoName(restaurantData.resto_name);
     setRestoDescription(restaurantData.description);
+  };
+
+  const handleRestaurantDraft = () => {
+    setRestoName(restaurantDraft.resto_name);
+    setRestoDescription(restaurantDraft.description);
   };
 
   const handleRestaurantCreate = async () => {
@@ -147,8 +153,22 @@ const RestaurantFormPage = (props) => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleRestaurantSetValue();
+    } else {
+      handleRestaurantDraft();
     }
   }, [location.pathname, restaurantData]);
+
+  useEffect(() => {
+    if (!location.pathname.includes("edit")) {
+      const data = {
+        resto_name: props.isModal ? restModalData.name : restoName,
+        description: restoDescription,
+        packages: restoPackage,
+      };
+
+      props.onDraft(data);
+    }
+  }, [restoName, restoDescription, restoPackage]);
 
   return (
     <Container
@@ -187,7 +207,11 @@ const RestaurantFormPage = (props) => {
       </Box>
       <PackageFormList
         isEdit={editFormActive}
-        packagesValue={restaurantData.packages || []}
+        packagesValue={
+          editFormActive
+            ? restaurantData.packages || []
+            : restaurantDraft.packages || []
+        }
         onChange={(packages) => {
           setRestoPackage(packages);
         }}
@@ -195,7 +219,7 @@ const RestaurantFormPage = (props) => {
 
       <Button
         w={"full"}
-        bg={"blue.500"}
+        bg={"teal.600"}
         mt={4}
         onClick={
           editFormActive ? handleRestaurantUpdate : handleRestaurantCreate
@@ -262,9 +286,9 @@ const PackageFormList = (props) => {
     props.onChange(newPackages);
   };
   useEffect(() => {
-    if (props.isEdit && props.packagesValue?.length > 0) {
+    if (props.packagesValue?.length > 0) {
       const mappedPackages = props.packagesValue.map((pkg) => ({
-        name: pkg.package_name,
+        name: pkg.package_name || pkg.name || "",
         price_domestic_adult:
           pkg.price_domestic_adult == null ? 0 : pkg.price_domestic_adult,
         price_domestic_child:

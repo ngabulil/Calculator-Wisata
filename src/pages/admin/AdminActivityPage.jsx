@@ -24,6 +24,8 @@ import ActivityFormPage from "../../components/Admin/Activity/ActivityForm/Activ
 import VendorFormPage from "../../components/Admin/Activity/ActivityForm/VendorForm";
 import VendorCard from "../../components/Admin/Activity/ActivityCard/VendorCard";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
+import SkeleteonList from "../../components/Admin/SkeletonList";
 
 const ITEMS_PER_PAGE = 7;
 
@@ -41,6 +43,8 @@ const AdminActivityPage = () => {
     allActivityDetails,
     updateActivityData,
     updateVendorData,
+    setActivityDraft,
+    setVendorDraft,
   } = useAdminActivityContext();
 
   // handle pagination
@@ -52,6 +56,11 @@ const AdminActivityPage = () => {
   const currentActivities = activities.slice(offset, offset + ITEMS_PER_PAGE);
   const pageCount = Math.ceil(activities.length / ITEMS_PER_PAGE);
 
+  // draft state
+  const [actDraft, setActDraft] = useState({});
+  const [venDraft, setVenDraft] = useState({});
+
+  //
   const handlePageChange = (selectedItem) => {
     setCurrentPage(selectedItem.selected);
   };
@@ -187,12 +196,17 @@ const AdminActivityPage = () => {
             </Flex>
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               setFormActive(!formActive);
 
-              if (formActive) {
+              if (formActive && mode == "activity") {
                 updateActivityData([]);
+                setActivityDraft(actDraft);
+              }
+              if (formActive && mode == "vendor") {
+                updateVendorData([]);
+                setVendorDraft(venDraft);
               }
 
               navigate("/admin/activity");
@@ -217,28 +231,31 @@ const AdminActivityPage = () => {
               onChange={() => {
                 setFormActive(false);
                 handleGetActivity();
+                setActivityDraft({});
               }}
+              onDraft={(data) => setActDraft(data)}
             />
           ) : (
             <VendorFormPage
               onChange={() => {
                 setFormActive(false);
                 handleGetVendors();
+                setVendorDraft({});
               }}
+              onDraft={(data) => setVenDraft(data)}
             />
           )
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"20px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeleteonList />
               ) : mode == "activity" ? (
                 currentActivities.length != 0 ? (
-                  currentActivities.map((act) => {
+                  currentActivities.map((act, index) => {
                     return (
                       <ActivityCard
+                        bgIcon={colorPallete[index % colorPallete.length]}
                         key={act.id}
                         act={act}
                         name={act.name}
@@ -272,9 +289,10 @@ const AdminActivityPage = () => {
                   </Box>
                 )
               ) : currentActivities.length != 0 ? (
-                currentActivities.map((ven) => {
+                currentActivities.map((ven, index) => {
                   return (
                     <VendorCard
+                      bgIcon={colorPallete[index % colorPallete.length]}
                       key={ven.id}
                       name={ven.name}
                       date={ven.updatedAt}
@@ -319,11 +337,12 @@ const AdminActivityPage = () => {
             onPageChange={handlePageChange}
             pageRangeDisplayed={3}
             marginPagesDisplayed={1}
-            previousLabel="<"
-            nextLabel=">"
+            previousLabel="Previous"
+            nextLabel="Next"
             breakLabel="..."
-            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            containerClassName="pagination"
             activeClassName="page-item-active"
+            disabledClassName="disabled"
           />
         </Box>
       )}
@@ -339,6 +358,7 @@ const VendorActivityDropdown = (props) => {
       w={"max"}
       value={props.value || selectedOption}
       defaultValue="activity"
+      backgroundColor={"teal.800"}
       onChange={(e) => {
         setSelectedOption(e.target.value);
         props.onChange(e.target.value);

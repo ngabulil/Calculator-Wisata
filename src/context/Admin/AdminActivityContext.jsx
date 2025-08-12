@@ -29,6 +29,8 @@ const AdminActivityContextProvider = ({ children }) => {
     keterangan: "",
     note: "",
   });
+  const [activityDraft, setActivityDraft] = useState({});
+  const [vendorDraft, setVendorDraft] = useState({});
 
   const getAllActivityDetails = async () => {
     try {
@@ -85,6 +87,10 @@ const AdminActivityContextProvider = ({ children }) => {
   };
 
   const value = {
+    activityDraft,
+    setActivityDraft,
+    vendorDraft,
+    setVendorDraft,
     activityData,
     vendorData,
     activityModalData,

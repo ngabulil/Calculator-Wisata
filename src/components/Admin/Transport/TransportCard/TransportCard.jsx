@@ -47,7 +47,7 @@ const TransportCard = (props) => {
           <Box
             w="60px"
             h="50px"
-            bg="gray.900"
+            bg={props.bgIcon || "gray.900"}
             rounded="md"
             display="flex"
             justifyContent="center"
@@ -72,7 +72,7 @@ const TransportCard = (props) => {
         <Flex gap={2} alignItems="center" zIndex={10}>
           <AppIconText
             icon="mdi:ticket"
-            bg="blue.700"
+            bg={props.bgIcon || "blue.700"}
             link={props.vendorLink}
             text="Vendor"
           />

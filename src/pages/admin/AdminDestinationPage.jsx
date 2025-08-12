@@ -1,15 +1,7 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  useToast,
-  Text,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-
+import SkeletonList from "../../components/Admin/SkeletonList";
 import SearchBar from "../../components/searchBar";
 import { useAdminDestinationContext } from "../../context/Admin/AdminDestinationContext";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +10,7 @@ import DestinationCard from "../../components/Admin/Destination/DestinationCard/
 import toastConfig from "../../utils/toastConfig";
 import DestinationFormPage from "../../components/Admin/Destination/DestinationForm/DestinationForm";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
 
 const ITEMS_PER_PAGE = 7;
 const AdminDestinationPage = () => {
@@ -25,10 +18,15 @@ const AdminDestinationPage = () => {
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { getAllDestination, allDestination, updateDestinationData } =
-    useAdminDestinationContext();
+  const {
+    getAllDestination,
+    allDestination,
+    updateDestinationData,
+    setDestinationDraft,
+  } = useAdminDestinationContext();
 
   // handle pagination
+  const [destDraft, setDestDraft] = useState([]);
   const [destination, setDestination] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [recentDestination, setRecentDestination] = useState([]);
@@ -119,11 +117,12 @@ const AdminDestinationPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               if (formActive) {
                 updateDestinationData(null);
                 navigate("/admin/destination");
+                setDestinationDraft(destDraft);
               }
               setFormActive(!formActive);
             }}
@@ -141,19 +140,21 @@ const AdminDestinationPage = () => {
             onChange={() => {
               setFormActive(false);
               handleGetAllDestination();
+              setDestinationDraft({});
+            }}
+            onDraft={(data) => {
+              setDestDraft(data);
             }}
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
             {loading ? (
-              <Flex w={"full"} justifyContent={"center"}>
-                {" "}
-                <Spinner size="xl" color="teal.500" />
-              </Flex>
+              <SkeletonList />
             ) : currentDestination.length > 0 ? (
               currentDestination.map((destination, index) => {
                 return (
                   <DestinationCard
+                    bgIcon={colorPallete[index % colorPallete.length]}
                     key={index}
                     name={destination.name}
                     description={destination.description}
@@ -202,11 +203,12 @@ const AdminDestinationPage = () => {
             onPageChange={handlePageChange}
             pageRangeDisplayed={3}
             marginPagesDisplayed={1}
-            previousLabel="<"
-            nextLabel=">"
+            previousLabel="Previous"
+            nextLabel="Next"
             breakLabel="..."
-            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            containerClassName="pagination"
             activeClassName="page-item-active"
+            disabledClassName="disabled"
           />
         </Box>
       )}

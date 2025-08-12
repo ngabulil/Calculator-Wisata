@@ -57,6 +57,7 @@ const PackageCreateForm = (props) => {
     getAllRestaurant,
     getAllDestination,
     onePackageFull,
+    packageDraft,
     days,
     setDays,
   } = useAdminPackageContext();
@@ -67,13 +68,10 @@ const PackageCreateForm = (props) => {
   const [editFormActive, setEditFormActive] = useState(false);
   const handleSetValue = async () => {
     setLoading(true);
-
     try {
       const res = await parseDays(onePackageFull.days);
 
       setSelectedTypeWisata(res[0].data.type_wisata);
-
-      
 
       setDays(res);
     } catch (err) {
@@ -82,8 +80,23 @@ const PackageCreateForm = (props) => {
       setLoading(false);
     }
   };
+  const handleSetDraft = async () => {
+    setLoading(true);
+
+    try {
+      if (packageDraft?.days) {
+        setSelectedTypeWisata(packageDraft.days[0]?.data?.type_wisata || "");
+        setDays(packageDraft.days);
+      }
+    } catch (err) {
+      console.error("Failed to parse days:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [selectedTypeWisata, setSelectedTypeWisata] = useState("");
+  const [isDaysReady, setIsDaysReady] = useState(false);
 
   const typeWisataOptions = [
     { value: "domestik", label: "Domestik" },
@@ -151,24 +164,26 @@ const PackageCreateForm = (props) => {
     if (location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleSetValue();
+    } else {
+      handleSetDraft();
     }
-  }, [location.pathname, onePackageFull]);
+    setIsDaysReady(true);
+  }, [location.pathname, onePackageFull, packageDraft]);
 
   useEffect(() => {
-    const updatedDays = days.map((day) => {
-      return {
-        ...day,
-        data: {
-          ...day.data,
-          type_wisata: selectedTypeWisata,
-        },
-      };
-    });
+    if (!isDaysReady) return;
+
+    const updatedDays = days.map((day) => ({
+      ...day,
+      data: {
+        ...day.data,
+        type_wisata: selectedTypeWisata,
+      },
+    }));
 
     setDays(updatedDays);
-
     props.onChange?.(updatedDays);
-  }, [selectedTypeWisata]);
+  }, [selectedTypeWisata, isDaysReady]);
 
   return (
     <Container maxW="7xl" px="0">
@@ -687,7 +702,8 @@ const PackageFormPage = (props) => {
   const toast = useToast();
   const location = useLocation();
 
-  const { headline, onePackageFull } = useAdminPackageContext();
+  const { headline, onePackageFull, packageDraft, setDays } =
+    useAdminPackageContext();
   const [primaryData, setPrimaryData] = useState([]);
   const [namePackages, setNamePackages] = useState("");
   const [desctiptionPackages, setDescriptionPackages] = useState("");
@@ -781,11 +797,29 @@ const PackageFormPage = (props) => {
     setNamePackages(headline.name || "");
     setDescriptionPackages(headline.description || "");
   };
+  const handleSetDraft = () => {
+    setNamePackages(packageDraft.name || "");
+    setDescriptionPackages(packageDraft.description || "");
+  };
+
+  useEffect(() => {
+    if (editFormActive == false) {
+      const data = {
+        name: namePackages,
+        description: desctiptionPackages,
+        days: [...primaryData],
+      };
+
+      props.onDraft(data);
+    }
+  }, [location.pathname, namePackages, desctiptionPackages, primaryData]);
 
   useEffect(() => {
     if (location.pathname.includes("edit")) {
       setEditFormActive(true);
       handleSetValue();
+    } else {
+      handleSetDraft();
     }
   }, [location.pathname]);
   return (
@@ -816,7 +850,7 @@ const PackageFormPage = (props) => {
           />
         </Flex>
         <PackageCreateForm onChange={handleonChangeData} />
-        <Button w={"full"} colorScheme="blue" onClick={handleButtonPackage}>
+        <Button w={"full"} background="teal.600" onClick={handleButtonPackage}>
           {editFormActive ? "Edit Paket" : "Buat Paket"}
         </Button>
       </Box>

@@ -17,7 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { apiDeleteMobilFull } from "../../services/transport";
 import toastConfig from "../../utils/toastConfig";
 import ReactPaginate from "react-paginate";
-
+import colorPallete from "../../utils/colorPallete";
+import SkeletonList from "../../components/Admin/SkeletonList";
 const ITEMS_PER_PAGE = 7;
 
 const AdminTransportPage = () => {
@@ -25,8 +26,13 @@ const AdminTransportPage = () => {
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { getAllTransport, allTransport, updateTransportData } =
-    useAdminTransportContext();
+  const [transDraft, setTransDraft] = useState({});
+  const {
+    getAllTransport,
+    allTransport,
+    updateTransportData,
+    setTransportDraft,
+  } = useAdminTransportContext();
 
   // handle pagination
   const [transports, setTransports] = useState([]);
@@ -125,11 +131,12 @@ const AdminTransportPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               if (formActive) {
                 updateTransportData(null);
                 navigate("/admin/transport");
+                setTransportDraft(transDraft);
               }
               setFormActive(!formActive);
             }}
@@ -147,19 +154,19 @@ const AdminTransportPage = () => {
             onChange={() => {
               setFormActive(false);
               handleGetAllTransport();
+              setTransportDraft({});
             }}
+            onDraft={(data) => setTransDraft(data)}
           />
         ) : (
           <Flex direction={"row"} w={"full"} gap={"25px"} wrap={"wrap"}>
             {loading ? (
-              <Flex w={"full"} justifyContent={"center"}>
-                {" "}
-                <Spinner size="xl" color="teal.500" />
-              </Flex>
+              <SkeletonList />
             ) : currentTransports.length > 0 ? (
               currentTransports.map((transport, index) => {
                 return (
                   <TransportCard
+                    bgIcon={colorPallete[index % colorPallete.length]}
                     key={index}
                     jenisKendaraan={transport.jenisKendaraan}
                     vendor={transport.vendor}
@@ -207,11 +214,12 @@ const AdminTransportPage = () => {
             onPageChange={handlePageChange}
             pageRangeDisplayed={3}
             marginPagesDisplayed={1}
-            previousLabel="<"
-            nextLabel=">"
+            previousLabel="Previous"
+            nextLabel="Next"
             breakLabel="..."
-            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            containerClassName="pagination"
             activeClassName="page-item-active"
+            disabledClassName="disabled"
           />
         </Box>
       )}

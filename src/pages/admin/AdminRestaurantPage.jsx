@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
-import PackageFormPage from "../../components/Admin/packages/PackagesForm/PackageForm";
+
 import RestaurantCard from "../../components/Admin/Restaurant/RestaurantCard/RestaurantCard";
 import SearchBar from "../../components/searchBar";
 import { useAdminRestaurantContext } from "../../context/Admin/AdminRestaurantContext";
@@ -20,6 +20,8 @@ import { apiDeleteRestaurant } from "../../services/restaurantService";
 import { useNavigate } from "react-router-dom";
 import RestaurantFormPage from "../../components/Admin/Restaurant/RestaurantForm/RestaurantForm";
 import ReactPaginate from "react-paginate";
+import colorPallete from "../../utils/colorPallete";
+import SkeleteonList from "../../components/Admin/SkeletonList";
 
 const ITEMS_PER_PAGE = 7;
 
@@ -28,8 +30,13 @@ const AdminRestaurantPage = () => {
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { getAllRestaurant, updateRestaurantData, allRestaurant } =
-    useAdminRestaurantContext();
+  const [resDraft, setResDraft] = useState({});
+  const {
+    getAllRestaurant,
+    updateRestaurantData,
+    allRestaurant,
+    setRestaurantDraft,
+  } = useAdminRestaurantContext();
 
   // handle pagination
   const [restaurant, setRestaurant] = useState([]);
@@ -124,13 +131,15 @@ const AdminRestaurantPage = () => {
             />
           )}
           <Button
-            bg={"blue.500"}
+            bg={"teal.600"}
             onClick={() => {
               setFormActive(!formActive);
 
               if (formActive) {
                 updateRestaurantData([]);
                 navigate("/admin/restaurant");
+                setRestaurantDraft(resDraft);
+                console.log(resDraft);
               }
             }}
           >
@@ -147,20 +156,20 @@ const AdminRestaurantPage = () => {
             onChange={() => {
               setFormActive(false);
               handleGetAllRestaurant();
+              setRestaurantDraft({});
             }}
+            onDraft={(draft) => setResDraft(draft)}
           />
         ) : (
           <Flex gap={6}>
             <Flex direction={"row"} gap={"25px"} wrap={"wrap"} w={"full"}>
               {loading ? (
-                <Flex w={"full"} justifyContent={"center"}>
-                  {" "}
-                  <Spinner size="xl" color="teal.500" />
-                </Flex>
+                <SkeleteonList />
               ) : currentRestaurant.length > 0 ? (
                 currentRestaurant.map((resto, index) => {
                   return (
                     <RestaurantCard
+                      bgIcon={colorPallete[index % colorPallete.length]}
                       key={index}
                       id={resto.id}
                       name={resto.resto_name}
@@ -207,11 +216,12 @@ const AdminRestaurantPage = () => {
             onPageChange={handlePageChange}
             pageRangeDisplayed={3}
             marginPagesDisplayed={1}
-            previousLabel="<"
-            nextLabel=">"
+            previousLabel="Previous"
+            nextLabel="Next"
             breakLabel="..."
-            containerClassName="flex items-center justify-center !gap-[15px] p-2 mt-4 list-none "
+            containerClassName="pagination"
             activeClassName="page-item-active"
+            disabledClassName="disabled"
           />
         </Box>
       )}
