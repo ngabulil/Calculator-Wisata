@@ -8,7 +8,7 @@ const SearchBar = (props) => {
       alignItems={"center"}
       gap={2}
       className="relative"
-      w={"30%"}
+      w={props.w || "30%"}
     >
       <Input
         className="relative"

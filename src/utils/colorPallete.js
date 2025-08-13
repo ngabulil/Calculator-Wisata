@@ -1,5 +1,4 @@
 const colorPallete = [
-  "gray.900",
   "teal.500",
   "orange.500",
   "purple.500",
