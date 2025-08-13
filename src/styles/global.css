@@ -90,3 +90,46 @@ button:focus {
   color: inherit;
   padding: 0 10px;
 }
+
+/*  */
+
+.package-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+}
+
+.package-page-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.package-page-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 40px;
+  height: 32px;
+  border-radius: 6px;
+
+  background: transparent;
+  color: rgb(177, 177, 177);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.package-page-link:hover {
+  background: var(--package-color, #2d3748);
+  color: white;
+}
+
+.package-active .package-page-link {
+  background: var(--package-color, #2d3748);
+  color: white;
+}

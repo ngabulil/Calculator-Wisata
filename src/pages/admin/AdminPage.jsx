@@ -6,6 +6,7 @@ import {
   Container,
   useToast,
   IconButton,
+  theme,
 } from "@chakra-ui/react";
 import { AddIcon, ChevronLeftIcon } from "@chakra-ui/icons";
 import { useEffect, useState, useMemo } from "react";
@@ -362,14 +363,27 @@ const AdminPage = () => {
 
 const MotionFlex = motion(Flex);
 
+const resolveColor = (chakraColor) => {
+  const [base, shade] = chakraColor.split(".");
+  return theme.colors[base]?.[shade] || chakraColor;
+};
+
 const AdminPackageTree = ({ data, color, onPackageActions }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5;
+
+  const resolvedColor = resolveColor(color);
+  const pageCount = Math.ceil(data.packages.length / itemsPerPage);
+  const offset = currentPage * itemsPerPage;
+  const currentPackages = data.packages.slice(offset, offset + itemsPerPage);
 
   return (
     <Flex direction="column" w="full">
+      {/* Header folder admin */}
       <Flex
         w="full"
-        bg={color}
+        bg={resolvedColor}
         p={4}
         borderTopRadius={"10px"}
         borderBottomRadius={isOpen ? "0" : "10px"}
@@ -413,13 +427,14 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
         />
       </Flex>
 
+      {/* List paket dengan animasi */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <MotionFlex
             direction="column"
             w="full"
             bg={"gray.700"}
-            borderColor={color}
+            borderColor={resolvedColor}
             borderWidth={2}
             px={3}
             borderBottomRadius={"10px"}
@@ -429,8 +444,9 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
             overflow="hidden"
+            style={{ "--package-color": resolvedColor }} // biar CSS pagination bisa pakai
           >
-            {data.packages.map((packageItem, index) => (
+            {currentPackages.map((packageItem, index) => (
               <Flex w="98%" key={packageItem.id}>
                 {/* Garis tree */}
                 <Flex
@@ -440,9 +456,9 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
                   justifyContent="start"
                 >
                   <Box
-                    h={data.packages.length - 1 === index ? "50%" : "full"}
+                    h={currentPackages.length - 1 === index ? "50%" : "full"}
                     w="3px"
-                    bg={color}
+                    bg={resolvedColor}
                   ></Box>
 
                   <Box
@@ -452,14 +468,14 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
                     display="flex"
                   >
                     <Box
-                      h="2.5px"
+                      h="3px"
                       w="full"
-                      bg={color}
+                      bg={resolvedColor}
                       alignSelf="center"
                       position="absolute"
                     ></Box>
                     <Box
-                      bg={color}
+                      bg={resolvedColor}
                       borderRadius="full"
                       w="10px"
                       h="10px"
@@ -472,7 +488,7 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
                 {/* Card paket */}
                 <PackageCard
                   flexGrow={0}
-                  bgIcon={color}
+                  bgIcon={resolvedColor}
                   title={packageItem.name}
                   description={packageItem.description}
                   days={packageItem.days}
@@ -489,6 +505,29 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
                 />
               </Flex>
             ))}
+
+            {/* Pagination */}
+            {pageCount > 1 && (
+              <Flex w="full" justifyContent="end" my={3}>
+                <ReactPaginate
+                  previousLabel={null}
+                  nextLabel={null}
+                  breakLabel={"..."}
+                  pageCount={pageCount}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={3}
+                  onPageChange={(e) => setCurrentPage(e.selected)}
+                  containerClassName="package-pagination"
+                  pageClassName="package-page-item"
+                  pageLinkClassName="package-page-link"
+                  previousClassName="package-page-item"
+                  nextClassName="package-page-item"
+                  activeClassName="package-active"
+                  breakClassName="package-page-item"
+                  renderOnZeroPageCount={null}
+                />
+              </Flex>
+            )}
           </MotionFlex>
         )}
       </AnimatePresence>
