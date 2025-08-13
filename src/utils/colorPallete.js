@@ -1,9 +1,9 @@
 const colorPallete = [
   "teal.500",
-  "orange.500",
-  "purple.500",
-  "blue.500",
   "red.500",
+  "orange.500",
+  "blue.500",
+  "purple.500",
   "green.500",
 ];
 

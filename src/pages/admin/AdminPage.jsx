@@ -25,7 +25,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PackageFilterBar from "../../components/Admin/packages/FilterPakcage";
 import { Icon } from "@iconify/react";
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 4;
 
 const AdminPage = () => {
   const toast = useToast();
@@ -371,7 +371,8 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
         w="full"
         bg={color}
         p={4}
-        borderRadius="8px"
+        borderTopRadius={"10px"}
+        borderBottomRadius={isOpen ? "0" : "10px"}
         alignItems="center"
         justifyContent="space-between"
         cursor="pointer"
@@ -417,6 +418,11 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
           <MotionFlex
             direction="column"
             w="full"
+            bg={"gray.700"}
+            borderColor={color}
+            borderWidth={2}
+            px={3}
+            borderBottomRadius={"10px"}
             alignItems="end"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
@@ -428,14 +434,14 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
               <Flex w="98%" key={packageItem.id}>
                 {/* Garis tree */}
                 <Flex
-                  w="80px"
+                  w="50px"
                   position="relative"
                   alignItems="start"
                   justifyContent="start"
                 >
                   <Box
                     h={data.packages.length - 1 === index ? "50%" : "full"}
-                    w="0.5"
+                    w="3px"
                     bg={color}
                   ></Box>
 
@@ -446,7 +452,7 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
                     display="flex"
                   >
                     <Box
-                      h="2.1px"
+                      h="2.5px"
                       w="full"
                       bg={color}
                       alignSelf="center"
