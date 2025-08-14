@@ -496,7 +496,11 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
                   description={packageItem.description}
                   days={packageItem.days}
                   date={packageItem.updatedAt}
-                  updater={packageItem.updater?.name || "Unknown Admin"}
+                  updater={
+                    packageItem.updater?.name ||
+                    packageItem.creator?.name ||
+                    "Unknown Admin"
+                  }
                   onDuplicateButton={() =>
                     onPackageActions.handleDuplicate(packageItem)
                   }
