@@ -37,6 +37,7 @@ const PackageCard = (props) => {
       }}
     >
       <AppTitleDescription
+        isOwner={props.isOwner}
         title={title}
         bgIcon={bgIcon}
         description={description}
@@ -61,6 +62,7 @@ const AppTitleDescription = ({
   days = [],
   date,
   updater,
+  isOwner = false,
   onDuplicateButton,
   onEditButton,
   onDeleteButton,
@@ -166,6 +168,7 @@ const AppTitleDescription = ({
         <PopoverButton
           isDuplicated
           isOpenButton
+          isOwner={isOwner}
           onEditButton={() => {
             navigate(`/admin/paket/edit`);
             onEditButton?.();

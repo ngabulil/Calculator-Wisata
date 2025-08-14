@@ -24,6 +24,7 @@ import colorPallete from "../../utils/colorPallete";
 import SkeletonList from "../../components/Admin/SkeletonList";
 import { motion, AnimatePresence } from "framer-motion";
 import PackageFilterBar from "../../components/Admin/packages/FilterPakcage";
+import { useAdminAuthContext } from "../../context/AuthContext";
 import { Icon } from "@iconify/react";
 
 const ITEMS_PER_PAGE = 4;
@@ -43,6 +44,7 @@ const AdminPage = () => {
     updatePackageDraft,
     setDays,
   } = useAdminPackageContext();
+
   // handle pagination
   const [packages, setPackages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -372,7 +374,7 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5;
-
+  const { userData } = useAdminAuthContext();
   const resolvedColor = resolveColor(color);
   const pageCount = Math.ceil(data.packages.length / itemsPerPage);
   const offset = currentPage * itemsPerPage;
@@ -488,6 +490,7 @@ const AdminPackageTree = ({ data, color, onPackageActions }) => {
                 {/* Card paket */}
                 <PackageCard
                   flexGrow={0}
+                  isOwner={userData?.id === packageItem.creator?.id}
                   bgIcon={resolvedColor}
                   title={packageItem.name}
                   description={packageItem.description}

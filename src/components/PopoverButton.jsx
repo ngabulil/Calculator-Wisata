@@ -30,7 +30,7 @@ export const PopoverButton = (props) => {
       _hover={{ bg: "gray.100", color: "gray.800", fontWeight: "bold" }}
       onClick={() => {
         onClick?.();
-        onClose(); // tutup popover setelah klik menu
+        onClose();
       }}
     >
       <Icon icon={icon} className="text-[18px]" color={color || "#1A202C"} />
@@ -91,7 +91,7 @@ export const PopoverButton = (props) => {
                 />
               </PopoverBody>
             )}
-            {userData.role === "super_admin" && (
+            {(userData.role === "super_admin" || props.isOwner) && (
               <>
                 <PopoverBody p={0}>
                   <MenuItem
