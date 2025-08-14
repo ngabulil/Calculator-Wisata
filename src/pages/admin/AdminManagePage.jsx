@@ -37,8 +37,8 @@ const AdminManagePage = () => {
 
   // handle pagination
   const [adminAccount, setAdminAccount] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
   const [recentAdmin, setRecentAdmin] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const offset = currentPage * ITEMS_PER_PAGE;
   const currentAdminAccount = adminAccount.slice(

@@ -99,6 +99,7 @@ const AdminPackageContextProvider = ({ children }) => {
       }));
 
       setPackageFull(sortedWithDays);
+      return sortedWithDays;
     } catch (error) {
       console.log(error);
     }
