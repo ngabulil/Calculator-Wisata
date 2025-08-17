@@ -7,6 +7,7 @@ import {
   Flex,
   Text,
   useDisclosure,
+  Portal,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -59,61 +60,63 @@ export const PopoverButton = (props) => {
         </Box>
       </PopoverTrigger>
 
-      <AnimatePresence>
-        {isOpen && (
-          <PopoverContent
-            as={MotionBox}
-            w="180px"
-            border="none"
-            boxShadow="lg"
-            borderRadius="md"
-            overflow="hidden"
-            initial={{ opacity: 0, scale: 0.95, y: -8 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -8 }}
-            transition={{ duration: 0.15 }}
-          >
-            {props.isOpenButton && (
-              <PopoverBody p={0}>
-                <MenuItem
-                  icon="mdi:eye-outline"
-                  label="Open"
-                  onClick={props.onOpenButton}
-                />
-              </PopoverBody>
-            )}
-            {props.isDuplicated && (
-              <PopoverBody p={0}>
-                <MenuItem
-                  icon="mdi:content-copy"
-                  label="Duplicate"
-                  onClick={props.onDuplicateButton}
-                />
-              </PopoverBody>
-            )}
-            {(userData.role === "super_admin" || props.isOwner) && (
-              <>
+      <Portal>
+        <AnimatePresence>
+          {isOpen && (
+            <PopoverContent
+              as={MotionBox}
+              w="180px"
+              border="none"
+              boxShadow="lg"
+              borderRadius="md"
+              overflow="hidden"
+              initial={{ opacity: 0, scale: 0.95, y: -8 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -8 }}
+              transition={{ duration: 0.15 }}
+            >
+              {props.isOpenButton && (
                 <PopoverBody p={0}>
                   <MenuItem
-                    icon="mdi:pencil-outline"
-                    label="Edit"
-                    onClick={props.onEditButton}
-                    color="#3182ce"
+                    icon="mdi:eye-outline"
+                    label="Open"
+                    onClick={props.onOpenButton}
                   />
                 </PopoverBody>
+              )}
+              {props.isDuplicated && (
                 <PopoverBody p={0}>
                   <MenuItem
-                    icon="mdi:trash-can-outline"
-                    label="Delete"
-                    onClick={props.onDeleteButton}
-                    color="#e53e3e"
+                    icon="mdi:content-copy"
+                    label="Duplicate"
+                    onClick={props.onDuplicateButton}
                   />
                 </PopoverBody>
-              </>
-            )}
-          </PopoverContent>
-        )}
-      </AnimatePresence>
+              )}
+              {(userData.role === "super_admin" || props.isOwner) && (
+                <>
+                  <PopoverBody p={0}>
+                    <MenuItem
+                      icon="mdi:pencil-outline"
+                      label="Edit"
+                      onClick={props.onEditButton}
+                      color="#3182ce"
+                    />
+                  </PopoverBody>
+                  <PopoverBody p={0}>
+                    <MenuItem
+                      icon="mdi:trash-can-outline"
+                      label="Delete"
+                      onClick={props.onDeleteButton}
+                      color="#e53e3e"
+                    />
+                  </PopoverBody>
+                </>
+              )}
+            </PopoverContent>
+          )}
+        </AnimatePresence>
+      </Portal>
     </Popover>
   );
 };
