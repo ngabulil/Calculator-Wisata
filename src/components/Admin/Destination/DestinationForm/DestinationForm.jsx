@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Input,
@@ -8,6 +8,8 @@ import {
   Flex,
   Container,
   useToast,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import { useLocation } from "react-router-dom";
@@ -30,9 +32,14 @@ const DestinationFormPage = (props) => {
   const [priceForeignChild, setPriceForeignChild] = useState("");
   const [priceDomesticAdult, setPriceDomesticAdult] = useState("");
   const [priceDomesticChild, setPriceDomesticChild] = useState("");
-
   const [note, setNote] = useState("");
   const [description, setDescription] = useState(null);
+  const [showError, setShowError] = useState(false);
+  const nameRef = useRef(null);
+  const priceForeignAdultRef = useRef(null);
+  const priceForeignChildRef = useRef(null);
+  const priceDomesticAdultRef = useRef(null);
+  const priceDomesticChildRef = useRef(null);
 
   const handleDestinationSetValue = () => {
     setName(destinationData.name);
@@ -131,6 +138,16 @@ const DestinationFormPage = (props) => {
     }
   };
 
+  const handleButtonClicked = () => {
+    setShowError(true);
+
+    if (editFormActive) {
+      handleDestinationUpdate();
+    } else {
+      handleDestinationCreate();
+    }
+  };
+
   useEffect(() => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
@@ -179,15 +196,21 @@ const DestinationFormPage = (props) => {
         {editFormActive ? "Edit Destinasi" : "Create Destinasi"}
       </Text>
       <Box mb={4}>
-        <FormLabel>Nama Destinasi</FormLabel>
-        <Input
-          placeholder="Contoh: Garuda Wisnu Kencana"
-          value={props.isModal ? destModalData.name : name}
-          isDisabled={props.isModal}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-        />
+        <FormControl isRequired isInvalid={showError && !name}>
+          <FormLabel>Nama Destinasi</FormLabel>
+          <Input
+            ref={nameRef}
+            placeholder="Contoh: Garuda Wisnu Kencana"
+            value={props.isModal ? destModalData.name : name}
+            isDisabled={props.isModal}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+          {showError && !name && (
+            <FormErrorMessage>Nama Destinasi wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
       <Box mb={4}>
         <FormLabel>Deskripsi</FormLabel>
@@ -215,52 +238,75 @@ const DestinationFormPage = (props) => {
           Price List{" "}
         </Text>
         <Box mb={4}>
-          <FormLabel>Price Foreign Adult</FormLabel>
-          <Input
-            type="number"
-            placeholder="Contoh: 70"
-            value={priceForeignAdult == null ? 0 : priceForeignAdult}
-            onChange={(e) => setPriceForeignAdult(e.target.value)}
-          />
+          <FormControl isRequired isInvalid={showError && !priceForeignAdult}>
+            <FormLabel>Price Foreign Adult</FormLabel>
+            <Input
+              ref={priceForeignAdultRef}
+              type="number"
+              placeholder="Contoh: 70"
+              value={priceForeignAdult == null ? 0 : priceForeignAdult}
+              onChange={(e) => setPriceForeignAdult(e.target.value)}
+            />
+            {showError && !priceForeignAdult && (
+              <FormErrorMessage>
+                Price Foreign Adult wajib diisi
+              </FormErrorMessage>
+            )}
+          </FormControl>
         </Box>
 
         <Box mb={4}>
-          <FormLabel>Price Foreign Child</FormLabel>
-          <Input
-            type="number"
-            placeholder="Contoh: 50"
-            value={priceForeignChild == null ? 0 : priceForeignChild}
-            onChange={(e) => setPriceForeignChild(e.target.value)}
-          />
+          <FormControl isRequired isInvalid={showError && !priceForeignChild}>
+            <FormLabel>Price Foreign Child</FormLabel>
+            <Input
+              type="number"
+              placeholder="Contoh: 50"
+              value={priceForeignChild == null ? 0 : priceForeignChild}
+              onChange={(e) => setPriceForeignChild(e.target.value)}
+            />
+            {showError && !priceForeignChild && (
+              <FormErrorMessage>
+                Price Foreign Child wajib diisi
+              </FormErrorMessage>
+            )}
+          </FormControl>
         </Box>
 
         <Box mb={4}>
-          <FormLabel>Price Domestic Adult</FormLabel>
-          <Input
-            type="number"
-            placeholder="Contoh: 55"
-            value={priceDomesticAdult == null ? 0 : priceDomesticAdult}
-            onChange={(e) => setPriceDomesticAdult(e.target.value)}
-          />
+          <FormControl isRequired isInvalid={showError && !priceDomesticAdult}>
+            <FormLabel>Price Domestic Adult</FormLabel>
+            <Input
+              type="number"
+              placeholder="Contoh: 55"
+              value={priceDomesticAdult == null ? 0 : priceDomesticAdult}
+              onChange={(e) => setPriceDomesticAdult(e.target.value)}
+            />
+            {showError && !priceDomesticAdult && (
+              <FormErrorMessage>
+                Price Domestic Adult wajib diisi
+              </FormErrorMessage>
+            )}
+          </FormControl>
         </Box>
 
         <Box mb={4}>
-          <FormLabel>Price Domestic Child</FormLabel>
-          <Input
-            type="number"
-            placeholder="Contoh: 35"
-            value={priceDomesticChild == null ? 0 : priceDomesticChild}
-            onChange={(e) => setPriceDomesticChild(e.target.value)}
-          />
+          <FormControl isRequired isInvalid={showError && !priceDomesticChild}>
+            <FormLabel>Price Domestic Child</FormLabel>
+            <Input
+              type="number"
+              placeholder="Contoh: 35"
+              value={priceDomesticChild == null ? 0 : priceDomesticChild}
+              onChange={(e) => setPriceDomesticChild(e.target.value)}
+            />
+            {showError && !priceDomesticChild && (
+              <FormErrorMessage>
+                Price Domestic Child wajib diisi
+              </FormErrorMessage>
+            )}
+          </FormControl>
         </Box>
       </Flex>
-      <Button
-        w={"full"}
-        bg={"teal.600"}
-        onClick={
-          editFormActive ? handleDestinationUpdate : handleDestinationCreate
-        }
-      >
+      <Button w={"full"} bg={"teal.600"} onClick={handleButtonClicked}>
         {editFormActive ? "Update Destinasi" : "Create Destinasi"}
       </Button>
     </Container>

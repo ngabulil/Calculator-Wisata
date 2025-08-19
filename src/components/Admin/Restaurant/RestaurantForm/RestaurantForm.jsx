@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Input,
@@ -12,6 +12,8 @@ import {
   VStack,
   HStack,
   IconButton,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { useLocation } from "react-router-dom";
@@ -32,6 +34,8 @@ const RestaurantFormPage = (props) => {
   const [restoName, setRestoName] = useState("");
   const [restoDescription, setRestoDescription] = useState(null);
   const [restoPackage, setRestoPackage] = useState([]);
+  const [showError, setShowError] = useState(false);
+  const restoNameRef = useRef(null);
 
   const handleRestaurantSetValue = () => {
     setRestoName(restaurantData.resto_name);
@@ -149,6 +153,23 @@ const RestaurantFormPage = (props) => {
     }
   };
 
+  const handleButtonClicked = () => {
+    setShowError(true);
+    if (!restoName) {
+      restoNameRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      restoNameRef.current?.focus();
+      return;
+    }
+    if (editFormActive) {
+      handleRestaurantUpdate();
+    } else {
+      handleRestaurantCreate();
+    }
+  };
+
   useEffect(() => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
@@ -184,15 +205,21 @@ const RestaurantFormPage = (props) => {
         {editFormActive ? "Edit Restaurant" : "Create Restaurant"}
       </Text>
       <Box mb={4}>
-        <FormLabel>Nama Restaurant</FormLabel>
-        <Input
-          placeholder="Contoh: Nama Restaurant"
-          value={props.isModal ? restModalData.name : restoName}
-          isDisabled={props.isModal}
-          onChange={(e) => {
-            setRestoName(e.target.value);
-          }}
-        />
+        <FormControl isRequired isInvalid={showError && !restoName}>
+          <FormLabel>Nama Restaurant</FormLabel>
+          <Input
+            ref={restoNameRef}
+            placeholder="Contoh: Nama Restaurant"
+            value={props.isModal ? restModalData.name : restoName}
+            isDisabled={props.isModal}
+            onChange={(e) => {
+              setRestoName(e.target.value);
+            }}
+          />
+          {showError && !name && (
+            <FormErrorMessage>Nama Restaurant wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
       <Box mb={4}>
         <FormLabel>Deskripsi Restaurant</FormLabel>
@@ -207,6 +234,7 @@ const RestaurantFormPage = (props) => {
       </Box>
       <PackageFormList
         isEdit={editFormActive}
+        showError={showError}
         packagesValue={
           editFormActive
             ? restaurantData.packages || []
@@ -217,14 +245,7 @@ const RestaurantFormPage = (props) => {
         }}
       />
 
-      <Button
-        w={"full"}
-        bg={"teal.600"}
-        mt={4}
-        onClick={
-          editFormActive ? handleRestaurantUpdate : handleRestaurantCreate
-        }
-      >
+      <Button w={"full"} bg={"teal.600"} mt={4} onClick={handleButtonClicked}>
         {editFormActive ? "Update Restaurant" : "Create Restaurant"}
       </Button>
     </Container>
@@ -232,6 +253,8 @@ const RestaurantFormPage = (props) => {
 };
 
 const PackageFormList = (props) => {
+  const showError = props.showError;
+
   const [packages, setPackages] = useState([
     {
       name: "",
@@ -332,12 +355,17 @@ const PackageFormList = (props) => {
           </HStack>
 
           <Box mb={3}>
-            <FormLabel>Nama Paket</FormLabel>
-            <Input
-              placeholder="Contoh: Paket A"
-              value={pkg.name}
-              onChange={(e) => handleChange(index, "name", e.target.value)}
-            />
+            <FormControl isRequired isInvalid={showError && !pkg.name}>
+              <FormLabel>Nama Paket</FormLabel>
+              <Input
+                placeholder="Contoh: Paket A"
+                value={pkg.name}
+                onChange={(e) => handleChange(index, "name", e.target.value)}
+              />
+              {showError && !pkg.name && (
+                <FormErrorMessage>Nama Paket wajib diisi</FormErrorMessage>
+              )}
+            </FormControl>
           </Box>
 
           <Box mb={3}>
@@ -406,15 +434,17 @@ const PackageFormList = (props) => {
             />
           </Box>
 
-          <Box mb={3}>
+          <FormControl isRequired isInvalid={showError && !pkg.valid}>
             <FormLabel>Valid Sampai</FormLabel>
             <Input
               type="date"
               value={pkg.valid?.split("T")[0] || ""}
-              required
               onChange={(e) => handleChange(index, "valid", e.target.value)}
             />
-          </Box>
+            {showError && !pkg.valid && (
+              <FormErrorMessage>Tanggal validasi wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
 
           <Box mb={3}>
             <FormLabel>Link Kontrak</FormLabel>

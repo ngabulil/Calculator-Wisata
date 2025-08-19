@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Input,
@@ -9,6 +9,8 @@ import {
   Flex,
   Container,
   useToast,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import { useLocation } from "react-router-dom";
@@ -40,6 +42,11 @@ const ActivityFormPage = (props) => {
   const [keterangan, setKeterangan] = useState("");
   const [note, setNote] = useState("");
   const [valid, setValid] = useState("");
+  const [showError, setShowError] = useState(false);
+
+  const vendorRef = useRef(null);
+  const nameRef = useRef(null);
+  const validRef = useRef(null);
 
   const handleActivitySetValue = () => {
     setVendorId(activityData.vendor_id);
@@ -82,13 +89,6 @@ const ActivityFormPage = (props) => {
       valid: valid,
     };
 
-    if (!vendorId)
-      toast(toastConfig("", "Vendor tidak boleh kosong", "warning"));
-    if (!name)
-      toast(toastConfig("", "Nama Aktivitas tidak boleh kosong", "warning"));
-    if (!valid)
-      toast(toastConfig("", "Tanggal Valid tidak boleh kosong", "warning"));
-
     try {
       const res = await apiPostActivityDetails(data);
 
@@ -120,13 +120,6 @@ const ActivityFormPage = (props) => {
 
   const handleActivityUpdate = async () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
-
-    if (!vendorId)
-      toast(toastConfig("", "Vendor tidak boleh kosong", "warning"));
-    if (!name)
-      toast(toastConfig("", "Nama Aktivitas tidak boleh kosong", "warning"));
-    if (!valid)
-      toast(toastConfig("", "Tanggal Valid tidak boleh kosong", "warning"));
 
     const data = {
       vendor_id: vendorId,
@@ -162,6 +155,41 @@ const ActivityFormPage = (props) => {
       toast.close(loading);
       console.log(error);
       toast(toastConfig("Create Failed", "Aktivitas Gagal Diubah", "error"));
+    }
+  };
+
+  const handleButtonClicked = () => {
+    setShowError(true);
+
+    if (!name) {
+      nameRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+    if (!vendorId) {
+      vendorRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      vendorRef.current?.focus();
+      return;
+    }
+    if (!valid) {
+      validRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      validRef.current?.focus();
+      return;
+    }
+
+    if (editFormActive) {
+      handleActivityUpdate();
+    } else {
+      handleActivityCreate();
     }
   };
 
@@ -223,15 +251,21 @@ const ActivityFormPage = (props) => {
         {editFormActive ? "Edit Aktivitas" : "Create Aktivitas"}
       </Text>
       <Box mb={4}>
-        <FormLabel>Nama Aktivitas</FormLabel>
-        <Input
-          placeholder="Contoh: Trip Adventure"
-          value={props.isModal ? activityModalData.name : name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          isDisabled={props.isModal ? true : false}
-        />
+        <FormControl isRequired isInvalid={showError && !name}>
+          <FormLabel>Nama Aktivitas</FormLabel>
+          <Input
+            ref={nameRef}
+            placeholder="Contoh: Trip Adventure"
+            value={props.isModal ? activityModalData.name : name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            isDisabled={props.isModal ? true : false}
+          />
+          {showError && !name && (
+            <FormErrorMessage>Nama Activity wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
       <Box mb={4}>
         <FormLabel>Deskripsi</FormLabel>
@@ -264,32 +298,44 @@ const ActivityFormPage = (props) => {
         />
       </Box>
       <Box mb={4}>
-        <FormLabel>Vendor</FormLabel>
-        <Select
-          name="vendor_id"
-          value={vendorId}
-          onChange={(e) => {
-            setVendorId(e.target.value);
-          }}
-          placeholder="Select vendor"
-        >
-          {allActivityVendors.map((vendor) => (
-            <option key={vendor.id} value={vendor.id}>
-              {vendor.name}
-            </option>
-          ))}
-        </Select>{" "}
+        <FormControl isRequired isInvalid={showError && !vendorId}>
+          <FormLabel>Vendor</FormLabel>
+          <Select
+            ref={vendorRef}
+            name="vendor_id"
+            value={vendorId}
+            onChange={(e) => {
+              setVendorId(e.target.value);
+            }}
+            placeholder="Select vendor"
+          >
+            {allActivityVendors.map((vendor) => (
+              <option key={vendor.id} value={vendor.id}>
+                {vendor.name}
+              </option>
+            ))}
+          </Select>{" "}
+          {showError && !vendorId && (
+            <FormErrorMessage>Vendor wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
       <Box mb={4}>
-        <FormLabel>Valid Date</FormLabel>
-        <Input
-          type="date"
-          placeholder="Contoh: Aktivitas Bintang Bali"
-          value={valid}
-          onChange={(e) => {
-            setValid(e.target.value);
-          }}
-        />
+        <FormControl isRequired isInvalid={showError && !valid}>
+          <FormLabel>Valid Date</FormLabel>
+          <Input
+            ref={validRef}
+            type="date"
+            placeholder="Contoh: Aktivitas Bintang Bali"
+            value={valid}
+            onChange={(e) => {
+              setValid(e.target.value);
+            }}
+          />
+          {showError && !valid && (
+            <FormErrorMessage>Validasi tanggal wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
       <Flex direction="column" w="full" p={4} bg={"gray.700"} rounded={"12px"}>
         <Text fontSize="20px" fontWeight={"bold"} mb={2}>
@@ -337,11 +383,7 @@ const ActivityFormPage = (props) => {
           />
         </Box>
       </Flex>
-      <Button
-        w={"full"}
-        bg={"teal.600"}
-        onClick={editFormActive ? handleActivityUpdate : handleActivityCreate}
-      >
+      <Button w={"full"} bg={"teal.600"} onClick={handleButtonClicked}>
         {editFormActive ? "Update Aktivitas" : "Create Aktivitas"}
       </Button>
     </Container>

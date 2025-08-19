@@ -9,9 +9,11 @@ import {
   NumberInput,
   NumberInputField,
   useToast,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import toastConfig from "../../../../utils/toastConfig";
 import { useAdminTransportContext } from "../../../../context/Admin/AdminTransportContext";
 import {
@@ -40,6 +42,10 @@ const TransportForm = (props) => {
   const toast = useToast();
   const location = useLocation();
   const [editFormActive, setEditFormActive] = useState(false);
+  const [showError, setShowError] = useState(false);
+
+  const vendorRef = useRef(null);
+  const nameRef = useRef(null);
 
   const handleChange = (field, value) => {
     setVehicle((prev) => ({
@@ -173,6 +179,33 @@ const TransportForm = (props) => {
     }
   };
 
+  const handleButtonClicked = () => {
+    setShowError(true);
+
+    if (!vehicle.name) {
+      nameRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+    if (!vehicle.vendor) {
+      vendorRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      vendorRef.current?.focus();
+      return;
+    }
+
+    if (editFormActive) {
+      handleTransportUpdate();
+    } else {
+      handleTransportCreate();
+    }
+  };
+
   useEffect(() => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
@@ -207,27 +240,39 @@ const TransportForm = (props) => {
         </HStack>
 
         <Box mb={3}>
-          <FormLabel>Nama Kendaraan</FormLabel>
-          <Input
-            value={props.isModal ? mobilModalData.name : vehicle.name}
-            onChange={(e) =>
-              handleChange(
-                "name",
-                props.isModal ? mobilModalData.name : e.target.value
-              )
-            }
-            placeholder="Contoh: Toyota Innova Reborn"
-            isDisabled={props.isModal}
-          />
+          <FormControl isRequired isInvalid={showError && !vehicle.name}>
+            <FormLabel>Nama Kendaraan</FormLabel>
+            <Input
+              ref={nameRef}
+              value={props.isModal ? mobilModalData.name : vehicle.name}
+              onChange={(e) =>
+                handleChange(
+                  "name",
+                  props.isModal ? mobilModalData.name : e.target.value
+                )
+              }
+              placeholder="Contoh: Toyota Innova Reborn"
+              isDisabled={props.isModal}
+            />
+            {showError && !vehicle.name && (
+              <FormErrorMessage>Nama Kendaraan wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
         </Box>
 
         <Box mb={3}>
-          <FormLabel>Vendor</FormLabel>
-          <Input
-            value={vehicle.vendor}
-            onChange={(e) => handleChange("vendor", e.target.value)}
-            placeholder="Contoh: PT. Bali Transport"
-          />
+          <FormControl isRequired isInvalid={showError && !vehicle.vendor}>
+            <FormLabel>Vendor</FormLabel>
+            <Input
+              ref={vendorRef}
+              value={vehicle.vendor}
+              onChange={(e) => handleChange("vendor", e.target.value)}
+              placeholder="Contoh: PT. Bali Transport"
+            />
+            {showError && !vehicle.vendor && (
+              <FormErrorMessage>Nama Vendor wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
         </Box>
 
         <Box mb={3}>
@@ -290,13 +335,7 @@ const TransportForm = (props) => {
           </Box>
         ))}
 
-        <Button
-          w={"full"}
-          bg={"teal.600"}
-          onClick={
-            editFormActive ? handleTransportUpdate : handleTransportCreate
-          }
-        >
+        <Button w={"full"} bg={"teal.600"} onClick={handleButtonClicked}>
           {editFormActive ? "Update Transport" : "Create Transport"}
         </Button>
       </Box>

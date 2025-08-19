@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Input,
@@ -7,6 +7,8 @@ import {
   FormLabel,
   Container,
   useToast,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 
 import { useLocation } from "react-router-dom";
@@ -22,8 +24,9 @@ const VendorFormPage = (props) => {
   const toast = useToast();
   const { vendorData, vendorDraft } = useAdminActivityContext();
   const [editFormActive, setEditFormActive] = useState(false);
-
+  const [showError, setShowError] = useState(false);
   const [name, setName] = useState("");
+  const nameRef = useRef(null);
 
   const handleVendorSetValue = () => {
     setName(vendorData.name);
@@ -94,6 +97,24 @@ const VendorFormPage = (props) => {
       toast(toastConfig("Update Failed", "Vendor Gagal Diubah", "error"));
     }
   };
+  const handleButtonClicked = () => {
+    setShowError(true);
+
+    if (!name) {
+      nameRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+
+    if (editFormActive) {
+      handleVendorUpdate();
+    } else {
+      handleVendorCreate();
+    }
+  };
 
   useEffect(() => {
     if (location.pathname.includes("edit")) {
@@ -127,21 +148,22 @@ const VendorFormPage = (props) => {
         {editFormActive ? "Edit Vendor" : "Create Vendor"}
       </Text>
       <Box mb={4}>
-        <FormLabel>Nama Vendor</FormLabel>
-        <Input
-          placeholder="Contoh: Trip Adventure"
-          value={name}
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-        />
+        <FormControl isRequired isInvalid={showError && !name}>
+          <FormLabel>Nama Vendor</FormLabel>
+          <Input
+            placeholder="Contoh: Trip Adventure"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+          {showError && !name && (
+            <FormErrorMessage>Nama Vendor wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
 
-      <Button
-        w={"full"}
-        bg={"teal.600"}
-        onClick={editFormActive ? handleVendorUpdate : handleVendorCreate}
-      >
+      <Button w={"full"} bg={"teal.600"} onClick={handleButtonClicked}>
         {editFormActive ? "Update Vendor" : "Create Vendor"}
       </Button>
     </Container>
