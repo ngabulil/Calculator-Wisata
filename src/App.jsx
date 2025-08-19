@@ -47,6 +47,7 @@ function App() {
     { path: "/admin/manage/edit", element: <AdminManagePage /> },
     { path: "/admin/activity", element: <AdminActivityPage /> },
     { path: "/admin/activity/edit", element: <AdminActivityPage /> },
+    { path: "/admin/paket/pdf-itinerary", element:  <ItineraryPage /> },
   ];
 
   const publicRoutes = [

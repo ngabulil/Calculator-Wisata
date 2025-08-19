@@ -77,16 +77,24 @@ const AuthLoginPage = () => {
 
   return (
     <Box
-      w={"full"}
-      h={"100vh"}
-      display={"flex"}
-      justifyContent={"center"}
-      alignItems={"center"}
+      w="full"
+      minH="100vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      p={4} // padding agar tidak terlalu mepet di layar kecil
     >
-      <Box w={"30%"} p={8} borderWidth="1px" borderRadius="md" boxShadow="md">
+      <Box
+        w={{ base: "100%", sm: "80%", md: "50%", lg: "30%" }} // responsif
+        p={8}
+        borderWidth="1px"
+        borderRadius="md"
+        boxShadow="md"
+      >
         <Heading mb={6} size="lg" textAlign="center">
           Login Admin
         </Heading>
+
         <form onSubmit={handleSubmit}>
           <VStack spacing={4}>
             <FormControl id="email" isRequired>
@@ -110,7 +118,13 @@ const AuthLoginPage = () => {
               />
             </FormControl>
 
-            <Button bg={"teal.600"} type="submit" width="full">
+            <Button
+              bg="teal.600"
+              _hover={{ bg: "teal.700" }}
+              type="submit"
+              width="full"
+              color="white"
+            >
               Login
             </Button>
           </VStack>

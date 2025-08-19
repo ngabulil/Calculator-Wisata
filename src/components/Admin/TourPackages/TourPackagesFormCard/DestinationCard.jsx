@@ -7,7 +7,13 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { MainSelectCreatableWithDelete } from "../../../MainSelect";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 import DestinationModal from "../TourModal/DestinationModal";
@@ -18,86 +24,118 @@ const typeWisataOptions = [
   { value: "asing", label: "Asing" },
 ];
 
-const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
-  const { destination } = useAdminPackageContext();
-  const { updateDestinationModalData } = useAdminDestinationContext();
-  const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
-  const [selectedType, setSelectedType] = useState(data.selectedType || null);
-  const [openModal, setOpenModal] = useState(false);
-  const [description, setDescription] = useState(data.description || "");
+const DestinationCard = forwardRef(
+  ({ index, data, onChange, onDelete, onModalClose }, ref) => {
+    const { destination } = useAdminPackageContext();
+    const { updateDestinationModalData } = useAdminDestinationContext();
+    const [selectedDest, setSelectedDest] = useState(data.selectedDest || null);
+    const [selectedType, setSelectedType] = useState(data.selectedType || null);
+    const [openModal, setOpenModal] = useState(false);
+    const [description, setDescription] = useState(data.description || "");
 
-  const textColor = useColorModeValue("white", "white");
+    const wrapperRef = useRef(null);
 
-  const destinationOptions =
-    destination?.map((dest) => ({
-      value: dest.id,
-      label: dest.name,
-      originalData: dest,
-    })) || [];
+    const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    if (selectedDest && !selectedType) {
-      const dest = destinationOptions.find(
-        (d) => d.value === selectedDest.value
-      );
-      if (dest) {
-        const isAsing =
-          dest.originalData.price_foreign_adult >
-          dest.originalData.price_domestic_adult;
-        setSelectedType(isAsing ? typeWisataOptions[1] : typeWisataOptions[0]);
+    const validateAll = () => {
+      const newErrors = {};
+      if (!data.destination && index != null)
+        newErrors.destination = "Destinasi harus dipilih";
+
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    };
+
+    useImperativeHandle(ref, () => ({
+      validate: validateAll,
+      scroll: () => {
+        wrapperRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      },
+    }));
+
+    const textColor = useColorModeValue("white", "white");
+
+    const destinationOptions =
+      destination?.map((dest) => ({
+        value: dest.id,
+        label: dest.name,
+        originalData: dest,
+      })) || [];
+
+    useEffect(() => {
+      if (selectedDest && !selectedType) {
+        const dest = destinationOptions.find(
+          (d) => d.value === selectedDest.value
+        );
+        if (dest) {
+          const isAsing =
+            dest.originalData.price_foreign_adult >
+            dest.originalData.price_domestic_adult;
+          setSelectedType(
+            isAsing ? typeWisataOptions[1] : typeWisataOptions[0]
+          );
+        }
       }
-    }
-  }, [selectedDest]);
+    }, [selectedDest]);
 
-  useEffect(() => {
-    onChange({
-      ...data,
-      selectedDest,
-      selectedType,
-      id_destinasi: selectedDest?.value,
-      type_wisata: selectedType?.value,
-      description: description || "",
-    });
-  }, [selectedDest, selectedType]);
+    useEffect(() => {
+      onChange({
+        ...data,
+        selectedDest,
+        selectedType,
+        id_destinasi: selectedDest?.value,
+        type_wisata: selectedType?.value,
+        description: description || "",
+      });
+    }, [selectedDest, selectedType]);
 
-  return (
-    <Box bg="gray.600" p={4} rounded="md">
-      <HStack justify="space-between" mb={3}>
-        <Text fontWeight="bold" color={textColor}>
-        {index + 1}. Destinasi 
-        </Text>
-        <IconButton
-          size="xs"
-          icon={<DeleteIcon />}
-          colorScheme="red"
-          variant="ghost"
-          aria-label="Hapus Destinasi"
-          onClick={onDelete}
-        />
-      </HStack>
+    return (
+      <Box bg="gray.600" p={4} rounded="md" ref={wrapperRef}>
+        <HStack justify="space-between" mb={3}>
+          <Text fontWeight="bold" color={textColor}>
+            {index + 1}. Destinasi
+          </Text>
+          <IconButton
+            size="xs"
+            icon={<DeleteIcon />}
+            colorScheme="red"
+            variant="ghost"
+            aria-label="Hapus Destinasi"
+            onClick={onDelete}
+          />
+        </HStack>
 
-      {/* Pilih Destinasi */}
-      <Box mb={3}>
-        <Text fontSize="sm" color="gray.300" mb={1}>
-          Pilih Destinasi
-        </Text>
-        <MainSelectCreatableWithDelete
-          options={destinationOptions}
-          value={selectedDest}
-          onChange={(value) => {
-            setSelectedDest(value);
+        {/* Pilih Destinasi */}
+        <Box mb={3}>
+          <Text fontSize="sm" color="gray.300" mb={1}>
+            Pilih Destinasi
+          </Text>
+          <MainSelectCreatableWithDelete
+            options={destinationOptions}
+            value={selectedDest}
+            onChange={(value) => {
+              setSelectedDest(value);
 
-            if (value.__isNew__) {
-              setOpenModal(true);
-              updateDestinationModalData({
-                name: value.label,
-              });
-            }
-          }}
-          placeholder="Pilih destinasi"
-        />
-      </Box>
-      {/* <Box mb={3}>
+              if (value.__isNew__) {
+                setOpenModal(true);
+                updateDestinationModalData({
+                  name: value.label,
+                });
+              }
+            }}
+            placeholder="Pilih destinasi"
+            isError={errors.destination}
+          />
+          {errors.destination && (
+            <Text fontSize="xs" color="red.300" mt={1}>
+              {errors.destination}
+            </Text>
+          )}
+        </Box>
+        {/* <Box mb={3}>
         <Text fontSize="sm" color="gray.300" mb={1}>
           Deskripsi Aktivitas
         </Text>
@@ -111,15 +149,16 @@ const DestinationCard = ({ index, data, onChange, onDelete, onModalClose }) => {
         />
       </Box> */}
 
-      <DestinationModal
-        isOpen={openModal}
-        onClose={() => {
-          setOpenModal(false);
-          onModalClose(false);
-        }}
-      />
-    </Box>
-  );
-};
+        <DestinationModal
+          isOpen={openModal}
+          onClose={() => {
+            setOpenModal(false);
+            onModalClose(false);
+          }}
+        />
+      </Box>
+    );
+  }
+);
 
 export default DestinationCard;

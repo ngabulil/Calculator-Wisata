@@ -10,7 +10,7 @@ import {
   SkeletonText,
   VStack,
   HStack,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import { usePackageContext } from "../context/PackageContext";
 
