@@ -168,9 +168,13 @@ const CheckoutContextProvider = ({ children }) => {
   const tourTotal = breakdown.tours;
 
   const subtotalBeforeUserMarkup = akomodasiTotal + transportTotal + tourTotal;
+  const totalAdult = (selectedPackage?.totalPaxAdult && selectedPackage.totalPaxAdult > 0)
+    ? selectedPackage.totalPaxAdult
+    : 1;
+
   const userMarkupAmount = calculateUserMarkup(subtotalBeforeUserMarkup);
-  const totalMarkup = userMarkupAmount * selectedPackage.totalPaxAdult;
-  const grandTotal = subtotalBeforeUserMarkup + (userMarkupAmount * (selectedPackage.totalPaxAdult ?? 1));
+  const totalMarkup = userMarkupAmount * totalAdult;
+  const grandTotal = subtotalBeforeUserMarkup + totalMarkup;
 
   const value = {
     breakdown,
