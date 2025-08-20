@@ -5,10 +5,11 @@ import {
   FormLabel,
   Input,
   Text,
-  VStack,
+  FormControl,
+  FormErrorMessage,
   Button,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useAdminHotelContext } from "../../../../context/Admin/AdminHotelContext";
 import { apiPostHotel, apiPutHotel } from "../../../../services/hotelService";
@@ -31,8 +32,6 @@ const HotelForm = (props) => {
   const { hotelData, hotelModal } = useAdminHotelContext();
   const [stars, setStars] = useState(1);
   const [photoLink, setPhotoLink] = useState("");
-
-  //
   const [hotelName, setHotelName] = useState("");
 
   // fetch create
@@ -40,10 +39,12 @@ const HotelForm = (props) => {
   const [hotelAvailable, setHotelAvailable] = useState(false);
   const [hotelCreateId, setHotelCreateId] = useState(null);
 
+  const [showError, setShowError] = useState(false);
+  const nameRef = useRef(null);
+
   const handleHotelSetValue = () => {
     setHotelName(hotelData.hotelName || "");
     setStars(hotelData.stars || 1);
-
     setPhotoLink(hotelData.photoLink || "");
   };
 
@@ -107,6 +108,25 @@ const HotelForm = (props) => {
     }
   };
 
+  const handleButtonClicked = () => {
+    setShowError(true);
+
+    if (!hotelName) {
+      nameRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+
+    if (editFormActive) {
+      handleHotelUpdate();
+    } else {
+      handleHotelCreate();
+    }
+  };
+
   useEffect(() => {
     if (!props.isModal && location.pathname.includes("edit")) {
       setEditFormActive(true);
@@ -128,15 +148,21 @@ const HotelForm = (props) => {
         {editFormActive ? "Edit Hotel" : "Create Hotel"}
       </Text>
       <Box mb={4}>
-        <FormLabel>Hotel Name</FormLabel>
-        <Input
-          placeholder="Contoh: Hotel Bintang Bali"
-          value={props.isModal ? hotelModal.hotelName : hotelName}
-          isDisabled={props.isModal}
-          onChange={(e) => {
-            setHotelName(e.target.value);
-          }}
-        />
+        <FormControl isRequired isInvalid={showError && !hotelName}>
+          <FormLabel>Hotel Name</FormLabel>
+          <Input
+            ref={nameRef}
+            placeholder="Contoh: Hotel Bintang Bali"
+            value={props.isModal ? hotelModal.hotelName : hotelName}
+            isDisabled={props.isModal}
+            onChange={(e) => {
+              setHotelName(e.target.value);
+            }}
+          />
+          {showError && !hotelName && (
+            <FormErrorMessage>Nama Hotel wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
 
       <Box mb={4}>
@@ -160,11 +186,7 @@ const HotelForm = (props) => {
           ))}
         </Select>
       </Box>
-      <Button
-        w={"full"}
-        bg={"teal.600"}
-        onClick={editFormActive ? handleHotelUpdate : handleHotelCreate}
-      >
+      <Button w={"full"} bg={"teal.600"} onClick={handleButtonClicked}>
         {editFormActive ? "Update Hotel" : "Create Hotel"}
       </Button>
       {hotelAvailable && (

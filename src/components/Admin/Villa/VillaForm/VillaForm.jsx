@@ -7,8 +7,10 @@ import {
   Text,
   VStack,
   Button,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useAdminVillaContext } from "../../../../context/Admin/AdminVillaContext";
 import toastConfig from "../../../../utils/toastConfig";
@@ -35,9 +37,11 @@ const VillaForm = (props) => {
   const [villaCreateId, setVillaCreateId] = useState(null);
   //
   const [stars, setStars] = useState(1);
-
   const [villaName, setVillaName] = useState("");
   const [photoLink, setPhotoLink] = useState("");
+
+  const [showError, setShowError] = useState(false);
+  const nameRef = useRef(null);
 
   const handleVillaSetValue = () => {
     setVillaName(villaData.villaName || "");
@@ -54,20 +58,13 @@ const VillaForm = (props) => {
       link_photo: photoLink,
     };
 
-    for (const [key, value] of Object.entries(data)) {
-      if (value === "") {
-        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
-        return;
-      }
-    }
-
     try {
       const res = await apiPostVilla(data);
 
       if (res.status == 201) {
         toast.close(loading);
         toast(
-          toastConfig("Hotel Created", "Hotel Berhasil Ditambahkan!", "success")
+          toastConfig("Villa Created", "Villa Berhasil Ditambahkan!", "success")
         );
 
         setVillaAvailable(true);
@@ -92,19 +89,12 @@ const VillaForm = (props) => {
       link_photo: photoLink,
     };
 
-    for (const [key, value] of Object.entries(data)) {
-      if (value === "") {
-        toast(toastConfig("Input Error", `${key} tidak boleh kosong`, "error"));
-        return;
-      }
-    }
-
     try {
       const res = await apiPutVilla(villaData.id, data);
 
       if (res.status == 200) {
         toast.close(loading);
-        toast(toastConfig("Edit Villa", "Hotel Berhasil Diedit!", "success"));
+        toast(toastConfig("Edit Villa", "Villa Berhasil Diedit!", "success"));
 
         setVillaAvailable(true);
         setVillaCreateId(res.result.id);
@@ -117,6 +107,25 @@ const VillaForm = (props) => {
       toast.close(loading);
       console.log(error);
       setVillaAvailable(false);
+    }
+  };
+
+  const handleButtonClicked = () => {
+    setShowError(true);
+
+    if (!villaName) {
+      nameRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+
+    if (editFormActive) {
+      handleVillaUpdate();
+    } else {
+      handleVillaCreate();
     }
   };
 
@@ -140,15 +149,24 @@ const VillaForm = (props) => {
         {editFormActive ? "Edit Villa" : "Create Villa"}
       </Text>
       <Box mb={4}>
-        <FormLabel>Villa Name</FormLabel>
-        <Input
-          placeholder="Contoh: Villa Bintang Bali"
-          value={props.isModal ? villaModal.villaName : villaName}
-          onChange={(e) => {
-            setVillaName(e.target.value);
-          }}
-          isDisabled={props.isModal ? true : false}
-        />
+        <FormControl
+          isRequired
+          isInvalid={!villaName && showError}
+          ref={nameRef}
+        >
+          <FormLabel>Villa Name</FormLabel>
+          <Input
+            placeholder="Contoh: Villa Bintang Bali"
+            value={props.isModal ? villaModal.villaName : villaName}
+            onChange={(e) => {
+              setVillaName(e.target.value);
+            }}
+            isDisabled={props.isModal ? true : false}
+          />
+          {showError && !villaName && (
+            <FormErrorMessage>Nama Villa wajib diisi</FormErrorMessage>
+          )}
+        </FormControl>
       </Box>
       <Box mb={4}>
         <FormLabel>Link Hotel Photos</FormLabel>
@@ -171,11 +189,7 @@ const VillaForm = (props) => {
         </Select>
       </Box>
 
-      <Button
-        w={"full"}
-        bg={"teal.600"}
-        onClick={editFormActive ? handleVillaUpdate : handleVillaCreate}
-      >
+      <Button w={"full"} bg={"teal.600"} onClick={handleButtonClicked}>
         {editFormActive ? "Update Villa" : "Create Villa"}
       </Button>
       {villaAvailable && (

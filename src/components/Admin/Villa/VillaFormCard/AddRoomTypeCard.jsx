@@ -9,9 +9,11 @@ import {
   HStack,
   IconButton,
   Flex,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { AddIcon, CloseIcon, DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAdminVillaContext } from "../../../../context/Admin/AdminVillaContext";
 import {
   apiPostVillaRooms,
@@ -24,8 +26,14 @@ const AddRoomTypeCard = (props) => {
   const toast = useToast();
   const { getRoomTypeSelect } = useAdminVillaContext();
 
+  const [showError, setShowError] = useState(false);
+
   const isEdit = props.isEdit;
   const id_villa = props.id_villa;
+
+  const roomRef = useRef(null);
+  const nameRef = useRef(null);
+  const validRef = useRef(null);
 
   const handleGetRoomTypeSelect = async () => {
     const res = await getRoomTypeSelect(id_villa);
@@ -70,6 +78,33 @@ const AddRoomTypeCard = (props) => {
   };
 
   const handleSaveRoom = async (room) => {
+    setShowError(true);
+
+    if (!room.name) {
+      nameRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+    if (!room.extrabed_price) {
+      roomRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      vendorRef.current?.focus();
+      return;
+    }
+    if (!room.contract_limit) {
+      validRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      validRef.current?.focus();
+      return;
+    }
+
     try {
       let res;
       if (isEdit && room.id) {
@@ -168,34 +203,50 @@ const AddRoomTypeCard = (props) => {
             }
           </Flex>
 
-          <Input
-            placeholder="Nama tipe kamar"
-            size="sm"
-            mb={2}
-            value={room.name}
-            onChange={(e) => handleFieldChange(index, "name", e.target.value)}
-          />
+          <FormControl isRequired isInvalid={showError && !room.name}>
+            <Input
+              ref={nameRef}
+              placeholder="Nama tipe kamar"
+              size="sm"
+              mb={2}
+              value={room.name}
+              onChange={(e) => handleFieldChange(index, "name", e.target.value)}
+            />
+            {showError && !room.name && (
+              <FormErrorMessage>Nama tipe kamar wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
 
-          <NumberInput
-            size="sm"
-            mb={2}
-            value={room.extrabed_price}
-            onChange={(val) =>
-              handleFieldChange(index, "extrabed_price", parseInt(val))
-            }
-          >
-            <NumberInputField placeholder="Harga extrabed" />
-          </NumberInput>
-
-          <Input
-            type="date"
-            size="sm"
-            mb={2}
-            value={room.contract_limit}
-            onChange={(e) =>
-              handleFieldChange(index, "contract_limit", e.target.value)
-            }
-          />
+          <FormControl isRequired isInvalid={showError && !room.extrabed_price}>
+            <NumberInput
+              ref={roomRef}
+              size="sm"
+              mb={2}
+              value={room.extrabed_price}
+              onChange={(val) =>
+                handleFieldChange(index, "extrabed_price", parseInt(val))
+              }
+            >
+              <NumberInputField placeholder="Harga extrabed" />
+            </NumberInput>
+            {showError && !room.extrabed_price && (
+              <FormErrorMessage>Harga extrabed wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
+          <FormControl isRequired isInvalid={showError && !room.contract_limit}>
+            <Input
+              type="date"
+              size="sm"
+              mb={2}
+              value={room.contract_limit}
+              onChange={(e) =>
+                handleFieldChange(index, "contract_limit", e.target.value)
+              }
+            />
+            {showError && !room.contract_limit && (
+              <FormErrorMessage>Batas kontrak wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
 
           <Button
             size="sm"
