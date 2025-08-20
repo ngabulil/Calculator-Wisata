@@ -9,9 +9,11 @@ import {
   Text,
   useToast,
   IconButton,
+  FormControl,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon, CloseIcon } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import toastConfig from "../../../../utils/toastConfig";
 
 import {
@@ -47,8 +49,41 @@ const AddSeasonCard = (props) => {
     price: "",
   });
 
+  const [showError, setShowError] = useState(false);
+
+  const seasonRef = useRef(null);
+  const priceRef = useRef(null);
+  const roomRef = useRef(null);
+  const labelRef = useRef(null);
+
   const handleAddSeasonPrice = async () => {
     const { season, id, label, price } = form;
+
+    setShowError(true);
+    if (!season) {
+      seasonRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+    if (!id) {
+      roomRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      roomRef.current?.focus();
+      return;
+    }
+    if (season != "normal" && !label) {
+      labelRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      labelRef.current?.focus();
+      return;
+    }
 
     const room = roomTypeSelect.find((r) => r.id === parseInt(id));
 
@@ -136,42 +171,70 @@ const AddSeasonCard = (props) => {
               onClick={() => setOpenCreateForm(!openCreateForm)}
             />
           </Box>
-          <Select
-            value={form.season}
-            onChange={(e) => setForm({ ...form, season: e.target.value })}
-          >
-            <option value="normal">Normal</option>
-            <option value="high">High</option>
-            <option value="peak">Peak</option>
-            <option value="honeymoon">Honeymoon</option>
-          </Select>
+          <FormControl isRequired isInvalid={showError && !form.season}>
+            <Select
+              value={form.season}
+              onChange={(e) => setForm({ ...form, season: e.target.value })}
+            >
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="peak">Peak</option>
+              <option value="honeymoon">Honeymoon</option>
+            </Select>
+            {showError && !form.season && (
+              <FormErrorMessage ref={seasonRef}>
+                Musim wajib diisi
+              </FormErrorMessage>
+            )}
+          </FormControl>
 
-          <Select
-            placeholder="Pilih Room Type"
-            value={form.id}
-            onChange={(e) => setForm({ ...form, id: e.target.value })}
-          >
-            {roomTypeSelect.map((room) => (
-              <option key={room.id} value={room.id}>
-                {room.name}
-              </option>
-            ))}
-          </Select>
+          <FormControl isRequired isInvalid={showError && !form.id}>
+            <Select
+              placeholder="Pilih Room Type"
+              value={form.id}
+              onChange={(e) => setForm({ ...form, id: e.target.value })}
+            >
+              {roomTypeSelect.map((room) => (
+                <option key={room.id} value={room.id}>
+                  {room.name}
+                </option>
+              ))}
+            </Select>
+            {showError && !form.id && (
+              <FormErrorMessage ref={roomRef}>
+                Room Type wajib diisi
+              </FormErrorMessage>
+            )}
+          </FormControl>
 
           {form.season != "normal" && form.season != "honeymoon" && (
-            <Input
-              placeholder="Label musim (cth: Lebaran, New Year)"
-              value={form.label}
-              onChange={(e) => setForm({ ...form, label: e.target.value })}
-            />
+            <FormControl isRequired isInvalid={showError && !form.label}>
+              <Input
+                placeholder="Label musim (cth: Lebaran, New Year)"
+                value={form.label}
+                onChange={(e) => setForm({ ...form, label: e.target.value })}
+              />
+              {showError && !form.label && (
+                <FormErrorMessage ref={labelRef}>
+                  Label musim wajib diisi
+                </FormErrorMessage>
+              )}
+            </FormControl>
           )}
 
-          <NumberInput
-            value={form.price}
-            onChange={(val) => setForm({ ...form, price: val })}
-          >
-            <NumberInputField placeholder="Harga" />
-          </NumberInput>
+          <FormControl isRequired isInvalid={showError && !form.price}>
+            <NumberInput
+              value={form.price}
+              onChange={(val) => setForm({ ...form, price: val })}
+            >
+              <NumberInputField placeholder="Harga" />
+            </NumberInput>
+            {showError && !form.price && (
+              <FormErrorMessage ref={priceRef}>
+                Harga wajib diisi
+              </FormErrorMessage>
+            )}
+          </FormControl>
 
           <Button colorScheme="yellow" onClick={handleAddSeasonPrice}>
             Tambah ke Musim
@@ -244,10 +307,42 @@ const FormEditSeasons = ({
     price: seasonData.price,
   });
 
+  const [showError, setShowError] = useState(false);
+  const seasonRef = useRef(null);
+  const priceRef = useRef(null);
+  const roomRef = useRef(null);
+  const labelRef = useRef(null);
+
   const toast = useToast();
 
   const handleEditForm = async () => {
     const { season, idRoom, label, price } = form;
+
+    setShowError(true);
+    if (!season) {
+      seasonRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      nameRef.current?.focus();
+      return;
+    }
+    if (!id) {
+      roomRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      roomRef.current?.focus();
+      return;
+    }
+    if (season != "normal" && !label) {
+      labelRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      labelRef.current?.focus();
+      return;
+    }
 
     const room = roomTypeSelect.find((r) => r.id === parseInt(idRoom));
 
@@ -330,43 +425,67 @@ const FormEditSeasons = ({
           onClick={handleDeleteForm}
         />
       </Box>
-      <Select
-        value={form.season}
-        isDisabled
-        onChange={(e) => setForm({ ...form, season: e.target.value })}
-      >
-        <option value="normal">Normal</option>
-        <option value="high">High</option>
-        <option value="peak">Peak</option>
-        <option value="honeymoon">Honeymoon</option>
-      </Select>
+      <FormControl isRequired isInvalid={showError && !form.season}>
+        <Select
+          value={form.season}
+          isDisabled
+          onChange={(e) => setForm({ ...form, season: e.target.value })}
+        >
+          <option value="normal">Normal</option>
+          <option value="high">High</option>
+          <option value="peak">Peak</option>
+          <option value="honeymoon">Honeymoon</option>
+        </Select>
+        {showError && !form.season && (
+          <FormErrorMessage ref={seasonRef}>Musim wajib diisi</FormErrorMessage>
+        )}
+      </FormControl>
 
-      <Select
-        placeholder="Pilih Room Type"
-        value={form.idRoom}
-        onChange={(e) => setForm({ ...form, idRoom: e.target.value })}
-      >
-        {roomTypeSelect.map((room) => (
-          <option key={room.id} value={room.id}>
-            {room.name}
-          </option>
-        ))}
-      </Select>
+      <FormControl isRequired isInvalid={showError && !form.idRoom}>
+        <Select
+          placeholder="Pilih Room Type"
+          value={form.idRoom}
+          onChange={(e) => setForm({ ...form, idRoom: e.target.value })}
+        >
+          {roomTypeSelect.map((room) => (
+            <option key={room.id} value={room.id}>
+              {room.name}
+            </option>
+          ))}
+        </Select>
+        {showError && !form.idRoom && (
+          <FormErrorMessage ref={roomRef}>
+            Room Type wajib diisi
+          </FormErrorMessage>
+        )}
+      </FormControl>
 
       {form.season != "normal" && form.season != "honeymoon" && (
-        <Input
-          placeholder="Label musim (cth: Lebaran, New Year)"
-          value={form.label}
-          onChange={(e) => setForm({ ...form, label: e.target.value })}
-        />
+        <FormControl isRequired isInvalid={showError && !form.label}>
+          <Input
+            placeholder="Label musim (cth: Lebaran, New Year)"
+            value={form.label}
+            onChange={(e) => setForm({ ...form, label: e.target.value })}
+          />
+          {showError && !form.label && (
+            <FormErrorMessage ref={labelRef}>
+              Label musim wajib diisi
+            </FormErrorMessage>
+          )}
+        </FormControl>
       )}
 
-      <NumberInput
-        value={form.price}
-        onChange={(val) => setForm({ ...form, price: val })}
-      >
-        <NumberInputField placeholder="Harga" />
-      </NumberInput>
+      <FormControl isRequired isInvalid={showError && !form.price}>
+        <NumberInput
+          value={form.price}
+          onChange={(val) => setForm({ ...form, price: val })}
+        >
+          <NumberInputField placeholder="Harga" />
+        </NumberInput>
+        {showError && !form.price && (
+          <FormErrorMessage ref={priceRef}>Harga wajib diisi</FormErrorMessage>
+        )}
+      </FormControl>
 
       <Button colorScheme="red" onClick={handleEditForm}>
         Edit Musim

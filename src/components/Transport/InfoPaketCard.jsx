@@ -1,0 +1,204 @@
+import {
+  Box,
+  HStack,
+  Text,
+  IconButton,
+  Input,
+  useColorModeValue,
+  Flex,
+} from "@chakra-ui/react";
+
+import { DeleteIcon } from "@chakra-ui/icons";
+import {
+  useMemo,
+  useEffect,
+  useState,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import {
+  apiDeleteAdditionalMobil,
+  apiPostAdditionalMobil,
+} from "../../services/transport";
+import { MainSelectCreatableWithDelete } from "../MainSelect";
+import { useTransportContext } from "../../context/TransportContext";
+
+const InfoCard = forwardRef(
+  ({ index, onDelete, data, onChange, isAdmin }, ref) => {
+    const { additional, setAdditional } = useTransportContext();
+
+    const infoOptions = useMemo(
+      () =>
+        additional.map((item) => ({
+          value: item.id,
+          label: item.name,
+        })),
+      [additional]
+    );
+
+    const inputBg = useColorModeValue("gray.700", "gray.700");
+    const borderColor = useColorModeValue("gray.600", "gray.600");
+    const textColor = useColorModeValue("white", "white");
+
+    const wrapperRef = useRef(null);
+
+    const [errors, setErrors] = useState({});
+    const validateAll = () => {
+      const newErrors = {};
+      if (!data.additional && index != null)
+        newErrors.additional = "Additional harus dipilih";
+
+      setErrors(newErrors);
+      return Object.keys(newErrors).length === 0;
+    };
+
+    // expose fungsi ke parent
+    useImperativeHandle(ref, () => ({
+      validate: validateAll,
+      scroll: () => {
+        wrapperRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      },
+    }));
+
+    const [selectedInfo, setSelectedInfo] = useState(data.selectedInfo || null);
+    const [harga, setHarga] = useState(data.harga || 0);
+    const [jumlah, setJumlah] = useState(data.jumlah || 1);
+
+    const total = (isNaN(harga) ? 0 : harga) * (isNaN(jumlah) ? 0 : jumlah);
+
+    useEffect(() => {
+      onChange({
+        ...data,
+        selectedInfo,
+        nama: selectedInfo?.label || "",
+        harga,
+        jumlah,
+      });
+    }, [selectedInfo, harga, jumlah]);
+
+    // ➕ Handler untuk buat opsi baru (POST ke backend)
+    const handleCreate = async (inputValue) => {
+      try {
+        const created = await apiPostAdditionalMobil({ name: inputValue });
+        console.log("Additional baru:", created);
+
+        // Update context
+        setAdditional((prev) => [
+          ...prev,
+          { id: created.result.id, name: created.result.name },
+        ]);
+
+        // Pilih langsung
+        setSelectedInfo({
+          value: created.result.id,
+          label: created.result.name,
+        });
+      } catch (err) {
+        console.error("Gagal menambah Additional:", err);
+      }
+    };
+
+    // ❌ Handler hapus opsi
+    const handleDelete = async (id) => {
+      try {
+        await apiDeleteAdditionalMobil(id);
+
+        setAdditional((prev) => prev.filter((item) => item.id !== id));
+
+        if (selectedInfo?.value === id) {
+          setSelectedInfo(null);
+        }
+      } catch (err) {
+        console.error("Gagal hapus:", err);
+      }
+    };
+
+    return (
+      <Box bg="gray.600" p={4} rounded="md" ref={wrapperRef}>
+        <HStack justify="space-between" mb={3}>
+          <Text fontWeight="bold" color={textColor}>
+            Additional {index + 1}
+          </Text>
+          <IconButton
+            size="xs"
+            icon={<DeleteIcon />}
+            colorScheme="red"
+            variant="ghost"
+            aria-label="Hapus Info"
+            onClick={onDelete}
+          />
+        </HStack>
+
+        <HStack spacing={4} mb={3}>
+          {/* Nama Additional */}
+          <Box w={isAdmin ? "full" : "50%"}>
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Nama Additional
+            </Text>
+            <MainSelectCreatableWithDelete
+              options={infoOptions}
+              value={selectedInfo}
+              onChange={setSelectedInfo}
+              placeholder="Pilih atau ketik"
+              onCreateOption={handleCreate}
+              onDeleteOption={handleDelete}
+              isError={errors.additional}
+            />
+            {errors.additional && (
+              <Text fontSize="xs" color="red.300" mt={1}>
+                {errors.additional}
+              </Text>
+            )}
+          </Box>
+
+          {/* Harga */}
+          {!isAdmin && (
+            <>
+              <Box w="25%">
+                <Text mb={1} fontSize="sm" color="gray.300">
+                  Harga
+                </Text>
+                <Input
+                  value={harga}
+                  onChange={(e) => setHarga(Number(e.target.value))}
+                  bg={inputBg}
+                  color={textColor}
+                  borderColor={borderColor}
+                />
+              </Box>
+
+              {/* Jumlah */}
+              <Box w="25%">
+                <Text mb={1} fontSize="sm" color="gray.300">
+                  Jumlah
+                </Text>
+                <Input
+                  value={jumlah}
+                  onChange={(e) => setJumlah(Number(e.target.value))}
+                  bg={inputBg}
+                  color={textColor}
+                  borderColor={borderColor}
+                />
+              </Box>
+            </>
+          )}
+        </HStack>
+
+        {/* Total */}
+        {!isAdmin && (
+          <Box mt={2}>
+            <Text fontWeight="semibold" color="green.300">
+              Total Harga: Rp {total.toLocaleString("id-ID")}
+            </Text>
+          </Box>
+        )}
+      </Box>
+    );
+  }
+);
+
+export default InfoCard;

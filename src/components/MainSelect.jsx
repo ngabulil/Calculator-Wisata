@@ -3,12 +3,20 @@ import SelectCreatable from "react-select/creatable";
 import { Flex, Text, IconButton } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 
-const customSelectStyles = {
-  control: (base) => ({
+const customSelectStyles = (isError) => ({
+  control: (base, state) => ({
     ...base,
     backgroundColor: "#2D3748",
-    borderColor: "#4A5568",
+    borderColor: isError ? "#F56565" : state.isFocused ? "#3182ce" : "#4A5568",
     color: "white",
+    boxShadow: isError
+      ? "0 0 0 1px #F56565"
+      : state.isFocused
+      ? "0 0 0 1px #3182ce"
+      : "none",
+    "&:hover": {
+      borderColor: isError ? "#F56565" : "#3182ce",
+    },
   }),
   menu: (base) => ({
     ...base,
@@ -28,7 +36,7 @@ const customSelectStyles = {
     ...base,
     color: "white",
   }),
-};
+});
 
 const CustomOption = (props) => {
   const { data, innerRef, innerProps, selectProps } = props;
@@ -75,11 +83,12 @@ export const MainSelectCreatableWithDelete = ({
   placeholder,
   onCreateOption, // ← dari parent (misal API post)
   onDeleteOption, // ← dari parent (misal API delete)
+  isError = false,
 }) => {
   return (
     <SelectCreatable
       isSearchable
-      styles={customSelectStyles}
+      styles={customSelectStyles(isError)}
       value={value || null}
       onChange={onChange}
       onCreateOption={onCreateOption}
@@ -91,14 +100,20 @@ export const MainSelectCreatableWithDelete = ({
   );
 };
 
-const MainSelect = ({ options = [], value, onChange, placeholder }) => {
+const MainSelect = ({
+  options = [],
+  value,
+  onChange,
+  placeholder,
+  isError = false,
+}) => {
   return (
     <Select
       options={options}
       value={value || null}
       onChange={onChange}
       placeholder={placeholder}
-      styles={customSelectStyles}
+      styles={customSelectStyles(isError)}
       isClearable
       isSearchable
     />
@@ -110,6 +125,7 @@ export const MainSelectCreatable = ({
   value,
   onChange,
   placeholder,
+  isError = false,
 }) => {
   return (
     <SelectCreatable
@@ -117,7 +133,7 @@ export const MainSelectCreatable = ({
       value={value || null}
       onChange={onChange}
       placeholder={placeholder}
-      styles={customSelectStyles}
+      styles={customSelectStyles(isError)}
       isSearchable
     />
   );

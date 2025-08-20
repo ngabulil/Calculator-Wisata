@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import {
   Container,
@@ -17,16 +17,20 @@ import {
   Tab,
   TabPanel,
   Input,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
   useColorModeValue,
   Spinner,
 } from "@chakra-ui/react";
 
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+
 //
 import HotelCard from "../../../Akomodasi/HotelPaketCard";
 import VillaCard from "../../../Akomodasi/VillaPaketCard";
-import InfoCard from "../../../Akomodasi/InfoCard";
-import InfoTransportCard from "../../../Transport/InfoCard";
+import InfoCard from "../../../Akomodasi/InfoPaketCard";
+import InfoTransportCard from "../../../Transport/InfoPaketCard";
 import MobilCard from "../../../Transport/MobilPaketCard";
 
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
@@ -277,6 +281,7 @@ const PackageCreateForm = (props) => {
                         <VStack spacing={2} align="stretch">
                           {day.data.akomodasi.hotels.map((hotel, i) => (
                             <HotelCard
+                              ref={props.hotelCardRef}
                               key={i}
                               isAdmin={true}
                               index={i}
@@ -314,8 +319,9 @@ const PackageCreateForm = (props) => {
 
                           {day.data.akomodasi.villas.map((villa, i) => (
                             <VillaCard
-                              isAdmin={true}
+                              ref={props.villaCardRef}
                               key={i}
+                              isAdmin={true}
                               index={i}
                               data={villa}
                               onChange={(newVilla) => {
@@ -363,6 +369,7 @@ const PackageCreateForm = (props) => {
                         <VStack spacing={2} align="stretch">
                           {day.data.akomodasi.additional.map((info, i) => (
                             <InfoCard
+                              ref={props.addCardRef}
                               isAdmin={true}
                               key={i}
                               index={i}
@@ -514,6 +521,7 @@ const PackageCreateForm = (props) => {
                                   rounded="md"
                                 >
                                   <DestinationCard
+                                    ref={props.destinationCardRef}
                                     index={i}
                                     data={tourItem}
                                     onModalClose={(val) =>
@@ -536,6 +544,7 @@ const PackageCreateForm = (props) => {
                                   rounded="md"
                                 >
                                   <ActivityCard
+                                    ref={props.activityCardRef}
                                     index={i}
                                     data={tourItem}
                                     onModalClose={(val) =>
@@ -558,6 +567,7 @@ const PackageCreateForm = (props) => {
                                   rounded="md"
                                 >
                                   <RestaurantCard
+                                    ref={props.restaurantCardRef}
                                     index={i}
                                     data={tourItem}
                                     onModalClose={(val) =>
@@ -598,6 +608,7 @@ const PackageCreateForm = (props) => {
                         <VStack spacing={2} align="stretch">
                           {day.data.transport.mobils.map((mobil, i) => (
                             <MobilCard
+                              ref={props.mobilCardRef}
                               isAdmin={true}
                               key={i}
                               index={i}
@@ -653,6 +664,7 @@ const PackageCreateForm = (props) => {
                         <VStack spacing={2} align="stretch">
                           {day.data.transport.additional.map((info, i) => (
                             <InfoTransportCard
+                              ref={props.addCardRef2}
                               key={i}
                               isAdmin={true}
                               index={i}
@@ -706,8 +718,20 @@ const PackageFormPage = (props) => {
     useAdminPackageContext();
   const [primaryData, setPrimaryData] = useState([]);
   const [namePackages, setNamePackages] = useState("");
-  const [desctiptionPackages, setDescriptionPackages] = useState("");
+  const [desctiptionPackages, setDescriptionPackages] = useState(" ");
+  const [showError, setShowError] = useState(false);
   const [editFormActive, setEditFormActive] = useState(false);
+
+  const nameRef = useRef(null);
+  const descRef = useRef(null);
+  const hotelCardRef = useRef();
+  const villaCardRef = useRef();
+  const addCardRef = useRef();
+  const destinationCardRef = useRef();
+  const activityCardRef = useRef();
+  const restaurantCardRef = useRef();
+  const addCardRef2 = useRef();
+  const mobilCardRef = useRef();
 
   const handleonChangeData = (data) => {
     setPrimaryData(data);
@@ -721,6 +745,67 @@ const PackageFormPage = (props) => {
 
         return day.data.tours.length > 0 && type_wisata == "";
       });
+
+      const hotelValidation = hotelCardRef.current?.validate();
+      const villaValidation = villaCardRef.current?.validate();
+      const addValidation = addCardRef.current?.validate();
+      const destinationValidation = destinationCardRef.current?.validate();
+      const activityValidation = activityCardRef.current?.validate();
+      const restaurantValidation = restaurantCardRef.current?.validate();
+      const transportValidation = addCardRef2.current?.validate();
+      const mobilValidation = mobilCardRef.current?.validate();
+
+      const sections = [
+        {
+          valid: hotelValidation,
+          ref: hotelCardRef,
+          msg: "Silakan lengkapi Hotel Card",
+        },
+        {
+          valid: villaValidation,
+          ref: villaCardRef,
+          msg: "Silakan lengkapi Villa Card",
+        },
+        {
+          valid: addValidation,
+          ref: addCardRef,
+          msg: "Silakan lengkapi Additional Card",
+        },
+        {
+          valid: destinationValidation,
+          ref: destinationCardRef,
+          msg: "Silakan lengkapi Destination Card",
+        },
+        {
+          valid: activityValidation,
+          ref: activityCardRef,
+          msg: "Silakan lengkapi Activity Card",
+        },
+        {
+          valid: restaurantValidation,
+          ref: restaurantCardRef,
+          msg: "Silakan lengkapi Restaurant Card",
+        },
+        {
+          valid: transportValidation,
+          ref: addCardRef2,
+          msg: "Silakan lengkapi Transport Additional Card",
+        },
+        {
+          valid: mobilValidation,
+          ref: mobilCardRef,
+          msg: "Silakan lengkapi Mobil Card",
+        },
+      ];
+
+      for (const sec of sections) {
+        if (sec.valid === false) {
+          toast.close(loading);
+          toast(toastConfig("Info", sec.msg, "warning"));
+          sec?.ref?.current?.scroll();
+          return;
+        }
+      }
 
       if (hasMissingTypeWisata) {
         toast.close(loading);
@@ -828,29 +913,82 @@ const PackageFormPage = (props) => {
         <Text fontWeight="bold" fontSize={"2xl"}>
           {editFormActive ? "Edit Paket" : "Buat Paket"}
         </Text>
+
         <Flex direction={"column"} gap={5} py={5}>
-          <Text fontWeight="semibold">Nama Paket</Text>
-          <Input
-            value={namePackages}
-            placeholder="Contoh: Tiket Tour Bali 3 Hari"
-            onChange={(e) => {
-              setNamePackages(e.target.value);
-            }}
-          />
-          <Text fontWeight="semibold">Deskripsi untuk Paket</Text>
-          <Textarea
-            value={desctiptionPackages}
-            onChange={(e) => {
-              setDescriptionPackages(e.target.value);
-            }}
-            placeholder="Deskripsi Paket..."
-            bg="gray.700"
-            color="white"
-            _placeholder={{ color: "gray.400" }}
-          />
+          {/* Nama Paket */}
+          <FormControl isRequired isInvalid={showError && !namePackages.trim()}>
+            <FormLabel fontWeight="semibold">Nama Paket</FormLabel>
+            <Input
+              ref={nameRef}
+              value={namePackages}
+              placeholder="Contoh: Tiket Tour Bali 3 Hari"
+              onChange={(e) => setNamePackages(e.target.value)}
+            />
+            {showError && !namePackages.trim() && (
+              <FormErrorMessage>Nama paket wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
+
+          {/* Deskripsi Paket */}
+          <FormControl
+            isRequired
+            isInvalid={showError && !desctiptionPackages.trim()}
+          >
+            <FormLabel fontWeight="semibold">Deskripsi untuk Paket</FormLabel>
+            <Textarea
+              ref={descRef}
+              value={desctiptionPackages}
+              onChange={(e) => setDescriptionPackages(e.target.value)}
+              placeholder="Deskripsi Paket..."
+              bg="gray.700"
+              color="white"
+              _placeholder={{ color: "gray.400" }}
+            />
+            {showError && !desctiptionPackages.trim() && (
+              <FormErrorMessage>Deskripsi wajib diisi</FormErrorMessage>
+            )}
+          </FormControl>
         </Flex>
-        <PackageCreateForm onChange={handleonChangeData} />
-        <Button w={"full"} background="teal.600" onClick={handleButtonPackage}>
+
+        <PackageCreateForm
+          hotelCardRef={hotelCardRef}
+          villaCardRef={villaCardRef}
+          addCardRef={addCardRef}
+          destinationCardRef={destinationCardRef}
+          activityCardRef={activityCardRef}
+          restaurantCardRef={restaurantCardRef}
+          mobilCardRef={mobilCardRef}
+          addCardRef2={addCardRef2}
+          onChange={handleonChangeData}
+        />
+
+        <Button
+          w="full"
+          background="teal.600"
+          type="button"
+          onClick={() => {
+            setShowError(true);
+
+            if (!namePackages.trim()) {
+              nameRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+              nameRef.current?.focus();
+              return;
+            }
+            if (!desctiptionPackages.trim()) {
+              descRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+              descRef.current?.focus();
+              return;
+            }
+
+            handleButtonPackage();
+          }}
+        >
           {editFormActive ? "Edit Paket" : "Buat Paket"}
         </Button>
       </Box>

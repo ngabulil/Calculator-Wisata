@@ -8,6 +8,7 @@ import {
   useCallback
 } from "react";
 import { Box, Text, Divider, Button, Flex, useToast } from "@chakra-ui/react";
+import HotelChoiceTable from "../components/ItineraryPDF/HotelChoiceTable";
 import ItineraryTable from "../components/ItineraryPDF/ItineraryTable";
 import InclusionExclusion from "../components/ItineraryPDF/InclusionExclusion";
 import { usePackageContext } from "../context/PackageContext";
@@ -15,7 +16,6 @@ import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
 import useItineraryEditor from "../hooks/useItineraryEditor";
-import PackagesChoiceTable from "../components/ItineraryPDF/PackagesChoiceTable";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -454,7 +454,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
         <Divider mb={6} borderColor="#FFA726" />
 
-        <PackagesChoiceTable/>
+        <HotelChoiceTable akomodasiDays={itineraryState.mergedDays} />
 
         <Divider my={6} borderColor="#FFA726" />
 

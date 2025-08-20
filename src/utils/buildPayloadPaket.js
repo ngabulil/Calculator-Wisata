@@ -11,7 +11,7 @@ export default function buildPayloadPaket(data) {
               hotels:
                 day.data?.akomodasi?.hotels?.map((hotel) => ({
                   id_hotel: hotel?.hotel?.value,
-                  id_tipe_kamar: hotel?.roomType.value,
+                  id_tipe_kamar: hotel?.roomType?.value,
                   season: {
                     type: resolveSeason(hotel?.season),
                     id_musim: hotel?.idMusim,

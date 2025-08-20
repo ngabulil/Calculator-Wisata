@@ -9,17 +9,54 @@ import {
   TabPanel,
   Container,
   Spinner,
+  useToast,
+  Button,
 } from "@chakra-ui/react";
 import { Icon } from "@iconify/react";
-
+import { DownloadIcon, ViewIcon } from "@chakra-ui/icons";
 import { useAdminPackageContext } from "../../../../context/Admin/AdminPackageContext";
 import { parsePaketDays } from "../../../../utils/parseOnePaket";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { usePackageContext } from "../../../../context/PackageContext";
+import ItineraryPDF from "../../../../pages/ItineraryPDF";
 
 const PackageRead = () => {
   const { onePackageFull } = useAdminPackageContext();
   const [loading, setLoading] = useState(false);
   const [paketDay, setPaketDay] = useState([]);
+  const { setSelectedPackage, selectedPackage } = usePackageContext();
+  const itineraryRef = useRef();
+  const toast = useToast();
+
+  const handleViewItineraryPdf = () => {
+    window.history.pushState({}, "", "paket/pdf-itinerary");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  };
+
+  const handleDownloadItinerary = async () => {
+    if (!itineraryRef.current) {
+      toast({
+        title: "Error",
+        description: "Itinerary component is not ready.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      await itineraryRef.current.download();
+    } catch (error) {
+      toast({
+        title: "Gagal mengunduh itinerary",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   const handlePaketRead = async () => {
     try {
@@ -27,6 +64,14 @@ const PackageRead = () => {
 
       const data = await parsePaketDays(onePackageFull.days);
       setPaketDay(data);
+      setSelectedPackage({
+        ...onePackageFull,
+        title: onePackageFull.name,
+        name: onePackageFull.name,
+        totalPaxAdult: onePackageFull.totalPaxAdult || 0,
+        totalPaxChildren: onePackageFull.totalPaxChildren || 0,
+        days: onePackageFull.days || [],
+      });
     } catch (error) {
       console.error(error);
     } finally {
@@ -49,10 +94,29 @@ const PackageRead = () => {
       display={"flex"}
     >
       <Flex direction={"column"} gap={4} w={"full"}>
-        <AppTitleDescription
-          title={onePackageFull.name}
-          description={onePackageFull.description}
-        />
+        <Flex w={"full"}>
+          <AppTitleDescription
+            title={onePackageFull.name}
+            description={onePackageFull.description}
+          />
+          {/* <Flex w={"50%"} justifyContent={"end"} gap={2}>
+            <Button
+              leftIcon={<ViewIcon />}
+              colorScheme="blue"
+              onClick={handleViewItineraryPdf}
+            >
+              Itinerary
+            </Button>
+            <Button
+              leftIcon={<DownloadIcon />}
+              colorScheme="teal"
+              onClick={handleDownloadItinerary}
+              variant="outline"
+            >
+              Itinerary
+            </Button>
+          </Flex> */}
+        </Flex>
         <Tabs variant="line" colorScheme="blue" isFitted>
           <TabList>
             {onePackageFull.days.map((_, index) => (
@@ -256,6 +320,9 @@ const PackageRead = () => {
           </TabPanels>
         </Tabs>
       </Flex>
+      <Box style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
+        <ItineraryPDF ref={itineraryRef} />
+      </Box>
     </Container>
   );
 };
@@ -264,7 +331,7 @@ export default PackageRead;
 
 const AppTitleDescription = (props) => {
   return (
-    <Flex direction={"column"} gap={2}>
+    <Flex direction={"column"} gap={2} w={"50%"}>
       <Flex direction={"row"} gap={5}>
         <Flex direction={"column"} gap={"15px"} w={"60%"} flexShrink={"1"}>
           <Text fontSize={"32px"} fontWeight={"bold"}>
