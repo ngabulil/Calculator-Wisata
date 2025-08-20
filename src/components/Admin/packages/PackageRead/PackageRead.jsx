@@ -99,7 +99,7 @@ const PackageRead = () => {
             title={onePackageFull.name}
             description={onePackageFull.description}
           />
-          <Flex w={"50%"} justifyContent={"end"} gap={2}>
+          {/* <Flex w={"50%"} justifyContent={"end"} gap={2}>
             <Button
               leftIcon={<ViewIcon />}
               colorScheme="blue"
@@ -115,7 +115,7 @@ const PackageRead = () => {
             >
               Itinerary
             </Button>
-          </Flex>
+          </Flex> */}
         </Flex>
         <Tabs variant="line" colorScheme="blue" isFitted>
           <TabList>
