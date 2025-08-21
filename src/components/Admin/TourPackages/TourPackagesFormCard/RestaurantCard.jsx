@@ -31,8 +31,9 @@ const RestaurantCard = forwardRef(
     const validateAll = () => {
       const newErrors = {};
       if (index != null) {
-        if (!data.restaurant) newErrors.restaurant = "Restaurant harus dipilih";
-        if (!data.menu) newErrors.menu = "Menu harus dipilih";
+  
+        if (!data.id_resto) newErrors.restaurant = "Restaurant harus dipilih";
+        if (!data.id_package) newErrors.menu = "Menu harus dipilih";
       }
 
       setErrors(newErrors);

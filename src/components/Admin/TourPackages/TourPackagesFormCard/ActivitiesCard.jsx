@@ -43,8 +43,8 @@ const ActivityCard = forwardRef(
     const validateAll = () => {
       const newErrors = {};
       if (index != null) {
-        if (!data.vendor) newErrors.vendor = "Vendor harus dipilih";
-        if (!data.activity) newErrors.activity = "Aktivitas harus dipilih";
+        if (!data.selectedVendor) newErrors.vendor = "Vendor harus dipilih";
+        if (!data.selectedActivity) newErrors.activity = "Aktivitas harus dipilih";
       }
 
       setErrors(newErrors);

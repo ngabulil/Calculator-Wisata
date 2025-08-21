@@ -39,7 +39,8 @@ const DestinationCard = forwardRef(
 
     const validateAll = () => {
       const newErrors = {};
-      if (!data.destination && index != null)
+    
+      if (!data.selectedDest && index != null)
         newErrors.destination = "Destinasi harus dipilih";
 
       setErrors(newErrors);

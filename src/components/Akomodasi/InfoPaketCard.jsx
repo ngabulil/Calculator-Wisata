@@ -45,7 +45,8 @@ const InfoCard = forwardRef(
 
     const validateAll = () => {
       const newErrors = {};
-      if (!data.additional && index != null)
+
+      if (!data.selectedInfo && index != null)
         newErrors.additional = "Additional harus dipilih";
 
       setErrors(newErrors);

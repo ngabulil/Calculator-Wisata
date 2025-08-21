@@ -33,9 +33,10 @@ const MobilCard = forwardRef(
 
     const validateAll = () => {
       const newErrors = {};
+
       if (index != null) {
         if (!data.mobil) newErrors.mobil = "Mobil harus dipilih";
-        if (!data.category) newErrors.category = "Kategori harus dipilih";
+        if (!data.kategori) newErrors.category = "Kategori harus dipilih";
         if (!data.area) newErrors.area = "Area harus dipilih";
       }
 
