@@ -26,6 +26,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PackageFilterBar from "../../components/Admin/packages/FilterPakcage";
 import { useAdminAuthContext } from "../../context/AuthContext";
 import { Icon } from "@iconify/react";
+import buildPayloadDuplicate from "../../utils/buildPayloadDuplicate";
 
 const ITEMS_PER_PAGE = 4;
 
@@ -137,12 +138,16 @@ const AdminPage = () => {
     const loading = toast(toastConfig("Loading", "Mohon Menunggu", "loading"));
 
     try {
-      const res = await apiPostPackageFull(data);
+      const res = await apiPostPackageFull(buildPayloadDuplicate(data));
 
       if (res.status == 201 || res.status == 200) {
         toast.close(loading);
         toast(
-          toastConfig("Buat Berhasil", "Paket berhasil dibuat!", "success")
+          toastConfig(
+            "Duplikasi Berhasil",
+            "Paket berhasil diduplikasi!",
+            "success"
+          )
         );
         handleGetAllPackageFull();
       } else {
