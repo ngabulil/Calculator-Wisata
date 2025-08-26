@@ -11,7 +11,7 @@ const DaySummary = ({
   const accentColor = useColorModeValue("teal.300", "teal.400");
   const summaryCardBg = useColorModeValue("gray.600", "gray.700");
 
-  const { totalMarkup } = useCheckoutContext();
+  const { totalMarkup, totalMarkupChild } = useCheckoutContext();
 
   return (
     <Grid templateColumns="repeat(2, 1fr)" gap={4}>
@@ -49,15 +49,30 @@ const DaySummary = ({
       <Box bg={summaryCardBg} p={4} rounded="lg">
         <Flex align="center" gap={2}>
           <Text fontSize="sm" color="gray.300">
-            Total Markup
+            Total Markup Adult
           </Text>
           <Text fontSize="xs" color="gray.500">
-            (Markup × Jumlah pax)
+            (Markup × Jumlah Adult)
           </Text>
         </Flex>
 
         <Text fontSize="lg" fontWeight="bold" color={accentColor}>
           {formatCurrency(totalMarkup)}
+        </Text>
+      </Box>
+
+      <Box bg={summaryCardBg} p={4} rounded="lg">
+        <Flex align="center" gap={2}>
+          <Text fontSize="sm" color="gray.300">
+            Total Markup Child
+          </Text>
+          <Text fontSize="xs" color="gray.500">
+            (Markup × Jumlah Child)
+          </Text>
+        </Flex>
+
+        <Text fontSize="lg" fontWeight="bold" color={accentColor}>
+          {formatCurrency(totalMarkupChild)}
         </Text>
       </Box>
     </Grid>

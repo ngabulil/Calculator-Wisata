@@ -37,7 +37,7 @@ const tableCellStyle = {
 const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
   const { hotelItems, villaItems, formatCurrency, calculateGrandTotal, expenseChild } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
-  const { transportTotal, tourTotal, userMarkupAmount, childTotal } = useCheckoutContext();
+  const { transportTotal, tourTotal, userMarkupAmount, childTotal, childMarkupAmount } = useCheckoutContext();
 
   const [parsedExpensesData, setParsedExpensesData] = useState({
     hotels: [],
@@ -176,7 +176,8 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
   //   return adjustedGrandTotal / totalAdult;
   // }, [selectedPackage?.totalPaxAdult, grandTotal, calculateGrandTotal]);
   
-  const calculateTotalChild = childTotal + expenseChild / selectedPackage?.totalPaxChildren;
+  const calculateTotalChild = (childTotal + expenseChild ) / selectedPackage?.totalPaxChildren;
+  const totalChildPrice = calculateTotalChild + childMarkupAmount;
 
   const calculateAlternativePrice = (hotelPrice) => {
     const totalAdult =
@@ -380,7 +381,7 @@ return (
 
             {selectedPackage?.totalPaxChildren > 0 && (
               <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
-                {formatCurrency(calculateTotalChild)}
+                {formatCurrency(totalChildPrice)}
               </Td>
             )}
           </Tr>

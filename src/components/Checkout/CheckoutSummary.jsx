@@ -20,13 +20,17 @@ const CheckoutSummary = ({ formatCurrency }) => {
     grandTotal,
     subtotalBeforeUserMarkup, 
     userMarkup, 
+    childMarkup,
     userMarkupAmount, 
-    updateUserMarkup 
+    updateUserMarkup,
+    childMarkupAmount,
+    updateChildMarkup 
   } = useCheckoutContext();
   const accentColor = useColorModeValue("teal.300", "teal.400");
   const navigate = useNavigate();
   
   const [markupInput, setMarkupInput] = useState(userMarkup.value.toString());
+  const [childMarkupInput, setChildMarkupInput] = useState(childMarkup.value.toString());
 
   const labelMap = {
     hotels: 'Hotel',
@@ -48,6 +52,19 @@ const CheckoutSummary = ({ formatCurrency }) => {
   
     const numericValue = parseFloat(value) || 0;
     updateUserMarkup(userMarkup.type, numericValue);
+  };
+
+  const handleChildMarkupTypeChange = (e) => {
+    const newType = e.target.value;
+    updateChildMarkup(newType, childMarkup.value); // Fixed: was passing 'childMarupAmount' instead of 'childMarkup.value'
+  };
+
+  const handleChildMarkupValueChange = (e) => {
+    const value = e.target.value;
+    setChildMarkupInput(value);
+  
+    const numericValue = parseFloat(value) || 0;
+    updateChildMarkup(childMarkup.type, numericValue); // Fixed: was missing 'childMarkup.type' parameter
   };
 
   return (
@@ -75,7 +92,7 @@ const CheckoutSummary = ({ formatCurrency }) => {
 
         {/* Input markup dengan select dan fungsionalitas */}
         <HStack justify="space-between" fontSize="12px" mt={2}>
-          <Text>Markup Per Pax</Text>
+          <Text>Markup Adult</Text>
           <Flex align="center" gap={3}>
             <Select 
               value={userMarkup.type} 
@@ -104,6 +121,40 @@ const CheckoutSummary = ({ formatCurrency }) => {
             
             <Text minWidth="80px" textAlign="right">
               {formatCurrency(userMarkupAmount)}
+            </Text>
+          </Flex>
+        </HStack>
+
+        <HStack justify="space-between" fontSize="12px" mt={2}>
+          <Text>Markup Child</Text>
+          <Flex align="center" gap={3}>
+            <Select 
+              value={childMarkup.type} 
+              onChange={handleChildMarkupTypeChange}
+              size="sm" 
+              width="70px"
+              bg="whiteAlpha.200"
+              _hover={{ bg: "whiteAlpha.300" }}
+            >
+              <option value="percent">%</option>
+              <option value="fixed">IDR</option>
+            </Select>
+            
+            <Input
+              value={childMarkupInput}
+              onChange={handleChildMarkupValueChange}
+              placeholder="0"
+              size="sm"
+              width="100px"
+              textAlign="right"
+              bg="whiteAlpha.200"
+              _hover={{ bg: "whiteAlpha.300" }}
+              type="number"
+              min="0"
+            />
+            
+            <Text minWidth="80px" textAlign="right">
+              {formatCurrency(childMarkupAmount)}
             </Text>
           </Flex>
         </HStack>
