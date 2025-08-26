@@ -39,6 +39,8 @@ const InvoicePDF = forwardRef((props, ref) => {
     calculateHotelTotal,
     calculateVillaTotal,
     totalMarkup,
+    childMarkupAmount,
+    childTotal,
   } = useCheckoutContext();
   const { days: expenseDays, calculateGrandTotal, expenseChild } = useExpensesContext();
 
@@ -136,13 +138,13 @@ const InvoicePDF = forwardRef((props, ref) => {
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
 
   // Pisahkan harga adult/child sebelum markup
-  const adultBase = (adjustedGrandTotal - expenseChild - calculateKidTotals.tourKid - totalMarkup) / totalAdult;
-  const childBase = (expenseChild + calculateKidTotals.tourKid) / actualChild;
+  const adultBase = (adjustedGrandTotal - expenseChild - childTotal - totalMarkup) / totalAdult;
+  const childBase = (childTotal + expenseChild ) / actualChild;
 
 
   // Tambahkan markup per pax sesuai jumlah adult/child
   const totalAdultPrice = adultBase + userMarkupAmount ;
-  const totalChildPrice = childBase + userMarkupAmount ;
+  const totalChildPrice = childBase + childMarkupAmount ;
 
   return {
     totalAdult,
@@ -337,9 +339,9 @@ const InvoicePDF = forwardRef((props, ref) => {
                     if (item.adultPrice !== null || item.childPrice !== null) {
                       const adultTotal =
                         (item.adultPrice || 0) * (item.adultQuantity || 1);
-                      const childTotal =
+                      const childrenTotal =
                         (item.childPrice || 0) * (item.childQuantity || 1);
-                      total = adultTotal + childTotal;
+                      total = adultTotal + childrenTotal;
                     } else {
                       total = (item.price || 0) * (item.quantity || 1);
                     }

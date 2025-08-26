@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { usePackageContext } from './PackageContext';
+import { createContext, useContext, useState, useEffect } from "react";
+import { usePackageContext } from "./PackageContext";
 
 const CheckoutContext = createContext();
 
@@ -18,19 +18,24 @@ const CheckoutContextProvider = ({ children }) => {
   });
   const [childTotal, setChildTotal] = useState(0);
   const [dayTotals, setDayTotals] = useState([]);
-  const [detailedBreakdown, setDetailedBreakdown] = useState([]);  
+  const [detailedBreakdown, setDetailedBreakdown] = useState([]);
   const [userMarkup, setUserMarkup] = useState({
-    type: 'percent',
-    value: 0
+    type: "percent",
+    value: 0,
   });
-  
+  const [childMarkup, setChildMarkup] = useState({
+    type: "percent",
+    value: 0,
+  });
+
   const { selectedPackage } = usePackageContext();
 
   const calculateHotelTotal = (hotels = []) => {
     return hotels.reduce((sum, hotel) => {
       const roomCost = (hotel.jumlahKamar || 0) * (hotel.hargaPerKamar || 0);
-      const extrabedCost = hotel.useExtrabed ? 
-        (hotel.jumlahExtrabed || 0) * (hotel.hargaExtrabed || 0) : 0;
+      const extrabedCost = hotel.useExtrabed
+        ? (hotel.jumlahExtrabed || 0) * (hotel.hargaExtrabed || 0)
+        : 0;
       return sum + roomCost + extrabedCost;
     }, 0);
   };
@@ -38,8 +43,9 @@ const CheckoutContextProvider = ({ children }) => {
   const calculateVillaTotal = (villas = []) => {
     return villas.reduce((sum, villa) => {
       const roomCost = (villa.jumlahKamar || 0) * (villa.hargaPerKamar || 0);
-      const extrabedCost = villa.useExtrabed ? 
-        (villa.jumlahExtrabed || 0) * (villa.hargaExtrabed || 0) : 0;
+      const extrabedCost = villa.useExtrabed
+        ? (villa.jumlahExtrabed || 0) * (villa.hargaExtrabed || 0)
+        : 0;
       return sum + roomCost + extrabedCost;
     }, 0);
   };
@@ -54,11 +60,14 @@ const CheckoutContextProvider = ({ children }) => {
     const mobilTotal = (day.mobils || []).reduce((sum, mobil) => {
       return sum + (mobil.harga || 0);
     }, 0);
-    
-    const additionalTransportTotal = (day.transport_additionals || []).reduce((sum, item) => {
-      return sum + (item.harga || 0) * (item.jumlah || 1);
-    }, 0);
-    
+
+    const additionalTransportTotal = (day.transport_additionals || []).reduce(
+      (sum, item) => {
+        return sum + (item.harga || 0) * (item.jumlah || 1);
+      },
+      0
+    );
+
     return mobilTotal + additionalTransportTotal;
   };
 
@@ -71,13 +80,13 @@ const CheckoutContextProvider = ({ children }) => {
         const childPrice = item.hargaChild || 0;
         const adultCount = item.jumlahAdult || 0;
         const childCount = item.jumlahChild || 0;
-        
-        return sum + (adultPrice * adultCount) + (childPrice * childCount);
+
+        return sum + adultPrice * adultCount + childPrice * childCount;
       }
       if (item.harga && item.jumlah) {
-        return sum + (item.harga * item.jumlah);
+        return sum + item.harga * item.jumlah;
       }
-      
+
       return sum;
     }, 0);
   };
@@ -101,8 +110,8 @@ const CheckoutContextProvider = ({ children }) => {
 
   const calculateUserMarkup = (subtotal) => {
     if (!userMarkup.value || userMarkup.value <= 0) return 0;
-    
-    if (userMarkup.type === 'percent') {
+
+    if (userMarkup.type === "percent") {
       return (subtotal * userMarkup.value) / 100;
     } else {
       return userMarkup.value;
@@ -112,6 +121,21 @@ const CheckoutContextProvider = ({ children }) => {
   const updateUserMarkup = (type, value) => {
     const numericValue = parseFloat(value) || 0;
     setUserMarkup({ type, value: numericValue });
+  };
+
+  const calculateChildMarkup = (subtotalChild) => {
+    if (!childMarkup.value || childMarkup.value <= 0) return 0;
+
+    if (childMarkup.type === "percent") {
+      return (subtotalChild * childMarkup.value) / 100;
+    } else {
+      return childMarkup.value;
+    }
+  };
+
+  const updateChildMarkup = (type, value) => {
+    const numericValue = parseFloat(value) || 0;
+    setChildMarkup({ type, value: numericValue });
   };
 
   useEffect(() => {
@@ -141,13 +165,19 @@ const CheckoutContextProvider = ({ children }) => {
     selectedPackage.days.forEach((day, index) => {
       const dayHotelTotal = calculateHotelTotal(day.hotels);
       const dayVillaTotal = calculateVillaTotal(day.villas);
-      const dayAdditionalTotal = calculateAdditionalTotal(day.akomodasi_additionals);
+      const dayAdditionalTotal = calculateAdditionalTotal(
+        day.akomodasi_additionals
+      );
       const dayTransportTotal = calculateTransportTotal(day);
       const dayTourTotal = calculateTourTotal(day);
 
-      const daySubTotal = dayHotelTotal + dayVillaTotal + dayAdditionalTotal + 
-                         dayTransportTotal + dayTourTotal;
-      
+      const daySubTotal =
+        dayHotelTotal +
+        dayVillaTotal +
+        dayAdditionalTotal +
+        dayTransportTotal +
+        dayTourTotal;
+
       totalHotels += dayHotelTotal;
       totalVillas += dayVillaTotal;
       totalAdditionals += dayAdditionalTotal;
@@ -181,25 +211,29 @@ const CheckoutContextProvider = ({ children }) => {
     setDetailedBreakdown(calculatedDetailedBreakdown);
     const totalChild = calculateChildTotal(selectedPackage.days);
     setChildTotal(totalChild);
-  }, [selectedPackage, userMarkup]); 
+  }, [selectedPackage, userMarkup]);
 
-  const akomodasiTotal = breakdown.hotels + breakdown.villas + breakdown.additionals;
+  const akomodasiTotal =
+    breakdown.hotels + breakdown.villas + breakdown.additionals;
   const transportTotal = breakdown.transports;
   const tourTotal = breakdown.tours;
 
   const subtotalBeforeUserMarkup = akomodasiTotal + transportTotal + tourTotal;
-  const totalAdult = (selectedPackage?.totalPaxAdult && selectedPackage.totalPaxAdult > 0)
-    ? selectedPackage.totalPaxAdult
-    : 1;
-  const totalChildren = (selectedPackage?.totalPaxChildren && selectedPackage.totalPaxChildren > 0)
-    ? selectedPackage.totalPaxChildren
-    : 0;
-  const totalPax = totalAdult + totalChildren;
+  const totalAdult =
+    selectedPackage?.totalPaxAdult && selectedPackage.totalPaxAdult > 0
+      ? selectedPackage.totalPaxAdult
+      : 1;
+  const totalChildren =
+    selectedPackage?.totalPaxChildren && selectedPackage.totalPaxChildren > 0
+      ? selectedPackage.totalPaxChildren
+      : 0;
   const userMarkupAmount = calculateUserMarkup(subtotalBeforeUserMarkup);
-  const totalMarkup = userMarkupAmount * totalPax;
-  const grandTotal = subtotalBeforeUserMarkup + totalMarkup;
+  const totalMarkup = userMarkupAmount * totalAdult;
+  const childMarkupAmount = calculateChildMarkup(childTotal);
+  const totalMarkupChild = childMarkupAmount * totalChildren;
+  const grandTotal = subtotalBeforeUserMarkup + totalMarkup + totalMarkupChild;
 
-const value = {
+  const value = {
     breakdown,
     dayTotals,
     detailedBreakdown,
@@ -210,15 +244,19 @@ const value = {
     childTotal,
     userMarkup,
     userMarkupAmount,
+    childMarkup,
+    childMarkupAmount,
     totalMarkup,
+    totalMarkupChild,
     subtotalBeforeUserMarkup,
     updateUserMarkup,
+    updateChildMarkup,
     calculateHotelTotal,
     calculateVillaTotal,
     calculateAdditionalTotal,
     calculateTransportTotal,
     calculateTourTotal,
-    calculateChildTotal
+    calculateChildTotal,
   };
 
   return (
