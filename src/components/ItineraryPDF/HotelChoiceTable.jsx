@@ -34,10 +34,10 @@ const tableCellStyle = {
 };
 
 
-const HotelChoiceTable = ({ akomodasiDays, calculatedTotalChild, calculatedTotalPerPax }) => {
-  const { hotelItems, villaItems, formatCurrency } = useExpensesContext();
+const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
+  const { hotelItems, villaItems, formatCurrency, calculateGrandTotal, expenseChild } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
-  const { transportTotal, tourTotal, userMarkupAmount, totalChildCost } = useCheckoutContext();
+  const { transportTotal, tourTotal, userMarkupAmount, childTotal } = useCheckoutContext();
 
   const [parsedExpensesData, setParsedExpensesData] = useState({
     hotels: [],
@@ -175,6 +175,8 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalChild, calculatedTotal
 
   //   return adjustedGrandTotal / totalAdult;
   // }, [selectedPackage?.totalPaxAdult, grandTotal, calculateGrandTotal]);
+  
+  const calculateTotalChild = childTotal + expenseChild / selectedPackage?.totalPaxChildren;
 
   const calculateAlternativePrice = (hotelPrice) => {
     const totalAdult =
@@ -190,8 +192,8 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalChild, calculatedTotal
     }, 0) || 1;
 
     const totalHotelPrice = hotelPrice * accommodationDays;
-    // const totalExpensesFromContext = calculateGrandTotal();
-    const subtotalBeforeMarkup = totalHotelPrice + tourTotal + transportTotal - totalChildCost;
+    const totalExpensesFromContext = calculateGrandTotal();
+    const subtotalBeforeMarkup = totalHotelPrice + tourTotal + transportTotal + totalExpensesFromContext - childTotal - expenseChild;
     const alternativeTotal = subtotalBeforeMarkup + userMarkupAmount;
 
     return alternativeTotal / totalAdult;
@@ -378,7 +380,7 @@ return (
 
             {selectedPackage?.totalPaxChildren > 0 && (
               <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
-                {formatCurrency(calculatedTotalChild)}
+                {formatCurrency(calculateTotalChild)}
               </Td>
             )}
           </Tr>

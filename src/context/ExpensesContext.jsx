@@ -16,7 +16,7 @@ const ExpensesContextProvider = ({ children }) => {
             totals: [],
         },
     ]);
-
+    const [expenseChild, setExpenseChild] = React.useState(0);
     const [hotelItems, setHotelItems] = React.useState([]);
     const [villaItems, setVillaItems] = React.useState([]);
     const [accommodationMarkup, setAccommodationMarkup] = React.useState({ type: "percent", value: 0 });
@@ -245,6 +245,17 @@ const ExpensesContextProvider = ({ children }) => {
         }, 0);
     };
 
+    const calculateChildTotal = React.useCallback(() => {
+    return days.reduce((grand, day) => {
+        const daySum = (day?.totals || []).reduce((sum, item) => {
+        const childPrice = item.childPrice || 0;
+        const childQty   = selectedPackage?.totalPaxChildren || 0;
+        return sum + childPrice * childQty;
+        }, 0);
+        return grand + daySum;
+    }, 0);
+    }, [days]);
+
     const calculateGrandTotal = () => {
         return days.reduce((total, _, dayIndex) => {
             return total + calculateDayTotal(dayIndex);
@@ -275,6 +286,11 @@ const ExpensesContextProvider = ({ children }) => {
         }).format(amount);
     };
 
+    React.useEffect(() => {
+    const total = calculateChildTotal();
+    setExpenseChild(total);
+  }, [days, calculateChildTotal]);
+
     return (
         <ExpensesContext.Provider 
             value={{ 
@@ -290,6 +306,8 @@ const ExpensesContextProvider = ({ children }) => {
                 calculateDayTotal,
                 calculateGrandTotal,
                 formatCurrency,
+                expenseChild,
+                calculateChildTotal,
         
                 hotelItems,
                 setHotelItems,
