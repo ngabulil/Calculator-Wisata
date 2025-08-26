@@ -22,37 +22,52 @@ const tableHeaderStyle = {
   fontWeight: "bold",
   fontSize: "1rem",
   textAlign: "center",
-  padding: "2px 40px 12px 10px",
-  verticalAlign: "top",
+  padding: "8px 12px",
+  verticalAlign: "middle",
+  whiteSpace: "nowrap",
 };
 
 const tableCellStyle = {
-  padding: "2px 20px 12px 10px",
-  verticalAlign: "top",
+  padding: "8px 12px",
+  verticalAlign: "middle",
+  fontSize: "0.95rem",
+  lineHeight: "1.2",
 };
 
 const narrowColumnStyle = {
   ...tableCellStyle,
-  width: "60px",
+  width: "70px",
+  textAlign: "center",
+};
+
+const mediumColumnStyle = {
+  ...tableCellStyle,
+  width: "120px",
+  textAlign: "left",
 };
 
 const wideColumnStyle = {
   ...tableCellStyle,
-  minWidth: "200px",
+  minWidth: "180px",
+  maxWidth: "220px",
+  textAlign: "left",
+  wordWrap: "break-word",
+  overflow: "hidden",
 };
 
 const tableTotalStyle = {
   backgroundColor: yellow,
   fontWeight: "bold",
-  padding: "2px 40px 12px 10px",
-  verticalAlign: "top",
+  padding: "8px 12px",
+  verticalAlign: "middle",
+  fontSize: "0.95rem",
 };
 
 const tableGrandTotalStyle = {
   backgroundColor: orangeDark,
   color: "black",
   fontWeight: "bold",
-  fontSize: "1.2rem",
+  fontSize: "1.1rem",
 };
 
 const CostBreakDown = ({
@@ -96,61 +111,82 @@ const CostBreakDown = ({
   const transportPerAdult = totalAdult > 0 ? transportTotal / totalAdult : 0;
   const additionalPerAdult = totalAdult > 0 ? additionalTotal / totalAdult : 0;
 
+  // Check if any hotel has extrabed
+  const hasExtrabed = sortedHotelData.some(item => (item.extrabedQty || 0) > 0);
+
   return (
-    <VStack spacing={6} align="stretch">
+    <VStack spacing={3} align="stretch">
       {/* Hotel */}
       <Box>
         <Text fontWeight="bold" mb={1} fontSize="lg" color={orangeDark}>
           Akomodasi
         </Text>
-        <Divider mb={1} borderColor="white" />
-        <Table variant="simple" size="sm" border="1px solid #e0e0e0">
-          <Thead>
-            <Tr>
-              <Th style={{ ...tableHeaderStyle, width: "60px" }}>Day</Th>
-              <Th style={{ ...tableHeaderStyle, minWidth: "200px" }}>Name</Th>
-              <Th style={{ ...tableHeaderStyle, width: "60px" }}>Rooms</Th>
-              <Th style={{ ...tableHeaderStyle, width: "100px" }}>
-                Price/Room
-              </Th>
-              <Th style={{ ...tableHeaderStyle, width: "100px" }}>TOTAL</Th>
-            </Tr>
-          </Thead>
-          <Tbody color={"#222"}>
-            {sortedHotelData.map((item, index) => (
-              <Tr key={index}>
-                <Td style={narrowColumnStyle}>{item.day}</Td>
-                <Td style={wideColumnStyle}>{item.name}</Td>
-                <Td style={narrowColumnStyle}>{item.rooms}</Td>
-                <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
-                  {formatCurrency(item.pricePerNight)}
+        <Divider mb={2} borderColor="white" />
+        <Box overflowX="auto">
+          <Table variant="simple" size="sm" border="1px solid #e0e0e0" width="100%">
+            <Thead>
+              <Tr>
+                <Th style={{ ...tableHeaderStyle, width: "70px" }}>Day</Th>
+                <Th style={{ ...tableHeaderStyle, width: "180px" }}>Name</Th>
+                <Th style={{ ...tableHeaderStyle, width: "70px" }}>Rooms</Th>
+                <Th style={{ ...tableHeaderStyle, width: "120px" }}>
+                  Price/Room
+                </Th>
+                {hasExtrabed && (
+                  <Th style={{ ...tableHeaderStyle, width: "100px" }}>
+                    Extrabed
+                  </Th>
+                )}
+                <Th style={{ ...tableHeaderStyle, width: "120px" }}>TOTAL</Th>
+              </Tr>
+            </Thead>
+            <Tbody color={"#222"}>
+              {sortedHotelData.map((item, index) => (
+                <Tr key={index}>
+                  <Td style={narrowColumnStyle}>{item.day}</Td>
+                  <Td style={wideColumnStyle}>{item.name}</Td>
+                  <Td style={narrowColumnStyle}>{item.rooms}</Td>
+                  <Td style={mediumColumnStyle}>
+                    {formatCurrency(item.pricePerNight)}
+                  </Td>
+                  {hasExtrabed && (
+                    <Td style={mediumColumnStyle}>
+                      {(item.extrabedQty || 0) > 0 ? (
+                          <div style={{ fontSize: "0.9em" }}>
+                            {formatCurrency((item.extrabedQty || 0) * (item.extrabedPrice || 0))}
+                          </div>
+                                              ) : (
+                        "-"
+                      )}
+                    </Td>
+                  )}
+                  <Td style={mediumColumnStyle}>
+                    {formatCurrency(item.total)}
+                  </Td>
+                </Tr>
+              ))}
+              <Tr>
+                <Td colSpan={hasExtrabed ? 5 : 4} style={tableTotalStyle}>
+                  Total Hotel
                 </Td>
-                <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
-                  {formatCurrency(item.total)}
+                <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                  {formatCurrency(hotelTotal)}
                 </Td>
               </Tr>
-            ))}
-            <Tr>
-              <Td colSpan={4} style={tableTotalStyle}>
-                Total Hotel
-              </Td>
-              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
-                {formatCurrency(hotelTotal)}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td
-                colSpan={4}
-                style={{ ...tableTotalStyle, textAlign: "right" }}
-              >
-                Grand Total
-              </Td>
-              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
-                {formatCurrency(hotelPerAdult)}
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
+              <Tr>
+                <Td
+                  colSpan={hasExtrabed ? 5 : 4}
+                  style={{ ...tableTotalStyle, textAlign: "right" }}
+                >
+                  Grand Total
+                </Td>
+                <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                  {formatCurrency(hotelPerAdult)}
+                </Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Box>
       </Box>
 
       {/* Transport */}
@@ -158,147 +194,152 @@ const CostBreakDown = ({
         <Text fontWeight="bold" mb={1} fontSize="lg" color={orangeDark}>
           Transportasi
         </Text>
-        <Divider mb={1} borderColor="white" />
-        <Table variant="simple" size="sm" border="1px solid #e0e0e0">
-          <Thead>
-            <Tr>
-              <Th style={{ ...tableHeaderStyle, width: "60px" }}>Day</Th>
-              <Th style={{ ...tableHeaderStyle, minWidth: "200px" }}>
-                Description
-              </Th>
-              <Th style={{ ...tableHeaderStyle, width: "100px" }}>Price</Th>
-            </Tr>
-          </Thead>
-          <Tbody color={"#222"}>
-            {sortedTransportData.map((item, index) => (
-              <Tr key={index}>
-                <Td style={narrowColumnStyle}>{item.day}</Td>
-                <Td style={wideColumnStyle}>{item.description}</Td>
-                <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
-                  {formatCurrency(item.price)}
+        <Divider mb={2} borderColor="white" />
+        <Box overflowX="auto">
+          <Table variant="simple" size="sm" border="1px solid #e0e0e0" width="100%">
+            <Thead>
+              <Tr>
+                <Th style={{ ...tableHeaderStyle, width: "70px" }}>Day</Th>
+                <Th style={{ ...tableHeaderStyle, width: "300px" }}>
+                  Description
+                </Th>
+                <Th style={{ ...tableHeaderStyle, width: "120px" }}>Price</Th>
+              </Tr>
+            </Thead>
+            <Tbody color={"#222"}>
+              {sortedTransportData.map((item, index) => (
+                <Tr key={index}>
+                  <Td style={narrowColumnStyle}>{item.day}</Td>
+                  <Td style={{ ...wideColumnStyle, width: "300px" }}>{item.description}</Td>
+                  <Td style={mediumColumnStyle}>
+                    {formatCurrency(item.price)}
+                  </Td>
+                </Tr>
+              ))}
+              <Tr>
+                <Td colSpan={2} style={tableTotalStyle}>
+                  Total Transport
+                </Td>
+                <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                  {formatCurrency(transportTotal)}
                 </Td>
               </Tr>
-            ))}
-            <Tr>
-              <Td colSpan={2} style={tableTotalStyle}>
-                Total Transport
-              </Td>
-              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
-                {formatCurrency(transportTotal)}
-              </Td>
-            </Tr>
-            <Tr>
-              <Td
-                colSpan={2}
-                style={{ ...tableTotalStyle, textAlign: "right" }}
-              >
-                Grand Total
-              </Td>
-              <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
-                {formatCurrency(transportPerAdult)}
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
+              <Tr>
+                <Td
+                  colSpan={2}
+                  style={{ ...tableTotalStyle, textAlign: "right" }}
+                >
+                  Grand Total
+                </Td>
+                <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                  {formatCurrency(transportPerAdult)}
+                </Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </Box>
       </Box>
 
       {/* Tambahan */}
       <Box>
-        <Text fontWeight="bold" mb={1} fontSize="lg" color={orangeDark}>
+        <Text fontWeight="bold" mb={2} fontSize="lg" color={orangeDark}>
           Tambahan (Akomodasi & Transport)
         </Text>
-        <Divider mb={1} borderColor="white" />
-        <Table variant="simple" size="sm" border="1px solid #e0e0e0">
-          {sortedAdditionalData.length > 0 && (
-            <Thead>
-              <Tr>
-                <Th style={{ ...tableHeaderStyle, width: "60px" }}>Day</Th>
-                <Th style={{ ...tableHeaderStyle, minWidth: "150px" }}>Item</Th>
-                <Th style={{ ...tableHeaderStyle, width: "60px" }}>Qty</Th>
-                <Th style={{ ...tableHeaderStyle, width: "100px" }}>Price</Th>
-                <Th style={{ ...tableHeaderStyle, width: "100px" }}>Total</Th>
-              </Tr>
-            </Thead>
-          )}
-          <Tbody color="#222">
-            {sortedAdditionalData.length > 0 ? (
-              <>
-                {sortedAdditionalData.map((item, index) => (
-                  <Tr key={index}>
-                    <Td style={narrowColumnStyle}>{item.day}</Td>
-                    <Td style={wideColumnStyle}>{item.name}</Td>
-                    <Td style={narrowColumnStyle}>{item.quantity}</Td>
-                    <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
-                      {formatCurrency(item.price)}
+        <Divider mb={2} borderColor="white" />
+        <Box overflowX="auto" mb={5}>
+          <Table variant="simple" size="sm" border="1px solid #e0e0e0" width="100%">
+            {sortedAdditionalData.length > 0 && (
+              <Thead>
+                <Tr>
+                  <Th style={{ ...tableHeaderStyle, width: "70px" }}>Day</Th>
+                  <Th style={{ ...tableHeaderStyle, width: "180px" }}>Item</Th>
+                  <Th style={{ ...tableHeaderStyle, width: "70px" }}>Qty</Th>
+                  <Th style={{ ...tableHeaderStyle, width: "120px" }}>Price</Th>
+                  <Th style={{ ...tableHeaderStyle, width: "120px" }}>Total</Th>
+                </Tr>
+              </Thead>
+            )}
+            <Tbody color="#222">
+              {sortedAdditionalData.length > 0 ? (
+                <>
+                  {sortedAdditionalData.map((item, index) => (
+                    <Tr key={index}>
+                      <Td style={narrowColumnStyle}>{item.day}</Td>
+                      <Td style={wideColumnStyle}>{item.name}</Td>
+                      <Td style={narrowColumnStyle}>{item.quantity}</Td>
+                      <Td style={mediumColumnStyle}>
+                        {formatCurrency(item.price)}
+                      </Td>
+                      <Td style={mediumColumnStyle}>
+                        {formatCurrency(item.total)}
+                      </Td>
+                    </Tr>
+                  ))}
+                  <Tr>
+                    <Td colSpan={4} style={tableTotalStyle}>
+                      Total Tambahan
                     </Td>
-                    <Td style={{ ...narrowColumnStyle, textAlign: "left" }}>
-                      {formatCurrency(item.total)}
+                    <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                      {formatCurrency(additionalTotal)}
                     </Td>
                   </Tr>
-                ))}
-                <Tr>
-                  <Td colSpan={4} style={tableTotalStyle}>
-                    Total Tambahan
-                  </Td>
-                  <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
-                    {formatCurrency(additionalTotal)}
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td
-                    colSpan={4}
-                    style={{ ...tableTotalStyle, textAlign: "right" }}
-                  >
-                    Grand Total
-                  </Td>
-                  <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
-                    {formatCurrency(additionalPerAdult)}
-                  </Td>
-                </Tr>
-              </>
-            ) : (
-              <>
-                <Tr>
-                  <Td
-                    colSpan={5}
-                    style={{
-                      ...tableCellStyle,
-                      textAlign: "center",
-                      color: "gray.500",
-                    }}
-                  >
-                    Tidak ada tambahan
-                  </Td>
-                </Tr>
-              </>
-            )}
-          </Tbody>
-        </Table>
+                  <Tr>
+                    <Td
+                      colSpan={4}
+                      style={{ ...tableTotalStyle, textAlign: "right" }}
+                    >
+                      Grand Total
+                    </Td>
+                    <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
+                      {formatCurrency(additionalPerAdult)}
+                    </Td>
+                  </Tr>
+                </>
+              ) : (
+                <>
+                  <Tr>
+                    <Td
+                      colSpan={5}
+                      style={{
+                        ...tableCellStyle,
+                        textAlign: "center",
+                        color: "gray.500",
+                        padding: "20px",
+                      }}
+                    >
+                      Tidak ada tambahan
+                    </Td>
+                  </Tr>
+                </>
+              )}
+            </Tbody>
+          </Table>
+        </Box>
       </Box>
 
       {/* Grand Total */}
       <Box p={4} borderRadius="md" style={tableGrandTotalStyle}>
-        <VStack spacing={2}>
+        <VStack spacing={3}>
           <HStack justify="space-between" w="100%">
-            <Text>TOTAL</Text>
-            <Text>{formatCurrency(grandTotal)}</Text>
-          </HStack>
-          <HStack justify="space-between" w="100%" fontSize="lg">
-            <Text>Markup</Text>
-            <Text>{formatCurrency(markup)}</Text>
+            <Text fontSize="lg">TOTAL</Text>
+            <Text fontSize="lg">{formatCurrency(grandTotal)}</Text>
           </HStack>
           <HStack justify="space-between" w="100%">
-            <Text fontWeight="bold">Price Pax Adult</Text>
-            <Text>{formatCurrency(selling)}</Text>
+            <Text fontSize="lg">Markup</Text>
+            <Text fontSize="lg">{formatCurrency(markup)}</Text>
           </HStack>
-         {totalChild > 0 && (
+          <HStack justify="space-between" w="100%">
+            <Text fontWeight="bold" fontSize="lg">Price Pax Adult</Text>
+            <Text fontWeight="bold" fontSize="lg">{formatCurrency(selling)}</Text>
+          </HStack>
+          {totalChild > 0 && (
             <HStack justify="space-between" w="100%">
-              <Text>Price Pax Child</Text>
-              <Text>{formatCurrency(sellingChild)}</Text>
+              <Text fontSize="lg">Price Pax Child</Text>
+              <Text fontSize="lg">{formatCurrency(sellingChild)}</Text>
             </HStack>
           )}
           <HStack justify="space-between" w="100%">
-            <Text>Exchange Rate</Text>
+            <Text fontSize="lg">Exchange Rate</Text>
             {isEditingExchangeRate ? (
               <Input
                 type="number"
@@ -308,15 +349,16 @@ const CostBreakDown = ({
                   onExchangeRateChange(value === "" ? "" : Number(value));
                 }}
                 style={{
-                  width: "100px",
-                  padding: "2px 6px",
+                  width: "120px",
+                  padding: "4px 8px",
                   borderRadius: "4px",
                   fontWeight: "bold",
+                  fontSize: "1rem",
                   textAlign: "right",
                 }}
               />
             ) : (
-              <Text fontWeight="bold">{formatCurrency(exchangeRate)}</Text>
+              <Text fontWeight="bold" fontSize="lg">{formatCurrency(exchangeRate)}</Text>
             )}
           </HStack>
         </VStack>
