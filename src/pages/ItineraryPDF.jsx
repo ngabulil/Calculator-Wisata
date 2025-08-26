@@ -16,6 +16,7 @@ import { useExpensesContext } from "../context/ExpensesContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
 import useItineraryEditor from "../hooks/useItineraryEditor";
+import { useCheckoutContext } from "../context/CheckoutContext";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -29,7 +30,6 @@ const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
   const { days: expenseDays } = useExpensesContext();
   
-  // Consolidated state untuk mengurangi re-render - sama seperti InvoicePDF
   const [itineraryState, setItineraryState] = useState({
     mergedDays: [],
     itineraryData: [],
@@ -40,28 +40,35 @@ const ItineraryPDF = forwardRef((props, ref) => {
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const toast = useToast();
   const componentRef = useRef();
+  const {grandTotal, totalMarkup, userMarkupAmount, totalChildCost} = useCheckoutContext();
 
-  // Memoize package ID untuk reorder hook
   const packageId = useMemo(() => 
     selectedPackage?.id || selectedPackage?._id
   , [selectedPackage?.id, selectedPackage?._id]);
 
-  // Calculate total adults and children - sama seperti InvoicePDF
-  const calculatedValues = useMemo(() => {
-    const totalAdult = selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
-      ? parseInt(selectedPackage.totalPaxAdult)
-      : 1;
-    const actualChild = selectedPackage?.totalPaxChildren && parseInt(selectedPackage.totalPaxChildren) > 0
-      ? parseInt(selectedPackage.totalPaxChildren)
-      : 0;
+const calculatedValues = useMemo(() => {
+  const totalAdult = selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
+    ? parseInt(selectedPackage.totalPaxAdult)
+    : 1;
+  const actualChild = selectedPackage?.totalPaxChildren && parseInt(selectedPackage.totalPaxChildren) > 0
+    ? parseInt(selectedPackage.totalPaxChildren)
+    : 0;
 
-    return {
-      totalAdult,
-      actualChild,
-    };
-  }, [selectedPackage?.totalPaxAdult, selectedPackage?.totalPaxChildren]);
+  return {
+    totalAdult,
+    actualChild,
+  };
+}, [selectedPackage?.totalPaxAdult, selectedPackage?.totalPaxChildren]);
 
-  // Initialize reorder hook dengan package ID untuk menyimpan urutan
+const calculatedTotalPerPax = useMemo(() => {
+  const adjustedGrandTotal = grandTotal - totalChildCost - totalMarkup;
+  return (adjustedGrandTotal / calculatedValues.totalAdult) + userMarkupAmount;
+}, [grandTotal, totalChildCost, calculatedValues.totalAdult]);
+
+const totalChild = useMemo(() => {
+  return (totalChildCost / calculatedValues.actualChild) + userMarkupAmount;
+}, [totalChildCost, calculatedValues.actualChild]);
+
   const {
     days: reorderedDays,
     originalDays,
@@ -88,7 +95,6 @@ const ItineraryPDF = forwardRef((props, ref) => {
     }
   }));
 
-  // Process days data - PERBAIKAN: Gunakan logika yang sama seperti InvoicePDF
   useEffect(() => {
     let isMounted = true;
 
@@ -105,11 +111,9 @@ const ItineraryPDF = forwardRef((props, ref) => {
         
         if (!isMounted) return;
 
-        // PERBAIKAN: Gunakan processing yang sama seperti InvoicePDF
         const itinerary = [];
 
         merged.forEach((day, dayIndex) => {
-          // Helper function untuk process activities - sama seperti InvoicePDF
           const processActivities = (items, type) => {
             return items?.map((item) => {
               const adultQty = parseInt(item.jumlahadult || item.jumlahAdult) || 0;
@@ -165,7 +169,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
                   }
                   return total > 0 ? formatCurrency(total) : "Rp 0";
                 })(),
-                kidExpense: "-", // Expense items biasanya tidak memiliki kid expense terpisah
+                kidExpense: "-",
                 originalData: item,
               };
             }) || [];
@@ -178,12 +182,8 @@ const ItineraryPDF = forwardRef((props, ref) => {
             ...processActivities(day.activities, "Activity")
           ])
         ];
-
-          // Get expense items dari context
           const expenseDay = expenseDays[dayIndex];
           const expenseItems = processExpenseItems(expenseDay?.totals || []);
-
-          // PERBAIKAN: Gabungkan activities dan expense items menjadi unified items
           const unifiedItems = [...activities, ...expenseItems];
 
           itinerary.push({
@@ -191,22 +191,18 @@ const ItineraryPDF = forwardRef((props, ref) => {
             title: day.name || `Day ${dayIndex + 1}`,
             description: day.description_day || day.day_description || "",
             date: day.date,
-            // PERBAIKAN: Tambahkan unified items array
             items: unifiedItems,
-            // Keep backward compatibility
             activities: activities,
             expenseItems: expenseItems,
           });
         });
 
-        // Update state sekaligus
         setItineraryState({
           mergedDays: merged,
           itineraryData: itinerary,
           isDataProcessed: true,
         });
 
-        // Update reorder hook with new data
         updateDays(itinerary);
 
       } catch (err) {
@@ -228,7 +224,6 @@ const ItineraryPDF = forwardRef((props, ref) => {
     };
   }, [selectedPackage?.days, expenseDays, updateDays]);
 
-  // Memoized handlers untuk inclusion/exclusion
   const handleSaveInclusion = useCallback(() => {
     toast({
       title: "Data Tersimpan",
@@ -454,7 +449,12 @@ const ItineraryPDF = forwardRef((props, ref) => {
 
         <Divider mb={6} borderColor="#FFA726" />
 
-        <HotelChoiceTable akomodasiDays={itineraryState.mergedDays} />
+        <HotelChoiceTable 
+          akomodasiDays={itineraryState.mergedDays}
+          calculatedTotalChild={totalChild}
+          calculatedTotalPerPax={calculatedTotalPerPax}
+          totalChildCost={totalChildCost}  />
+          
 
         <Divider my={6} borderColor="#FFA726" />
 

@@ -18,6 +18,9 @@ const CheckoutContextProvider = ({ children }) => {
   });
   const [dayTotals, setDayTotals] = useState([]);
   const [detailedBreakdown, setDetailedBreakdown] = useState([]);
+  const [totalChildCost, setTotalChildCost] = useState(0);
+  const [expensesKid, setExpensesKid] = useState(0);
+  const [tourKid, setTourKid] = useState(0);
   
   const [userMarkup, setUserMarkup] = useState({
     type: 'percent',
@@ -91,6 +94,12 @@ const CheckoutContextProvider = ({ children }) => {
       return userMarkup.value;
     }
   };
+
+  const updateChildCosts = (expensesKidValue, tourKidValue) => {
+    setExpensesKid(expensesKidValue);
+    setTourKid(tourKidValue);
+    setTotalChildCost(expensesKidValue + tourKidValue);
+  }
 
   const updateUserMarkup = (type, value) => {
     const numericValue = parseFloat(value) || 0;
@@ -171,12 +180,15 @@ const CheckoutContextProvider = ({ children }) => {
   const totalAdult = (selectedPackage?.totalPaxAdult && selectedPackage.totalPaxAdult > 0)
     ? selectedPackage.totalPaxAdult
     : 1;
-
+  const totalChildren = (selectedPackage?.totalPaxChildren && selectedPackage.totalPaxChildren > 0)
+    ? selectedPackage.totalPaxChildren
+    : 0;
+  const totalPax = totalAdult + totalChildren;
   const userMarkupAmount = calculateUserMarkup(subtotalBeforeUserMarkup);
-  const totalMarkup = userMarkupAmount * totalAdult;
+  const totalMarkup = userMarkupAmount * totalPax;
   const grandTotal = subtotalBeforeUserMarkup + totalMarkup;
 
-  const value = {
+const value = {
     breakdown,
     dayTotals,
     detailedBreakdown,
@@ -184,11 +196,15 @@ const CheckoutContextProvider = ({ children }) => {
     akomodasiTotal,
     transportTotal,
     tourTotal,
+    totalChildCost,
+    expensesKid,
+    tourKid,
     userMarkup,
     userMarkupAmount,
     totalMarkup,
     subtotalBeforeUserMarkup,
     updateUserMarkup,
+    updateChildCosts,
     calculateHotelTotal,
     calculateVillaTotal,
     calculateAdditionalTotal,
