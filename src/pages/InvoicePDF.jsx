@@ -35,10 +35,11 @@ const InvoicePDF = forwardRef((props, ref) => {
     transportTotal,
     tourTotal,
     grandTotal,
-    breakdown,
+    userMarkupAmount,
     calculateHotelTotal,
     calculateVillaTotal,
-    totalMarkup
+    totalMarkup,
+    updateChildCosts,
   } = useCheckoutContext();
   const { days: expenseDays, calculateGrandTotal } = useExpensesContext();
 
@@ -95,39 +96,75 @@ const InvoicePDF = forwardRef((props, ref) => {
       await downloadPdf(componentRef, filename);
     },
   }));
+  
+  const calculateKidTotals = useMemo(() => {
+  let expensesKid = 0;
+  let tourKid = 0;
+
+  // Ambil dari context expenses
+  expenseDays.forEach(day => {
+    day?.totals?.forEach(item => {
+      if (item.childPrice) {
+        expensesKid += (item.childPrice || 0) * (item.childQuantity || 1);
+      }
+    });
+  });
+
+  // Ambil dari itineraryData (destinations, restaurants, activities)
+  invoiceData.itineraryData.forEach(day => {
+    day.activities?.forEach(act => {
+      tourKid += (act.childPrice || 0) * (act.childQty || 0);
+    });
+  });
+
+  return { expensesKid, tourKid };
+}, [expenseDays, invoiceData.itineraryData]);
+useEffect(() => {
+  updateChildCosts(calculateKidTotals.expensesKid, calculateKidTotals.tourKid);
+}, [calculateKidTotals.expensesKid, calculateKidTotals.tourKid, updateChildCosts]);
+
 
   // Memoize calculations untuk menghindari perhitungan berulang
   const calculatedValues = useMemo(() => {
-    const totalAdult =
-      selectedPackage?.totalPaxAdult &&
-      parseInt(selectedPackage.totalPaxAdult) > 0
-        ? parseInt(selectedPackage.totalPaxAdult)
-        : 0;
-    const actualChild =
-      selectedPackage?.totalPaxChildren &&
-      parseInt(selectedPackage.totalPaxChildren) > 0
-        ? parseInt(selectedPackage.totalPaxChildren)
-        : 0;
-    const perAdult = totalAdult > 0 ? breakdown.markup / totalAdult : 0;
-    const totalExpensesFromContext = calculateGrandTotal();
-    const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
-    const selling = adjustedGrandTotal / totalAdult;
+  const totalAdult =
+    selectedPackage?.totalPaxAdult &&
+    parseInt(selectedPackage.totalPaxAdult) > 0
+      ? parseInt(selectedPackage.totalPaxAdult)
+      : 0;
+  const actualChild =
+    selectedPackage?.totalPaxChildren &&
+    parseInt(selectedPackage.totalPaxChildren) > 0
+      ? parseInt(selectedPackage.totalPaxChildren)
+      : 0;
 
-    return {
-      totalAdult,
-      actualChild,
-      perAdult,
-      totalExpensesFromContext,
-      adjustedGrandTotal,
-      selling,
-    };
-  }, [
-    selectedPackage?.totalPaxAdult,
-    selectedPackage?.totalPaxChildren,
-    breakdown.markup,
-    grandTotal,
-    calculateGrandTotal,
-  ]);
+  const totalExpensesFromContext = calculateGrandTotal();
+  const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
+
+  // Pisahkan harga adult/child sebelum markup
+  const adultBase = (adjustedGrandTotal - calculateKidTotals.expensesKid - calculateKidTotals.tourKid - totalMarkup) / totalAdult;
+  const childBase = (calculateKidTotals.expensesKid + calculateKidTotals.tourKid) / actualChild;
+
+  // Tambahkan markup per pax sesuai jumlah adult/child
+  const totalAdultPrice = adultBase + userMarkupAmount ;
+  const totalChildPrice = childBase + userMarkupAmount ;
+
+  return {
+    totalAdult,
+    actualChild,
+    totalExpensesFromContext,
+    adjustedGrandTotal,
+    totalAdultPrice,
+    totalChildPrice,
+  };
+}, [
+  selectedPackage?.totalPaxAdult,
+  selectedPackage?.totalPaxChildren,
+  totalMarkup,
+  grandTotal,
+  calculateGrandTotal,
+  calculateKidTotals,
+]);
+
 
   // Separate adminName state
   const [adminName, setAdminName] = useState("");
@@ -615,8 +652,8 @@ const InvoicePDF = forwardRef((props, ref) => {
           grandTotal={calculatedValues.adjustedGrandTotal}
           originalGrandTotal={grandTotal}
           totalExpenses={calculatedValues.totalExpensesFromContext}
-          perPax={calculatedValues.perAdult}
-          selling={calculatedValues.selling}
+  selling={calculatedValues.totalAdultPrice}
+  sellingChild={calculatedValues.totalChildPrice}
           formatCurrency={formatCurrency}
           totalAdult={calculatedValues.totalAdult}
           totalChild={calculatedValues.actualChild}

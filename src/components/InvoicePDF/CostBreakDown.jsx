@@ -64,8 +64,10 @@ const CostBreakDown = ({
   formatCurrency,
   markup,
   totalAdult = 1,
+  totalChild = 0,
   exchangeRate,
   isEditingExchangeRate = false,
+  sellingChild,
   onExchangeRateChange = () => {},
 }) => {
   const sortByDay = (data) => {
@@ -76,12 +78,10 @@ const CostBreakDown = ({
     });
   };
 
-  // Sort the data before rendering
   const sortedHotelData = sortByDay(hotelData);
   const sortedTransportData = sortByDay(transportData);
   const sortedAdditionalData = sortByDay(additionalData);
 
-  // Calculate totals for each category
   const hotelTotal = sortedHotelData.reduce((sum, i) => sum + i.total, 0);
   const transportTotal = sortedTransportData.reduce(
     (sum, i) => sum + i.price,
@@ -92,7 +92,6 @@ const CostBreakDown = ({
     0
   );
 
-  // Calculate per adult amounts (only use totalAdult for calculations)
   const hotelPerAdult = totalAdult > 0 ? hotelTotal / totalAdult : 0;
   const transportPerAdult = totalAdult > 0 ? transportTotal / totalAdult : 0;
   const additionalPerAdult = totalAdult > 0 ? additionalTotal / totalAdult : 0;
@@ -289,9 +288,15 @@ const CostBreakDown = ({
             <Text>{formatCurrency(markup)}</Text>
           </HStack>
           <HStack justify="space-between" w="100%">
-            <Text fontWeight="bold">Grand Total</Text>
+            <Text fontWeight="bold">Price Pax Adult</Text>
             <Text>{formatCurrency(selling)}</Text>
           </HStack>
+         {totalChild > 0 && (
+            <HStack justify="space-between" w="100%">
+              <Text>Price Pax Child</Text>
+              <Text>{formatCurrency(sellingChild)}</Text>
+            </HStack>
+          )}
           <HStack justify="space-between" w="100%">
             <Text>Exchange Rate</Text>
             {isEditingExchangeRate ? (

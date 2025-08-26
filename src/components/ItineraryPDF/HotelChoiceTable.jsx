@@ -23,9 +23,9 @@ const tableHeaderStyle = {
   backgroundColor: orange,
   color: "#222",
   fontWeight: "bold",
-  fontSize: "1rem",
+  fontSize: "15px",
   textAlign: "center",
-  padding: "2px 40px 12px 40px",
+  padding: "2px 20px 12px 20px",
 };
 
 const tableCellStyle = {
@@ -34,10 +34,10 @@ const tableCellStyle = {
 };
 
 
-const HotelChoiceTable = ({ akomodasiDays }) => {
-  const { hotelItems, villaItems, calculateGrandTotal, formatCurrency } = useExpensesContext();
+const HotelChoiceTable = ({ akomodasiDays, calculatedTotalChild, calculatedTotalPerPax }) => {
+  const { hotelItems, villaItems, formatCurrency } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
-  const { transportTotal, tourTotal, grandTotal, userMarkup } = useCheckoutContext();
+  const { transportTotal, tourTotal, userMarkupAmount, totalChildCost } = useCheckoutContext();
 
   const [parsedExpensesData, setParsedExpensesData] = useState({
     hotels: [],
@@ -152,29 +152,29 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     };
   }, [hotelItems, villaItems]);
 
- const calculateUserMarkupAmount = (subtotal) => {
-    if (!userMarkup.value || userMarkup.value <= 0) return 0;
+//  const calculateUserMarkupAmount = (subtotal) => {
+//     if (!userMarkup.value || userMarkup.value <= 0) return 0;
     
-    if (userMarkup.type === 'percent') {
-      return (subtotal * userMarkup.value) / 100;
-    } else {
-      return userMarkup.value;
-    }
-  };
+//     if (userMarkup.type === 'percent') {
+//       return (subtotal * userMarkup.value) / 100;
+//     } else {
+//       return userMarkup.value;
+//     }
+//   };
 
   // Calculate total price per pax - menggunakan grandTotal dari CheckoutContext
-  const calculatedTotalPerPax = useMemo(() => {
-    const totalAdult =
-      selectedPackage?.totalPaxAdult &&
-      parseInt(selectedPackage.totalPaxAdult) > 0
-        ? parseInt(selectedPackage.totalPaxAdult)
-        : 1; 
+  // const calculatedTotalPerPax = useMemo(() => {
+  //   const totalAdult =
+  //     selectedPackage?.totalPaxAdult &&
+  //     parseInt(selectedPackage.totalPaxAdult) > 0
+  //       ? parseInt(selectedPackage.totalPaxAdult)
+  //       : 1; 
 
-    const totalExpensesFromContext = calculateGrandTotal();
-    const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
+  //   const totalExpensesFromContext = calculateGrandTotal();
+  //   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
 
-    return adjustedGrandTotal / totalAdult;
-  }, [selectedPackage?.totalPaxAdult, grandTotal, calculateGrandTotal]);
+  //   return adjustedGrandTotal / totalAdult;
+  // }, [selectedPackage?.totalPaxAdult, grandTotal, calculateGrandTotal]);
 
   const calculateAlternativePrice = (hotelPrice) => {
     const totalAdult =
@@ -190,10 +190,9 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     }, 0) || 1;
 
     const totalHotelPrice = hotelPrice * accommodationDays;
-    const totalExpensesFromContext = calculateGrandTotal();
-    const subtotalBeforeMarkup = totalHotelPrice + tourTotal + transportTotal + totalExpensesFromContext;
-    const markupAmount = calculateUserMarkupAmount(subtotalBeforeMarkup);
-    const alternativeTotal = subtotalBeforeMarkup + (markupAmount * totalAdult);
+    // const totalExpensesFromContext = calculateGrandTotal();
+    const subtotalBeforeMarkup = totalHotelPrice + tourTotal + transportTotal - totalChildCost;
+    const alternativeTotal = subtotalBeforeMarkup + userMarkupAmount;
 
     return alternativeTotal / totalAdult;
   };
@@ -251,7 +250,6 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         }
       });
 
-      // If no accommodation found in days array, show package name
       if (!hasAccommodation && selectedPackage?.name) {
         packageAccommodations.push({
           no: 1,
@@ -264,7 +262,6 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
       }
     }
 
-    // Process expenses accommodations (parsed data)
     const expensesAccommodations = [
       ...parsedExpensesData.hotels.map((hotel, index) => ({
         no: index + 2,
@@ -282,7 +279,7 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
         price: villa.price,
         roomType: String(villa.roomType),
       })),
-    ].slice(0, 5); // max 5
+    ].slice(0, 5);
 
     return [
       ...(packageAccommodations.slice(0, 1) || []),
@@ -290,12 +287,8 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     ];
   }, [akomodasiDays, parsedExpensesData, selectedPackage]);
 
-  // Check if there are any real items to display (not just empty rows)
   const hasItems = useMemo(() => {
-    // Check if allAccommodations has any real data (not just empty placeholders)
     const hasRealAccommodations = allAccommodations.length > 0;
-
-    // Check if there are any non-empty package accommodations
     const hasPackageAccommodations =
       Array.isArray(akomodasiDays) &&
       akomodasiDays.some(
@@ -332,54 +325,69 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     return null;
   }
 
-  return (
-    <Box mb={8}>
-      <Table variant="simple" size="sm" border="1px solid #ddd">
-        <Thead>
-          <Tr>
-            <Th style={tableHeaderStyle} border="1px solid #ddd" width="60px">
-              NO
+return (
+  <Box mb={8}>
+    <Table variant="simple" size="sm" border="1px solid #ddd">
+      <Thead>
+        <Tr>
+          <Th style={tableHeaderStyle} border="1px solid #ddd" width="2%">
+            NO
+          </Th>
+          <Th style={tableHeaderStyle} border="1px solid #ddd" width="55%">
+            <Text>PACKAGES CHOICE</Text>
+            <Text fontSize="xs" color="gray.600">
+              (ACCOMODATION)
+            </Text>  
+          </Th>
+          <Th style={tableHeaderStyle} border="1px solid #ddd" width="20%">
+            PRICE PER PAX ({selectedPackage?.totalPaxAdult || 1})
+          </Th>
+
+          {/* Tampilkan kolom Child hanya jika totalPaxChildren > 0 */}
+          {selectedPackage?.totalPaxChildren > 0 && (
+            <Th style={tableHeaderStyle} border="1px solid #ddd" width="20%">
+              PRICE CHILD ({selectedPackage?.totalPaxChildren})
             </Th>
-            <Th style={tableHeaderStyle} border="1px solid #ddd">
-              <Text>PACKAGES CHOICE</Text>
-              <Text fontSize="xs" color="gray.600">
-                (ACCOMODATION)
-              </Text>  
-            </Th>
-            <Th style={tableHeaderStyle} border="1px solid #ddd" width="200px">
-              PRICE PER PAX({selectedPackage?.totalPaxAdult || 1})
-            </Th>
+          )}
+        </Tr>
+      </Thead>
+
+      <Tbody color={"#222"}>
+        {allAccommodations.map((item, index) => (
+          <Tr key={`accommodation-${index}`} _hover={{ background: gray }}>
+            <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
+              {item.no || index + 1}
+            </Td>
+            <Td style={tableCellStyle}>
+              <VStack align="flex-start" spacing={1}>
+                <Text fontWeight="bold">
+                  {item.name.toUpperCase()}
+                  {item.stars ? ` (${item.stars}*)` : ""}
+                </Text>
+                <Text fontSize="sm" color="gray.600">
+                  {item.type}
+                  {item.roomType ? ` - ${item.roomType}` : ""}
+                </Text>
+              </VStack>
+            </Td>
+            <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
+              {index === 0
+                ? formatCurrency(calculatedTotalPerPax)
+                : formatCurrency(calculateAlternativePrice(item.price))}
+            </Td>
+
+            {selectedPackage?.totalPaxChildren > 0 && (
+              <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
+                {formatCurrency(calculatedTotalChild)}
+              </Td>
+            )}
           </Tr>
-        </Thead>
-        <Tbody color={"#222"}>
-          {allAccommodations.map((item, index) => (
-            <Tr key={`accommodation-${index}`} _hover={{ background: gray }}>
-              <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
-                {item.no || index + 1}
-              </Td>
-              <Td style={tableCellStyle}>
-                <VStack align="flex-start" spacing={1}>
-                  <Text fontWeight="bold">
-                    {item.name.toUpperCase()}
-                    {item.stars ? ` (${item.stars}*)` : ""}
-                  </Text>
-                  <Text fontSize="sm" color="gray.600">
-                    {item.type}
-                    {item.roomType ? ` - ${item.roomType}` : ""}
-                  </Text>
-                </VStack>
-              </Td>
-              <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
-                {index === 0
-                  ? formatCurrency(calculatedTotalPerPax)
-                  : formatCurrency(calculateAlternativePrice(item.price))}
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </Box>
-  );
+        ))}
+      </Tbody>
+    </Table>
+  </Box>
+);
+
 };
 
 export default HotelChoiceTable;
