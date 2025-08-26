@@ -39,9 +39,8 @@ const InvoicePDF = forwardRef((props, ref) => {
     calculateHotelTotal,
     calculateVillaTotal,
     totalMarkup,
-    updateChildCosts,
   } = useCheckoutContext();
-  const { days: expenseDays, calculateGrandTotal } = useExpensesContext();
+  const { days: expenseDays, calculateGrandTotal, expenseChild } = useExpensesContext();
 
   // Consolidated state untuk mengurangi re-render
   const [invoiceData, setInvoiceData] = useState({
@@ -119,10 +118,6 @@ const InvoicePDF = forwardRef((props, ref) => {
 
   return { expensesKid, tourKid };
 }, [expenseDays, invoiceData.itineraryData]);
-useEffect(() => {
-  updateChildCosts(calculateKidTotals.expensesKid, calculateKidTotals.tourKid);
-}, [calculateKidTotals.expensesKid, calculateKidTotals.tourKid, updateChildCosts]);
-
 
   // Memoize calculations untuk menghindari perhitungan berulang
   const calculatedValues = useMemo(() => {
@@ -141,8 +136,9 @@ useEffect(() => {
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
 
   // Pisahkan harga adult/child sebelum markup
-  const adultBase = (adjustedGrandTotal - calculateKidTotals.expensesKid - calculateKidTotals.tourKid - totalMarkup) / totalAdult;
-  const childBase = (calculateKidTotals.expensesKid + calculateKidTotals.tourKid) / actualChild;
+  const adultBase = (adjustedGrandTotal - expenseChild - calculateKidTotals.tourKid - totalMarkup) / totalAdult;
+  const childBase = (expenseChild + calculateKidTotals.tourKid) / actualChild;
+
 
   // Tambahkan markup per pax sesuai jumlah adult/child
   const totalAdultPrice = adultBase + userMarkupAmount ;
@@ -164,7 +160,6 @@ useEffect(() => {
   calculateGrandTotal,
   calculateKidTotals,
 ]);
-
 
   // Separate adminName state
   const [adminName, setAdminName] = useState("");
@@ -652,8 +647,8 @@ useEffect(() => {
           grandTotal={calculatedValues.adjustedGrandTotal}
           originalGrandTotal={grandTotal}
           totalExpenses={calculatedValues.totalExpensesFromContext}
-  selling={calculatedValues.totalAdultPrice}
-  sellingChild={calculatedValues.totalChildPrice}
+          selling={calculatedValues.totalAdultPrice}
+          sellingChild={calculatedValues.totalChildPrice}
           formatCurrency={formatCurrency}
           totalAdult={calculatedValues.totalAdult}
           totalChild={calculatedValues.actualChild}

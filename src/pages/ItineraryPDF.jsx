@@ -28,7 +28,7 @@ const formatCurrency = (amount) => {
 
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
-  const { days: expenseDays } = useExpensesContext();
+  const { days: expenseDays, expenseChild, calculateGrandTotal } = useExpensesContext();
   
   const [itineraryState, setItineraryState] = useState({
     mergedDays: [],
@@ -40,7 +40,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const toast = useToast();
   const componentRef = useRef();
-  const {grandTotal, totalMarkup, userMarkupAmount, totalChildCost} = useCheckoutContext();
+  const {grandTotal, totalMarkup, userMarkupAmount, childTotal} = useCheckoutContext();
 
   const packageId = useMemo(() => 
     selectedPackage?.id || selectedPackage?._id
@@ -61,13 +61,14 @@ const calculatedValues = useMemo(() => {
 }, [selectedPackage?.totalPaxAdult, selectedPackage?.totalPaxChildren]);
 
 const calculatedTotalPerPax = useMemo(() => {
-  const adjustedGrandTotal = grandTotal - totalChildCost - totalMarkup;
+  const totalExpensesFromContext = calculateGrandTotal();
+  const adjustedGrandTotal = grandTotal + totalExpensesFromContext - childTotal - totalMarkup - expenseChild;
   return (adjustedGrandTotal / calculatedValues.totalAdult) + userMarkupAmount;
-}, [grandTotal, totalChildCost, calculatedValues.totalAdult]);
+}, [grandTotal, childTotal, calculatedValues.totalAdult]);
 
 const totalChild = useMemo(() => {
-  return (totalChildCost / calculatedValues.actualChild) + userMarkupAmount;
-}, [totalChildCost, calculatedValues.actualChild]);
+  return (childTotal / calculatedValues.actualChild) + userMarkupAmount;
+}, [childTotal, calculatedValues.actualChild]);
 
   const {
     days: reorderedDays,
@@ -453,7 +454,7 @@ const totalChild = useMemo(() => {
           akomodasiDays={itineraryState.mergedDays}
           calculatedTotalChild={totalChild}
           calculatedTotalPerPax={calculatedTotalPerPax}
-          totalChildCost={totalChildCost}  />
+          childTotal={childTotal}  />
           
 
         <Divider my={6} borderColor="#FFA726" />

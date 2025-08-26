@@ -16,12 +16,9 @@ const CheckoutContextProvider = ({ children }) => {
     tours: 0,
     markup: 0,
   });
+  const [childTotal, setChildTotal] = useState(0);
   const [dayTotals, setDayTotals] = useState([]);
-  const [detailedBreakdown, setDetailedBreakdown] = useState([]);
-  const [totalChildCost, setTotalChildCost] = useState(0);
-  const [expensesKid, setExpensesKid] = useState(0);
-  const [tourKid, setTourKid] = useState(0);
-  
+  const [detailedBreakdown, setDetailedBreakdown] = useState([]);  
   const [userMarkup, setUserMarkup] = useState({
     type: 'percent',
     value: 0
@@ -85,6 +82,23 @@ const CheckoutContextProvider = ({ children }) => {
     }, 0);
   };
 
+  const calculateChildTotal = (days = selectedPackage?.days || []) => {
+    return days.reduce((sum, day) => {
+      const tours = day.tours || day.tour || [];
+      return (
+        sum +
+        tours.reduce((tourSum, item) => {
+          if (item.jenis_wisatawan) {
+            const childPrice = item.hargaChild || 0;
+            const childCount = item.jumlahChild || 0;
+            return tourSum + childPrice * childCount;
+          }
+          return tourSum;
+        }, 0)
+      );
+    }, 0);
+  };
+
   const calculateUserMarkup = (subtotal) => {
     if (!userMarkup.value || userMarkup.value <= 0) return 0;
     
@@ -94,12 +108,6 @@ const CheckoutContextProvider = ({ children }) => {
       return userMarkup.value;
     }
   };
-
-  const updateChildCosts = (expensesKidValue, tourKidValue) => {
-    setExpensesKid(expensesKidValue);
-    setTourKid(tourKidValue);
-    setTotalChildCost(expensesKidValue + tourKidValue);
-  }
 
   const updateUserMarkup = (type, value) => {
     const numericValue = parseFloat(value) || 0;
@@ -118,6 +126,7 @@ const CheckoutContextProvider = ({ children }) => {
       });
       setDayTotals([]);
       setDetailedBreakdown([]);
+      setChildTotal(0);
       return;
     }
 
@@ -170,6 +179,8 @@ const CheckoutContextProvider = ({ children }) => {
 
     setDayTotals(calculatedDayTotals);
     setDetailedBreakdown(calculatedDetailedBreakdown);
+    const totalChild = calculateChildTotal(selectedPackage.days);
+    setChildTotal(totalChild);
   }, [selectedPackage, userMarkup]); 
 
   const akomodasiTotal = breakdown.hotels + breakdown.villas + breakdown.additionals;
@@ -196,20 +207,18 @@ const value = {
     akomodasiTotal,
     transportTotal,
     tourTotal,
-    totalChildCost,
-    expensesKid,
-    tourKid,
+    childTotal,
     userMarkup,
     userMarkupAmount,
     totalMarkup,
     subtotalBeforeUserMarkup,
     updateUserMarkup,
-    updateChildCosts,
     calculateHotelTotal,
     calculateVillaTotal,
     calculateAdditionalTotal,
     calculateTransportTotal,
     calculateTourTotal,
+    calculateChildTotal
   };
 
   return (
