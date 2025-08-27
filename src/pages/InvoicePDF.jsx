@@ -137,9 +137,11 @@ const InvoicePDF = forwardRef((props, ref) => {
 
   const totalExpensesFromContext = calculateGrandTotal();
   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
+  const adultExpenses = totalExpensesFromContext - expenseChild
+  const tourAdult = tourTotal - childTotal;
 
   // Pisahkan harga adult/child sebelum markup
-  const adultBase = (adjustedGrandTotal - expenseChild - childTotal - totalMarkup) / totalAdult;
+  const adultBase = (tourAdult + transportTotal + akomodasiTotal + adultExpenses) / totalAdult;
   const childBase = (childTotal + expenseChild ) / actualChild;
 
 

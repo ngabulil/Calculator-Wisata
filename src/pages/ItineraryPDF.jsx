@@ -40,7 +40,7 @@ const ItineraryPDF = forwardRef((props, ref) => {
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const toast = useToast();
   const componentRef = useRef();
-  const {grandTotal, totalMarkup, userMarkupAmount, childTotal} = useCheckoutContext();
+  const {grandTotal, userMarkupAmount, childTotal, tourTotal, transportTotal, akomodasiTotal} = useCheckoutContext();
 
   const packageId = useMemo(() => 
     selectedPackage?.id || selectedPackage?._id
@@ -62,7 +62,9 @@ const calculatedValues = useMemo(() => {
 
 const calculatedTotalPerPax = useMemo(() => {
   const totalExpensesFromContext = calculateGrandTotal();
-  const adjustedGrandTotal = grandTotal + totalExpensesFromContext - childTotal - totalMarkup - expenseChild;
+  const adultExpenses = totalExpensesFromContext - expenseChild
+  const tourAdult = tourTotal - childTotal;
+  const adjustedGrandTotal = tourAdult + transportTotal + akomodasiTotal + adultExpenses;
   return (adjustedGrandTotal / calculatedValues.totalAdult) + userMarkupAmount;
 }, [grandTotal, childTotal, calculatedValues.totalAdult]);
 

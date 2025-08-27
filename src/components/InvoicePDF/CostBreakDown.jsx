@@ -155,7 +155,7 @@ const CostBreakDown = ({
                           <div style={{ fontSize: "0.9em" }}>
                             {formatCurrency((item.extrabedQty || 0) * (item.extrabedPrice || 0))}
                           </div>
-                                              ) : (
+                        ) : (
                         "-"
                       )}
                     </Td>
