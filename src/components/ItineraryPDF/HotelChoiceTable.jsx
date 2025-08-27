@@ -194,10 +194,12 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
 
     const totalHotelPrice = hotelPrice * accommodationDays;
     const totalExpensesFromContext = calculateGrandTotal();
-    const subtotalBeforeMarkup = totalHotelPrice + tourTotal + transportTotal + totalExpensesFromContext - childTotal - expenseChild;
+    const adultExpenses = totalExpensesFromContext - expenseChild
+    const tourAdult = tourTotal - childTotal;
+    const subtotalBeforeMarkup = (tourAdult + transportTotal + totalHotelPrice + adultExpenses) / totalAdult;
     const alternativeTotal = subtotalBeforeMarkup + userMarkupAmount;
 
-    return alternativeTotal / totalAdult;
+    return alternativeTotal;
   };
 
   const allAccommodations = useMemo(() => {
