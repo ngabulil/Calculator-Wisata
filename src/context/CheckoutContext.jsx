@@ -17,6 +17,9 @@ const CheckoutContextProvider = ({ children }) => {
     markup: 0,
   });
   const [childTotal, setChildTotal] = useState(0);
+  const [extrabedTotal, setExtrabedTotal] = useState(0);
+  const [adultPriceTotal, setAdultPriceTotal] = useState(0);
+  const [childPriceTotal, setChildPriceTotal] = useState(0);
   const [dayTotals, setDayTotals] = useState([]);
   const [detailedBreakdown, setDetailedBreakdown] = useState([]);
   const [userMarkup, setUserMarkup] = useState({
@@ -49,6 +52,27 @@ const CheckoutContextProvider = ({ children }) => {
       return sum + roomCost + extrabedCost;
     }, 0);
   };
+
+  const calculateExtrabedTotal = (days = selectedPackage?.days || []) => {
+    return days.reduce((sum, day) => {
+      const hotelExtrabeds = (day.hotels || []).reduce((hotelSum, hotel) => {
+        if (hotel.useExtrabed) {
+          return hotelSum + ((hotel.jumlahExtrabed || 0) * (hotel.hargaExtrabed || 0));
+        }
+        return hotelSum;
+      }, 0);
+
+      const villaExtrabeds = (day.villas || []).reduce((villaSum, villa) => {
+        if (villa.useExtrabed) {
+          return villaSum + ((villa.jumlahExtrabed || 0) * (villa.hargaExtrabed || 0));
+        }
+        return villaSum;
+      }, 0);
+
+      return sum + hotelExtrabeds + villaExtrabeds;
+    }, 0);
+  };
+
 
   const calculateAdditionalTotal = (additionals = []) => {
     return additionals.reduce((sum, item) => {
@@ -151,6 +175,9 @@ const CheckoutContextProvider = ({ children }) => {
       setDayTotals([]);
       setDetailedBreakdown([]);
       setChildTotal(0);
+      setExtrabedTotal(0);
+      setAdultPriceTotal(0);
+      setChildPriceTotal(0);
       return;
     }
 
@@ -211,6 +238,8 @@ const CheckoutContextProvider = ({ children }) => {
     setDetailedBreakdown(calculatedDetailedBreakdown);
     const totalChild = calculateChildTotal(selectedPackage.days);
     setChildTotal(totalChild);
+    const totalExtrabed = calculateExtrabedTotal(selectedPackage.days);
+    setExtrabedTotal(totalExtrabed);
   }, [selectedPackage, userMarkup]);
 
   const akomodasiTotal =
@@ -242,7 +271,10 @@ const CheckoutContextProvider = ({ children }) => {
     transportTotal,
     tourTotal,
     childTotal,
+    extrabedTotal,
     userMarkup,
+    adultPriceTotal,
+    childPriceTotal,
     userMarkupAmount,
     childMarkup,
     childMarkupAmount,
@@ -251,6 +283,8 @@ const CheckoutContextProvider = ({ children }) => {
     subtotalBeforeUserMarkup,
     updateUserMarkup,
     updateChildMarkup,
+    setAdultPriceTotal,
+    setChildPriceTotal,
     calculateHotelTotal,
     calculateVillaTotal,
     calculateAdditionalTotal,

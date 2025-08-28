@@ -109,10 +109,11 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
       jumlahExtrabed,
       hargaPerKamar,
       hargaExtrabed,
+      namaTipeKamar: selectedRoom?.label || null,
     });
     // }, 300);
     // return () => clearTimeout(timeout);
-  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed, dayIndex]);
+  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed,selectedRoom, dayIndex]);
 
   const handleSelectChange = (field, val) => {
     const updates = { [field]: val?.value ?? null };

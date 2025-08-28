@@ -42,6 +42,9 @@ const InvoicePDF = forwardRef((props, ref) => {
     childMarkupAmount,
     childTotal,
     totalMarkupChild,
+    extrabedTotal,
+    setAdultPriceTotal, // Dapatkan setter dari context
+    setChildPriceTotal, // Dapatkan setter dari context
   } = useCheckoutContext();
   const { days: expenseDays, calculateGrandTotal, expenseChild } = useExpensesContext();
 
@@ -98,73 +101,111 @@ const InvoicePDF = forwardRef((props, ref) => {
       await downloadPdf(componentRef, filename);
     },
   }));
-  
+
   const calculateKidTotals = useMemo(() => {
-  let expensesKid = 0;
-  let tourKid = 0;
+    let expensesKid = 0;
+    let tourKid = 0;
 
-  // Ambil dari context expenses
-  expenseDays.forEach(day => {
-    day?.totals?.forEach(item => {
-      if (item.childPrice) {
-        expensesKid += (item.childPrice || 0) * (item.childQuantity || 1);
-      }
+    // Ambil dari context expenses
+    expenseDays.forEach((day) => {
+      day?.totals?.forEach((item) => {
+        if (item.childPrice) {
+          expensesKid += (item.childPrice || 0) * (item.childQuantity || 1);
+        }
+      });
     });
-  });
 
-  // Ambil dari itineraryData (destinations, restaurants, activities)
-  invoiceData.itineraryData.forEach(day => {
-    day.activities?.forEach(act => {
-      tourKid += (act.childPrice || 0) * (act.childQty || 0);
+    // Ambil dari itineraryData (destinations, restaurants, activities)
+    invoiceData.itineraryData.forEach((day) => {
+      day.activities?.forEach((act) => {
+        tourKid += (act.childPrice || 0) * (act.childQty || 0);
+      });
     });
-  });
 
-  return { expensesKid, tourKid };
-}, [expenseDays, invoiceData.itineraryData]);
+    return { expensesKid, tourKid };
+  }, [expenseDays, invoiceData.itineraryData]);
 
   // Memoize calculations untuk menghindari perhitungan berulang
   const calculatedValues = useMemo(() => {
-  const totalAdult =
-    selectedPackage?.totalPaxAdult &&
-    parseInt(selectedPackage.totalPaxAdult) > 0
-      ? parseInt(selectedPackage.totalPaxAdult)
-      : 0;
-  const actualChild =
-    selectedPackage?.totalPaxChildren &&
-    parseInt(selectedPackage.totalPaxChildren) > 0
-      ? parseInt(selectedPackage.totalPaxChildren)
-      : 0;
+    const totalAdult =
+      selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
+        ? parseInt(selectedPackage.totalPaxAdult)
+        : 0;
+    const actualChild =
+      selectedPackage?.totalPaxChildren &&
+      parseInt(selectedPackage.totalPaxChildren) > 0
+        ? parseInt(selectedPackage.totalPaxChildren)
+        : 0;
 
-  const totalExpensesFromContext = calculateGrandTotal();
-  const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
-  const adultExpenses = totalExpensesFromContext - expenseChild
-  const tourAdult = tourTotal - childTotal;
+    const totalExpensesFromContext = calculateGrandTotal();
+    const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
+    const adultExpenses = totalExpensesFromContext - expenseChild;
+    const tourAdult = tourTotal - childTotal;
 
-  // Pisahkan harga adult/child sebelum markup
-  const adultBase = (tourAdult + transportTotal + akomodasiTotal + adultExpenses) / totalAdult;
-  const childBase = (childTotal + expenseChild ) / actualChild;
+    let adultAkomodasiTotal = akomodasiTotal;
+    let childAkomodasiTotal = 0;
 
+    if (selectedPackage?.addExtabedToChild) {
+      adultAkomodasiTotal = akomodasiTotal - extrabedTotal;
+      childAkomodasiTotal = extrabedTotal;
+    } else {
+      adultAkomodasiTotal = akomodasiTotal;
+      childAkomodasiTotal = 0;
+    }
 
-  // Tambahkan markup per pax sesuai jumlah adult/child
-  const totalAdultPrice = adultBase + userMarkupAmount ;
-  const totalChildPrice = childBase + childMarkupAmount ;
+    const adultBase =
+      (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
+      totalAdult;
 
-  return {
-    totalAdult,
-    actualChild,
-    totalExpensesFromContext,
-    adjustedGrandTotal,
-    totalAdultPrice,
-    totalChildPrice,
-  };
-}, [
-  selectedPackage?.totalPaxAdult,
-  selectedPackage?.totalPaxChildren,
-  totalMarkup,
-  grandTotal,
-  calculateGrandTotal,
-  calculateKidTotals,
-]);
+    let childBase = 0;
+    if (selectedPackage?.addExtabedToChild) {
+      childBase = (childTotal + expenseChild + childAkomodasiTotal) / actualChild;
+    } else {
+      childBase = (childTotal + expenseChild) / actualChild;
+    }
+    
+    const adultPriceTotal = adultBase + userMarkupAmount;
+    const childPriceTotal = childBase + childMarkupAmount;
+
+    return {
+      totalAdult,
+      actualChild,
+      totalExpensesFromContext,
+      adjustedGrandTotal,
+      extrabedTotal,
+      adultPriceTotal,
+      childPriceTotal,
+    };
+  }, [
+    selectedPackage?.totalPaxAdult,
+    selectedPackage?.totalPaxChildren,
+    totalMarkup,
+    grandTotal,
+    calculateGrandTotal,
+    calculateKidTotals,
+    extrabedTotal,
+    akomodasiTotal,
+    childTotal,
+    expenseChild,
+    tourTotal,
+    transportTotal,
+    userMarkupAmount,
+    childMarkupAmount,
+  ]);
+
+  useEffect(() => {
+    if (calculatedValues.adultPriceTotal >= 0) {
+      setAdultPriceTotal(calculatedValues.adultPriceTotal);
+    }
+    if (calculatedValues.childPriceTotal >= 0) {
+      setChildPriceTotal(calculatedValues.childPriceTotal);
+    }
+  }, [
+    calculatedValues.adultPriceTotal,
+    calculatedValues.childPriceTotal,
+    setAdultPriceTotal,
+    setChildPriceTotal,
+  ]);
 
   // Separate adminName state
   const [adminName, setAdminName] = useState("");
@@ -317,8 +358,8 @@ const InvoicePDF = forwardRef((props, ref) => {
             );
           };
 
-          const tourActivities = day.tours 
-            ? processActivities(day.tours, "Tour Item") 
+          const tourActivities = day.tours
+            ? processActivities(day.tours, "Tour Item")
             : [];
 
           // Process expense items dari context
@@ -350,20 +391,22 @@ const InvoicePDF = forwardRef((props, ref) => {
                     }
                     return total > 0 ? formatCurrency(total) : "Rp 0";
                   })(),
-                  kidExpense: "-", 
+                  kidExpense: "-",
                   originalData: item,
                 };
               }) || []
             );
           };
 
-        const activities = [
-          ...(day.tours ? tourActivities : [
-            ...processActivities(day.destinations, "Destination"),
-            ...processActivities(day.restaurants, "Restaurant"),
-            ...processActivities(day.activities, "Activity")
-          ])
-        ];
+          const activities = [
+            ...(day.tours
+              ? tourActivities
+              : [
+                  ...processActivities(day.destinations, "Destination"),
+                  ...processActivities(day.restaurants, "Restaurant"),
+                  ...processActivities(day.activities, "Activity"),
+                ]),
+          ];
 
           // Get expense items dari context
           const expenseDay = expenseDays[dayIndex];
@@ -652,8 +695,8 @@ const InvoicePDF = forwardRef((props, ref) => {
           grandTotal={calculatedValues.adjustedGrandTotal}
           originalGrandTotal={grandTotal}
           totalExpenses={calculatedValues.totalExpensesFromContext}
-          selling={calculatedValues.totalAdultPrice}
-          sellingChild={calculatedValues.totalChildPrice}
+          selling={calculatedValues.adultPriceTotal}
+          sellingChild={calculatedValues.childPriceTotal}
           formatCurrency={formatCurrency}
           totalAdult={calculatedValues.totalAdult}
           totalChild={calculatedValues.actualChild}

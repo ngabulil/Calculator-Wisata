@@ -17,6 +17,7 @@ import {
   TabPanel,
   Tag,
   TagLabel,
+  Checkbox,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -137,6 +138,7 @@ const CalculatorFixPage = () => {
                   name: found.name,
                   totalPaxAdult: found.totalPaxAdult || 0,
                   totalPaxChildren: found.totalPaxChildren || 0,
+                  addExtabedToChild: false,
                   days: found.days || [],
                 });
                 setActiveDayId(found.id);
@@ -208,6 +210,20 @@ const CalculatorFixPage = () => {
               />
             </FormControl>
           </HStack>
+          <Checkbox
+            colorScheme="blue"
+            size="md"
+            value={selectedPackage.addExtabedToChild}
+            onChange={(e) =>
+              setSelectedPackage((prev) => ({
+                ...prev,
+                addExtabedToChild: e.target.checked,
+              }))
+            }
+            isChecked={selectedPackage.addExtabedToChild}
+          >
+            Add Extabed to Child
+          </Checkbox> 
 
           {/* DAYS */}
           <Box mt={8}>
