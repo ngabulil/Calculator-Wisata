@@ -110,10 +110,11 @@ const HotelCard = ({ index, onDelete, data, onChange, dayIndex }) => {
         jumlahExtrabed,
         hargaPerKamar,
         hargaExtrabed,
+        namaTipeKamar: selectedRoom?.label || null,
       });
     // }, 300);
     // return () => clearTimeout(timeout);
-  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed, dayIndex]);
+  }, [jumlahKamar, jumlahExtrabed, hargaPerKamar, hargaExtrabed, dayIndex, selectedRoom]);
 
   const handleSelectChange = (field, val) => {
     const updates = { [field]: val?.value ?? null };

@@ -29,7 +29,7 @@ const tableHeaderStyle = {
 };
 
 const tableCellStyle = {
-  padding: "2px 40px 12px 40px",
+  padding: "2px 20px 16px 20px",
   verticalAlign: "top",
 };
 
@@ -37,7 +37,7 @@ const tableCellStyle = {
 const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
   const { hotelItems, villaItems, formatCurrency, calculateGrandTotal, expenseChild } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
-  const { transportTotal, tourTotal, userMarkupAmount, childTotal, childMarkupAmount } = useCheckoutContext();
+  const { transportTotal, tourTotal, userMarkupAmount, childTotal, childMarkupAmount, childPriceTotal } = useCheckoutContext();
 
   const [parsedExpensesData, setParsedExpensesData] = useState({
     hotels: [],
@@ -84,12 +84,11 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
                   hotel?.hotelName ||
                   "Unknown Hotel",
                 stars: hotel?.bintang || hotel?.star || hotel?.stars || "",
-                roomType: hotel?.roomType || "",
-                price:
-                  (hotel?.jumlahKamar || 1) * (hotel?.hargaPerKamar || 0) +
-                  (hotel?.useExtrabed
-                    ? (hotel?.jumlahExtrabed || 0) * (hotel?.hargaExtrabed || 0)
-                    : 0),
+                roomType: hotel?.namaTipeKamar || "",
+                // Perhitungan harga kamar saja
+                price: (hotel?.jumlahKamar || 1) * (hotel?.hargaPerKamar || 0),
+                // Perhitungan harga extrabed terpisah
+                extrabedPrice: (hotel?.useExtrabed ? (hotel?.jumlahExtrabed || 0) * (hotel?.hargaExtrabed || 0) : 0),
                 type: "Hotel",
                 originalData: hotel,
               })) || []
@@ -108,10 +107,11 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
                   "Unknown Villa",
                 stars:
                   villa?.bintang || villa?.star_rating || villa?.star || "",
-                roomType: villa?.roomType || "",
-                price:
-                  (villa?.jumlahKamar || 1) * (villa?.hargaPerKamar || 0) +
-                  (villa?.useExtrabed ? (villa?.jumlahExtrabed || 0) * (villa?.hargaExtrabed || 0) : 0),
+                roomType: villa?.namaTipeKamar || "",
+                // Perhitungan harga kamar saja
+                price: (villa?.jumlahKamar || 1) * (villa?.hargaPerKamar || 0),
+                // Perhitungan harga extrabed terpisah
+                extrabedPrice: (villa?.useExtrabed ? (villa?.jumlahExtrabed || 0) * (villa?.hargaExtrabed || 0) : 0),
                 type: "Villa",
                 originalData: villa,
               })) || []
@@ -152,55 +152,71 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
     };
   }, [hotelItems, villaItems]);
 
-//  const calculateUserMarkupAmount = (subtotal) => {
-//     if (!userMarkup.value || userMarkup.value <= 0) return 0;
+const getAccommodationNights = useMemo(() => {
+  if (!selectedPackage?.days || !Array.isArray(selectedPackage.days)) {
+    return 0;
+  }
+
+  let nightsCount = 0;
+
+  selectedPackage.days.forEach(day => {
+    const hasHotel = day.hotels && Array.isArray(day.hotels) && day.hotels.length > 0;
+    const hasVilla = day.villas && Array.isArray(day.villas) && day.villas.length > 0;
     
-//     if (userMarkup.type === 'percent') {
-//       return (subtotal * userMarkup.value) / 100;
-//     } else {
-//       return userMarkup.value;
-//     }
-//   };
+    if (hasHotel || hasVilla) {
+      nightsCount += 1;
+    }
+  });
 
-  // Calculate total price per pax - menggunakan grandTotal dari CheckoutContext
-  // const calculatedTotalPerPax = useMemo(() => {
-  //   const totalAdult =
-  //     selectedPackage?.totalPaxAdult &&
-  //     parseInt(selectedPackage.totalPaxAdult) > 0
-  //       ? parseInt(selectedPackage.totalPaxAdult)
-  //       : 1; 
-
-  //   const totalExpensesFromContext = calculateGrandTotal();
-  //   const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
-
-  //   return adjustedGrandTotal / totalAdult;
-  // }, [selectedPackage?.totalPaxAdult, grandTotal, calculateGrandTotal]);
+  return nightsCount;
+}, [selectedPackage?.days]);
   
-  const calculateTotalChild = (childTotal + expenseChild ) / selectedPackage?.totalPaxChildren;
-  const totalChildPrice = calculateTotalChild + childMarkupAmount;
 
-  const calculateAlternativePrice = (hotelPrice) => {
-    const totalAdult =
-      selectedPackage?.totalPaxAdult &&
-      parseInt(selectedPackage.totalPaxAdult) > 0
-        ? parseInt(selectedPackage.totalPaxAdult)
-        : 1;
+const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
+  const totalAdult =
+    selectedPackage?.totalPaxAdult &&
+    parseInt(selectedPackage.totalPaxAdult) > 0
+      ? parseInt(selectedPackage.totalPaxAdult)
+      : 1;
 
-    const accommodationDays = selectedPackage?.days?.reduce((count, day) => {
-      const hasHotel = Array.isArray(day.hotels) && day.hotels.length > 0;
-      const hasVilla = Array.isArray(day.villa) && day.villa.length > 0;
-      return hasHotel || hasVilla ? count + 1 : count;
-    }, 0) || 1;
+  const totalChild =
+    selectedPackage?.totalPaxChildren &&
+    parseInt(selectedPackage.totalPaxChildren) > 0
+      ? parseInt(selectedPackage.totalPaxChildren)
+      : 0;
+      
+  const accommodationNights = selectedPackage?.days?.reduce((count, day) => {
+    const hasHotel = Array.isArray(day.hotels) && day.hotels.length > 0;
+    const hasVilla = Array.isArray(day.villas) && day.villas.length > 0;
+    return hasHotel || hasVilla ? count + 1 : count;
+  }, 0) || 1;
 
-    const totalHotelPrice = hotelPrice * accommodationDays;
-    const totalExpensesFromContext = calculateGrandTotal();
-    const adultExpenses = totalExpensesFromContext - expenseChild
-    const tourAdult = tourTotal - childTotal;
-    const subtotalBeforeMarkup = (tourAdult + transportTotal + totalHotelPrice + adultExpenses) / totalAdult;
-    const alternativeTotal = subtotalBeforeMarkup + userMarkupAmount;
+  // Logika pembagian harga extrabed
+  let adultAkomodasiTotal = (accommodationPrice * accommodationNights);
+  let childAkomodasiTotal = 0;
 
-    return alternativeTotal;
+  if (selectedPackage?.addExtabedToChild) {
+    childAkomodasiTotal = (extrabedPrice * accommodationNights);
+  } else {
+    adultAkomodasiTotal += (extrabedPrice * accommodationNights);
+  }
+  
+  const totalExpensesFromContext = calculateGrandTotal();
+  const adultExpenses = totalExpensesFromContext - expenseChild;
+  const tourAdult = tourTotal - childTotal;
+
+  const adultBase = ( adultAkomodasiTotal + tourAdult + transportTotal + adultExpenses ) / totalAdult;
+  const childBase = ( childAkomodasiTotal + childTotal + expenseChild ) / totalChild;
+
+  const alternativeAdultPrice = adultBase + userMarkupAmount;
+  const alternativeChildPrice = childBase + childMarkupAmount;
+  
+  return {
+    adultPrice: alternativeAdultPrice,
+    childPrice: alternativeChildPrice
   };
+};
+
 
   const allAccommodations = useMemo(() => {
     const packageAccommodations = [];
@@ -217,7 +233,9 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
               hotel?.hotel?.label ||
               "Unknown Hotel";
             const stars = hotel?.bintang || hotel?.star || "";
-            const roomType = hotel?.roomType || "";
+            const roomType = hotel?.namaTipeKamar || "";
+            const hasExtrabed = hotel?.useExtrabed || false;
+            const extrabedCount = hotel?.jumlahExtrabed || 0;
 
             packageAccommodations.push({
               no: 1,
@@ -225,7 +243,10 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
               stars: String(stars),
               type: "Hotel",
               price: hotel?.hargaPerKamar || 0,
+              extrabedPrice: (hasExtrabed ? (extrabedCount * hotel?.hargaExtrabed || 0) : 0),
               roomType: String(roomType),
+              hasExtrabed: hasExtrabed,
+              extrabedCount: extrabedCount
             });
             hasAccommodation = true;
           });
@@ -240,7 +261,9 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
               "Unknown Villa";
             const stars =
               villa?.bintang || villa?.star_rating || villa?.star || "";
-            const roomType = villa?.roomType || "";
+            const roomType = villa?.namaTipeKamar || "";
+            const hasExtrabed = villa?.useExtrabed || false;
+            const extrabedCount = villa?.jumlahExtrabed || 0;
 
             packageAccommodations.push({
               no: 1,
@@ -248,7 +271,10 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
               stars: String(stars),
               type: "Villa",
               price: villa?.hargaPerKamar || 0,
+              extrabedPrice: (hasExtrabed ? (extrabedCount * villa?.hargaExtrabed || 0) : 0),
               roomType: String(roomType),
+              hasExtrabed: hasExtrabed,
+              extrabedCount: extrabedCount
             });
             hasAccommodation = true;
           });
@@ -262,7 +288,10 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
           stars: "",
           type: "Package",
           price: 0,
+          extrabedPrice: 0,
           roomType: "",
+          hasExtrabed: false,
+          extrabedCount: 0
         });
       }
     }
@@ -274,7 +303,10 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
         stars: String(hotel.stars),
         type: hotel.type,
         price: hotel.price,
+        extrabedPrice: hotel.extrabedPrice,
         roomType: String(hotel.roomType),
+        hasExtrabed: hotel.originalData?.useExtrabed || false,
+        extrabedCount: hotel.originalData?.jumlahExtrabed || 0
       })),
       ...parsedExpensesData.villas.map((villa, index) => ({
         no: parsedExpensesData.hotels.length + index + 2,
@@ -282,7 +314,10 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
         stars: String(villa.stars),
         type: villa.type,
         price: villa.price,
+        extrabedPrice: villa.extrabedPrice,
         roomType: String(villa.roomType),
+        hasExtrabed: villa.originalData?.useExtrabed || false,
+        extrabedCount: villa.originalData?.jumlahExtrabed || 0
       })),
     ].slice(0, 5);
 
@@ -302,7 +337,6 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
           (day?.villas && day.villas.length > 0)
       );
 
-    // Check if there are expenses accommodations
     const hasExpensesAccommodations =
       parsedExpensesData.hotels.length > 0 ||
       parsedExpensesData.villas.length > 0;
@@ -335,25 +369,29 @@ return (
     <Table variant="simple" size="sm" border="1px solid #ddd">
       <Thead>
         <Tr>
-          <Th style={tableHeaderStyle} border="1px solid #ddd" width="2%">
+          <Th style={tableHeaderStyle} border="1px solid #ddd" width="5%" rowSpan={2}>
             NO
           </Th>
-          <Th style={tableHeaderStyle} border="1px solid #ddd" width="55%">
-            <Text>PACKAGES CHOICE</Text>
-            <Text fontSize="xs" color="gray.600">
-              (ACCOMODATION)
-            </Text>  
+          <Th style={tableHeaderStyle} border="1px solid #ddd" width="50%" rowSpan={2}>
+            <VStack spacing={0}>
+              <Text fontWeight="bold" fontSize="14px">HOTEL CHOICE</Text>
+              <Text fontSize="xs" color="gray.700" fontWeight="normal">
+                ({getAccommodationNights || 0} Night Hotel)
+              </Text>
+            </VStack>
           </Th>
-          <Th style={tableHeaderStyle} border="1px solid #ddd" width="20%">
-            PRICE PER PAX ({selectedPackage?.totalPaxAdult || 1})
+          <Th style={tableHeaderStyle} border="1px solid #ddd" width="45%" colSpan={selectedPackage?.totalPaxChildren > 0 ? 2 : 1}>
+            <Text fontWeight="bold" fontSize="14px">PRICE PER PAX</Text>
           </Th>
-
-          {/* Tampilkan kolom Child hanya jika totalPaxChildren > 0 */}
-          {selectedPackage?.totalPaxChildren > 0 && (
-            <Th style={tableHeaderStyle} border="1px solid #ddd" width="20%">
-              PRICE CHILD ({selectedPackage?.totalPaxChildren})
-            </Th>
-          )}
+        </Tr>
+        <Tr>
+          <Th style={{...tableHeaderStyle,}} border="1px solid #ddd" width="22.5%">
+            <VStack spacing={0}>
+              <Text fontSize="2xs" fontWeight="bold">A{selectedPackage?.totalPaxAdult}+C{selectedPackage?.totalPaxChildren}</Text>
+              <Text fontSize="2xs" fontWeight="bold">Transport 6 Seater</Text>
+              <Text fontSize="2xs" fontWeight="bold" textColor="blue.400">Driver as guide</Text>
+            </VStack>
+          </Th>
         </Tr>
       </Thead>
 
@@ -370,22 +408,30 @@ return (
                   {item.stars ? ` (${item.stars}*)` : ""}
                 </Text>
                 <Text fontSize="sm" color="gray.600">
-                  {item.type}
-                  {item.roomType ? ` - ${item.roomType}` : ""}
+                  ({item.roomType ? `${item.roomType}` : ""}
+                  {item.hasExtrabed && item.extrabedCount > 0 
+                    ? ` + ${item.extrabedCount} Extrabed` 
+                    : ""})
                 </Text>
               </VStack>
             </Td>
-            <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
-              {index === 0
-                ? formatCurrency(calculatedTotalPerPax)
-                : formatCurrency(calculateAlternativePrice(item.price))}
-            </Td>
 
-            {selectedPackage?.totalPaxChildren > 0 && (
-              <Td style={tableCellStyle} fontWeight="bold" textAlign="center">
-                {formatCurrency(totalChildPrice)}
-              </Td>
-            )}
+            <Td style={tableCellStyle} fontWeight="bold" textAlign="center" fontSize="xs">
+              <VStack spacing={1}>
+                <Text>
+                  Adult : {index === 0
+                    ? formatCurrency(calculatedTotalPerPax)
+                    : formatCurrency(calculateAlternativePrices(item.price, item.extrabedPrice).adultPrice)} / Pax
+                </Text>
+              {selectedPackage?.totalPaxChildren > 0 && (
+                <Text>
+                  Child : {index === 0
+                    ? formatCurrency(childPriceTotal)
+                    : formatCurrency(calculateAlternativePrices(item.price, item.extrabedPrice).childPrice)} / Pax
+                </Text>
+              )}
+              </VStack>
+            </Td>
           </Tr>
         ))}
       </Tbody>

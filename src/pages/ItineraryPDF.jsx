@@ -28,7 +28,7 @@ const formatCurrency = (amount) => {
 
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
-  const { days: expenseDays, expenseChild, calculateGrandTotal } = useExpensesContext();
+  const { days: expenseDays } = useExpensesContext();
   
   const [itineraryState, setItineraryState] = useState({
     mergedDays: [],
@@ -40,37 +40,11 @@ const ItineraryPDF = forwardRef((props, ref) => {
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const toast = useToast();
   const componentRef = useRef();
-  const {grandTotal, userMarkupAmount, childTotal, tourTotal, transportTotal, akomodasiTotal} = useCheckoutContext();
+  const { childTotal, adultPriceTotal, childPriceTotal} = useCheckoutContext();
 
   const packageId = useMemo(() => 
     selectedPackage?.id || selectedPackage?._id
   , [selectedPackage?.id, selectedPackage?._id]);
-
-const calculatedValues = useMemo(() => {
-  const totalAdult = selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
-    ? parseInt(selectedPackage.totalPaxAdult)
-    : 1;
-  const actualChild = selectedPackage?.totalPaxChildren && parseInt(selectedPackage.totalPaxChildren) > 0
-    ? parseInt(selectedPackage.totalPaxChildren)
-    : 0;
-
-  return {
-    totalAdult,
-    actualChild,
-  };
-}, [selectedPackage?.totalPaxAdult, selectedPackage?.totalPaxChildren]);
-
-const calculatedTotalPerPax = useMemo(() => {
-  const totalExpensesFromContext = calculateGrandTotal();
-  const adultExpenses = totalExpensesFromContext - expenseChild
-  const tourAdult = tourTotal - childTotal;
-  const adjustedGrandTotal = tourAdult + transportTotal + akomodasiTotal + adultExpenses;
-  return (adjustedGrandTotal / calculatedValues.totalAdult) + userMarkupAmount;
-}, [grandTotal, childTotal, calculatedValues.totalAdult]);
-
-const totalChild = useMemo(() => {
-  return (childTotal / calculatedValues.actualChild) + userMarkupAmount;
-}, [childTotal, calculatedValues.actualChild]);
 
   const {
     days: reorderedDays,
@@ -454,8 +428,8 @@ const totalChild = useMemo(() => {
 
         <HotelChoiceTable 
           akomodasiDays={itineraryState.mergedDays}
-          calculatedTotalChild={totalChild}
-          calculatedTotalPerPax={calculatedTotalPerPax}
+          calculatedTotalChild={childPriceTotal}
+          calculatedTotalPerPax={adultPriceTotal}
           childTotal={childTotal}  />
           
 
@@ -472,8 +446,6 @@ const totalChild = useMemo(() => {
           onMoveDayDown={moveDayDown}
           onEditItemTitle={editItemTitle}
           onEditItemDescription={editItemDescription} 
-          totalAdult={calculatedValues.totalAdult}
-          totalChild={calculatedValues.actualChild}
         />
 
         <Divider my={6} borderColor="#FFA726" />
