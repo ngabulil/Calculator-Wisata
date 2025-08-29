@@ -389,7 +389,6 @@ return (
             <VStack spacing={0}>
               <Text fontSize="2xs" fontWeight="bold">A{selectedPackage?.totalPaxAdult}+C{selectedPackage?.totalPaxChildren}</Text>
               <Text fontSize="2xs" fontWeight="bold">Transport 6 Seater</Text>
-              <Text fontSize="2xs" fontWeight="bold" textColor="blue.400">Driver as guide</Text>
             </VStack>
           </Th>
         </Tr>
