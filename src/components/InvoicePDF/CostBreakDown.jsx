@@ -80,9 +80,11 @@ const CostBreakDown = ({
   markup,
   totalAdult = 1,
   totalChild = 0,
+  totalChild9 = 0,
   exchangeRate,
   isEditingExchangeRate = false,
   sellingChild,
+  sellingChild9,
   onExchangeRateChange = () => {},
 }) => {
   const sortByDay = (data) => {
@@ -332,6 +334,12 @@ const CostBreakDown = ({
             <Text fontWeight="bold" fontSize="lg">Price Pax Adult</Text>
             <Text fontWeight="bold" fontSize="lg">{formatCurrency(selling)}</Text>
           </HStack>
+          {totalChild9 > 0 && (
+          <HStack justify="space-between" w="100%">
+            <Text fontWeight="bold" fontSize="lg">Price Pax Child 9Y</Text>
+            <Text fontWeight="bold" fontSize="lg">{formatCurrency(sellingChild9)}</Text>
+          </HStack>
+          )}
           {totalChild > 0 && (
             <HStack justify="space-between" w="100%">
               <Text fontSize="lg">Price Pax Child</Text>

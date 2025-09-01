@@ -18,6 +18,7 @@ import {
   Tag,
   TagLabel,
   Checkbox,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -116,7 +117,7 @@ const CalculatorFixPage = () => {
       }));
     }
   }, [days[0]?.date]);
-
+  console.log("selectedPackage", selectedPackage);
   return (
     <Box minH="100vh" bg={bg} position="relative">
       <Container maxW="7xl" py={3}>
@@ -138,9 +139,9 @@ const CalculatorFixPage = () => {
                   name: found.name,
                   totalPaxAdult: found.totalPaxAdult || 0,
                   totalPaxChildren: found.totalPaxChildren || 0,
-                  addExtabedToChild: false,
                   addAdditionalChild: false,
                   days: found.days || [],
+                  childrenAges: [],
                 });
                 setActiveDayId(found.id);
               }}
@@ -180,7 +181,8 @@ const CalculatorFixPage = () => {
             />
           </FormControl>
 
-          <HStack spacing={4} mb={4}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+            {/* Total Pax Adult */}
             <FormControl>
               <FormLabel color="white">Total Pax Adult</FormLabel>
               <Input
@@ -196,50 +198,83 @@ const CalculatorFixPage = () => {
               />
             </FormControl>
 
+            {/* Total Pax Children + Umur Anak */}
             <FormControl>
               <FormLabel color="white">Total Pax Children</FormLabel>
               <Input
                 bg="gray.600"
                 color="white"
                 value={selectedPackage.totalPaxChildren || 0}
-                onChange={(e) =>
-                  setSelectedPackage((prev) => ({
-                    ...prev,
-                    totalPaxChildren: parseInt(e.target.value) || 0,
-                  }))
-                }
+                onChange={(e) => {
+                  const count = parseInt(e.target.value) || 0;
+
+                  setSelectedPackage((prev) => {
+                    let newAges = prev.childrenAges || [];
+                    if (count > newAges.length) {
+                      newAges = [
+                        ...newAges,
+                        ...Array(count - newAges.length).fill(""),
+                      ];
+                    } else {
+                      newAges = newAges.slice(0, count);
+                    }
+                    return {
+                      ...prev,
+                      totalPaxChildren: count,
+                      childrenAges: newAges,
+                    };
+                  });
+                }}
               />
+
+              {/* Input Umur Anak */}
+              {selectedPackage.totalPaxChildren > 0 && (
+                <Box mt={3}>
+                  <FormLabel color="white">Umur Anak</FormLabel>
+                  <HStack spacing={3} wrap="wrap">
+                    {(selectedPackage.childrenAges || []).map((age, idx) => (
+                      <Input
+                        key={idx}
+                        type="number"
+                        min="0"
+                        placeholder={`Anak ${idx + 1}`}
+                        value={age}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSelectedPackage((prev) => {
+                            const updatedAges = [...(prev.childrenAges || [])];
+                            updatedAges[idx] = val;
+                            return {
+                              ...prev,
+                              childrenAges: updatedAges,
+                            };
+                          });
+                        }}
+                        bg="gray.600"
+                        color="white"
+                        width="100px"
+                      />
+                    ))}
+                  </HStack>
+                </Box>
+              )}
             </FormControl>
-          </HStack>
+          </SimpleGrid>
           <HStack spacing={4} mb={4}>
-          <Checkbox
-            colorScheme="blue"
-            size="md"
-            value={selectedPackage.addExtabedToChild}
-            onChange={(e) =>
-              setSelectedPackage((prev) => ({
-                ...prev,
-                addExtabedToChild: e.target.checked,
-              }))
-            }
-            isChecked={selectedPackage.addExtabedToChild}
-          >
-            Add Extabed to Child
-          </Checkbox> 
-                    <Checkbox
-            colorScheme="blue"
-            size="md"
-            value={selectedPackage.addAdditionalChild}
-            onChange={(e) =>
-              setSelectedPackage((prev) => ({
-                ...prev,
-                addAdditionalChild: e.target.checked,
-              }))
-            }
-            isChecked={selectedPackage.addAdditionalChild}
-          >
-            Additional will be shared
-          </Checkbox> 
+            <Checkbox
+              colorScheme="blue"
+              size="md"
+              value={selectedPackage.addAdditionalChild}
+              onChange={(e) =>
+                setSelectedPackage((prev) => ({
+                  ...prev,
+                  addAdditionalChild: e.target.checked,
+                }))
+              }
+              isChecked={selectedPackage.addAdditionalChild}
+            >
+              Additional will be shared
+            </Checkbox>
           </HStack>
           {/* DAYS */}
           <Box mt={8}>

@@ -46,13 +46,14 @@ const InvoicePDF = forwardRef((props, ref) => {
     setAdultPriceTotal,
     setChildPriceTotal,
     additionalChild,
+    setChild9Total,
   } = useCheckoutContext();
   const {
     days: expenseDays,
     calculateGrandTotal,
     expenseChild,
   } = useExpensesContext();
-  console.log(additionalChild);
+
   // Consolidated state untuk mengurangi re-render
   const [invoiceData, setInvoiceData] = useState({
     hotelData: [],
@@ -107,29 +108,6 @@ const InvoicePDF = forwardRef((props, ref) => {
     },
   }));
 
-  const calculateKidTotals = useMemo(() => {
-    let expensesKid = 0;
-    let tourKid = 0;
-
-    // Ambil dari context expenses
-    expenseDays.forEach((day) => {
-      day?.totals?.forEach((item) => {
-        if (item.childPrice) {
-          expensesKid += (item.childPrice || 0) * (item.childQuantity || 1);
-        }
-      });
-    });
-
-    // Ambil dari itineraryData (destinations, restaurants, activities)
-    invoiceData.itineraryData.forEach((day) => {
-      day.activities?.forEach((act) => {
-        tourKid += (act.childPrice || 0) * (act.childQty || 0);
-      });
-    });
-
-    return { expensesKid, tourKid };
-  }, [expenseDays, invoiceData.itineraryData]);
-
   // Memoize calculations untuk menghindari perhitungan berulang
   const calculatedValues = useMemo(() => {
     const totalAdult =
@@ -137,11 +115,15 @@ const InvoicePDF = forwardRef((props, ref) => {
       parseInt(selectedPackage.totalPaxAdult) > 0
         ? parseInt(selectedPackage.totalPaxAdult)
         : 0;
+
     const actualChild =
       selectedPackage?.totalPaxChildren &&
       parseInt(selectedPackage.totalPaxChildren) > 0
         ? parseInt(selectedPackage.totalPaxChildren)
         : 0;
+
+    const childrenAges = selectedPackage?.childrenAges || [];
+    const child9Count = childrenAges.filter((age) => age >= 9).length;
 
     const totalExpensesFromContext = calculateGrandTotal();
     const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
@@ -149,55 +131,53 @@ const InvoicePDF = forwardRef((props, ref) => {
     const tourAdult = tourTotal - childTotal;
 
     let adultAkomodasiTotal = akomodasiTotal;
-    let childAkomodasiTotal = 0;
-
-    if (selectedPackage?.addExtabedToChild) {
+    if (child9Count > 0 && extrabedTotal > 0) {
       adultAkomodasiTotal = akomodasiTotal - extrabedTotal;
-      childAkomodasiTotal = extrabedTotal;
-    } else {
-      adultAkomodasiTotal = akomodasiTotal;
-      childAkomodasiTotal = 0;
     }
 
     let adultBase =
       (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
-      totalAdult;
+      (totalAdult || 1);
 
-    let childBase = 0;
-    if (selectedPackage?.addExtabedToChild) {
-      childBase =
-        (childTotal + expenseChild + childAkomodasiTotal) / actualChild;
-    } else {
-      childBase = (childTotal + expenseChild) / actualChild;
+    let childBase = (childTotal + expenseChild) / (actualChild || 1);
+
+    let priceChild9 = childBase;
+    if (child9Count > 0 && extrabedTotal > 0) {
+      priceChild9 = childBase + extrabedTotal / child9Count;
     }
 
     if (selectedPackage?.addAdditionalChild) {
       const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
       const perChild = actualChild > 0 ? additionalChild / actualChild : 0;
-
+      const perChild9 = child9Count > 0 ? additionalChild / actualChild : 0;
+      
       adultBase -= perAdult;
-      childBase += perChild; 
+      childBase += perChild;
+      priceChild9 += perChild9;
     }
 
     const adultPriceTotal = adultBase + userMarkupAmount;
     const childPriceTotal = childBase + childMarkupAmount;
+    const child9PriceTotal = priceChild9 + childMarkupAmount;
 
     return {
       totalAdult,
       actualChild,
+      child9Count,
       totalExpensesFromContext,
       adjustedGrandTotal,
       extrabedTotal,
       adultPriceTotal,
       childPriceTotal,
+      child9PriceTotal, 
     };
   }, [
     selectedPackage?.totalPaxAdult,
     selectedPackage?.totalPaxChildren,
+    selectedPackage?.childrenAges,
     totalMarkup,
     grandTotal,
     calculateGrandTotal,
-    calculateKidTotals,
     extrabedTotal,
     akomodasiTotal,
     childTotal,
@@ -215,11 +195,15 @@ const InvoicePDF = forwardRef((props, ref) => {
     if (calculatedValues.childPriceTotal >= 0) {
       setChildPriceTotal(calculatedValues.childPriceTotal);
     }
+    if (calculatedValues.child9PriceTotal >= 0) {
+      setChild9Total(calculatedValues.child9PriceTotal);
+    }
   }, [
     calculatedValues.adultPriceTotal,
     calculatedValues.childPriceTotal,
     setAdultPriceTotal,
     setChildPriceTotal,
+    setChild9Total,
   ]);
 
   // Separate adminName state
@@ -716,9 +700,11 @@ const InvoicePDF = forwardRef((props, ref) => {
           totalExpenses={calculatedValues.totalExpensesFromContext}
           selling={calculatedValues.adultPriceTotal}
           sellingChild={calculatedValues.childPriceTotal}
+          sellingChild9={calculatedValues.child9PriceTotal}
           formatCurrency={formatCurrency}
           totalAdult={calculatedValues.totalAdult}
           totalChild={calculatedValues.actualChild}
+          totalChild9={calculatedValues.child9Count}
           exchangeRate={exchangeRate}
           isEditingExchangeRate={isEditingExchange}
           onExchangeRateChange={setExchangeRate}

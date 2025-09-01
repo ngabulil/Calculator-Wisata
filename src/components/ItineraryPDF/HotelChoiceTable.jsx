@@ -50,6 +50,7 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
     childMarkupAmount,
     childPriceTotal,
     additionalChild,
+    child9Total,
   } = useCheckoutContext();
 
   const [parsedExpensesData, setParsedExpensesData] = useState({
@@ -191,59 +192,50 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
   }, [selectedPackage?.days]);
 
   const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
-    const totalAdult =
-      selectedPackage?.totalPaxAdult &&
-      parseInt(selectedPackage.totalPaxAdult) > 0
-        ? parseInt(selectedPackage.totalPaxAdult)
-        : 1;
-
-    const totalChild =
-      selectedPackage?.totalPaxChildren &&
-      parseInt(selectedPackage.totalPaxChildren) > 0
-        ? parseInt(selectedPackage.totalPaxChildren)
-        : 0;
-
-    const accommodationNights =
-      selectedPackage?.days?.reduce((count, day) => {
-        const hasHotel = Array.isArray(day.hotels) && day.hotels.length > 0;
-        const hasVilla = Array.isArray(day.villas) && day.villas.length > 0;
-        return hasHotel || hasVilla ? count + 1 : count;
-      }, 0) || 1;
-
-    let adultAkomodasiTotal = accommodationPrice * accommodationNights;
-    let childAkomodasiTotal = 0;
-
-    if (selectedPackage?.addExtabedToChild) {
-      childAkomodasiTotal = extrabedPrice * accommodationNights;
-    } else {
-      adultAkomodasiTotal += extrabedPrice * accommodationNights;
-    }
+    const totalAdult = parseInt(selectedPackage?.totalPaxAdult) || 0;
+    const totalChild = parseInt(selectedPackage?.totalPaxChildren) || 0;
+    const childrenAges = selectedPackage?.childrenAges || [];
+    const child9Count = childrenAges.filter((age) => age >= 9).length;
 
     const totalExpensesFromContext = calculateGrandTotal();
     const adultExpenses = totalExpensesFromContext - expenseChild;
     const tourAdult = tourTotal - childTotal;
 
-    let adultBase =
-      (adultAkomodasiTotal + tourAdult + transportTotal + adultExpenses) /
-      totalAdult;
+    let adultAkomodasiTotal = accommodationPrice;
 
-    let childBase =
-      (childAkomodasiTotal + childTotal + expenseChild) / totalChild;
+    if (child9Count > 0 && extrabedPrice > 0) {
+      adultAkomodasiTotal -= extrabedPrice;
+    }
+
+    let adultBase =
+      (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
+      (totalAdult || 1);
+
+    let childBase = (childTotal + expenseChild) / (totalChild || 1);
+
+    let priceChild9 = childBase;
+    if (child9Count > 0 && extrabedPrice > 0) {
+      priceChild9 = childBase + extrabedPrice / child9Count;
+    }
 
     if (selectedPackage?.addAdditionalChild) {
       const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
       const perChild = totalChild > 0 ? additionalChild / totalChild : 0;
+      const perChild9 = child9Count > 0 ? additionalChild / totalChild : 0;
 
-      adultBase -= perAdult; 
-      childBase += perChild;  
+      adultBase -= perAdult;
+      childBase += perChild;
+      priceChild9 += perChild9;
     }
 
     const alternativeAdultPrice = adultBase + userMarkupAmount;
     const alternativeChildPrice = childBase + childMarkupAmount;
+    const alternativeChild9Price = priceChild9 + childMarkupAmount;
 
     return {
       adultPrice: alternativeAdultPrice,
       childPrice: alternativeChildPrice,
+      child9Price: alternativeChild9Price,
     };
   };
 
@@ -485,9 +477,10 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
                 textAlign="center"
                 fontSize="xs"
               >
-                <VStack spacing={1}>
-                  <Text>
-                    Adult :{" "}
+                <VStack spacing={1} align="flex-start">
+                  {/* Adult */}
+                  <Text fontWeight="bold" color="teal.700">
+                    ADULT :{" "}
                     {index === 0
                       ? formatCurrency(calculatedTotalPerPax)
                       : formatCurrency(
@@ -498,9 +491,27 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
                         )}{" "}
                     / Pax
                   </Text>
-                  {selectedPackage?.totalPaxChildren > 0 && (
-                    <Text>
-                      Child :{" "}
+
+                  {/* Child ≥9 tahun */}
+                  {selectedPackage?.childrenAges?.some((age) => age >= 9) && (
+                    <Text fontWeight="bold" color="blue.700">
+                      CHILD 9y :{" "}
+                      {index === 0
+                        ? formatCurrency(child9Total) // ini dari CheckoutContext
+                        : formatCurrency(
+                            calculateAlternativePrices(
+                              item.price,
+                              item.extrabedPrice
+                            ).child9Price
+                          )}{" "}
+                      / Pax
+                    </Text>
+                  )}
+
+                  {/* Child <9 tahun */}
+                  {selectedPackage?.childrenAges?.some((age) => age < 9) && (
+                    <Text fontWeight="bold" color="green.700">
+                      CHILD :{" "}
                       {index === 0
                         ? formatCurrency(childPriceTotal)
                         : formatCurrency(

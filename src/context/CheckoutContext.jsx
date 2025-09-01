@@ -20,6 +20,7 @@ const CheckoutContextProvider = ({ children }) => {
   const [extrabedTotal, setExtrabedTotal] = useState(0);
   const [adultPriceTotal, setAdultPriceTotal] = useState(0);
   const [childPriceTotal, setChildPriceTotal] = useState(0);
+  const [child9Total, setChild9Total] = useState(0);
   const [dayTotals, setDayTotals] = useState([]);
   const [detailedBreakdown, setDetailedBreakdown] = useState([]);
   const [userMarkup, setUserMarkup] = useState({
@@ -299,6 +300,8 @@ const CheckoutContextProvider = ({ children }) => {
     updateChildMarkup,
     setAdultPriceTotal,
     setChildPriceTotal,
+    setChild9Total,
+    child9Total,
     calculateHotelTotal,
     calculateVillaTotal,
     calculateAdditionalTotal,
