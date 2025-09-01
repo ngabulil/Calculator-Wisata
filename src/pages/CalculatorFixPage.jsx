@@ -139,6 +139,7 @@ const CalculatorFixPage = () => {
                   totalPaxAdult: found.totalPaxAdult || 0,
                   totalPaxChildren: found.totalPaxChildren || 0,
                   addExtabedToChild: false,
+                  addAdditionalChild: false,
                   days: found.days || [],
                 });
                 setActiveDayId(found.id);
@@ -210,6 +211,7 @@ const CalculatorFixPage = () => {
               />
             </FormControl>
           </HStack>
+          <HStack spacing={4} mb={4}>
           <Checkbox
             colorScheme="blue"
             size="md"
@@ -224,7 +226,21 @@ const CalculatorFixPage = () => {
           >
             Add Extabed to Child
           </Checkbox> 
-
+                    <Checkbox
+            colorScheme="blue"
+            size="md"
+            value={selectedPackage.addAdditionalChild}
+            onChange={(e) =>
+              setSelectedPackage((prev) => ({
+                ...prev,
+                addAdditionalChild: e.target.checked,
+              }))
+            }
+            isChecked={selectedPackage.addAdditionalChild}
+          >
+            Additional will be shared
+          </Checkbox> 
+          </HStack>
           {/* DAYS */}
           <Box mt={8}>
             <HStack spacing={3} mb={3} flexWrap="wrap">

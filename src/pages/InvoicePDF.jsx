@@ -43,11 +43,16 @@ const InvoicePDF = forwardRef((props, ref) => {
     childTotal,
     totalMarkupChild,
     extrabedTotal,
-    setAdultPriceTotal, // Dapatkan setter dari context
-    setChildPriceTotal, // Dapatkan setter dari context
+    setAdultPriceTotal,
+    setChildPriceTotal,
+    additionalChild,
   } = useCheckoutContext();
-  const { days: expenseDays, calculateGrandTotal, expenseChild } = useExpensesContext();
-
+  const {
+    days: expenseDays,
+    calculateGrandTotal,
+    expenseChild,
+  } = useExpensesContext();
+  console.log(additionalChild);
   // Consolidated state untuk mengurangi re-render
   const [invoiceData, setInvoiceData] = useState({
     hotelData: [],
@@ -128,7 +133,8 @@ const InvoicePDF = forwardRef((props, ref) => {
   // Memoize calculations untuk menghindari perhitungan berulang
   const calculatedValues = useMemo(() => {
     const totalAdult =
-      selectedPackage?.totalPaxAdult && parseInt(selectedPackage.totalPaxAdult) > 0
+      selectedPackage?.totalPaxAdult &&
+      parseInt(selectedPackage.totalPaxAdult) > 0
         ? parseInt(selectedPackage.totalPaxAdult)
         : 0;
     const actualChild =
@@ -153,17 +159,26 @@ const InvoicePDF = forwardRef((props, ref) => {
       childAkomodasiTotal = 0;
     }
 
-    const adultBase =
+    let adultBase =
       (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
       totalAdult;
 
     let childBase = 0;
     if (selectedPackage?.addExtabedToChild) {
-      childBase = (childTotal + expenseChild + childAkomodasiTotal) / actualChild;
+      childBase =
+        (childTotal + expenseChild + childAkomodasiTotal) / actualChild;
     } else {
       childBase = (childTotal + expenseChild) / actualChild;
     }
-    
+
+    if (selectedPackage?.addAdditionalChild) {
+      const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
+      const perChild = actualChild > 0 ? additionalChild / actualChild : 0;
+
+      adultBase -= perAdult;
+      childBase += perChild; 
+    }
+
     const adultPriceTotal = adultBase + userMarkupAmount;
     const childPriceTotal = childBase + childMarkupAmount;
 
@@ -291,7 +306,11 @@ const InvoicePDF = forwardRef((props, ref) => {
             const price = parseInt(mobil.harga) || 0;
             transports.push({
               day: `Day ${dayIndex + 1}`,
-              description: mobil.mobil?.label || mobil.label || mobil.displayName || mobil.name,
+              description:
+                mobil.mobil?.label ||
+                mobil.label ||
+                mobil.displayName ||
+                mobil.name,
               price: price,
             });
           });
