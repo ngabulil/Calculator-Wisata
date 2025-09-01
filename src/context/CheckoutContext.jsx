@@ -95,6 +95,18 @@ const CheckoutContextProvider = ({ children }) => {
     return mobilTotal + additionalTransportTotal;
   };
 
+  const calculateAditionalChild = (days = []) => {
+    const multiplier = selectedPackage?.totalPaxChildren;
+    return days.reduce((sum, day) => {
+      const dayTotal = [
+        ...(day.akomodasi_additionals || []),
+        ...(day.transport_additionals || []),
+      ].reduce((subSum, item) => subSum + (item.harga || 0) * multiplier, 0);
+
+      return sum + dayTotal;
+    }, 0);
+  };
+
   const calculateTourTotal = (day) => {
     const tours = day.tours || day.tour || [];
 
@@ -256,6 +268,7 @@ const CheckoutContextProvider = ({ children }) => {
     selectedPackage?.totalPaxChildren && selectedPackage.totalPaxChildren > 0
       ? selectedPackage.totalPaxChildren
       : 0;
+  const additionalChild = calculateAditionalChild(selectedPackage?.days || []);
   const userMarkupAmount = calculateUserMarkup(subtotalBeforeUserMarkup);
   const totalMarkup = userMarkupAmount * totalAdult;
   const childMarkupAmount = calculateChildMarkup(childTotal);
@@ -275,6 +288,7 @@ const CheckoutContextProvider = ({ children }) => {
     userMarkup,
     adultPriceTotal,
     childPriceTotal,
+    additionalChild,
     userMarkupAmount,
     childMarkup,
     childMarkupAmount,
