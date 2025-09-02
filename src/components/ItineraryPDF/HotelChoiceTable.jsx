@@ -407,7 +407,7 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
             <Th
               style={tableHeaderStyle}
               border="1px solid #ddd"
-              width="50%"
+              width="60%"
               rowSpan={2}
             >
               <VStack spacing={0}>
@@ -434,7 +434,7 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
             <Th
               style={{ ...tableHeaderStyle }}
               border="1px solid #ddd"
-              width="22.5%"
+              width="25%"
             >
               <VStack spacing={0}>
                 <Text fontSize="2xs" fontWeight="bold">
@@ -472,7 +472,7 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
               </Td>
 
               <Td
-                style={tableCellStyle}
+                style={{ ...tableCellStyle, width: "40%" }}
                 fontWeight="bold"
                 textAlign="center"
                 fontSize="xs"

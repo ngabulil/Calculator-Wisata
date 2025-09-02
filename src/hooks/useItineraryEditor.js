@@ -92,29 +92,23 @@ const useItineraryEditor = (initialDays = [], packageId = null) => {
             }
 
             // Apply item-level edits
-            if (dayOrderInfo.editedContent.items && reorderedDay.items) {
-              reorderedDay.items = reorderedDay.items.map((item, index) => {
-                const editedItem = dayOrderInfo.editedContent.items[index];
-                if (editedItem) {
-                  return {
-                    ...item,
-                    ...(editedItem.title && { 
-                      item: item.type === 'activity' ? editedItem.title : item.item,
-                      label: item.type === 'expense' ? editedItem.title : item.label 
-                    }),
-                    ...(editedItem.description && { description: editedItem.description })
-                  };
-                }
-                return item;
-              });
+          if (dayOrderInfo.editedContent.items && reorderedDay.items) {
+            dayOrderInfo.editedContent.items.forEach(edit => {
+              const targetIndex = edit.index;
+              if (reorderedDay.items[targetIndex]) {
+                reorderedDay.items[targetIndex] = {
+                  ...reorderedDay.items[targetIndex],
+                  ...(edit.title && { 
+                    item: reorderedDay.items[targetIndex].type === 'activity' ? edit.title : reorderedDay.items[targetIndex].item,
+                    label: reorderedDay.items[targetIndex].type === 'expense' ? edit.title : reorderedDay.items[targetIndex].label 
+                  }),
+                  ...(edit.description && { description: edit.description })
+                };
+              }
+            });
 
-              // Update activities and expenseItems arrays
-              reorderedDay.activities = reorderedDay.items.filter(
-                (item) => item.type === "activity"
-              );
-              reorderedDay.expenseItems = reorderedDay.items.filter(
-                (item) => item.type === "expense"
-              );
+            reorderedDay.activities = reorderedDay.items.filter(i => i.type === "activity");
+            reorderedDay.expenseItems = reorderedDay.items.filter(i => i.type === "expense");
             }
           }
 
@@ -174,26 +168,25 @@ const useItineraryEditor = (initialDays = [], packageId = null) => {
         orderInfo.editedContent.items = day.items.map((item, index) => {
           const originalIndex = orderInfo.itemOrders.items[index];
           const originalItem = originalIndex !== -1 ? originalDay.items[originalIndex] : null;
-          
+
           if (!originalItem) return null;
 
           const editedItem = {};
-          
-          // Check if title/name changed
           const currentTitle = item.type === 'activity' ? item.item : item.label;
           const originalTitle = originalItem.type === 'activity' ? originalItem.item : originalItem.label;
-          
+
           if (currentTitle !== originalTitle) {
             editedItem.title = currentTitle;
           }
 
-          // Check if description changed
           if (item.description !== originalItem.description) {
             editedItem.description = item.description;
           }
 
-          return Object.keys(editedItem).length > 0 ? editedItem : null;
-        });
+          return Object.keys(editedItem).length > 0
+            ? { index: originalIndex, ...editedItem }
+            : null;
+        }).filter(Boolean);
 
         // Remove null entries
         orderInfo.editedContent.items = orderInfo.editedContent.items.filter(Boolean);
