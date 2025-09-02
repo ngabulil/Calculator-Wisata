@@ -703,7 +703,7 @@ const InvoicePDF = forwardRef((props, ref) => {
           sellingChild9={calculatedValues.child9PriceTotal}
           formatCurrency={formatCurrency}
           totalAdult={calculatedValues.totalAdult}
-          totalChild={calculatedValues.actualChild}
+          totalChild={selectedPackage?.childrenAges?.some((age) => age < 9)}
           totalChild9={calculatedValues.child9Count}
           exchangeRate={exchangeRate}
           isEditingExchangeRate={isEditingExchange}
