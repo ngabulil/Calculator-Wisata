@@ -19,6 +19,7 @@ import { apiGetUser } from "../services/adminService";
 import Cookies from "js-cookie";
 import useExportPdf from "../hooks/useExportPdf";
 import useItineraryEditor from "../hooks/useItineraryEditor";
+import { roundPrice } from "../utils/roundPrice";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -156,9 +157,9 @@ const InvoicePDF = forwardRef((props, ref) => {
       priceChild9 += perChild9;
     }
 
-    const adultPriceTotal = adultBase + userMarkupAmount;
-    const childPriceTotal = childBase + childMarkupAmount;
-    const child9PriceTotal = priceChild9 + childMarkupAmount;
+    const adultPriceTotal = roundPrice(adultBase + userMarkupAmount);
+    const childPriceTotal = roundPrice(childBase + childMarkupAmount);
+    const child9PriceTotal = roundPrice(priceChild9 + childMarkupAmount);
 
     return {
       totalAdult,
