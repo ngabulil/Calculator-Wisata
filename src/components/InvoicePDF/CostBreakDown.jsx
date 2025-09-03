@@ -12,6 +12,7 @@ import {
   Divider,
   Input
 } from "@chakra-ui/react";
+import { roundPrice } from "../../utils/roundPrice";
 
 const orangeDark = "#FB8C00";
 const yellow = "#FFF59D";
@@ -109,9 +110,9 @@ const CostBreakDown = ({
     0
   );
 
-  const hotelPerAdult = totalAdult > 0 ? hotelTotal / totalAdult : 0;
-  const transportPerAdult = totalAdult > 0 ? transportTotal / totalAdult : 0;
-  const additionalPerAdult = totalAdult > 0 ? additionalTotal / totalAdult : 0;
+  const hotelPerAdult = roundPrice(totalAdult > 0 ? hotelTotal / totalAdult : 0);
+  const transportPerAdult = roundPrice(totalAdult > 0 ? transportTotal / totalAdult : 0);
+  const additionalPerAdult = roundPrice(totalAdult > 0 ? additionalTotal / totalAdult : 0);
 
   // Check if any hotel has extrabed
   const hasExtrabed = sortedHotelData.some(item => (item.extrabedQty || 0) > 0);
