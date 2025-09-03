@@ -15,6 +15,7 @@ import { parseAndMergeDays } from "../../utils/parseAndMergeDays";
 // import { useGrandTotalContext } from "../../context/GrandTotalContext";
 import { usePackageContext } from "../../context/PackageContext";
 import { useCheckoutContext } from "../../context/CheckoutContext";
+import { roundPrice } from "../../utils/roundPrice";
 
 const orange = "#FB8C00";
 const gray = "#F5F5F5";
@@ -228,9 +229,9 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
       priceChild9 += perChild9;
     }
 
-    const alternativeAdultPrice = adultBase + userMarkupAmount;
-    const alternativeChildPrice = childBase + childMarkupAmount;
-    const alternativeChild9Price = priceChild9 + childMarkupAmount;
+    const alternativeAdultPrice = roundPrice(adultBase + userMarkupAmount);
+    const alternativeChildPrice = roundPrice(childBase + childMarkupAmount);
+    const alternativeChild9Price = roundPrice(priceChild9 + childMarkupAmount);
 
     return {
       adultPrice: alternativeAdultPrice,
