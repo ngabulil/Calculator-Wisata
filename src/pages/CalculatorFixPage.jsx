@@ -230,14 +230,14 @@ const CalculatorFixPage = () => {
               {/* Input Umur Anak */}
               {selectedPackage.totalPaxChildren > 0 && (
                 <Box mt={3}>
-                  <FormLabel color="white">Umur Anak</FormLabel>
+                  <FormLabel color="white">Children Age</FormLabel>
                   <HStack spacing={3} wrap="wrap">
                     {(selectedPackage.childrenAges || []).map((age, idx) => (
                       <Input
                         key={idx}
                         type="number"
                         min="0"
-                        placeholder={`Anak ${idx + 1}`}
+                        placeholder={`Child ${idx + 1}`}
                         value={age}
                         onChange={(e) => {
                           const val = e.target.value;
@@ -273,7 +273,7 @@ const CalculatorFixPage = () => {
               }
               isChecked={selectedPackage.addAdditionalChild}
             >
-              Additional will be shared
+              Add Additionals to Children
             </Checkbox>
           </HStack>
           {/* DAYS */}
