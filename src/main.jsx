@@ -17,6 +17,7 @@ import PackageContextProvider from "./context/PackageContext";
 import TourContextProvider from "./context/TourContext";
 import GrandTotalContextProvider from "./context/GrandTotalContext";
 import AdminAuthContextProvider from "./context/AuthContext";
+import CurrencyContextProvider from "./context/CurrencyContext";
 
 const config = {
   initialColorMode: "dark", // dark default
@@ -29,25 +30,27 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
     <AdminAuthContextProvider>
       <CalculatorProvider>
-        <PackageContextProvider>
-          <GrandTotalContextProvider>
-            <CheckoutContextProvider>
-              <AkomodasiContextProvider>
-                <TourContextProvider>
-                  <TransportContextProvider>
-                    <ExpensesContextProvider>
-                      <AdminProviderContext>
-                        <BrowserRouter>
-                          <App />
-                        </BrowserRouter>
-                      </AdminProviderContext>
-                    </ExpensesContextProvider>
-                  </TransportContextProvider>
-                </TourContextProvider>
-              </AkomodasiContextProvider>
-            </CheckoutContextProvider>
-          </GrandTotalContextProvider>
-        </PackageContextProvider>
+        <CurrencyContextProvider>
+          <PackageContextProvider>
+            <GrandTotalContextProvider>
+              <CheckoutContextProvider>
+                <AkomodasiContextProvider>
+                  <TourContextProvider>
+                    <TransportContextProvider>
+                      <ExpensesContextProvider>
+                        <AdminProviderContext>
+                          <BrowserRouter>
+                            <App />
+                          </BrowserRouter>
+                        </AdminProviderContext>
+                      </ExpensesContextProvider>
+                    </TransportContextProvider>
+                  </TourContextProvider>
+                </AkomodasiContextProvider>
+              </CheckoutContextProvider>
+            </GrandTotalContextProvider>
+          </PackageContextProvider>
+        </CurrencyContextProvider>
       </CalculatorProvider>
     </AdminAuthContextProvider>
   </ChakraProvider>

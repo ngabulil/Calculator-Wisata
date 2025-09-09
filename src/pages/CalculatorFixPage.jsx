@@ -34,6 +34,7 @@ import TourTabContent from "../components/Calculator/tab-content/TourTabContent"
 import { useGrandTotalContext } from "../context/GrandTotalContext";
 import MainSelect from "../components/MainSelect";
 import AkomodasiTabContent from "../components/Calculator/tab-content/AkomodasiTabContent";
+import { useCurrencyContext } from "../context/CurrencyContext";
 
 const CalculatorFixPage = () => {
   const bg = useColorModeValue("gray.50", "gray.900");
@@ -41,6 +42,7 @@ const CalculatorFixPage = () => {
   const navigate = useNavigate();
   const { akomodasiTotal, transportTotal, tourTotal } = useGrandTotalContext();
   const [isVisible, setIsVisible] = useState(true);
+  const { currency, setCurrency } = useCurrencyContext();
 
   const isCheckoutPage = location.pathname === "/checkout";
 
@@ -179,6 +181,20 @@ const CalculatorFixPage = () => {
                 }))
               }
             />
+          </FormControl>
+
+          <FormControl mb={4}>
+            <FormLabel color="white">Currency</FormLabel>
+            <Input
+              placeholder="IDR, USD, MYR, SGD"
+              bg="gray.600"
+              color="white"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value.toUpperCase())}
+            />
+            <Text fontSize="sm" color="gray.400" mt={2}>
+              *This currency format will be applied to prices in the itinerary
+            </Text>
           </FormControl>
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
