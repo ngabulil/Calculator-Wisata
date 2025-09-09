@@ -48,6 +48,7 @@ const InvoicePDF = forwardRef((props, ref) => {
     setChildPriceTotal,
     additionalChild,
     setChild9Total,
+    hotelVilla,
   } = useCheckoutContext();
   const {
     days: expenseDays,
@@ -132,26 +133,35 @@ const InvoicePDF = forwardRef((props, ref) => {
     const tourAdult = tourTotal - childTotal;
 
     let adultAkomodasiTotal = akomodasiTotal;
-    if (child9Count > 0 && extrabedTotal > 0) {
-      adultAkomodasiTotal = akomodasiTotal - extrabedTotal;
+    let childAkomodasiTotal = 0;
+
+    if (selectedPackage?.addExtrabedChild) {
+      adultAkomodasiTotal = hotelVilla;
+      childAkomodasiTotal = extrabedTotal;
+    } else if (child9Count > 0) {
+      adultAkomodasiTotal = hotelVilla;
     }
 
     let adultBase =
       (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
       (totalAdult || 1);
 
-    let childBase = (childTotal + expenseChild) / (actualChild || 1);
+    let childBase =
+      (childTotal + expenseChild + childAkomodasiTotal) / (actualChild || 1);
 
     let priceChild9 = childBase;
-    if (child9Count > 0 && extrabedTotal > 0) {
-      priceChild9 = childBase + extrabedTotal / child9Count;
+    if (child9Count > 0) {
+      if (selectedPackage?.addExtrabedChild) {
+        priceChild9 = childBase;
+      } else if (extrabedTotal > 0) {
+        priceChild9 = childBase + extrabedTotal / child9Count;
+      }
     }
-
     if (selectedPackage?.addAdditionalChild) {
       const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
       const perChild = actualChild > 0 ? additionalChild / actualChild : 0;
       const perChild9 = child9Count > 0 ? additionalChild / actualChild : 0;
-      
+
       adultBase -= perAdult;
       childBase += perChild;
       priceChild9 += perChild9;
@@ -168,9 +178,10 @@ const InvoicePDF = forwardRef((props, ref) => {
       totalExpensesFromContext,
       adjustedGrandTotal,
       extrabedTotal,
+      hotelVilla,
       adultPriceTotal,
       childPriceTotal,
-      child9PriceTotal, 
+      child9PriceTotal,
     };
   }, [
     selectedPackage?.totalPaxAdult,
