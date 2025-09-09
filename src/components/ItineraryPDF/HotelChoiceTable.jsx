@@ -16,6 +16,7 @@ import { parseAndMergeDays } from "../../utils/parseAndMergeDays";
 import { usePackageContext } from "../../context/PackageContext";
 import { useCheckoutContext } from "../../context/CheckoutContext";
 import { roundPrice } from "../../utils/roundPrice";
+import { useCurrencyContext } from "../../context/CurrencyContext";
 
 const orange = "#FB8C00";
 const gray = "#F5F5F5";
@@ -53,6 +54,19 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
     additionalChild,
     child9Total,
   } = useCheckoutContext();
+  const { currency } = useCurrencyContext();
+
+const formatCurrencyWithCode = (value) => {
+  if (currency === 'IDR') {
+    return formatCurrency(value);
+  } else {
+    const exchangeRate = parseFloat(localStorage.getItem('invoiceExchangeRate') || '1');
+    const convertedValue = value / exchangeRate;
+    const roundedValue = Math.round(convertedValue)
+    
+    return `${roundedValue.toLocaleString("id-ID")} ${currency}`;
+  }
+};
 
   const [parsedExpensesData, setParsedExpensesData] = useState({
     hotels: [],
@@ -483,8 +497,8 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
                   <Text fontWeight="bold" color="teal.700">
                     ADULT :{" "}
                     {index === 0
-                      ? formatCurrency(calculatedTotalPerPax)
-                      : formatCurrency(
+                      ? formatCurrencyWithCode(calculatedTotalPerPax)
+                      : formatCurrencyWithCode(
                           calculateAlternativePrices(
                             item.price,
                             item.extrabedPrice
@@ -498,8 +512,8 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
                     <Text fontWeight="bold" color="blue.700">
                       CHILD 9y :{" "}
                       {index === 0
-                        ? formatCurrency(child9Total) // ini dari CheckoutContext
-                        : formatCurrency(
+                        ?  formatCurrencyWithCode(child9Total) // ini dari CheckoutContext
+                        :  formatCurrencyWithCode(
                             calculateAlternativePrices(
                               item.price,
                               item.extrabedPrice
@@ -514,8 +528,8 @@ const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
                     <Text fontWeight="bold" color="green.700">
                       CHILD :{" "}
                       {index === 0
-                        ? formatCurrency(childPriceTotal)
-                        : formatCurrency(
+                        ? formatCurrencyWithCode(childPriceTotal)
+                        :  formatCurrencyWithCode(
                             calculateAlternativePrices(
                               item.price,
                               item.extrabedPrice
