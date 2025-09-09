@@ -142,6 +142,7 @@ const CalculatorFixPage = () => {
                   totalPaxAdult: found.totalPaxAdult || 0,
                   totalPaxChildren: found.totalPaxChildren || 0,
                   addAdditionalChild: false,
+                  addExtrabedChild: false,
                   days: found.days || [],
                   childrenAges: [],
                 });
@@ -290,6 +291,20 @@ const CalculatorFixPage = () => {
               isChecked={selectedPackage.addAdditionalChild}
             >
               Add Additionals to Children
+            </Checkbox>
+            <Checkbox
+              colorScheme="blue"
+              size="md"
+              value={selectedPackage.addExtrabedChild}
+              onChange={(e) =>
+                setSelectedPackage((prev) => ({
+                  ...prev,
+                  addExtrabedChild: e.target.checked,
+                }))
+              }
+              isChecked={selectedPackage.addExtrabedChild}
+            >
+              Add Exrtabed to Children
             </Checkbox>
           </HStack>
           {/* DAYS */}

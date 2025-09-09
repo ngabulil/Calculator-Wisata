@@ -206,53 +206,61 @@ const formatCurrencyWithCode = (value) => {
     return nightsCount;
   }, [selectedPackage?.days]);
 
-  const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
-    const totalAdult = parseInt(selectedPackage?.totalPaxAdult) || 0;
-    const totalChild = parseInt(selectedPackage?.totalPaxChildren) || 0;
-    const childrenAges = selectedPackage?.childrenAges || [];
-    const child9Count = childrenAges.filter((age) => age >= 9).length;
+const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
+  const totalAdult = parseInt(selectedPackage?.totalPaxAdult) || 0;
+  const totalChild = parseInt(selectedPackage?.totalPaxChildren) || 0;
+  const childrenAges = selectedPackage?.childrenAges || [];
+  const child9Count = childrenAges.filter((age) => age >= 9).length;
 
-    const totalExpensesFromContext = calculateGrandTotal();
-    const adultExpenses = totalExpensesFromContext - expenseChild;
-    const tourAdult = tourTotal - childTotal;
+  const totalExpensesFromContext = calculateGrandTotal();
+  const adultExpenses = totalExpensesFromContext - expenseChild;
+  const tourAdult = tourTotal - childTotal;
 
-    let adultAkomodasiTotal = accommodationPrice;
+  let adultAkomodasiTotal = accommodationPrice;
+  let childAkomodasiTotal = 0;
 
-    if (child9Count > 0 && extrabedPrice > 0) {
-      adultAkomodasiTotal -= extrabedPrice;
-    }
+  if (selectedPackage?.addExtrabedChild) {
+    adultAkomodasiTotal = accommodationPrice;
+    childAkomodasiTotal = extrabedPrice;
+  } else if (child9Count > 0 && extrabedPrice > 0) {
+    adultAkomodasiTotal = extrabedPrice;
+  }
 
-    let adultBase =
-      (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
-      (totalAdult || 1);
+  let childBase = (childTotal + expenseChild + childAkomodasiTotal) / (totalChild || 1);
+  let priceChild9 = childBase;
 
-    let childBase = (childTotal + expenseChild) / (totalChild || 1);
-
-    let priceChild9 = childBase;
-    if (child9Count > 0 && extrabedPrice > 0) {
+  if (child9Count > 0) {
+    if (selectedPackage?.addExtrabedChild) {
+      priceChild9 = childBase;
+    } else if (extrabedPrice > 0) {
       priceChild9 = childBase + extrabedPrice / child9Count;
     }
+  }
 
-    if (selectedPackage?.addAdditionalChild) {
-      const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
-      const perChild = totalChild > 0 ? additionalChild / totalChild : 0;
-      const perChild9 = child9Count > 0 ? additionalChild / totalChild : 0;
+  let adultBase =
+    (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
+    (totalAdult || 1);
 
-      adultBase -= perAdult;
-      childBase += perChild;
-      priceChild9 += perChild9;
-    }
+  if (selectedPackage?.addAdditionalChild) {
+    const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
+    const perChild = totalChild > 0 ? additionalChild / totalChild : 0;
+    const perChild9 = child9Count > 0 ? additionalChild / totalChild : 0;
 
-    const alternativeAdultPrice = roundPrice(adultBase + userMarkupAmount);
-    const alternativeChildPrice = roundPrice(childBase + childMarkupAmount);
-    const alternativeChild9Price = roundPrice(priceChild9 + childMarkupAmount);
+    adultBase -= perAdult;
+    childBase += perChild;
+    priceChild9 += perChild9;
+  }
 
-    return {
-      adultPrice: alternativeAdultPrice,
-      childPrice: alternativeChildPrice,
-      child9Price: alternativeChild9Price,
-    };
+  const alternativeAdultPrice = roundPrice(adultBase + userMarkupAmount);
+  const alternativeChildPrice = roundPrice(childBase + childMarkupAmount);
+  const alternativeChild9Price = roundPrice(priceChild9 + childMarkupAmount);
+
+  return {
+    adultPrice: alternativeAdultPrice,
+    childPrice: alternativeChildPrice,
+    child9Price: alternativeChild9Price,
   };
+};
 
   const allAccommodations = useMemo(() => {
     const packageAccommodations = [];
