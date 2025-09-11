@@ -42,7 +42,14 @@ const CalculatorFixPage = () => {
   const bg = useColorModeValue("gray.50", "gray.900");
   const location = useLocation();
   const navigate = useNavigate();
-  const { akomodasiTotal, transportTotal, tourTotal } = useGrandTotalContext();
+  const {
+    akomodasiTotal,
+    transportTotal,
+    tourTotal,
+    setAkomodasiTotal,
+    setTransportTotal,
+    setTourTotal,
+  } = useGrandTotalContext();
   const [isVisible, setIsVisible] = useState(true);
   const { currency, setCurrency } = useCurrencyContext();
 
@@ -232,13 +239,32 @@ const CalculatorFixPage = () => {
   };
 
   // Grand total
-  const grandTotal = useMemo(
-    () =>
-      [akomodasiTotal, tourTotal, transportTotal]
-        .flat()
-        .reduce((sum, n) => sum + n, 0),
-    [akomodasiTotal, tourTotal, transportTotal]
-  );
+  const dayLen = days.length;
+  const sumUpto = (arr) =>
+    (arr || []).slice(0, dayLen).reduce((s, n) => s + (Number(n) || 0), 0);
+
+  const grandTotal = useMemo(() => {
+    return (
+      sumUpto(akomodasiTotal) + sumUpto(tourTotal) + sumUpto(transportTotal)
+    );
+  }, [akomodasiTotal, tourTotal, transportTotal, dayLen]);
+
+  useEffect(() => {
+    const len = days.length || 0;
+
+    const fit = (prev) => {
+      if (!Array.isArray(prev)) return Array(len).fill(0);
+      if (prev.length === len) return prev;
+      // potong atau tambahkan 0 hingga panjangnya pas
+      const next = prev.slice(0, len);
+      while (next.length < len) next.push(0);
+      return next;
+    };
+
+    setAkomodasiTotal((prev) => fit(prev));
+    setTourTotal((prev) => fit(prev));
+    setTransportTotal((prev) => fit(prev));
+  }, [days.length, setAkomodasiTotal, setTourTotal, setTransportTotal]);
 
   return (
     <Box minH="100vh" bg={bg} position="relative">
@@ -281,7 +307,12 @@ const CalculatorFixPage = () => {
                   days: found.days || [],
                   childrenAges: [],
                 });
-                setActiveDayId(found.id);
+                // RESET total per-hari agar bersih sesuai jumlah hari paket yang baru
+                const len = (found.days || []).length;
+                setAkomodasiTotal(Array(len).fill(0));
+                setTourTotal(Array(len).fill(0));
+                setTransportTotal(Array(len).fill(0));
+                setActiveDayId(found?.days?.[0]?.id ?? 1);
                 setActiveTravelerKey("adult");
               }}
               placeholder="Pilih Paket"
