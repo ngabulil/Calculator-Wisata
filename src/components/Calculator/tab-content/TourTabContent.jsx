@@ -14,6 +14,8 @@ import RestoCard from "../tour/RestoCard";
 import { usePackageContext } from "../../../context/PackageContext";
 import { useTourContext } from "../../../context/TourContext";
 import { useGrandTotalContext } from "../../../context/GrandTotalContext";
+// NEW
+import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
 const TourTabContent = ({ dayIndex }) => {
   const {
@@ -34,12 +36,11 @@ const TourTabContent = ({ dayIndex }) => {
   );
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let timeout;
-    timeout = setTimeout(() => {
-      setLoading(false);
-    }, 100);
+  // NEW: traveler context
+  const { isAdultActive } = useTravelerGroup();
 
+  useEffect(() => {
+    let timeout = setTimeout(() => setLoading(false), 100);
     return () => {
       setLoading(true);
       clearTimeout(timeout);
@@ -66,24 +67,24 @@ const TourTabContent = ({ dayIndex }) => {
     const tourItems = currentDay.tour || [];
 
     const subtotal = tourItems.reduce((sum, item) => {
-      const hargaAdult = item.hargaAdult || 0;
-      const hargaChild = item.hargaChild || 0;
-      const jumlahAdult = item.jumlahAdult || 0;
-      const jumlahChild = item.jumlahChild || 0;
+      const hargaAdult = Number(item.hargaAdult) || 0;
+      const hargaChild = Number(item.hargaChild) || 0;
+      const jumlahAdult = Number(item.jumlahAdult) || 0;
+      const jumlahChild = Number(item.jumlahChild) || 0;
       return sum + hargaAdult * jumlahAdult + hargaChild * jumlahChild;
     }, 0);
 
     const markup =
       markupState.type === "percent"
-        ? (markupState.value / 100) * subtotal
-        : markupState.value;
+        ? ((Number(markupState.value) || 0) / 100) * subtotal
+        : Number(markupState.value) || 0;
 
     return subtotal + markup;
   }, [currentDay.tour, markupState]);
 
   useEffect(() => {
     setTourTotal((prev) => {
-      const newTotal = [...prev];
+      const newTotal = [...(prev || [])];
       newTotal[dayIndex] = total;
       return newTotal;
     });
@@ -110,6 +111,8 @@ const TourTabContent = ({ dayIndex }) => {
                 });
               }}
               onDelete={() => {
+                // Hapus item hanya saat Adult aktif (konsisten dgn edit rules)
+                if (!isAdultActive) return;
                 updatePackageDay((d) => {
                   const tour = [...(d.tour || [])];
                   tour.splice(i, 1);
@@ -134,6 +137,7 @@ const TourTabContent = ({ dayIndex }) => {
                 });
               }}
               onDelete={() => {
+                if (!isAdultActive) return;
                 updatePackageDay((d) => {
                   const tour = [...(d.tour || [])];
                   tour.splice(i, 1);
@@ -158,6 +162,7 @@ const TourTabContent = ({ dayIndex }) => {
                 });
               }}
               onDelete={() => {
+                if (!isAdultActive) return;
                 updatePackageDay((d) => {
                   const tour = [...(d.tour || [])];
                   tour.splice(i, 1);
@@ -167,7 +172,10 @@ const TourTabContent = ({ dayIndex }) => {
             />
           );
         }
+        return null;
       })}
+
+      {/* tombol tambah: HANYA untuk Adult */}
       <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3}>
         <Button
           size="sm"
@@ -178,6 +186,7 @@ const TourTabContent = ({ dayIndex }) => {
               tour: [...(d.tour || []), { id_destinasi: null }],
             }));
           }}
+          isDisabled={!isAdultActive}
         >
           Tambah Destinasi
         </Button>
@@ -190,6 +199,7 @@ const TourTabContent = ({ dayIndex }) => {
               tour: [...(d.tour || []), { id_activity: null }],
             }));
           }}
+          isDisabled={!isAdultActive}
         >
           Tambah Aktivitas
         </Button>
@@ -202,155 +212,12 @@ const TourTabContent = ({ dayIndex }) => {
               tour: [...(d.tour || []), { id_resto: null }],
             }));
           }}
+          isDisabled={!isAdultActive}
         >
           Tambah Resto
         </Button>
       </Box>
-      {/* === DESTINASI === */}
-      {/* {(currentDay.destinations || []).map((item, i) => (
-        <DestinasiCard
-          dayIndex={dayIndex}
-          key={i}
-          index={i}
-          data={item}
-          destinasiList={tiketsData}
-          onChange={(newItem) => {
-            updatePackageDay((d) => {
-              const destinations = [...(d.destinations || [])];
-              destinations[i] = newItem;
-              return { ...d, destinations };
-            });
-          }}
-          onDelete={() => {
-            updatePackageDay((d) => {
-              const destinations = [...(d.destinations || [])];
-              destinations.splice(i, 1);
-              return { ...d, destinations };
-            });
-          }}
-        />
-      ))} */}
-      {/* <Button
-        size="sm"
-        colorScheme="teal"
-        onClick={() => {
-          updatePackageDay((d) => ({
-            ...d,
-            destinations: [...(d.destinations || []), {}],
-          }));
-        }}
-      >
-        Tambah Destinasi
-      </Button> */}
 
-      {/* === AKTIVITAS === */}
-      {/* {(currentDay.activities || []).map((item, i) => (
-        <ActivityCard
-          dayIndex={dayIndex}
-          key={i}
-          index={i}
-          data={item}
-          vendors={activitesData}
-          onChange={(newItem) => {
-            updatePackageDay((d) => {
-              const activities = [...(d.activities || [])];
-              activities[i] = newItem;
-              return { ...d, activities };
-            });
-          }}
-          onDelete={() => {
-            updatePackageDay((d) => {
-              const activities = [...(d.activities || [])];
-              activities.splice(i, 1);
-              return { ...d, activities };
-            });
-          }}
-        />
-      ))} */}
-      {/* <Button
-        size="sm"
-        colorScheme="teal"
-        onClick={() => {
-          updatePackageDay((d) => ({
-            ...d,
-            activities: [...(d.activities || []), {}],
-          }));
-        }}
-      >
-        Tambah Aktivitas
-      </Button> */}
-
-      {/* === RESTO === */}
-      {/* {(currentDay.restaurants || []).map((item, i) => (
-        <RestoCard
-          dayIndex={dayIndex}
-          key={i}
-          index={i}
-          data={item}
-          restaurants={restaurantsData}
-          onChange={(newItem) => {
-            updatePackageDay((d) => {
-              const restaurants = [...(d.restaurants || [])];
-              restaurants[i] = newItem;
-              return { ...d, restaurants };
-            });
-          }}
-          onDelete={() => {
-            updatePackageDay((d) => {
-              const restaurants = [...(d.restaurants || [])];
-              restaurants.splice(i, 1);
-              return { ...d, restaurants };
-            });
-          }}
-        />
-      ))} */}
-      {/* <Button
-        size="sm"
-        colorScheme="teal"
-        onClick={() => {
-          updatePackageDay((d) => ({
-            ...d,
-            restaurants: [...(d.restaurants || []), {}],
-          }));
-        }}
-      >
-        Tambah Resto
-      </Button> */}
-
-      {/* === MARKUP === */}
-      {/* <Box>
-        <Text fontWeight="bold" mb={2}>
-          Markup
-        </Text>
-        <HStack>
-          <Select
-            w="150px"
-            value={markupState.type}
-            onChange={(e) => {
-              const newMarkup = { ...markupState, type: e.target.value };
-              setMarkupState(newMarkup);
-              updatePackageDay((d) => ({ ...d, markup: newMarkup }));
-            }}
-          >
-            <option value="percent">Persen (%)</option>
-            <option value="amount">Nominal (Rp)</option>
-          </Select>
-          <Input
-            w="150px"
-            value={markupState.value}
-            onChange={(e) => {
-              const newMarkup = {
-                ...markupState,
-                value: Number(e.target.value),
-              };
-              setMarkupState(newMarkup);
-              updatePackageDay((d) => ({ ...d, markup: newMarkup }));
-            }}
-          />
-        </HStack>
-      </Box> */}
-
-      {/* === TOTAL === */}
       <Box fontWeight="bold" mt={4}>
         Total Hari Ini: Rp {total.toLocaleString("id-ID")}
       </Box>

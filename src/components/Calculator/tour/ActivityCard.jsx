@@ -1,4 +1,3 @@
-// ActivityCard.jsx
 import {
   Box,
   HStack,
@@ -8,12 +7,13 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import MainSelect from "../../MainSelect";
 import { formatWisatawan } from "../../../utils/formatCalculator";
 import { usePackageContext } from "../../../context/PackageContext";
+// NEW
+import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
-// Opsi wisatawan
 const wisatawanOptions = [
   { value: "foreign", label: "Asing" },
   { value: "domestic", label: "Domestik" },
@@ -32,14 +32,16 @@ const ActivityCard = ({
     jenis_wisatawan: formatWisatawan(rawData.type_wisata),
   };
   const { selectedPackage } = usePackageContext();
-  const { totalPaxAdult: jumlahAdult, totalPaxChildren: jumlahChild } =
-    selectedPackage;
+  const { totalPaxAdult, childGroups = [] } = selectedPackage;
+  const { isAdultActive, activeTravelerKey } = useTravelerGroup();
+  const activeChildTotal =
+    childGroups.find((c) => c.id === activeTravelerKey)?.total || 0;
 
   const inputBg = useColorModeValue("gray.700", "gray.700");
   const borderColor = useColorModeValue("gray.600", "gray.600");
   const textColor = useColorModeValue("white", "white");
 
-  // Normalize vendor data without deduplication by name
+  // Normalized vendors
   const normalizedVendors = useMemo(() => {
     return vendors.map((v) => ({
       ...v,
@@ -48,14 +50,8 @@ const ActivityCard = ({
         id: a.activity_id,
         nama: a.name,
         harga: {
-          foreign: {
-            adult: a.price_foreign_adult,
-            child: a.price_foreign_child,
-          },
-          domestic: {
-            adult: a.price_domestic_adult,
-            child: a.price_domestic_child,
-          },
+          foreign: { adult: a.price_foreign_adult, child: a.price_foreign_child },
+          domestic: { adult: a.price_domestic_adult, child: a.price_domestic_child },
         },
         note: a.note,
         keterangan: a.keterangan,
@@ -68,54 +64,56 @@ const ActivityCard = ({
     [normalizedVendors, data.id_vendor]
   );
 
-  const aktivitasOptions = useMemo(() => {
-    return (
-      selectedVendor?.aktivitas.map((a) => ({
-        value: a.id,
-        label: a.nama,
-      })) || []
-    );
-  }, [selectedVendor]);
+  const aktivitasOptions = useMemo(
+    () => selectedVendor?.aktivitas.map((a) => ({ value: a.id, label: a.nama })) || [],
+    [selectedVendor]
+  );
 
-  const selectedAktivitas = useMemo(() => {
-    return selectedVendor?.aktivitas.find((a) => a.id === data.id_activity);
-  }, [selectedVendor, data.id_activity]);
+  const selectedAktivitas = useMemo(
+    () => selectedVendor?.aktivitas.find((a) => a.id === data.id_activity),
+    [selectedVendor, data.id_activity]
+  );
 
-  const hargaAdult = useMemo(() => {
-    return selectedAktivitas?.harga?.[data.jenis_wisatawan]?.adult ?? 0;
-  }, [selectedAktivitas, data.jenis_wisatawan]);
+  const hargaAdult = useMemo(
+    () => selectedAktivitas?.harga?.[data.jenis_wisatawan]?.adult ?? 0,
+    [selectedAktivitas, data.jenis_wisatawan]
+  );
+  const hargaChild = useMemo(
+    () => selectedAktivitas?.harga?.[data.jenis_wisatawan]?.child ?? 0,
+    [selectedAktivitas, data.jenis_wisatawan]
+  );
 
-  const hargaChild = useMemo(() => {
-    return selectedAktivitas?.harga?.[data.jenis_wisatawan]?.child ?? 0;
-  }, [selectedAktivitas, data.jenis_wisatawan]);
-
-  const totalHarga = jumlahAdult * hargaAdult + jumlahChild * hargaChild;
+  // touched flags
+  const [adultTouched, setAdultTouched] = useState(false);
+  const [childTouched, setChildTouched] = useState(false);
 
   useEffect(() => {
-    onChange({
-      ...data,
-      jumlahAdult,
-      jumlahChild,
-      hargaAdult,
-      hargaChild,
-    });
-  }, [jumlahAdult, jumlahChild, hargaAdult, hargaChild, dayIndex]);
+    if (isAdultActive) {
+      const base = Number(totalPaxAdult) || 0;
+      if (!adultTouched && data.jumlahAdult !== base) {
+        onChange({ ...data, jumlahAdult: base, hargaAdult, hargaChild });
+      }
+    } else {
+      const base = Number(activeChildTotal) || 0;
+      if (!childTouched && data.jumlahChild !== base) {
+        onChange({ ...data, jumlahChild: base, hargaAdult, hargaChild });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdultActive, totalPaxAdult, activeChildTotal, hargaAdult, hargaChild, dayIndex]);
+
+  const totalHarga =
+    (Number(data.jumlahAdult) || 0) * (Number(hargaAdult) || 0) +
+    (Number(data.jumlahChild) || 0) * (Number(hargaChild) || 0);
 
   const handleSelectChange = (field, val) => {
+    if (!isAdultActive) return;
     const updates = { [field]: val?.value ?? null };
     if (field === "id_vendor") {
-      Object.assign(updates, {
-        id_activity: null,
-        jenis_wisatawan: null,
-      });
+      Object.assign(updates, { id_activity: null, jenis_wisatawan: null });
     }
     if (field === "id_activity") {
-      Object.assign(updates, {
-        jenis_wisatawan: null,
-        description: selectedVendor?.activities.find(
-          (a) => a.activity_id === val.value
-        )?.description,
-      });
+      Object.assign(updates, { jenis_wisatawan: null });
     }
     onChange({ ...data, ...updates });
   };
@@ -133,6 +131,7 @@ const ActivityCard = ({
           variant="ghost"
           onClick={onDelete}
           aria-label="hapus aktivitas"
+          isDisabled={!isAdultActive}
         />
       </HStack>
 
@@ -154,6 +153,7 @@ const ActivityCard = ({
             }
             onChange={(val) => handleSelectChange("id_vendor", val)}
             placeholder="Pilih Vendor"
+            isDisabled={!isAdultActive}
           />
         </Box>
         <Box w="50%">
@@ -168,7 +168,7 @@ const ActivityCard = ({
                 : null
             }
             onChange={(val) => handleSelectChange("id_activity", val)}
-            isDisabled={!data.id_vendor}
+            isDisabled={!isAdultActive || !data.id_vendor}
             placeholder="Pilih Aktivitas"
           />
         </Box>
@@ -186,12 +186,12 @@ const ActivityCard = ({
             null
           }
           onChange={(val) => handleSelectChange("type_wisata", val)}
-          isDisabled={!data.id_activity}
+          isDisabled={!isAdultActive || !data.id_activity}
           placeholder="Pilih Jenis Wisatawan"
         />
       </Box>
 
-      {/* Harga Satuan */}
+      {/* Harga Satuan (read-only) */}
       <HStack spacing={4} mb={3}>
         <Box w="50%">
           <Text mb={1} fontSize="sm" color="gray.300">
@@ -219,33 +219,44 @@ const ActivityCard = ({
         </Box>
       </HStack>
 
-      {/* Jumlah Orang */}
-      <HStack spacing={4} mb={3}>
-        <Box w="50%">
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Jumlah Adult
-          </Text>
-          <Input
-            readOnly
-            value={jumlahAdult || 0}
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
-        <Box w="50%">
-          <Text mb={1} fontSize="sm" color="gray.300">
-            Jumlah Child
-          </Text>
-          <Input
-            value={jumlahChild || 0}
-            readOnly
-            bg={inputBg}
-            color={textColor}
-            borderColor={borderColor}
-          />
-        </Box>
-      </HStack>
+      {/* Jumlah Orang — conditional */}
+      {isAdultActive ? (
+        <HStack spacing={4} mb={3}>
+          <Box w="50%">
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Jumlah Adult
+            </Text>
+            <Input
+              value={Number(data.jumlahAdult) || 0}
+              onChange={(e) => {
+                setAdultTouched(true);
+                onChange({ ...data, jumlahAdult: Number(e.target.value) || 0 });
+              }}
+              bg={inputBg}
+              color={textColor}
+              borderColor={borderColor}
+            />
+          </Box>
+        </HStack>
+      ) : (
+        <HStack spacing={4} mb={3}>
+          <Box w="50%">
+            <Text mb={1} fontSize="sm" color="gray.300">
+              Jumlah Child
+            </Text>
+            <Input
+              value={Number(data.jumlahChild) || 0}
+              onChange={(e) => {
+                setChildTouched(true);
+                onChange({ ...data, jumlahChild: Number(e.target.value) || 0 });
+              }}
+              bg={inputBg}
+              color={textColor}
+              borderColor={borderColor}
+            />
+          </Box>
+        </HStack>
+      )}
 
       <Box mt={4}>
         <Text fontWeight="semibold" color="green.300">

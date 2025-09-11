@@ -5,7 +5,6 @@ import {
   Input,
   Select,
   Text,
-  Textarea,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
@@ -14,6 +13,8 @@ import InfoCard from "../transport/InfoCard";
 import { useTransportContext } from "../../../context/TransportContext";
 import { usePackageContext } from "../../../context/PackageContext";
 import { useGrandTotalContext } from "../../../context/GrandTotalContext";
+// NEW
+import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
 const TransportTabContent = ({ dayIndex }) => {
   const { getMobils, getAdditionalMobil } = useTransportContext();
@@ -25,6 +26,9 @@ const TransportTabContent = ({ dayIndex }) => {
     currentDay.markup || { type: "percent", value: 0 }
   );
   const [loading, setLoading] = useState(true);
+
+  // NEW: traveler context
+  const { isAdultActive, activeTravelerKey } = useTravelerGroup();
 
   useEffect(() => {
     let timeout;
@@ -43,22 +47,49 @@ const TransportTabContent = ({ dayIndex }) => {
     getAdditionalMobil();
   }, []);
 
+  // Helper read/write additional per traveler
+  const additionalByGroup = currentDay.transport_additionals_by_group || {};
+  const legacyAdditional = currentDay.transport_additionals || [];
+  const activeAdditionalList =
+    additionalByGroup[activeTravelerKey] ??
+    // fallback: kalau belum ada struktur per-group, pakai legacy utk Adult
+    (activeTravelerKey === "adult" ? legacyAdditional : []);
+
   const total = useMemo(() => {
     const totalMobil = (currentDay.mobils || []).reduce(
-      (sum, m) => sum + (m.harga || 0) * (m.jumlah || 1),
+      (sum, m) => sum + (Number(m.harga) || 0) * (Number(m.jumlah) || 1),
       0
     );
-    const totalAdditional = (currentDay.transport_additionals || []).reduce(
-      (sum, a) => sum + (a.harga || 0) * (a.jumlah || 1),
-      0
-    );
+
+    let totalAdditional = 0;
+    if (Object.keys(additionalByGroup).length > 0) {
+      totalAdditional = Object.values(additionalByGroup)
+        .flat()
+        .reduce(
+          (sum, a) => sum + (Number(a.harga) || 0) * (Number(a.jumlah) || 1),
+          0
+        );
+    } else {
+      // legacy mode (sebelum per-group)
+      totalAdditional = legacyAdditional.reduce(
+        (sum, a) => sum + (Number(a.harga) || 0) * (Number(a.jumlah) || 1),
+        0
+      );
+    }
+
     const subtotal = totalMobil + totalAdditional;
     const markup =
       markupState.type === "percent"
-        ? (markupState.value / 100) * subtotal
-        : markupState.value;
+        ? ((Number(markupState.value) || 0) / 100) * subtotal
+        : Number(markupState.value) || 0;
     return subtotal + markup;
-  }, [currentDay.mobils, currentDay.transport_additionals, markupState]);
+  }, [
+    currentDay.mobils,
+    additionalByGroup,
+    legacyAdditional,
+    markupState.type,
+    markupState.value,
+  ]);
 
   const updatePackageDay = (updater) => {
     setSelectedPackage((prev) => {
@@ -72,7 +103,7 @@ const TransportTabContent = ({ dayIndex }) => {
 
   useEffect(() => {
     setTransportTotal((prev) => {
-      const newTotal = [...prev];
+      const newTotal = [...(prev || [])];
       newTotal[dayIndex] = total;
       return newTotal;
     });
@@ -82,7 +113,7 @@ const TransportTabContent = ({ dayIndex }) => {
 
   return (
     <VStack spacing={6} align="stretch">
-      {/* Mobil */}
+      {/* Mobil (HANYA Adult yang bisa edit/tambah/hapus) */}
       {(currentDay.mobils || []).map((mobil, i) => (
         <MobilCard
           dayIndex={dayIndex}
@@ -97,6 +128,7 @@ const TransportTabContent = ({ dayIndex }) => {
             });
           }}
           onDelete={() => {
+            if (!isAdultActive) return;
             updatePackageDay((d) => {
               const mobils = [...(d.mobils || [])];
               mobils.splice(i, 1);
@@ -105,21 +137,24 @@ const TransportTabContent = ({ dayIndex }) => {
           }}
         />
       ))}
+
       <Button
         size="sm"
         colorScheme="teal"
         onClick={() => {
+          if (!isAdultActive) return;
           updatePackageDay((d) => ({
             ...d,
             mobils: [...(d.mobils || []), {}],
           }));
         }}
+        isDisabled={!isAdultActive}
       >
         Tambah Mobil
       </Button>
 
-      {/* Additional Info */}
-      {(currentDay.transport_additionals || []).map((info, i) => (
+      {/* Additional Info (per traveler) */}
+      {activeAdditionalList.map((info, i) => (
         <InfoCard
           dayIndex={dayIndex}
           key={i}
@@ -127,69 +162,60 @@ const TransportTabContent = ({ dayIndex }) => {
           data={info}
           onChange={(newInfo) => {
             updatePackageDay((d) => {
-              const transport_additionals = [
-                ...(d.transport_additionals || []),
-              ];
-              transport_additionals[i] = newInfo;
-              return { ...d, transport_additionals };
+              const map = { ...(d.transport_additionals_by_group || {}) };
+              const baseList =
+                map[activeTravelerKey] ??
+                (activeTravelerKey === "adult"
+                  ? d.transport_additionals || []
+                  : []);
+              const list = [...baseList];
+              list[i] = newInfo;
+              map[activeTravelerKey] = list;
+              return {
+                ...d,
+                transport_additionals_by_group: map,
+              };
             });
           }}
           onDelete={() => {
             updatePackageDay((d) => {
-              const transport_additionals = [
-                ...(d.transport_additionals || []),
-              ];
-              transport_additionals.splice(i, 1);
-              return { ...d, transport_additionals };
+              const map = { ...(d.transport_additionals_by_group || {}) };
+              const baseList =
+                map[activeTravelerKey] ??
+                (activeTravelerKey === "adult"
+                  ? d.transport_additionals || []
+                  : []);
+              const list = [...baseList];
+              list.splice(i, 1);
+              map[activeTravelerKey] = list;
+              return {
+                ...d,
+                transport_additionals_by_group: map,
+              };
             });
           }}
         />
       ))}
+
       <Button
         size="sm"
         colorScheme="teal"
         onClick={() => {
-          updatePackageDay((d) => ({
-            ...d,
-            transport_additionals: [...(d.transport_additionals || []), {}],
-          }));
+          updatePackageDay((d) => {
+            const map = { ...(d.transport_additionals_by_group || {}) };
+            const baseList =
+              map[activeTravelerKey] ??
+              (activeTravelerKey === "adult" ? d.transport_additionals || [] : []);
+            map[activeTravelerKey] = [...baseList, {}];
+            return {
+              ...d,
+              transport_additionals_by_group: map,
+            };
+          });
         }}
       >
         Tambah Tambahan
       </Button>
-
-      {/* MARKUP */}
-      {/* <Box>
-        <Text fontWeight="bold" mb={2}>
-          Markup
-        </Text>
-        <HStack>
-          <Select
-            w="150px"
-            value={markupState.type}
-            onChange={(e) => {
-              const newMarkup = { ...markupState, type: e.target.value };
-              setMarkupState(newMarkup);
-              updatePackageDay((d) => ({ ...d, markup: newMarkup }));
-            }}
-          >
-            <option value="percent">Persen (%)</option>
-            <option value="amount">Nominal (Rp)</option>
-          </Select>
-          <Input
-            w="150px"
-            value={markupState.value}
-            onChange={(e) => {
-              const newMarkup = {
-                ...markupState,
-                value: Number(e.target.value),
-              };
-              setMarkupState(newMarkup);
-              updatePackageDay((d) => ({ ...d, markup: newMarkup }));
-            }}
-          />
-        </HStack>
-      </Box> */}
 
       {/* Total Hari Ini */}
       <Box fontWeight="bold" mt={4}>
