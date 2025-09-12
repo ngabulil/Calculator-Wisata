@@ -102,8 +102,7 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
 
   // traveler-specific EB (fallback)
   const currentTravelerEB =
-    (data.extrabedByTraveler &&
-      data.extrabedByTraveler[activeTravelerKey]) ||
+    (data.extrabedByTraveler && data.extrabedByTraveler[activeTravelerKey]) ||
     (isAdultActive && (data.useExtrabed || data.jumlahExtrabed)
       ? { use: !!data.useExtrabed, qty: Number(data.jumlahExtrabed) || 1 }
       : { use: false, qty: 1 });
@@ -113,7 +112,12 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   useEffect(() => {
     setJumlahExtrabed(Number(currentTravelerEB.qty) || 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTravelerKey, data.extrabedByTraveler, data.useExtrabed, data.jumlahExtrabed]);
+  }, [
+    activeTravelerKey,
+    data.extrabedByTraveler,
+    data.useExtrabed,
+    data.jumlahExtrabed,
+  ]);
 
   useEffect(() => {
     onChange({
@@ -137,8 +141,13 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
         id_musim: null,
       });
     if (field === "id_tipe_kamar")
-      Object.assign(updates, { season_type: null, season: null, id_musim: null });
-    if (field === "season_type") Object.assign(updates, { season: null, id_musim: null });
+      Object.assign(updates, {
+        season_type: null,
+        season: null,
+        id_musim: null,
+      });
+    if (field === "season_type")
+      Object.assign(updates, { season: null, id_musim: null });
     if (field === "season") updates.id_musim = val?.id_musim ?? null;
 
     onChange({ ...data, ...updates });
@@ -159,21 +168,30 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
     onChange(patch);
   };
 
-  const totalExtrabedQty = useMemo(() => {
-    if (data.extrabedByTraveler && typeof data.extrabedByTraveler === "object") {
-      return Object.values(data.extrabedByTraveler).reduce((acc, eb) => {
-        if (!eb) return acc;
-        const use = !!eb.use;
-        const qty = Number(eb.qty) || 0;
-        return acc + (use ? qty : 0);
-      }, 0);
+  const totalExtrabedQtyDisplay = useMemo(() => {
+    if (
+      data.extrabedByTraveler &&
+      typeof data.extrabedByTraveler === "object"
+    ) {
+      return Object.entries(data.extrabedByTraveler).reduce(
+        (acc, [key, eb]) => {
+          if (!eb) return acc;
+          const isActive = key === activeTravelerKey;
+          const use = isActive ? isEBChecked : !!eb.use;
+          const qty = isActive
+            ? Number(jumlahExtrabed) || 0
+            : Number(eb.qty) || 0;
+          return acc + (use ? qty : 0);
+        },
+        0
+      );
     }
-    return data.useExtrabed ? (Number(data.jumlahExtrabed) || 0) : 0;
-  }, [data.extrabedByTraveler, data.useExtrabed, data.jumlahExtrabed]);
+    return isEBChecked ? Number(jumlahExtrabed) || 0 : 0;
+  }, [data.extrabedByTraveler, activeTravelerKey, isEBChecked, jumlahExtrabed]);
 
   const totalHarga =
     (Number(jumlahKamar) || 0) * (Number(hargaPerKamar) || 0) +
-    totalExtrabedQty * (Number(hargaExtrabed) || 0);
+    totalExtrabedQtyDisplay * (Number(hargaExtrabed) || 0);
 
   return (
     <Box bg="gray.600" p={4} rounded="md">
@@ -204,7 +222,8 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
               villas.find((v) => v.id === data.id_villa)
                 ? {
                     value: data.id_villa,
-                    label: villas.find((v) => v.id === data.id_villa)?.villaName,
+                    label: villas.find((v) => v.id === data.id_villa)
+                      ?.villaName,
                   }
                 : null
             }
@@ -235,7 +254,9 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
           </Text>
           <MainSelect
             options={seasonTypes}
-            value={seasonTypes.find((st) => st.value === data.season_type) || null}
+            value={
+              seasonTypes.find((st) => st.value === data.season_type) || null
+            }
             onChange={(val) => handleSelectChange("season_type", val)}
             isDisabled={!canEditBase || !data.id_tipe_kamar}
             placeholder="Pilih Tipe Musim"
@@ -290,7 +311,19 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
           <Checkbox
             colorScheme="teal"
             isChecked={isEBChecked}
-            onChange={(e) => updateEBForTraveler({ use: e.target.checked })}
+            onChange={(e) => {
+              const checked = e.target.checked;
+              updateEBForTraveler({
+                use: checked,
+                qty: checked ? Number(currentTravelerEB.qty) || 1 : 0,
+              });
+              if (
+                checked &&
+                (!currentTravelerEB.qty || Number(currentTravelerEB.qty) === 0)
+              ) {
+                setJumlahExtrabed(1);
+              }
+            }}
             isDisabled={hargaExtrabed === 0}
           >
             Extrabed?
@@ -338,18 +371,7 @@ const VillaCard = ({ index, onDelete, data, onChange, dayIndex }) => {
 
       <Box mt={4}>
         <Text fontWeight="semibold" color="green.300">
-          Total Harga: Rp {(
-            (Number(jumlahKamar) || 0) * (Number(hargaPerKamar) || 0) +
-            (Number(hargaExtrabed) || 0) *
-              (data.extrabedByTraveler
-                ? Object.values(data.extrabedByTraveler).reduce((acc, eb) => {
-                    if (!eb) return acc;
-                    return acc + (eb.use ? Number(eb.qty) || 0 : 0);
-                  }, 0)
-                : data.useExtrabed
-                ? Number(data.jumlahExtrabed) || 0
-                : 0)
-          ).toLocaleString("id-ID")}
+          Total Harga: Rp {totalHarga.toLocaleString("id-ID")}
         </Text>
       </Box>
     </Box>

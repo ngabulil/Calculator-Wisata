@@ -31,6 +31,27 @@ const AkomodasiTabContent = ({ dayIndex }) => {
   // NEW
   const { isAdultActive, activeTravelerKey } = useTravelerGroup();
   const activeKey = isAdultActive ? "adult" : activeTravelerKey;
+  // deep keys agar total re-calc saat nested fields (extrabedByTraveler) berubah
+  const hotelsKey = useMemo(
+    () => JSON.stringify(currentDay.hotels || []),
+    [currentDay.hotels]
+  );
+  const villasKey = useMemo(
+    () => JSON.stringify(currentDay.villas || []),
+    [currentDay.villas]
+  );
+  const addKey = useMemo(
+    () =>
+      JSON.stringify(
+        currentDay.akomodasi_additionalsByTraveler ||
+          currentDay.akomodasi_additionals ||
+          []
+      ),
+    [
+      currentDay.akomodasi_additionalsByTraveler,
+      currentDay.akomodasi_additionals,
+    ]
+  );
 
   useEffect(() => {
     let timeout = setTimeout(() => setLoading(false), 100);
@@ -125,13 +146,7 @@ const AkomodasiTabContent = ({ dayIndex }) => {
         : Number(markupState.value) || 0;
 
     return sub + mark;
-  }, [
-    currentDay.hotels,
-    currentDay.villas,
-    currentDay.akomodasi_additionalsByTraveler,
-    currentDay.akomodasi_additionals, // legacy fallback
-    markupState,
-  ]);
+  }, [hotelsKey, villasKey, addKey, markupState.type, markupState.value]);
 
   const updatePackageDay = (updater) => {
     setSelectedPackage((prev) => {
