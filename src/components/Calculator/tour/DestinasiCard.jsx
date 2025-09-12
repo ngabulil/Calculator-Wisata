@@ -83,6 +83,11 @@ const DestinasiCard = ({
   // touched flags
   const [touched, setTouched] = useState({});
 
+ useEffect(() => {
+    onChange({ ...data, hargaAdult, hargaChild });
+    // dayIndex ikut supaya aman saat pindah hari
+  }, [hargaAdult, hargaChild, dayIndex]);
+
   useEffect(() => {
     const q = data.quantities || {};
     let changed = false;
