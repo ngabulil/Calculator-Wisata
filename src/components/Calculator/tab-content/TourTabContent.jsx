@@ -60,23 +60,33 @@ const TourTabContent = ({ dayIndex }) => {
     });
   };
 
+  const tourKey = useMemo(
+    () =>
+      JSON.stringify(
+        (currentDay.tour || []).map((it) => ({
+          q: it.quantities || {},
+          ha: Number(it.hargaAdult) || 0,
+          hc: Number(it.hargaChild) || 0,
+        }))
+      ),
+    [currentDay.tour]
+  );
+
   const total = useMemo(() => {
-    const tourItems = currentDay.tour || [];
+    const items = currentDay.tour || [];
 
-    const subtotal = tourItems.reduce((sum, item) => {
-      const hargaAdult = Number(item.hargaAdult) || 0;
-      const hargaChild = Number(item.hargaChild) || 0;
-
-      const q = item.quantities || {};
-      const adultQty = Number(q.adult ?? item.jumlahAdult ?? 0);
-      const childQtyFromMap = Object.entries(q)
+    let subtotal = 0;
+    for (const it of items) {
+      const q = it.quantities || {};
+      const adultQty = Number(q.adult ?? 0);
+      const childQty = Object.entries(q)
         .filter(([k]) => k !== "adult")
         .reduce((s, [, v]) => s + (Number(v) || 0), 0);
-      const legacyChild = Number(item.jumlahChild || 0);
-      const childQty = childQtyFromMap || legacyChild;
 
-      return sum + hargaAdult * adultQty + hargaChild * childQty;
-    }, 0);
+      const hargaAdult = Number(it.hargaAdult) || 0;
+      const hargaChild = Number(it.hargaChild) || 0;
+      subtotal += adultQty * hargaAdult + childQty * hargaChild;
+    }
 
     const markup =
       markupState.type === "percent"
@@ -84,7 +94,7 @@ const TourTabContent = ({ dayIndex }) => {
         : Number(markupState.value) || 0;
 
     return subtotal + markup;
-  }, [currentDay.tour, markupState]);
+  }, [tourKey, markupState.type, markupState.value]);
 
   useEffect(() => {
     setTourTotal((prev) => {
