@@ -95,6 +95,11 @@ const ActivityCard = ({
   const [touched, setTouched] = useState({});
 
   useEffect(() => {
+    onChange({ ...data, hargaAdult, hargaChild });
+    // dayIndex ikut supaya aman saat pindah hari
+  }, [hargaAdult, hargaChild, dayIndex]);
+
+  useEffect(() => {
     const q = data.quantities || {};
     let changed = false;
     const next = { ...q };
@@ -279,7 +284,7 @@ const ActivityCard = ({
             <Input
               value={Number((data.quantities || {}).adult ?? 0)}
               onChange={(e) => {
-                setTouched(t => ({ ...t, adult: true }));
+                setTouched((t) => ({ ...t, adult: true }));
                 onChange({
                   ...data,
                   quantities: {
@@ -303,7 +308,7 @@ const ActivityCard = ({
             <Input
               value={Number((data.quantities || {})[activeTravelerKey] ?? 0)}
               onChange={(e) => {
-                setTouched(t => ({ ...t, [activeTravelerKey]: true }));
+                setTouched((t) => ({ ...t, [activeTravelerKey]: true }));
                 onChange({
                   ...data,
                   quantities: {
