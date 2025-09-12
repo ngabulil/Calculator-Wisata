@@ -69,9 +69,16 @@ const TourTabContent = ({ dayIndex }) => {
     const subtotal = tourItems.reduce((sum, item) => {
       const hargaAdult = Number(item.hargaAdult) || 0;
       const hargaChild = Number(item.hargaChild) || 0;
-      const jumlahAdult = Number(item.jumlahAdult) || 0;
-      const jumlahChild = Number(item.jumlahChild) || 0;
-      return sum + hargaAdult * jumlahAdult + hargaChild * jumlahChild;
+
+      const q = item.quantities || {};
+      const adultQty = Number(q.adult ?? item.jumlahAdult ?? 0);
+      const childQtyFromMap = Object.entries(q)
+        .filter(([k]) => k !== "adult")
+        .reduce((s, [, v]) => s + (Number(v) || 0), 0);
+      const legacyChild = Number(item.jumlahChild || 0);
+      const childQty = childQtyFromMap || legacyChild;
+
+      return sum + hargaAdult * adultQty + hargaChild * childQty;
     }, 0);
 
     const markup =

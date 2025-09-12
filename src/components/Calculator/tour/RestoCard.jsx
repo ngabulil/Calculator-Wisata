@@ -93,28 +93,63 @@ const RestoCard = ({
   );
 
   // NEW: track apakah qty sudah diedit manual
-  const [adultTouched, setAdultTouched] = useState(false);
-  const [childTouched, setChildTouched] = useState(false);
+  const [touched, setTouched] = useState({});
+
+  useEffect(() => {
+    const q = data.quantities || {};
+    let changed = false;
+    const next = { ...q };
+    const baseAdult = Number(totalPaxAdult) || 0;
+    if (!touched.adult && (next.adult ?? undefined) !== baseAdult) {
+      next.adult = baseAdult;
+      changed = true;
+    }
+    childGroups.forEach((cg) => {
+      const base = Number(cg.total) || 0;
+      if (!touched[cg.id] && (next[cg.id] ?? undefined) !== base) {
+        next[cg.id] = base;
+        changed = true;
+      }
+    });
+    if (changed) onChange({ ...data, quantities: next });
+  }, [totalPaxAdult, childGroups, dayIndex]);
 
   // Default/auto-sync jumlah sesuai traveler aktif (hanya jika belum diedit manual)
   useEffect(() => {
     if (isAdultActive) {
       const base = Number(totalPaxAdult) || 0;
-      if (!adultTouched && data.jumlahAdult !== base) {
-        onChange({ ...data, jumlahAdult: base });
+      if ((data.quantities || {}).adult === undefined) {
+        onChange({
+          ...data,
+          quantities: { ...(data.quantities || {}), adult: base },
+        });
       }
     } else {
       const base = Number(activeChildTotal) || 0;
-      if (!childTouched && data.jumlahChild !== base) {
-        onChange({ ...data, jumlahChild: base });
+      const key = activeTravelerKey;
+      if ((data.quantities || {})[key] === undefined) {
+        onChange({
+          ...data,
+          quantities: { ...(data.quantities || {}), [key]: base },
+        });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAdultActive, totalPaxAdult, activeChildTotal, dayIndex]);
+  }, [
+    isAdultActive,
+    totalPaxAdult,
+    activeChildTotal,
+    activeTravelerKey,
+    dayIndex,
+  ]);
 
+  const quantities = data.quantities || {};
+  const adultQty = Number(quantities.adult ?? 0);
+  const childQtySum = Object.entries(quantities)
+    .filter(([k]) => k !== "adult")
+    .reduce((s, [, v]) => s + (Number(v) || 0), 0);
   const totalHarga =
-    (Number(data.jumlahAdult) || 0) * (Number(hargaAdult) || 0) +
-    (Number(data.jumlahChild) || 0) * (Number(hargaChild) || 0);
+    adultQty * (Number(hargaAdult) || 0) +
+    childQtySum * (Number(hargaChild) || 0);
 
   const handleSelectChange = (field, val) => {
     if (!isAdultActive) return; // child tidak boleh ubah field selain qty child
@@ -242,10 +277,16 @@ const RestoCard = ({
               Jumlah Adult
             </Text>
             <Input
-              value={Number(data.jumlahAdult) || 0}
+              value={Number((data.quantities || {}).adult ?? 0)}
               onChange={(e) => {
-                setAdultTouched(true);
-                onChange({ ...data, jumlahAdult: Number(e.target.value) || 0 });
+                setTouched((t) => ({ ...t, adult: true }));
+                onChange({
+                  ...data,
+                  quantities: {
+                    ...(data.quantities || {}),
+                    adult: Number(e.target.value) || 0,
+                  },
+                });
               }}
               bg={inputBg}
               color={textColor}
@@ -261,10 +302,16 @@ const RestoCard = ({
               Jumlah Child
             </Text>
             <Input
-              value={Number(data.jumlahChild) || 0}
+              value={Number((data.quantities || {})[activeTravelerKey] ?? 0)}
               onChange={(e) => {
-                setChildTouched(true);
-                onChange({ ...data, jumlahChild: Number(e.target.value) || 0 });
+                setTouched(t => ({ ...t, [activeTravelerKey]: true }));
+                onChange({
+                  ...data,
+                  quantities: {
+                    ...(data.quantities || {}),
+                    [activeTravelerKey]: Number(e.target.value) || 0,
+                  },
+                });
               }}
               bg={inputBg}
               color={textColor}
