@@ -99,27 +99,44 @@ const CalculatorFixPage = () => {
     getPackages();
   }, []);
 
-  // pastikan childGroups ter-inisialisasi (pakai age & total) & set default active traveler
   useEffect(() => {
-    setSelectedPackage((prev) => ({
-      ...prev,
-      childGroups: Array.isArray(prev.childGroups)
+    setSelectedPackage((prev) => {
+      const childGroups = Array.isArray(prev.childGroups)
         ? prev.childGroups.map((g, i) => ({
             id: g.id ?? `ch_${makeId()}`,
             label: g.label ?? `Child ${i + 1}`,
-            // migrate dari struktur lama (ages[]) → ambil panjang & kosongkan
-            total:
-              typeof g.total === "number"
-                ? g.total
-                : Array.isArray(g.ages)
-                ? g.ages.length
-                : 0,
-            age: g.age !== undefined ? g.age : "", // jika sebelumnya tidak ada age, kosong
+            total: typeof g.total === "number" ? g.total : 0,
+            age: g.age !== undefined ? g.age : "",
           }))
-        : [],
-      totalPaxAdult:
-        typeof prev.totalPaxAdult === "number" ? prev.totalPaxAdult : 0,
-    }));
+        : [];
+
+      const updatedDays = (prev.days || []).map((d) => {
+        const base = {
+          ...d,
+          tour_by_group: {
+            adult: d.tour || [],
+            ...(d.tour_by_group || {}),
+          },
+        };
+
+        childGroups.forEach((cg) => {
+          if (!base.tour_by_group[cg.id]) {
+            base.tour_by_group[cg.id] = [];
+          }
+        });
+
+        return base;
+      });
+
+      return {
+        ...prev,
+        childGroups,
+        totalPaxAdult:
+          typeof prev.totalPaxAdult === "number" ? prev.totalPaxAdult : 0,
+        days: updatedDays,
+      };
+    });
+
     setActiveTravelerKey("adult");
   }, [setSelectedPackage]);
 
@@ -155,13 +172,37 @@ const CalculatorFixPage = () => {
     setSelectedPackage((prev) => ({
       ...prev,
       childGroups: [...(prev.childGroups || []), newGroup],
+      days: prev.days.map((day) => {
+        let sourceTourData = [];
+        if (day.tour_by_group?.adult && day.tour_by_group.adult.length > 0) {
+          sourceTourData = [...day.tour_by_group.adult];
+        } else if (day.tour && day.tour.length > 0) {
+          sourceTourData = [...day.tour];
+        }
+
+        return {
+          ...day,
+          tour_by_group: {
+            ...day.tour_by_group,
+            [newId]: sourceTourData,
+          },
+        };
+      }),
     }));
     setActiveTravelerKey(newId);
   };
 
   const handleRemoveChildGroup = (idToRemove) => {
-    const filtered = childGroups.filter((c) => c.id !== idToRemove);
-    setSelectedPackage((prev) => ({ ...prev, childGroups: filtered }));
+    setSelectedPackage((prev) => {
+      const filtered = prev.childGroups.filter((c) => c.id !== idToRemove);
+      const days = prev.days.map((day) => {
+        const { [idToRemove]: removed, ...rest } = day.tour_by_group;
+        return { ...day, tour_by_group: rest };
+      });
+
+      return { ...prev, childGroups: filtered, days };
+    });
+
     if (activeTravelerKey === idToRemove) {
       setActiveTravelerKey("adult");
     }
@@ -281,6 +322,7 @@ const CalculatorFixPage = () => {
               value={id ? { value: id, label: title } : null}
               onChange={(selected) => {
                 const found = packagesData.find((p) => p.id === selected.value);
+
                 setSelectedPackage({
                   ...found,
                   title: found.name,
@@ -304,9 +346,19 @@ const CalculatorFixPage = () => {
                   totalPaxChildren: found?.totalPaxChildren || 0,
                   addAdditionalChild: false,
                   addExtrabedChild: false,
-                  days: found.days || [],
-                  childrenAges: [],
+                  days: (found.days || []).map((d) => {
+                    const tourData = Array.isArray(d.tour) ? d.tour : [];
+
+                    return {
+                      ...d,
+                      tour_by_group: {
+                        adult: tourData,
+                        ...(d.tour_by_group || {}),
+                      },
+                    };
+                  }),
                 });
+
                 // RESET total per-hari agar bersih sesuai jumlah hari paket yang baru
                 const len = (found.days || []).length;
                 setAkomodasiTotal(Array(len).fill(0));

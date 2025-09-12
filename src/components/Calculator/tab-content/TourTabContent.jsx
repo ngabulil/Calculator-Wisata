@@ -2,9 +2,6 @@ import {
   Box,
   Button,
   HStack,
-  Input,
-  Select,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
@@ -14,7 +11,6 @@ import RestoCard from "../tour/RestoCard";
 import { usePackageContext } from "../../../context/PackageContext";
 import { useTourContext } from "../../../context/TourContext";
 import { useGrandTotalContext } from "../../../context/GrandTotalContext";
-// NEW
 import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
 const TourTabContent = ({ dayIndex }) => {
@@ -29,15 +25,16 @@ const TourTabContent = ({ dayIndex }) => {
   const { selectedPackage, setSelectedPackage } = usePackageContext();
   const { setTourTotal } = useGrandTotalContext();
 
-  const currentDay = selectedPackage.days?.[dayIndex] || { tour: [] };
+  const { activeTravelerKey, isAdultActive } = useTravelerGroup();
+
+  const currentDay = selectedPackage.days?.[dayIndex] || {};
+  const currentTour =
+    currentDay.tour_by_group?.[activeTravelerKey] || [];
 
   const [markupState, setMarkupState] = useState(
     currentDay.markup || { type: "percent", value: 0 }
   );
   const [loading, setLoading] = useState(true);
-
-  // NEW: traveler context
-  const { isAdultActive } = useTravelerGroup();
 
   useEffect(() => {
     let timeout = setTimeout(() => setLoading(false), 100);
@@ -94,7 +91,7 @@ const TourTabContent = ({ dayIndex }) => {
 
   return (
     <VStack spacing={6} align="stretch">
-      {(currentDay.tour || []).map((item, i) => {
+      {(currentTour || []).map((item, i) => {
         if (item.id_destinasi || item.id_destinasi === null) {
           return (
             <DestinasiCard
@@ -105,18 +102,21 @@ const TourTabContent = ({ dayIndex }) => {
               destinasiList={tiketsData}
               onChange={(newItem) => {
                 updatePackageDay((d) => {
-                  const tour = [...(d.tour || [])];
-                  tour[i] = newItem;
-                  return { ...d, tour };
+                  const tour_by_group = { ...(d.tour_by_group || {}) };
+                  const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+                  groupTour[i] = newItem;
+                  tour_by_group[activeTravelerKey] = groupTour;
+                  return { ...d, tour_by_group };
                 });
               }}
               onDelete={() => {
-                // Hapus item hanya saat Adult aktif (konsisten dgn edit rules)
                 if (!isAdultActive) return;
                 updatePackageDay((d) => {
-                  const tour = [...(d.tour || [])];
-                  tour.splice(i, 1);
-                  return { ...d, tour };
+                  const tour_by_group = { ...(d.tour_by_group || {}) };
+                  const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+                  groupTour.splice(i, 1);
+                  tour_by_group[activeTravelerKey] = groupTour;
+                  return { ...d, tour_by_group };
                 });
               }}
             />
@@ -131,17 +131,21 @@ const TourTabContent = ({ dayIndex }) => {
               vendors={activitesData}
               onChange={(newItem) => {
                 updatePackageDay((d) => {
-                  const tour = [...(d.tour || [])];
-                  tour[i] = newItem;
-                  return { ...d, tour };
+                  const tour_by_group = { ...(d.tour_by_group || {}) };
+                  const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+                  groupTour[i] = newItem;
+                  tour_by_group[activeTravelerKey] = groupTour;
+                  return { ...d, tour_by_group };
                 });
               }}
               onDelete={() => {
                 if (!isAdultActive) return;
                 updatePackageDay((d) => {
-                  const tour = [...(d.tour || [])];
-                  tour.splice(i, 1);
-                  return { ...d, tour };
+                  const tour_by_group = { ...(d.tour_by_group || {}) };
+                  const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+                  groupTour.splice(i, 1);
+                  tour_by_group[activeTravelerKey] = groupTour;
+                  return { ...d, tour_by_group };
                 });
               }}
             />
@@ -156,17 +160,21 @@ const TourTabContent = ({ dayIndex }) => {
               restaurants={restaurantsData}
               onChange={(newItem) => {
                 updatePackageDay((d) => {
-                  const tour = [...(d.tour || [])];
-                  tour[i] = newItem;
-                  return { ...d, tour };
+                  const tour_by_group = { ...(d.tour_by_group || {}) };
+                  const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+                  groupTour[i] = newItem;
+                  tour_by_group[activeTravelerKey] = groupTour;
+                  return { ...d, tour_by_group };
                 });
               }}
               onDelete={() => {
                 if (!isAdultActive) return;
                 updatePackageDay((d) => {
-                  const tour = [...(d.tour || [])];
-                  tour.splice(i, 1);
-                  return { ...d, tour };
+                  const tour_by_group = { ...(d.tour_by_group || {}) };
+                  const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+                  groupTour.splice(i, 1);
+                  tour_by_group[activeTravelerKey] = groupTour;
+                  return { ...d, tour_by_group };
                 });
               }}
             />
@@ -181,10 +189,13 @@ const TourTabContent = ({ dayIndex }) => {
           size="sm"
           colorScheme="teal"
           onClick={() => {
-            updatePackageDay((d) => ({
-              ...d,
-              tour: [...(d.tour || []), { id_destinasi: null }],
-            }));
+            updatePackageDay((d) => {
+              const tour_by_group = { ...(d.tour_by_group || {}) };
+              const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+              groupTour.push({ id_destinasi: null });
+              tour_by_group[activeTravelerKey] = groupTour;
+              return { ...d, tour_by_group };
+            });
           }}
           isDisabled={!isAdultActive}
         >
@@ -194,10 +205,13 @@ const TourTabContent = ({ dayIndex }) => {
           size="sm"
           colorScheme="teal"
           onClick={() => {
-            updatePackageDay((d) => ({
-              ...d,
-              tour: [...(d.tour || []), { id_activity: null }],
-            }));
+            updatePackageDay((d) => {
+              const tour_by_group = { ...(d.tour_by_group || {}) };
+              const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+              groupTour.push({ id_activity: null });
+              tour_by_group[activeTravelerKey] = groupTour;
+              return { ...d, tour_by_group };
+            });
           }}
           isDisabled={!isAdultActive}
         >
@@ -207,10 +221,13 @@ const TourTabContent = ({ dayIndex }) => {
           size="sm"
           colorScheme="teal"
           onClick={() => {
-            updatePackageDay((d) => ({
-              ...d,
-              tour: [...(d.tour || []), { id_resto: null }],
-            }));
+            updatePackageDay((d) => {
+              const tour_by_group = { ...(d.tour_by_group || {}) };
+              const groupTour = [...(tour_by_group[activeTravelerKey] || [])];
+              groupTour.push({ id_resto: null });
+              tour_by_group[activeTravelerKey] = groupTour;
+              return { ...d, tour_by_group };
+            });
           }}
           isDisabled={!isAdultActive}
         >
