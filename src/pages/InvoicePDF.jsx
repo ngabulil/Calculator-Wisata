@@ -362,7 +362,6 @@ const InvoicePDF = forwardRef((props, ref) => {
                     childPrice > 0 && childQty > 0
                       ? formatCurrency(childPrice * childQty)
                       : "-",
-                  // Tambahan data untuk keperluan lain
                   adultPrice,
                   childPrice,
                   adultQty,
@@ -556,6 +555,14 @@ const InvoicePDF = forwardRef((props, ref) => {
     );
   }
 
+  const childGroups =
+  selectedPackage?.childGroups?.map((child, idx) => ({
+    id: child.id || `child-${idx}`,
+    label: `${child.label} (${child.age} thn)`, // tampilkan umur
+    total: child.total || 1,
+    age: child.age,
+  })) || [];
+
   return (
     <Box maxW="900px" mx="auto" py={8}>
       <Flex
@@ -696,6 +703,7 @@ const InvoicePDF = forwardRef((props, ref) => {
           onEditItemDescription={editItemDescription}
           totalAdult={calculatedValues.totalAdult}
           totalChild={calculatedValues.actualChild}
+          childGroups={childGroups}
         />
 
         <CostBreakDown

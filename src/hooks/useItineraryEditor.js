@@ -107,9 +107,13 @@ const useItineraryEditor = (initialDays = [], packageId = null) => {
               }
             });
 
-            reorderedDay.activities = reorderedDay.items.filter(i => i.type === "activity");
-            reorderedDay.expenseItems = reorderedDay.items.filter(i => i.type === "expense");
-            }
+          reorderedDay.activities = reorderedDay.items.filter(
+            (item) => item.type === "activity"
+          );
+          reorderedDay.expenseItems = reorderedDay.items.filter(
+            (item) => item.type === "expense"
+          );
+        }
           }
 
           return reorderedDay;
