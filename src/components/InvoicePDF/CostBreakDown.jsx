@@ -80,13 +80,10 @@ const CostBreakDown = ({
   formatCurrency,
   markup,
   totalAdult = 1,
-  totalChild = 0,
-  totalChild9 = 0,
   exchangeRate,
   isEditingExchangeRate = false,
-  sellingChild,
-  sellingChild9,
-  onExchangeRateChange = () => {},
+  childGroupsWithPricing = [],
+  onExchangeRateChange = () => { },
 }) => {
   const sortByDay = (data) => {
     return [...data].sort((a, b) => {
@@ -94,6 +91,26 @@ const CostBreakDown = ({
       const dayB = parseInt(b.day.replace(/\D/g, "")) || 0;
       return dayA - dayB;
     });
+  };
+
+  const getExtrabedQuantity = (item) => {
+    if (!item.extrabedByTraveler) return 0;
+
+    let totalQty = 0;
+
+    Object.keys(item.extrabedByTraveler).forEach(travelerKey => {
+      const travelerData = item.extrabedByTraveler[travelerKey];
+      if (travelerData && travelerData.use === true) {
+        totalQty += parseInt(travelerData.qty) || 0;
+      }
+    });
+
+    return totalQty;
+  };
+
+  const getExtrabedCost = (item) => {
+    const pricePerExtrabed = item.extrabedPrice || 0;
+    return pricePerExtrabed;
   };
 
   const sortedHotelData = sortByDay(hotelData);
@@ -114,8 +131,7 @@ const CostBreakDown = ({
   const transportPerAdult = roundPrice(totalAdult > 0 ? transportTotal / totalAdult : 0);
   const additionalPerAdult = roundPrice(totalAdult > 0 ? additionalTotal / totalAdult : 0);
 
-  // Check if any hotel has extrabed
-  const hasExtrabed = sortedHotelData.some(item => (item.extrabedQty || 0) > 0);
+  const hasExtrabed = sortedHotelData.some(item => getExtrabedQuantity(item) > 0);
 
   return (
     <VStack spacing={3} align="stretch">
@@ -144,30 +160,35 @@ const CostBreakDown = ({
               </Tr>
             </Thead>
             <Tbody color={"#222"}>
-              {sortedHotelData.map((item, index) => (
-                <Tr key={index}>
-                  <Td style={narrowColumnStyle}>{item.day}</Td>
-                  <Td style={wideColumnStyle}>{item.name}</Td>
-                  <Td style={narrowColumnStyle}>{item.rooms}</Td>
-                  <Td style={mediumColumnStyle}>
-                    {formatCurrency(item.pricePerNight)}
-                  </Td>
-                  {hasExtrabed && (
+              {sortedHotelData.map((item, index) => {
+                const extrabedQty = getExtrabedQuantity(item);
+                const extrabedCost = getExtrabedCost(item);
+
+                return (
+                  <Tr key={index}>
+                    <Td style={narrowColumnStyle}>{item.day}</Td>
+                    <Td style={wideColumnStyle}>{item.name}</Td>
+                    <Td style={narrowColumnStyle}>{item.rooms}</Td>
                     <Td style={mediumColumnStyle}>
-                      {(item.extrabedQty || 0) > 0 ? (
+                      {formatCurrency(item.pricePerNight)}
+                    </Td>
+                    {hasExtrabed && (
+                      <Td style={mediumColumnStyle}>
+                        {(extrabedQty || 0) > 0 ? (
                           <div style={{ fontSize: "0.9em" }}>
-                            {formatCurrency((item.extrabedQty || 0) * (item.extrabedPrice || 0))}
+                            {extrabedQty} x {formatCurrency((extrabedCost || 0))}
                           </div>
                         ) : (
-                        "-"
-                      )}
+                          "-"
+                        )}
+                      </Td>
+                    )}
+                    <Td style={mediumColumnStyle}>
+                      {formatCurrency(item.total)}
                     </Td>
-                  )}
-                  <Td style={mediumColumnStyle}>
-                    {formatCurrency(item.total)}
-                  </Td>
-                </Tr>
-              ))}
+                  </Tr>
+                );
+              })}
               <Tr>
                 <Td colSpan={hasExtrabed ? 5 : 4} style={tableTotalStyle}>
                   Total Hotel
@@ -335,18 +356,16 @@ const CostBreakDown = ({
             <Text fontWeight="bold" fontSize="lg">Price Pax Adult</Text>
             <Text fontWeight="bold" fontSize="lg">{formatCurrency(selling)}</Text>
           </HStack>
-          {totalChild9 > 0 && (
-          <HStack justify="space-between" w="100%">
-            <Text fontWeight="bold" fontSize="lg">Price Pax Child 9Y</Text>
-            <Text fontWeight="bold" fontSize="lg">{formatCurrency(sellingChild9)}</Text>
-          </HStack>
-          )}
-          {totalChild > 0 && (
-            <HStack justify="space-between" w="100%">
-              <Text fontSize="lg">Price Pax Child</Text>
-              <Text fontSize="lg">{formatCurrency(sellingChild)}</Text>
+          {childGroupsWithPricing.map((childGroup, index) => (
+            <HStack key={childGroup.id || index} justify="space-between" w="100%">
+              <Text fontWeight="bold" fontSize="lg">
+                Price Pax {childGroup.label}
+              </Text>
+              <Text fontWeight="bold" fontSize="lg">
+                {formatCurrency(childGroup.price)}
+              </Text>
             </HStack>
-          )}
+          ))}
           <HStack justify="space-between" w="100%">
             <Text fontSize="lg">Exchange Rate</Text>
             {isEditingExchangeRate ? (

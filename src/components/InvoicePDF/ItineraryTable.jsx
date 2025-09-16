@@ -73,23 +73,18 @@ const ItineraryTable = ({
     });
   };
 
-  // PERBAIKAN UTAMA: Normalisasi data yang lebih konsisten
   const normalizedDays = (Array.isArray(days) ? days : []).map((day, dayIdx) => {
     return {
       ...day,
       items: (day.items || []).map((item, itemIdx) => {
-        // Gunakan data dari item itu sendiri, bukan dari originalData yang mungkin tidak sinkron
         const finalItem = {
           ...item,
-          // Pastikan semua field yang dibutuhkan ada
           hargaAdult: item.hargaAdult || item.adultPrice || 0,
           hargaChild: item.hargaChild || item.childPrice || 0,
           quantities: item.quantities || {},
-          // Simpan data asli untuk referensi jika diperlukan
           originalData: item.originalData || item,
         };
 
-        // Jika ada originalData dan quantities kosong, ambil dari originalData
         if (item.originalData && (!item.quantities || Object.keys(item.quantities).length === 0)) {
           finalItem.quantities = item.originalData.quantities || {};
           finalItem.hargaAdult = item.originalData.hargaAdult || item.originalData.adultPrice || finalItem.hargaAdult;
@@ -138,18 +133,14 @@ const ItineraryTable = ({
     setEditValues({ title: "", description: "" });
   }, [editingItem, editValues, onEditItemTitle, onEditItemDescription, toast]);
 
-  // PERBAIKAN: Perhitungan harga yang lebih akurat
   const calculateItemPrice = (item) => {
-    // Gunakan data langsung dari item yang sudah dinormalisasi
     const quantities = item.quantities || {};
     const hargaAdult = Number(item.hargaAdult) || 0;
     const hargaChild = Number(item.hargaChild) || 0;
 
-    // Hitung adult expense
     const adultQty = Number(quantities.adult || 0);
     const adultExpense = adultQty * hargaAdult;
 
-    // Hitung child expenses per group
     const childExpenses = childGroups.map((child) => {
       const qty = Number(quantities[child.id] || 0);
       return qty * hargaChild;
@@ -336,7 +327,7 @@ const ItineraryTable = ({
                 width="120px"
                 style={tableStyles.header}
               >
-                {child.label}
+                Child{child.age}
               </Th>
             ))}
           </Tr>
