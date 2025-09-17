@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useCallback } from "react";
 import {
   Box,
@@ -28,8 +29,8 @@ const tableStyles = {
     backgroundColor: orange,
     color: "#222",
     fontWeight: "bold",
-    fontSize: "1rem",
-    padding: "2px 20px 12px 10px",
+    fontSize: "0.9rem",
+    padding: "2px 10px 12px 10px",
   },
   subHeader: {
     backgroundColor: orangeLight,
@@ -42,7 +43,7 @@ const tableStyles = {
     padding: "2px 20px 12px 10px",
   },
   cell: {
-    padding: "2px 30px 12px 10px",
+    padding: "2px 20px 12px 10px",
     verticalAlign: "top",
   },
 };
@@ -317,17 +318,17 @@ const ItineraryTable = ({
               Day
             </Th>
             <Th style={tableStyles.header}>Quotation</Th>
-            <Th textAlign="center" width="160px" style={tableStyles.header}>
+            <Th textAlign="center" width="40px" style={tableStyles.header}>
               Adult
             </Th>
             {childGroups.map((child) => (
               <Th
                 key={child.id}
                 textAlign="center"
-                width="120px"
+                width="30px"
                 style={tableStyles.header}
               >
-                Child{child.age}
+                Child {child.age}
               </Th>
             ))}
           </Tr>

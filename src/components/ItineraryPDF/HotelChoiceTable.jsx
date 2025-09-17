@@ -41,19 +41,22 @@ const HotelChoiceTable = ({ akomodasiDays }) => {
     hotelItems,
     villaItems,
     formatCurrency,
-    calculateGrandTotal,
-    expenseChild,
   } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
   const {
-    transportTotal,
-    tourTotal,
     userMarkupAmount,
-    childTotal,
     childMarkupAmount,
-    additionalChild,
   } = useCheckoutContext();
-  const { adultSubtotal, childSubtotal } = useCalculatePaxContext();
+  const {
+    calculateTourAdultTotal,
+    calculateAdditionalAdultTotal,
+    calculateTransport,
+    calculateTourChildTotals,
+    calculateAdditionalChildTotals,
+    calculateExtrabedChildTotals,
+    adultSubtotal,
+    childSubtotal
+  } = useCalculatePaxContext();
   const { currency } = useCurrencyContext();
 
 const formatCurrencyWithCode = (value) => {
@@ -226,58 +229,36 @@ const formatCurrencyWithCode = (value) => {
   }, [adultSubtotal, childSubtotal, userMarkupAmount, childMarkupAmount, selectedPackage?.childGroups]);
 
 const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
-  const totalAdult = parseInt(selectedPackage?.totalPaxAdult) || 0;
-  const totalChild = parseInt(selectedPackage?.totalPaxChildren) || 0;
-  const childrenAges = selectedPackage?.childrenAges || [];
-  const child9Count = childrenAges.filter((age) => age >= 9).length;
+  const days = selectedPackage?.days || [];
+  const totalAdult = selectedPackage?.totalPaxAdult || 0;
+  console.log(totalAdult)
+  const childGroups = selectedPackage?.childGroups || [];
 
-  const totalExpensesFromContext = calculateGrandTotal();
-  const adultExpenses = totalExpensesFromContext - expenseChild;
-  const tourAdult = tourTotal - childTotal;
+  const tourAdult = calculateTourAdultTotal(days);
+  const additionalAdult = calculateAdditionalAdultTotal(days);
+  const transportTotal = calculateTransport(days);
 
-  let adultAkomodasiTotal = accommodationPrice;
-  let childAkomodasiTotal = 0;
+  const adultBase = (tourAdult + additionalAdult + transportTotal + accommodationPrice + extrabedPrice) / totalAdult;
 
-  if (selectedPackage?.addExtrabedChild) {
-    adultAkomodasiTotal = accommodationPrice;
-    childAkomodasiTotal = extrabedPrice;
-  } else if (child9Count > 0 && extrabedPrice > 0) {
-    adultAkomodasiTotal = extrabedPrice;
-  }
+  const tourChildTotals = calculateTourChildTotals(days, childGroups);
+  const additionalChildTotals = calculateAdditionalChildTotals(days, childGroups);
+  const extrabedChildTotals = calculateExtrabedChildTotals(days, childGroups);
 
-  let childBase = (childTotal + expenseChild + childAkomodasiTotal) / (totalChild || 1);
-  let priceChild9 = childBase;
+  const childPriceTotals = {};
+  childGroups.forEach(group => {
+    const totalChildren = Number(group.total) || 1;
+    const groupTotal =
+      (tourChildTotals[group.id] || 0) +
+      (additionalChildTotals[group.id] || 0) +
+      (extrabedChildTotals[group.id] || 0) + extrabedPrice;
 
-  if (child9Count > 0) {
-    if (selectedPackage?.addExtrabedChild) {
-      priceChild9 = childBase;
-    } else if (extrabedPrice > 0) {
-      priceChild9 = childBase + extrabedPrice / child9Count;
-    }
-  }
-
-  let adultBase =
-    (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
-    (totalAdult || 1);
-
-  if (selectedPackage?.addAdditionalChild) {
-    const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
-    const perChild = totalChild > 0 ? additionalChild / totalChild : 0;
-    const perChild9 = child9Count > 0 ? additionalChild / totalChild : 0;
-
-    adultBase -= perAdult;
-    childBase += perChild;
-    priceChild9 += perChild9;
-  }
-
-  const alternativeAdultPrice = roundPrice(adultBase + userMarkupAmount);
-  const alternativeChildPrice = roundPrice(childBase + childMarkupAmount);
-  const alternativeChild9Price = roundPrice(priceChild9 + childMarkupAmount);
+    childPriceTotals[group.id] = roundPrice(groupTotal / totalChildren);
+  });
 
   return {
-    adultPrice: alternativeAdultPrice,
-    childPrice: alternativeChildPrice,
-    child9Price: alternativeChild9Price,
+    adultBase,
+    childGroups,
+    childPriceTotals
   };
 };
 
@@ -526,10 +507,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
                     {index === 0
                       ? formatCurrencyWithCode(calculateFirstRowPrices.adultPrice)
                       : formatCurrencyWithCode(
-                          calculateAlternativePrices(
-                            item.price,
-                            item.extrabedPrice
-                          ).adultPrice
+                          calculateAlternativePrices(item.price, item.extrabedPrice).adultBase
                         )}{" "}
                     / Pax
                   </Text>
@@ -545,7 +523,6 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
                       ))}
                     </>
                   ) : (
-                    // Other rows - use alternative prices from context
                     <>
                       {calculateAlternativePrices(item.price, item.extrabedPrice).childGroups.map((group) => (
                         <Text key={group.id} fontWeight="bold">
