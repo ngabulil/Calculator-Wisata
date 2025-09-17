@@ -62,7 +62,7 @@ const CalculatePaxProvider = ({ children }) => {
         return days.reduce((sum, day) => {
             let akomodasiAdult = 0;
             const akomodasiArr = day.akomodasi_additionalsByTraveler?.adult;
-            if (Array.isArray(akomodasiArr) && akomodasiArr.length === 2) {
+            if (Array.isArray(akomodasiArr)) {
                 akomodasiAdult = akomodasiArr.reduce((acc, item) => {
                     return acc + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
                 }, 0);
@@ -70,7 +70,7 @@ const CalculatePaxProvider = ({ children }) => {
 
             let transportAdult = 0;
             const transportArr = day.transport_additionals_by_group?.adult;
-            if (Array.isArray(transportArr) && transportArr.length === 2) {
+            if (Array.isArray(transportArr)) {
                 transportAdult = transportArr.reduce((acc, item) => {
                     return acc + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
                 }, 0);
@@ -148,13 +148,13 @@ const CalculatePaxProvider = ({ children }) => {
 
             days.forEach(day => {
                 const akomodasiArr = day.akomodasi_additionalsByTraveler?.[groupId];
-                if (Array.isArray(akomodasiArr) && akomodasiArr.length === 1) {
+                if (Array.isArray(akomodasiArr)) {
                     akomodasiArr.forEach(item => {
                         total += (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
                     });
                 }
                 const transportArr = day.transport_additionals_by_group?.[groupId];
-                if (Array.isArray(transportArr) && transportArr.length === 1) {
+                if (Array.isArray(transportArr)) {
                     transportArr.forEach(item => {
                         total += (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
                     });
@@ -171,6 +171,7 @@ const CalculatePaxProvider = ({ children }) => {
     const akomodasiTotal = calculateAkomodasi(selectedPackage?.days || []);
     const extrabedTotal = calculateExtrabedAdultTotal(selectedPackage?.days || []);
     const additionalAdultTotal = calculateAdditionalAdultTotal(selectedPackage?.days || []);
+    console.log("add ADult",additionalAdultTotal)
     const transportTotal = calculateTransport(selectedPackage?.days || []);
 
     const adultSubtotal = (tourAdult + akomodasiTotal + extrabedTotal + additionalAdultTotal + transportTotal) / (selectedPackage?.totalPaxAdult || 1);
