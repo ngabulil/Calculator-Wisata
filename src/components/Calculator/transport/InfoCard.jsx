@@ -7,7 +7,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   apiDeleteAdditionalMobil,
   apiPostAdditionalMobil,
@@ -15,12 +15,19 @@ import {
 import { MainSelectCreatableWithDelete } from "../../MainSelect";
 import { useTransportContext } from "../../../context/TransportContext";
 import { usePackageContext } from "../../../context/PackageContext";
+// NEW
+import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
 const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   const { additional, setAdditional } = useTransportContext();
   const { selectedPackage } = usePackageContext();
-  const { totalPaxAdult: jumlahAdult, totalPaxChildren: jumlahChild } =
-    selectedPackage;
+
+  // NEW: traveler context
+  const { isAdultActive, activeTravelerKey } = useTravelerGroup();
+  const { totalPaxAdult, childGroups = [] } = selectedPackage;
+  const activeChildTotal =
+    childGroups.find((c) => c.id === activeTravelerKey)?.total || 0;
+  const baseQty = isAdultActive ? (Number(totalPaxAdult) || 0) : (Number(activeChildTotal) || 0);
 
   const infoOptions = useMemo(
     () =>
@@ -46,7 +53,9 @@ const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
 
   const harga = data.harga ?? 0;
   const jumlah = data.jumlah ?? 1;
-  const total = harga * jumlah;
+  const total = (Number(harga) || 0) * (Number(jumlah) || 1);
+
+  const [qtyTouched, setQtyTouched] = useState(false);
 
   const handleUpdate = (fields) => {
     const updated = { ...data, ...fields };
@@ -63,6 +72,7 @@ const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
     onChange(updated);
   };
 
+  // Auto-set selectedInfo jika hanya id_additional yang tersedia
   useEffect(() => {
     if (!data.selectedInfo && data.id_additional) {
       const found = infoOptions.find((opt) => opt.value === data.id_additional);
@@ -75,24 +85,28 @@ const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data.selectedInfo, data.id_additional, infoOptions, dayIndex]);
 
+  // Auto-set harga jika belum ada saat selectedInfo tersedia
   useEffect(() => {
     if (
       selectedInfo &&
       data.id_additional &&
       (data.harga === undefined || data.harga === 0)
     ) {
-      handleUpdate({
-        harga: selectedInfo.defaultPrice || 0,
-      });
+      handleUpdate({ harga: selectedInfo.defaultPrice || 0 });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedInfo, dayIndex]);
 
+  // NEW: jumlah default mengikuti traveler aktif; tidak override bila user sudah edit
   useEffect(() => {
-    const totalPax = (jumlahAdult || 0) + (jumlahChild || 0);
-    handleUpdate({ jumlah: totalPax });
-  }, [jumlahAdult, jumlahChild]);
+    if (!qtyTouched && jumlah !== baseQty) {
+      handleUpdate({ jumlah: baseQty });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseQty, dayIndex]);
 
   const handleCreate = async (inputValue) => {
     try {
@@ -177,7 +191,10 @@ const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
           </Text>
           <Input
             value={jumlah}
-            onChange={(e) => handleUpdate({ jumlah: Number(e.target.value) })}
+            onChange={(e) => {
+              setQtyTouched(true);
+              handleUpdate({ jumlah: Number(e.target.value) });
+            }}
             bg={inputBg}
             color={textColor}
             borderColor={borderColor}

@@ -15,6 +15,7 @@ import { parseAndMergeDays } from "../../utils/parseAndMergeDays";
 // import { useGrandTotalContext } from "../../context/GrandTotalContext";
 import { usePackageContext } from "../../context/PackageContext";
 import { useCheckoutContext } from "../../context/CheckoutContext";
+import { useCalculatePaxContext } from "../../context/CalculatePaxContext";
 import { roundPrice } from "../../utils/roundPrice";
 import { useCurrencyContext } from "../../context/CurrencyContext";
 
@@ -35,25 +36,27 @@ const tableCellStyle = {
   verticalAlign: "top",
 };
 
-const HotelChoiceTable = ({ akomodasiDays, calculatedTotalPerPax }) => {
+const HotelChoiceTable = ({ akomodasiDays }) => {
   const {
     hotelItems,
     villaItems,
     formatCurrency,
-    calculateGrandTotal,
-    expenseChild,
   } = useExpensesContext();
   const { selectedPackage } = usePackageContext();
   const {
-    transportTotal,
-    tourTotal,
     userMarkupAmount,
-    childTotal,
     childMarkupAmount,
-    childPriceTotal,
-    additionalChild,
-    child9Total,
   } = useCheckoutContext();
+  const {
+    calculateTourAdultTotal,
+    calculateAdditionalAdultTotal,
+    calculateTransport,
+    calculateTourChildTotals,
+    calculateAdditionalChildTotals,
+    calculateExtrabedChildTotals,
+    adultSubtotal,
+    childSubtotal
+  } = useCalculatePaxContext();
   const { currency } = useCurrencyContext();
 
 const formatCurrencyWithCode = (value) => {
@@ -206,59 +209,56 @@ const formatCurrencyWithCode = (value) => {
     return nightsCount;
   }, [selectedPackage?.days]);
 
+  const calculateFirstRowPrices = useMemo(() => {
+    const childGroups = selectedPackage?.childGroups || [];
+    const totalChild = childGroups.reduce((total, group) => total + group.total, 0);
+    const adultPriceTotal = roundPrice(adultSubtotal + userMarkupAmount);
+    
+    const childPriceTotals = {};
+    childGroups.forEach(group => {
+      const basePrice = childSubtotal[group.id] || 0;
+      childPriceTotals[group.id] = roundPrice(basePrice + childMarkupAmount);
+    });
+
+    return {
+      adultPrice: adultPriceTotal,
+      childPriceTotals,
+      childGroups,
+      totalChild
+    };
+  }, [adultSubtotal, childSubtotal, userMarkupAmount, childMarkupAmount, selectedPackage?.childGroups]);
+
 const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
-  const totalAdult = parseInt(selectedPackage?.totalPaxAdult) || 0;
-  const totalChild = parseInt(selectedPackage?.totalPaxChildren) || 0;
-  const childrenAges = selectedPackage?.childrenAges || [];
-  const child9Count = childrenAges.filter((age) => age >= 9).length;
+  const days = selectedPackage?.days || [];
+  const totalAdult = selectedPackage?.totalPaxAdult || 0;
+  console.log(totalAdult)
+  const childGroups = selectedPackage?.childGroups || [];
 
-  const totalExpensesFromContext = calculateGrandTotal();
-  const adultExpenses = totalExpensesFromContext - expenseChild;
-  const tourAdult = tourTotal - childTotal;
+  const tourAdult = calculateTourAdultTotal(days);
+  const additionalAdult = calculateAdditionalAdultTotal(days);
+  const transportTotal = calculateTransport(days);
 
-  let adultAkomodasiTotal = accommodationPrice;
-  let childAkomodasiTotal = 0;
+  const adultBase = (tourAdult + additionalAdult + transportTotal + accommodationPrice + extrabedPrice) / totalAdult;
 
-  if (selectedPackage?.addExtrabedChild) {
-    adultAkomodasiTotal = accommodationPrice;
-    childAkomodasiTotal = extrabedPrice;
-  } else if (child9Count > 0 && extrabedPrice > 0) {
-    adultAkomodasiTotal = extrabedPrice;
-  }
+  const tourChildTotals = calculateTourChildTotals(days, childGroups);
+  const additionalChildTotals = calculateAdditionalChildTotals(days, childGroups);
+  const extrabedChildTotals = calculateExtrabedChildTotals(days, childGroups);
 
-  let childBase = (childTotal + expenseChild + childAkomodasiTotal) / (totalChild || 1);
-  let priceChild9 = childBase;
+  const childPriceTotals = {};
+  childGroups.forEach(group => {
+    const totalChildren = Number(group.total) || 1;
+    const groupTotal =
+      (tourChildTotals[group.id] || 0) +
+      (additionalChildTotals[group.id] || 0) +
+      (extrabedChildTotals[group.id] || 0) + extrabedPrice;
 
-  if (child9Count > 0) {
-    if (selectedPackage?.addExtrabedChild) {
-      priceChild9 = childBase;
-    } else if (extrabedPrice > 0) {
-      priceChild9 = childBase + extrabedPrice / child9Count;
-    }
-  }
-
-  let adultBase =
-    (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
-    (totalAdult || 1);
-
-  if (selectedPackage?.addAdditionalChild) {
-    const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
-    const perChild = totalChild > 0 ? additionalChild / totalChild : 0;
-    const perChild9 = child9Count > 0 ? additionalChild / totalChild : 0;
-
-    adultBase -= perAdult;
-    childBase += perChild;
-    priceChild9 += perChild9;
-  }
-
-  const alternativeAdultPrice = roundPrice(adultBase + userMarkupAmount);
-  const alternativeChildPrice = roundPrice(childBase + childMarkupAmount);
-  const alternativeChild9Price = roundPrice(priceChild9 + childMarkupAmount);
+    childPriceTotals[group.id] = roundPrice(groupTotal / totalChildren);
+  });
 
   return {
-    adultPrice: alternativeAdultPrice,
-    childPrice: alternativeChildPrice,
-    child9Price: alternativeChild9Price,
+    adultBase,
+    childGroups,
+    childPriceTotals
   };
 };
 
@@ -462,7 +462,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
               <VStack spacing={0}>
                 <Text fontSize="2xs" fontWeight="bold">
                   A{selectedPackage?.totalPaxAdult}+C
-                  {selectedPackage?.totalPaxChildren}
+                  {calculateFirstRowPrices.totalChild}
                 </Text>
                 <Text fontSize="2xs" fontWeight="bold">
                   Transport 6 Seater
@@ -501,50 +501,37 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
                 fontSize="xs"
               >
                 <VStack spacing={1} align="flex-start">
-                  {/* Adult */}
+                  {/* Adult Price */}
                   <Text fontWeight="bold" color="teal.700">
                     ADULT :{" "}
                     {index === 0
-                      ? formatCurrencyWithCode(calculatedTotalPerPax)
+                      ? formatCurrencyWithCode(calculateFirstRowPrices.adultPrice)
                       : formatCurrencyWithCode(
-                          calculateAlternativePrices(
-                            item.price,
-                            item.extrabedPrice
-                          ).adultPrice
+                          calculateAlternativePrices(item.price, item.extrabedPrice).adultBase
                         )}{" "}
                     / Pax
                   </Text>
 
-                  {/* Child ≥9 tahun */}
-                  {selectedPackage?.childrenAges?.some((age) => age >= 9) && (
-                    <Text fontWeight="bold" color="blue.700">
-                      CHILD 9y :{" "}
-                      {index === 0
-                        ?  formatCurrencyWithCode(child9Total) // ini dari CheckoutContext
-                        :  formatCurrencyWithCode(
-                            calculateAlternativePrices(
-                              item.price,
-                              item.extrabedPrice
-                            ).child9Price
-                          )}{" "}
-                      / Pax
-                    </Text>
-                  )}
-
-                  {/* Child <9 tahun */}
-                  {selectedPackage?.childrenAges?.some((age) => age < 9) && (
-                    <Text fontWeight="bold" color="green.700">
-                      CHILD :{" "}
-                      {index === 0
-                        ? formatCurrencyWithCode(childPriceTotal)
-                        :  formatCurrencyWithCode(
-                            calculateAlternativePrices(
-                              item.price,
-                              item.extrabedPrice
-                            ).childPrice
-                          )}{" "}
-                      / Pax
-                    </Text>
+                  {index === 0 ? (
+                    <>
+                      {calculateFirstRowPrices.childGroups.map((group) => (
+                        <Text key={group.id} fontWeight="bold">
+                          CHILD {group.age} :{" "}
+                          {formatCurrencyWithCode(calculateFirstRowPrices.childPriceTotals[group.id])}{" "}
+                          / Pax
+                        </Text>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {calculateAlternativePrices(item.price, item.extrabedPrice).childGroups.map((group) => (
+                        <Text key={group.id} fontWeight="bold">
+                          CHILD {group.age} :{" "}
+                          {formatCurrencyWithCode(calculateAlternativePrices(item.price, item.extrabedPrice).childPriceTotals[group.id])}{" "}
+                          / Pax
+                        </Text>
+                      ))}
+                    </>
                   )}
                 </VStack>
               </Td>

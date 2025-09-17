@@ -1,3 +1,4 @@
+// AkomodasiTabContent.jsx
 import {
   Box,
   Button,
@@ -14,6 +15,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useAkomodasiContext } from "../../../context/AkomodasiContext";
 import { usePackageContext } from "../../../context/PackageContext";
 import { useGrandTotalContext } from "../../../context/GrandTotalContext";
+// NEW
+import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
 const AkomodasiTabContent = ({ dayIndex }) => {
   const { getHotels, getVillas, getAdditional } = useAkomodasiContext();
@@ -25,12 +28,33 @@ const AkomodasiTabContent = ({ dayIndex }) => {
   );
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    let timeout;
-    timeout = setTimeout(() => {
-      setLoading(false);
-    }, 100);
+  // NEW
+  const { isAdultActive, activeTravelerKey } = useTravelerGroup();
+  const activeKey = isAdultActive ? "adult" : activeTravelerKey;
+  // deep keys agar total re-calc saat nested fields (extrabedByTraveler) berubah
+  const hotelsKey = useMemo(
+    () => JSON.stringify(currentDay.hotels || []),
+    [currentDay.hotels]
+  );
+  const villasKey = useMemo(
+    () => JSON.stringify(currentDay.villas || []),
+    [currentDay.villas]
+  );
+  const addKey = useMemo(
+    () =>
+      JSON.stringify(
+        currentDay.akomodasi_additionalsByTraveler ||
+          currentDay.akomodasi_additionals ||
+          []
+      ),
+    [
+      currentDay.akomodasi_additionalsByTraveler,
+      currentDay.akomodasi_additionals,
+    ]
+  );
 
+  useEffect(() => {
+    let timeout = setTimeout(() => setLoading(false), 100);
     return () => {
       setLoading(true);
       clearTimeout(timeout);
@@ -43,37 +67,86 @@ const AkomodasiTabContent = ({ dayIndex }) => {
     getAdditional();
   }, []);
 
+  // NEW: migrasi struktur lama → baru (sekali saja per day)
+  useEffect(() => {
+    if (!currentDay) return;
+    if (currentDay.akomodasi_additionalsByTraveler) return;
+
+    setSelectedPackage((prev) => {
+      const days = [...(prev.days || [])];
+      const day = { ...(days[dayIndex] || {}) };
+      const legacy = Array.isArray(day.akomodasi_additionals)
+        ? day.akomodasi_additionals
+        : [];
+      day.akomodasi_additionalsByTraveler = { adult: legacy };
+      // opsional: tetap simpan field lama agar kompatibel, atau hapus jika mau bersih:
+      // delete day.akomodasi_additionals;
+      days[dayIndex] = day;
+      return { ...prev, days };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayIndex, currentDay?.akomodasi_additionalsByTraveler]);
+
+  // helper aman ambil/add array traveler
+  const getTravelerAdditionals = (day, key) => {
+    const map = day.akomodasi_additionalsByTraveler || {};
+    return Array.isArray(map[key]) ? map[key] : [];
+  };
+
+  // NEW: total akomodasi + extrabed + SEMUA additional (semua traveler)
   const total = useMemo(() => {
-    const totalHotel = (currentDay.hotels || []).reduce(
-      (sum, h) =>
-        sum +
-        (h.jumlahKamar || 0) * (h.hargaPerKamar || 0) +
-        (h.useExtrabed ? (h.jumlahExtrabed || 0) * (h.hargaExtrabed || 0) : 0),
+    const sumExtrabedQty = (item) => {
+      if (
+        item?.extrabedByTraveler &&
+        typeof item.extrabedByTraveler === "object"
+      ) {
+        return Object.values(item.extrabedByTraveler).reduce((acc, eb) => {
+          if (!eb) return acc;
+          const use = !!eb.use;
+          const qty = Number(eb.qty) || 0;
+          return acc + (use ? qty : 0);
+        }, 0);
+      }
+      return item?.useExtrabed ? Number(item.jumlahExtrabed) || 0 : 0;
+    };
+
+    const totalHotel = (currentDay.hotels || []).reduce((sum, h) => {
+      const base =
+        (Number(h.jumlahKamar) || 0) * (Number(h.hargaPerKamar) || 0);
+      const eb = sumExtrabedQty(h) * (Number(h.hargaExtrabed) || 0);
+      return sum + base + eb;
+    }, 0);
+
+    const totalVilla = (currentDay.villas || []).reduce((sum, v) => {
+      const base =
+        (Number(v.jumlahKamar) || 0) * (Number(v.hargaPerKamar) || 0);
+      const eb = sumExtrabedQty(v) * (Number(v.hargaExtrabed) || 0);
+      return sum + base + eb;
+    }, 0);
+
+    // NEW: sum additional semua traveler
+    const map = currentDay.akomodasi_additionalsByTraveler || {};
+    const allAdditionals = Object.values(map).flat();
+    // fallback legacy kalau map belum ada
+    const legacy = Array.isArray(currentDay.akomodasi_additionals)
+      ? currentDay.akomodasi_additionals
+      : [];
+    const additionalsToSum =
+      map && Object.keys(map).length > 0 ? allAdditionals : legacy;
+
+    const totalAdditional = additionalsToSum.reduce(
+      (sum, a) => sum + (Number(a.harga) || 0) * (Number(a.jumlah) || 1),
       0
     );
-    const totalVilla = (currentDay.villas || []).reduce(
-      (sum, v) =>
-        sum +
-        (v.jumlahKamar || 0) * (v.hargaPerKamar || 0) +
-        (v.useExtrabed ? (v.jumlahExtrabed || 0) * (v.hargaExtrabed || 0) : 0),
-      0
-    );
-    const totalAdditional = (currentDay.akomodasi_additionals || []).reduce(
-      (sum, a) => sum + (a.harga || 0) * (a.jumlah || 1),
-      0
-    );
+
     const sub = totalHotel + totalVilla + totalAdditional;
     const mark =
       markupState.type === "percent"
-        ? ((markupState.value || 0) * sub) / 100
-        : markupState.value || 0;
+        ? ((Number(markupState.value) || 0) * sub) / 100
+        : Number(markupState.value) || 0;
+
     return sub + mark;
-  }, [
-    currentDay.hotels,
-    currentDay.villas,
-    currentDay.akomodasi_additionals,
-    markupState,
-  ]);
+  }, [hotelsKey, villasKey, addKey, markupState.type, markupState.value]);
 
   const updatePackageDay = (updater) => {
     setSelectedPackage((prev) => {
@@ -94,6 +167,9 @@ const AkomodasiTabContent = ({ dayIndex }) => {
   }, [total]);
 
   if (loading) return null;
+
+  // NEW: array additional traveler aktif
+  const activeAdditionals = getTravelerAdditionals(currentDay, activeKey);
 
   return (
     <VStack spacing={6} align="stretch">
@@ -119,6 +195,7 @@ const AkomodasiTabContent = ({ dayIndex }) => {
           }}
         />
       ))}
+
       <Button
         size="sm"
         colorScheme="teal"
@@ -128,6 +205,7 @@ const AkomodasiTabContent = ({ dayIndex }) => {
             return { ...day, hotels };
           });
         }}
+        isDisabled={!isAdultActive}
       >
         Tambah Hotel
       </Button>
@@ -154,6 +232,8 @@ const AkomodasiTabContent = ({ dayIndex }) => {
           }}
         />
       ))}
+
+      {/* Tambah Villa: hanya saat Adult */}
       <Button
         size="sm"
         colorScheme="teal"
@@ -163,84 +243,60 @@ const AkomodasiTabContent = ({ dayIndex }) => {
             return { ...day, villas };
           });
         }}
+        isDisabled={!isAdultActive}
       >
         Tambah Villa
       </Button>
 
-      {(currentDay.akomodasi_additionals || []).map((item, i) => (
+      {/* NEW: render hanya additional milik traveler aktif */}
+      {activeAdditionals.map((item, i) => (
         <InfoCard
-          key={i}
+          key={`${activeKey}-${i}`}
           index={i}
           data={item}
           dayIndex={dayIndex}
           onChange={(newInfo) => {
             updatePackageDay((day) => {
-              const akomodasi_additionals = [
-                ...(day.akomodasi_additionals || []),
-              ];
-              akomodasi_additionals[i] = newInfo;
-              return { ...day, akomodasi_additionals };
+              const map = { ...(day.akomodasi_additionalsByTraveler || {}) };
+              const arr = Array.isArray(map[activeKey])
+                ? [...map[activeKey]]
+                : [];
+              arr[i] = newInfo;
+              map[activeKey] = arr;
+              return { ...day, akomodasi_additionalsByTraveler: map };
             });
           }}
           onDelete={() => {
             updatePackageDay((day) => {
-              const akomodasi_additionals = [
-                ...(day.akomodasi_additionals || []),
-              ];
-              akomodasi_additionals.splice(i, 1);
-              return { ...day, akomodasi_additionals };
+              const map = { ...(day.akomodasi_additionalsByTraveler || {}) };
+              const arr = Array.isArray(map[activeKey])
+                ? [...map[activeKey]]
+                : [];
+              arr.splice(i, 1);
+              map[activeKey] = arr;
+              return { ...day, akomodasi_additionalsByTraveler: map };
             });
           }}
         />
       ))}
+
       <Button
         size="sm"
         colorScheme="teal"
         onClick={() => {
           updatePackageDay((day) => {
-            const akomodasi_additionals = [
-              ...(day.akomodasi_additionals || []),
-              {},
-            ];
-            return { ...day, akomodasi_additionals };
+            const map = { ...(day.akomodasi_additionalsByTraveler || {}) };
+            const arr = Array.isArray(map[activeKey])
+              ? [...map[activeKey]]
+              : [];
+            arr.push({});
+            map[activeKey] = arr;
+            return { ...day, akomodasi_additionalsByTraveler: map };
           });
         }}
       >
         Tambah Tambahan
       </Button>
-
-      {/* MARKUP */}
-      {/* <Box>
-        <Text fontWeight="bold" mb={2}>
-          Markup
-        </Text>
-        <HStack>
-          <Select
-            w="150px"
-            value={markupState.type}
-            onChange={(e) => {
-              const newMarkup = { ...markupState, type: e.target.value };
-              setMarkupState(newMarkup);
-              updatePackageDay((day) => ({ ...day, markup: newMarkup }));
-            }}
-          >
-            <option value="percent">Persen (%)</option>
-            <option value="amount">Nominal (Rp)</option>
-          </Select>
-          <Input
-            w="150px"
-            value={markupState.value}
-            onChange={(e) => {
-              const newMarkup = {
-                ...markupState,
-                value: Number(e.target.value),
-              };
-              setMarkupState(newMarkup);
-              updatePackageDay((day) => ({ ...day, markup: newMarkup }));
-            }}
-          />
-        </HStack>
-      </Box> */}
 
       <Box fontWeight="bold" mt={4}>
         Total Hari Ini: Rp {total.toLocaleString("id-ID")}

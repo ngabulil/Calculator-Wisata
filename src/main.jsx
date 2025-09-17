@@ -18,6 +18,7 @@ import TourContextProvider from "./context/TourContext";
 import GrandTotalContextProvider from "./context/GrandTotalContext";
 import AdminAuthContextProvider from "./context/AuthContext";
 import CurrencyContextProvider from "./context/CurrencyContext";
+import CalculatePaxContextProvider from "./context/CalculatePaxContext";
 
 const config = {
   initialColorMode: "dark", // dark default
@@ -32,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <CalculatorProvider>
         <CurrencyContextProvider>
           <PackageContextProvider>
+            <CalculatePaxContextProvider>
             <GrandTotalContextProvider>
               <CheckoutContextProvider>
                 <AkomodasiContextProvider>
@@ -49,6 +51,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 </AkomodasiContextProvider>
               </CheckoutContextProvider>
             </GrandTotalContextProvider>
+            </CalculatePaxContextProvider>
           </PackageContextProvider>
         </CurrencyContextProvider>
       </CalculatorProvider>

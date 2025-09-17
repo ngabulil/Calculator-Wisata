@@ -14,6 +14,7 @@ import CostBreakDown from "../components/InvoicePDF/CostBreakDown";
 import { usePackageContext } from "../context/PackageContext";
 import { useCheckoutContext } from "../context/CheckoutContext";
 import { useExpensesContext } from "../context/ExpensesContext";
+import { useCalculatePaxContext } from "../context/CalculatePaxContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import { apiGetUser } from "../services/adminService";
 import Cookies from "js-cookie";
@@ -41,22 +42,15 @@ const InvoicePDF = forwardRef((props, ref) => {
     calculateVillaTotal,
     totalMarkup,
     childMarkupAmount,
-    childTotal,
     totalMarkupChild,
-    extrabedTotal,
-    setAdultPriceTotal,
-    setChildPriceTotal,
-    additionalChild,
-    setChild9Total,
-    hotelVilla,
   } = useCheckoutContext();
   const {
     days: expenseDays,
     calculateGrandTotal,
-    expenseChild,
   } = useExpensesContext();
+  
+  const { adultSubtotal, childSubtotal } = useCalculatePaxContext();
 
-  // Consolidated state untuk mengurangi re-render
   const [invoiceData, setInvoiceData] = useState({
     hotelData: [],
     villaData: [],
@@ -68,7 +62,6 @@ const InvoicePDF = forwardRef((props, ref) => {
   });
 
   const [exchangeRate, setExchangeRate] = useState(() => {
-    // Initialize dari localStorage langsung
     const saved = localStorage.getItem("invoiceExchangeRate");
     return saved ? Number(saved) : 15000;
   });
@@ -79,13 +72,11 @@ const InvoicePDF = forwardRef((props, ref) => {
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const componentRef = useRef();
 
-  // Memoize package ID
   const packageId = useMemo(
     () => selectedPackage?.id || selectedPackage?._id,
     [selectedPackage?.id, selectedPackage?._id]
   );
 
-  // Initialize reorder hook dengan package ID
   const {
     days: reorderedDays,
     originalDays,
@@ -110,118 +101,47 @@ const InvoicePDF = forwardRef((props, ref) => {
     },
   }));
 
-  // Memoize calculations untuk menghindari perhitungan berulang
   const calculatedValues = useMemo(() => {
     const totalAdult =
       selectedPackage?.totalPaxAdult &&
-      parseInt(selectedPackage.totalPaxAdult) > 0
+        parseInt(selectedPackage.totalPaxAdult) > 0
         ? parseInt(selectedPackage.totalPaxAdult)
         : 0;
 
-    const actualChild =
-      selectedPackage?.totalPaxChildren &&
-      parseInt(selectedPackage.totalPaxChildren) > 0
-        ? parseInt(selectedPackage.totalPaxChildren)
-        : 0;
-
-    const childrenAges = selectedPackage?.childrenAges || [];
-    const child9Count = childrenAges.filter((age) => age >= 9).length;
-
+    const childGroups = selectedPackage?.childGroups || [];
     const totalExpensesFromContext = calculateGrandTotal();
     const adjustedGrandTotal = grandTotal + totalExpensesFromContext;
-    const adultExpenses = totalExpensesFromContext - expenseChild;
-    const tourAdult = tourTotal - childTotal;
 
-    let adultAkomodasiTotal = akomodasiTotal;
-    let childAkomodasiTotal = 0;
-
-    if (selectedPackage?.addExtrabedChild) {
-      adultAkomodasiTotal = hotelVilla;
-      childAkomodasiTotal = extrabedTotal;
-    } else if (child9Count > 0) {
-      adultAkomodasiTotal = hotelVilla;
-    }
-
-    let adultBase =
-      (tourAdult + transportTotal + adultAkomodasiTotal + adultExpenses) /
-      (totalAdult || 1);
-
-    let childBase =
-      (childTotal + expenseChild + childAkomodasiTotal) / (actualChild || 1);
-
-    let priceChild9 = childBase;
-    if (child9Count > 0) {
-      if (selectedPackage?.addExtrabedChild) {
-        priceChild9 = childBase;
-      } else if (extrabedTotal > 0) {
-        priceChild9 = childBase + extrabedTotal / child9Count;
-      }
-    }
-    if (selectedPackage?.addAdditionalChild) {
-      const perAdult = totalAdult > 0 ? additionalChild / totalAdult : 0;
-      const perChild = actualChild > 0 ? additionalChild / actualChild : 0;
-      const perChild9 = child9Count > 0 ? additionalChild / actualChild : 0;
-
-      adultBase -= perAdult;
-      childBase += perChild;
-      priceChild9 += perChild9;
-    }
-
-    const adultPriceTotal = roundPrice(adultBase + userMarkupAmount);
-    const childPriceTotal = roundPrice(childBase + childMarkupAmount);
-    const child9PriceTotal = roundPrice(priceChild9 + childMarkupAmount);
+    const adultPriceTotal = roundPrice(adultSubtotal + userMarkupAmount);
+    
+    const childPriceTotals = {};
+    childGroups.forEach(group => {
+      const basePrice = childSubtotal[group.id] || 0;
+      childPriceTotals[group.id] = roundPrice(basePrice + childMarkupAmount);
+    });
 
     return {
       totalAdult,
-      actualChild,
-      child9Count,
+      childGroups,
       totalExpensesFromContext,
       adjustedGrandTotal,
-      extrabedTotal,
-      hotelVilla,
       adultPriceTotal,
-      childPriceTotal,
-      child9PriceTotal,
+      childPriceTotals,
     };
   }, [
     selectedPackage?.totalPaxAdult,
-    selectedPackage?.totalPaxChildren,
-    selectedPackage?.childrenAges,
-    totalMarkup,
+    selectedPackage?.childGroups,
     grandTotal,
     calculateGrandTotal,
-    extrabedTotal,
-    akomodasiTotal,
-    childTotal,
-    expenseChild,
-    tourTotal,
-    transportTotal,
+    adultSubtotal,
+    childSubtotal,
     userMarkupAmount,
     childMarkupAmount,
   ]);
 
-  useEffect(() => {
-    if (calculatedValues.adultPriceTotal >= 0) {
-      setAdultPriceTotal(calculatedValues.adultPriceTotal);
-    }
-    if (calculatedValues.childPriceTotal >= 0) {
-      setChildPriceTotal(calculatedValues.childPriceTotal);
-    }
-    if (calculatedValues.child9PriceTotal >= 0) {
-      setChild9Total(calculatedValues.child9PriceTotal);
-    }
-  }, [
-    calculatedValues.adultPriceTotal,
-    calculatedValues.childPriceTotal,
-    setAdultPriceTotal,
-    setChildPriceTotal,
-    setChild9Total,
-  ]);
 
-  // Separate adminName state
   const [adminName, setAdminName] = useState("");
 
-  // Fetch admin data - hanya dipanggil sekali
   useEffect(() => {
     let isMounted = true;
 
@@ -246,7 +166,6 @@ const InvoicePDF = forwardRef((props, ref) => {
     };
   }, []);
 
-  // Process days data - dengan optimization
   useEffect(() => {
     let isMounted = true;
 
@@ -271,20 +190,18 @@ const InvoicePDF = forwardRef((props, ref) => {
         const itinerary = [];
 
         merged.forEach((day, dayIndex) => {
-          // Hotel processing
           day.hotels?.forEach((hotel) => {
             hotels.push({
               day: `Day ${dayIndex + 1}`,
               name: hotel.displayName,
               rooms: hotel.jumlahKamar || 1,
-              extrabedQty: hotel.useExtrabed ? hotel.jumlahExtrabed || 0 : 0,
+              extrabedByTraveler: hotel.extrabedByTraveler || 0,
               pricePerNight: hotel.hargaPerKamar || 0,
               extrabedPrice: hotel.hargaExtrabed || 0,
               total: calculateHotelTotal([hotel]),
             });
           });
 
-          // Villa processing
           day.villas?.forEach((villa) => {
             villas.push({
               day: `Day ${dayIndex + 1}`,
@@ -297,7 +214,6 @@ const InvoicePDF = forwardRef((props, ref) => {
             });
           });
 
-          // Transport processing
           day.mobils?.forEach((mobil) => {
             const price = parseInt(mobil.harga) || 0;
             transports.push({
@@ -311,7 +227,6 @@ const InvoicePDF = forwardRef((props, ref) => {
             });
           });
 
-          // Additional items processing
           const processAdditionalItems = (items, dayIndex) => {
             return (
               items?.map((item) => {
@@ -328,9 +243,37 @@ const InvoicePDF = forwardRef((props, ref) => {
             );
           };
 
+          const processGroupedAdditionalItems = (groupedItems, dayIndex) => {
+            if (!groupedItems) return [];
+
+            const allItems = [];
+            Object.values(groupedItems).forEach(groupArray => {
+              if (Array.isArray(groupArray)) {
+                const processed = groupArray
+                  // eslint-disable-next-line no-prototype-builtins
+                  .filter(item => item.hasOwnProperty('harga') && item.hasOwnProperty('nama'))
+                  .map(item => {
+                    const price = parseInt(item.harga) || 0;
+                    const quantity = parseInt(item.jumlah) || 1;
+                    return {
+                      day: `Day ${dayIndex + 1}`,
+                      name: item.displayName || item.nama,
+                      quantity: quantity,
+                      price: price,
+                      total: price * quantity,
+                    };
+                  });
+                allItems.push(...processed);
+              }
+            });
+            return allItems;
+          };
+
           additionals.push(
             ...processAdditionalItems(day.akomodasi_additionals, dayIndex),
-            ...processAdditionalItems(day.transport_additionals, dayIndex)
+            ...processAdditionalItems(day.transport_additionals, dayIndex),
+            ...processGroupedAdditionalItems(day.akomodasi_additionalsByTraveler, dayIndex),
+            ...processGroupedAdditionalItems(day.transport_additionals_by_group, dayIndex)
           );
 
           // Itinerary processing dengan helper function
@@ -362,7 +305,6 @@ const InvoicePDF = forwardRef((props, ref) => {
                     childPrice > 0 && childQty > 0
                       ? formatCurrency(childPrice * childQty)
                       : "-",
-                  // Tambahan data untuk keperluan lain
                   adultPrice,
                   childPrice,
                   adultQty,
@@ -417,10 +359,10 @@ const InvoicePDF = forwardRef((props, ref) => {
             ...(day.tours
               ? tourActivities
               : [
-                  ...processActivities(day.destinations, "Destination"),
-                  ...processActivities(day.restaurants, "Restaurant"),
-                  ...processActivities(day.activities, "Activity"),
-                ]),
+                ...processActivities(day.destinations, "Destination"),
+                ...processActivities(day.restaurants, "Restaurant"),
+                ...processActivities(day.activities, "Activity"),
+              ]),
           ];
 
           // Get expense items dari context
@@ -453,7 +395,6 @@ const InvoicePDF = forwardRef((props, ref) => {
           isDataProcessed: true,
         });
 
-        // Update reorder hook
         updateDays(itinerary);
       } catch (err) {
         console.error("Gagal memproses days:", err);
@@ -480,7 +421,6 @@ const InvoicePDF = forwardRef((props, ref) => {
     updateDays,
   ]);
 
-  // Memoize reorder handlers
   const handleSaveReorder = useCallback(() => {
     const success = saveOrder();
     if (success) {
@@ -555,6 +495,15 @@ const InvoicePDF = forwardRef((props, ref) => {
       </Box>
     );
   }
+
+  // Prepare child groups with pricing for CostBreakDown
+  const childGroupsWithPricing = calculatedValues.childGroups.map((group) => ({
+    id: group.id,
+    label: `Child(${group.age} thn)`,
+    total: group.total || 1,
+    age: group.age,
+    price: calculatedValues.childPriceTotals[group.id] || 0,
+  }));
 
   return (
     <Box maxW="900px" mx="auto" py={8}>
@@ -681,7 +630,7 @@ const InvoicePDF = forwardRef((props, ref) => {
       >
         <InvoiceHeader
           totalAdult={calculatedValues.totalAdult}
-          totalChild={calculatedValues.actualChild}
+          totalChild={calculatedValues.childGroups.reduce((sum, group) => sum + (group.total || 0), 0)}
           adminName={adminName}
           packageName={selectedPackage?.name}
         />
@@ -695,7 +644,8 @@ const InvoicePDF = forwardRef((props, ref) => {
           onEditItemTitle={editItemTitle}
           onEditItemDescription={editItemDescription}
           totalAdult={calculatedValues.totalAdult}
-          totalChild={calculatedValues.actualChild}
+          totalChild={calculatedValues.childGroups.reduce((sum, group) => sum + (group.total || 0), 0)}
+          childGroups={childGroupsWithPricing}
         />
 
         <CostBreakDown
@@ -711,12 +661,11 @@ const InvoicePDF = forwardRef((props, ref) => {
           originalGrandTotal={grandTotal}
           totalExpenses={calculatedValues.totalExpensesFromContext}
           selling={calculatedValues.adultPriceTotal}
-          sellingChild={calculatedValues.childPriceTotal}
-          sellingChild9={calculatedValues.child9PriceTotal}
+          childGroupsWithPricing={childGroupsWithPricing}
           formatCurrency={formatCurrency}
           totalAdult={calculatedValues.totalAdult}
-          totalChild={selectedPackage?.childrenAges?.some((age) => age < 9)}
-          totalChild9={calculatedValues.child9Count}
+          totalChild={calculatedValues.childGroups.some((group) => group.age < 9)}
+          totalChild9={calculatedValues.childGroups.filter((group) => group.age >= 9).length}
           exchangeRate={exchangeRate}
           isEditingExchangeRate={isEditingExchange}
           onExchangeRateChange={setExchangeRate}

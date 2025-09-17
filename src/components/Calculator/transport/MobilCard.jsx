@@ -10,6 +10,8 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useMemo, useEffect, useState } from "react";
 import MainSelect from "../../MainSelect";
 import { useTransportContext } from "../../../context/TransportContext";
+// NEW
+import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
 const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   const { mobils } = useTransportContext();
@@ -17,20 +19,16 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   const borderColor = useColorModeValue("gray.600", "gray.600");
   const textColor = useColorModeValue("white", "white");
 
+  // NEW: traveler context
+  const { isAdultActive } = useTravelerGroup();
+
   const [jumlah, setJumlah] = useState(data.jumlah || 1);
 
-  // Fungsi konversi keterangan ke camelCase yang cocok
   const convertKeteranganToCamel = (k) => {
-    const map = {
-      fullday: "fullDay",
-      halfday: "halfDay",
-      inout: "inOut",
-      menginap: "menginap",
-    };
+    const map = { fullday: "fullDay", halfday: "halfDay", inout: "inOut", menginap: "menginap" };
     return map[k?.toLowerCase()] || k;
   };
 
-  // Format awal dari backend
   const formattedData = {
     ...data,
     mobil: {
@@ -40,20 +38,17 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
           ?.jenisKendaraan || null,
     },
     keterangan: convertKeteranganToCamel(data.keterangan),
-    area: data.id_area || data.area || null, // disimpan sebagai id_area
+    area: data.id_area || data.area || null,
   };
+
   const selectedMobil = useMemo(
     () => mobils.find((m) => m.id === formattedData.mobil?.value),
     [mobils, formattedData.mobil]
   );
+
   const keteranganOptions = useMemo(() => {
     if (!selectedMobil) return [];
-    const map = {
-      fullDay: "Full Day",
-      halfDay: "Half Day",
-      inOut: "In Out",
-      menginap: "Menginap",
-    };
+    const map = { fullDay: "Full Day", halfDay: "Half Day", inOut: "In Out", menginap: "Menginap" };
     return Object.keys(selectedMobil.keterangan).map((key) => ({
       value: key,
       label: map[key] || key,
@@ -71,15 +66,14 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
   }, [selectedMobil, formattedData.keterangan]);
 
   const harga = useMemo(() => {
-    if (!selectedMobil || !formattedData.keterangan || !formattedData.area)
-      return 0;
+    if (!selectedMobil || !formattedData.keterangan || !formattedData.area) return 0;
     const found = selectedMobil.keterangan[formattedData.keterangan]?.find(
       (a) => a.id_area === formattedData.area
     );
     return found?.price || 0;
   }, [selectedMobil, formattedData.keterangan, formattedData.area]);
 
-  const totalHarga = jumlah * harga;
+  const totalHarga = (Number(jumlah) || 0) * (Number(harga) || 0);
 
   useEffect(() => {
     onChange({
@@ -87,6 +81,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
       jumlah,
       harga,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jumlah, harga, dayIndex]);
 
   return (
@@ -102,6 +97,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
           variant="ghost"
           onClick={onDelete}
           aria-label="hapus"
+          isDisabled={!isAdultActive}
         />
       </HStack>
 
@@ -130,6 +126,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
               })
             }
             placeholder="Pilih Mobil"
+            isDisabled={!isAdultActive}
           />
         </Box>
         <Box w="50%">
@@ -139,9 +136,8 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
           <MainSelect
             options={keteranganOptions}
             value={
-              keteranganOptions.find(
-                (k) => k.value === formattedData.keterangan
-              ) || null
+              keteranganOptions.find((k) => k.value === formattedData.keterangan) ||
+              null
             }
             onChange={(val) =>
               onChange({
@@ -152,7 +148,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
                 harga: 0,
               })
             }
-            isDisabled={!formattedData.mobil}
+            isDisabled={!isAdultActive || !formattedData.mobil}
             placeholder="Pilih Keterangan"
           />
         </Box>
@@ -166,9 +162,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
           </Text>
           <MainSelect
             options={areaOptions}
-            value={
-              areaOptions.find((a) => a.value === formattedData.area) || null
-            }
+            value={areaOptions.find((a) => a.value === formattedData.area) || null}
             onChange={(val) =>
               onChange({
                 ...formattedData,
@@ -176,7 +170,7 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
                 id_area: val?.value || null,
               })
             }
-            isDisabled={!formattedData.keterangan}
+            isDisabled={!isAdultActive || !formattedData.keterangan}
             placeholder="Pilih Area"
           />
         </Box>
@@ -206,11 +200,11 @@ const MobilCard = ({ index, onDelete, data = {}, onChange, dayIndex }) => {
             bg={inputBg}
             color={textColor}
             borderColor={borderColor}
+            isReadOnly={!isAdultActive}
           />
         </Box>
       </HStack>
 
-      {/* Total Display */}
       <Box mt={4}>
         <Text fontWeight="semibold" color="green.300">
           Total Harga: Rp {totalHarga.toLocaleString("id-ID")}

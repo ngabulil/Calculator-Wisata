@@ -17,11 +17,9 @@ import {
   TabPanel,
   Tag,
   TagLabel,
-  Checkbox,
-  SimpleGrid,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   CloseIcon,
   ChevronUpIcon,
@@ -35,12 +33,23 @@ import { useGrandTotalContext } from "../context/GrandTotalContext";
 import MainSelect from "../components/MainSelect";
 import AkomodasiTabContent from "../components/Calculator/tab-content/AkomodasiTabContent";
 import { useCurrencyContext } from "../context/CurrencyContext";
+import { TravelerGroupProvider } from "../context/TravelerGroupContext";
+
+// helper id sederhana
+const makeId = () => Math.random().toString(36).slice(2, 9);
 
 const CalculatorFixPage = () => {
   const bg = useColorModeValue("gray.50", "gray.900");
   const location = useLocation();
   const navigate = useNavigate();
-  const { akomodasiTotal, transportTotal, tourTotal } = useGrandTotalContext();
+  const {
+    akomodasiTotal,
+    transportTotal,
+    tourTotal,
+    setAkomodasiTotal,
+    setTransportTotal,
+    setTourTotal,
+  } = useGrandTotalContext();
   const [isVisible, setIsVisible] = useState(true);
   const { currency, setCurrency } = useCurrencyContext();
 
@@ -55,18 +64,142 @@ const CalculatorFixPage = () => {
     description = "",
     title = "",
     id = null,
+    childGroups = [],
+    totalPaxAdult = 0,
   } = selectedPackage;
+
   const [activeDayId, setActiveDayId] = useState(1);
 
+  // "adult" atau child id (e.g. "ch_xxx")
+  const [activeTravelerKey, setActiveTravelerKey] = useState("adult");
+
+  // Label tab aktif untuk tampilan
+  const activeTravelerLabel = useMemo(() => {
+    if (activeTravelerKey === "adult") return "Adult";
+    const cg = childGroups.find((c) => c.id === activeTravelerKey);
+    return cg?.label ?? "Child";
+  }, [activeTravelerKey, childGroups]);
+
+  // Nilai Total Pax aktif (bind ke input)
+  const activeTotalPax = useMemo(() => {
+    if (activeTravelerKey === "adult") return totalPaxAdult || 0;
+    const cg = childGroups.find((c) => c.id === activeTravelerKey);
+    return cg?.total ?? 0;
+  }, [activeTravelerKey, totalPaxAdult, childGroups]);
+
+  // Nilai Age aktif (khusus child)
+  const activeChildAge = useMemo(() => {
+    if (activeTravelerKey === "adult") return "";
+    const cg = childGroups.find((c) => c.id === activeTravelerKey);
+    return cg?.age ?? "";
+  }, [activeTravelerKey, childGroups]);
+
+  // ====== Effects ======
   useEffect(() => {
     getPackages();
   }, []);
 
+  // pastikan childGroups ter-inisialisasi (pakai age & total) & set default active traveler
   useEffect(() => {
-    setActiveDayId(selectedPackage?.days[0]?.id);
+    setSelectedPackage((prev) => ({
+      ...prev,
+      childGroups: Array.isArray(prev.childGroups)
+        ? prev.childGroups.map((g, i) => ({
+            id: g.id ?? `ch_${makeId()}`,
+            label: g.label ?? `Child ${i + 1}`,
+            // migrate dari struktur lama (ages[]) → ambil panjang & kosongkan
+            total:
+              typeof g.total === "number"
+                ? g.total
+                : Array.isArray(g.ages)
+                ? g.ages.length
+                : 0,
+            age: g.age !== undefined ? g.age : "", // jika sebelumnya tidak ada age, kosong
+          }))
+        : [],
+      totalPaxAdult:
+        typeof prev.totalPaxAdult === "number" ? prev.totalPaxAdult : 0,
+    }));
+    setActiveTravelerKey("adult");
+  }, [setSelectedPackage]);
+
+  useEffect(() => {
+    setActiveDayId(selectedPackage?.days?.[0]?.id);
   }, [selectedPackage?.id]);
 
+  // Auto-shift tanggal day lain berdasarkan day-1
+  useEffect(() => {
+    const firstDay = days[0];
+    if (firstDay?.date) {
+      const baseDate = new Date(firstDay.date);
+      const updatedDays = days.map((day, index) => {
+        if (index === 0) return day;
+        const newDate = new Date(baseDate);
+        newDate.setDate(newDate.getDate() + index);
+        return { ...day, date: newDate.toISOString().split("T")[0] };
+      });
+      setSelectedPackage((prev) => ({ ...prev, days: updatedDays }));
+    }
+  }, [days[0]?.date]); // eslint-disable-line
+
+  // ====== Handlers: Traveler Tabs ======
+  const handleAddChildGroup = () => {
+    const newId = `ch_${makeId()}`;
+    const nextIndex = childGroups.length + 1;
+    const newGroup = {
+      id: newId,
+      label: `Child ${nextIndex}`,
+      total: 0,
+      age: "",
+    };
+    setSelectedPackage((prev) => ({
+      ...prev,
+      childGroups: [...(prev.childGroups || []), newGroup],
+    }));
+    setActiveTravelerKey(newId);
+  };
+
+  const handleRemoveChildGroup = (idToRemove) => {
+    const filtered = childGroups.filter((c) => c.id !== idToRemove);
+    setSelectedPackage((prev) => ({ ...prev, childGroups: filtered }));
+    if (activeTravelerKey === idToRemove) {
+      setActiveTravelerKey("adult");
+    }
+  };
+
+  // Ubah Total Pax untuk Adult / Child aktif
+  const handleChangeTotalPax = (val) => {
+    const num = Math.max(0, parseInt(val) || 0);
+
+    if (activeTravelerKey === "adult") {
+      setSelectedPackage((prev) => ({ ...prev, totalPaxAdult: num }));
+      return;
+    }
+
+    setSelectedPackage((prev) => ({
+      ...prev,
+      childGroups: (prev.childGroups || []).map((c) =>
+        c.id === activeTravelerKey ? { ...c, total: num } : c
+      ),
+    }));
+  };
+
+  // Ubah Age untuk Child aktif
+  const handleChangeChildAge = (val) => {
+    if (activeTravelerKey === "adult") return;
+    setSelectedPackage((prev) => ({
+      ...prev,
+      childGroups: (prev.childGroups || []).map((c) =>
+        c.id === activeTravelerKey ? { ...c, age: val } : c
+      ),
+    }));
+  };
+
+  // ====== Handlers: Days (dibatasi hanya saat Adult aktif) ======
+  const canModifyDays = activeTravelerKey === "adult";
+
   const handleAddDay = () => {
+    if (!canModifyDays) return;
     const newId = days.length + 1;
     const newDay = {
       id: newId,
@@ -89,6 +222,7 @@ const CalculatorFixPage = () => {
   };
 
   const handleDeleteDay = (id) => {
+    if (!canModifyDays) return;
     const filtered = days.filter((d) => d.id !== id);
     setSelectedPackage((prev) => ({ ...prev, days: filtered }));
     if (activeDayId === id && filtered.length > 0) {
@@ -96,29 +230,41 @@ const CalculatorFixPage = () => {
     }
   };
 
-  useEffect(() => {
-    const firstDay = days[0];
-    if (firstDay?.date) {
-      const baseDate = new Date(firstDay.date);
-
-      const updatedDays = days.map((day, index) => {
-        if (index === 0) return day; // skip first day, already set manually
-
-        const newDate = new Date(baseDate);
-        newDate.setDate(newDate.getDate() + index); // index 1 = +1 day, etc.
-
-        return {
-          ...day,
-          date: newDate.toISOString().split("T")[0], // format to yyyy-mm-dd
-        };
-      });
-
-      setSelectedPackage((prev) => ({
-        ...prev,
-        days: updatedDays,
-      }));
+  // Untuk menampilkan label tombol Grand Total sesuai currency
+  const formatGrandTotal = (num) => {
+    if (!currency || currency === "IDR") {
+      return `Rp ${num.toLocaleString("id-ID")}`;
     }
-  }, [days[0]?.date]);
+    return `${currency} ${num.toLocaleString("en-US")}`;
+  };
+
+  // Grand total
+  const dayLen = days.length;
+  const sumUpto = (arr) =>
+    (arr || []).slice(0, dayLen).reduce((s, n) => s + (Number(n) || 0), 0);
+
+  const grandTotal = useMemo(() => {
+    return (
+      sumUpto(akomodasiTotal) + sumUpto(tourTotal) + sumUpto(transportTotal)
+    );
+  }, [akomodasiTotal, tourTotal, transportTotal, dayLen]);
+
+  useEffect(() => {
+    const len = days.length || 0;
+
+    const fit = (prev) => {
+      if (!Array.isArray(prev)) return Array(len).fill(0);
+      if (prev.length === len) return prev;
+      // potong atau tambahkan 0 hingga panjangnya pas
+      const next = prev.slice(0, len);
+      while (next.length < len) next.push(0);
+      return next;
+    };
+
+    setAkomodasiTotal((prev) => fit(prev));
+    setTourTotal((prev) => fit(prev));
+    setTransportTotal((prev) => fit(prev));
+  }, [days.length, setAkomodasiTotal, setTourTotal, setTransportTotal]);
 
   return (
     <Box minH="100vh" bg={bg} position="relative">
@@ -139,14 +285,35 @@ const CalculatorFixPage = () => {
                   ...found,
                   title: found.name,
                   name: found.name,
-                  totalPaxAdult: found.totalPaxAdult || 0,
-                  totalPaxChildren: found.totalPaxChildren || 0,
+                  totalPaxAdult: found?.totalPaxAdult ?? 0,
+                  // normalisasi struktur childGroups: {id,label,age,total}
+                  childGroups: Array.isArray(found?.childGroups)
+                    ? found.childGroups.map((g, i) => ({
+                        id: g.id ?? `ch_${makeId()}`,
+                        label: g.label ?? `Child ${i + 1}`,
+                        total:
+                          typeof g.total === "number"
+                            ? g.total
+                            : Array.isArray(g.ages)
+                            ? g.ages.length
+                            : 0,
+                        age: g.age ?? "",
+                      }))
+                    : [],
+                  // legacy (abaikan)
+                  totalPaxChildren: found?.totalPaxChildren || 0,
                   addAdditionalChild: false,
                   addExtrabedChild: false,
                   days: found.days || [],
                   childrenAges: [],
                 });
-                setActiveDayId(found.id);
+                // RESET total per-hari agar bersih sesuai jumlah hari paket yang baru
+                const len = (found.days || []).length;
+                setAkomodasiTotal(Array(len).fill(0));
+                setTourTotal(Array(len).fill(0));
+                setTransportTotal(Array(len).fill(0));
+                setActiveDayId(found?.days?.[0]?.id ?? 1);
+                setActiveTravelerKey("adult");
               }}
               placeholder="Pilih Paket"
             />
@@ -184,7 +351,7 @@ const CalculatorFixPage = () => {
             />
           </FormControl>
 
-          <FormControl mb={4}>
+          <FormControl mb={6}>
             <FormLabel color="white">Currency</FormLabel>
             <Input
               placeholder="IDR, USD, MYR, SGD"
@@ -198,117 +365,97 @@ const CalculatorFixPage = () => {
             </Text>
           </FormControl>
 
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
-            {/* Total Pax Adult */}
-            <FormControl>
-              <FormLabel color="white">Total Pax Adult</FormLabel>
-              <Input
-                bg="gray.600"
-                color="white"
-                value={selectedPackage.totalPaxAdult || 0}
-                onChange={(e) =>
-                  setSelectedPackage((prev) => ({
-                    ...prev,
-                    totalPaxAdult: parseInt(e.target.value) || 0,
-                  }))
-                }
-              />
-            </FormControl>
-
-            {/* Total Pax Children + Umur Anak */}
-            <FormControl>
-              <FormLabel color="white">Total Pax Children</FormLabel>
-              <Input
-                bg="gray.600"
-                color="white"
-                value={selectedPackage.totalPaxChildren || 0}
-                onChange={(e) => {
-                  const count = parseInt(e.target.value) || 0;
-
-                  setSelectedPackage((prev) => {
-                    let newAges = prev.childrenAges || [];
-                    if (count > newAges.length) {
-                      newAges = [
-                        ...newAges,
-                        ...Array(count - newAges.length).fill(""),
-                      ];
-                    } else {
-                      newAges = newAges.slice(0, count);
-                    }
-                    return {
-                      ...prev,
-                      totalPaxChildren: count,
-                      childrenAges: newAges,
-                    };
-                  });
-                }}
-              />
-
-              {/* Input Umur Anak */}
-              {selectedPackage.totalPaxChildren > 0 && (
-                <Box mt={3}>
-                  <FormLabel color="white">Children Age</FormLabel>
-                  <HStack spacing={3} wrap="wrap">
-                    {(selectedPackage.childrenAges || []).map((age, idx) => (
-                      <Input
-                        key={idx}
-                        type="number"
-                        min="0"
-                        placeholder={`Child ${idx + 1}`}
-                        value={age}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          setSelectedPackage((prev) => {
-                            const updatedAges = [...(prev.childrenAges || [])];
-                            updatedAges[idx] = val;
-                            return {
-                              ...prev,
-                              childrenAges: updatedAges,
-                            };
-                          });
-                        }}
-                        bg="gray.600"
-                        color="white"
-                        width="100px"
-                      />
-                    ))}
-                  </HStack>
-                </Box>
-              )}
-            </FormControl>
-          </SimpleGrid>
-          <HStack spacing={4} mb={4}>
-            <Checkbox
-              colorScheme="blue"
-              size="md"
-              value={selectedPackage.addAdditionalChild}
-              onChange={(e) =>
-                setSelectedPackage((prev) => ({
-                  ...prev,
-                  addAdditionalChild: e.target.checked,
-                }))
-              }
-              isChecked={selectedPackage.addAdditionalChild}
-            >
-              Add Additionals to Children
-            </Checkbox>
-            <Checkbox
-              colorScheme="blue"
-              size="md"
-              value={selectedPackage.addExtrabedChild}
-              onChange={(e) =>
-                setSelectedPackage((prev) => ({
-                  ...prev,
-                  addExtrabedChild: e.target.checked,
-                }))
-              }
-              isChecked={selectedPackage.addExtrabedChild}
-            >
-              Add Exrtabed to Children
-            </Checkbox>
-          </HStack>
-          {/* DAYS */}
+          {/* ========================= Traveler Tabs (Adult & Child) ========================= */}
           <Box mt={8}>
+            <FormLabel color="white" mb={2}>
+              Traveler Groups
+            </FormLabel>
+            <HStack spacing={2} mb={3} flexWrap="wrap">
+              {/* Adult (fixed, cannot delete) */}
+              <Tag
+                size="lg"
+                borderRadius="full"
+                variant="solid"
+                bg={activeTravelerKey === "adult" ? "blue.300" : "gray.600"}
+                cursor="pointer"
+                onClick={() => setActiveTravelerKey("adult")}
+              >
+                <TagLabel>Adult</TagLabel>
+              </Tag>
+
+              {/* Child dynamic */}
+              {childGroups.map((cg) => (
+                <HStack key={cg.id} spacing={1}>
+                  <Tag
+                    size="lg"
+                    borderRadius="full"
+                    variant="solid"
+                    bg={activeTravelerKey === cg.id ? "blue.300" : "gray.600"}
+                    cursor="pointer"
+                    onClick={() => setActiveTravelerKey(cg.id)}
+                  >
+                    <TagLabel>{cg.label}</TagLabel>
+                  </Tag>
+                  <IconButton
+                    aria-label={`Hapus ${cg.label}`}
+                    size="xs"
+                    icon={<DeleteIcon />}
+                    colorScheme="red"
+                    onClick={() => handleRemoveChildGroup(cg.id)}
+                  />
+                </HStack>
+              ))}
+
+              <Button
+                size="sm"
+                colorScheme="gray"
+                leftIcon={<AddIcon />}
+                onClick={handleAddChildGroup}
+              >
+                Tambah Child
+              </Button>
+            </HStack>
+
+            {/* Adult: hanya Total Pax. Child: Age + Total Pax */}
+            {activeTravelerKey === "adult" ? (
+              <FormControl mb={6}>
+                <FormLabel color="white">Total Pax (Adult)</FormLabel>
+                <Input
+                  min={0}
+                  bg="gray.600"
+                  color="white"
+                  value={activeTotalPax}
+                  onChange={(e) => handleChangeTotalPax(e.target.value)}
+                />
+              </FormControl>
+            ) : (
+              <>
+                <FormControl mb={3}>
+                  <FormLabel color="white">Age (years)</FormLabel>
+                  <Input
+                    min={0}
+                    bg="gray.600"
+                    color="white"
+                    value={activeChildAge}
+                    onChange={(e) => handleChangeChildAge(e.target.value)}
+                    placeholder="e.g. 8"
+                  />
+                </FormControl>
+                <FormControl mb={6}>
+                  <FormLabel color="white">Total Pax (Child)</FormLabel>
+                  <Input
+                    min={0}
+                    bg="gray.600"
+                    color="white"
+                    value={activeTotalPax}
+                    onChange={(e) => handleChangeTotalPax(e.target.value)}
+                    placeholder="e.g. 2"
+                  />
+                </FormControl>
+              </>
+            )}
+
+            {/* ========================= DAYS ========================= */}
             <HStack spacing={3} mb={3} flexWrap="wrap">
               {days.map((day) => (
                 <HStack key={day.id} spacing={1}>
@@ -328,22 +475,26 @@ const CalculatorFixPage = () => {
                     aria-label="Hapus Day"
                     colorScheme="red"
                     onClick={() => handleDeleteDay(day.id)}
+                    isDisabled={!canModifyDays} // hanya aktif di Adult
                   />
                 </HStack>
               ))}
-              <Button
-                size="sm"
-                colorScheme="gray"
-                leftIcon={<AddIcon />}
-                onClick={handleAddDay}
-              >
-                Tambah Day
-              </Button>
+
+              {/* Tombol tambah day hanya tampil saat Adult */}
+              {canModifyDays && (
+                <Button
+                  size="sm"
+                  colorScheme="gray"
+                  leftIcon={<AddIcon />}
+                  onClick={handleAddDay}
+                >
+                  Tambah Day
+                </Button>
+              )}
             </HStack>
 
             {/* DESKRIPSI DAY */}
             <FormControl>
-              {/* Label dan Input Tanggal */}
               <FormLabel color="white">
                 Tanggal untuk {days.find((d) => d.id === activeDayId)?.name}
               </FormLabel>
@@ -365,7 +516,6 @@ const CalculatorFixPage = () => {
                 }}
               />
 
-              {/* Deskripsi Hari */}
               <FormLabel mt={4} color="white">
                 Deskripsi untuk {days.find((d) => d.id === activeDayId)?.name}
               </FormLabel>
@@ -392,56 +542,61 @@ const CalculatorFixPage = () => {
 
             {/* TABS PER HARI */}
             <Box mt={6}>
-              <Tabs isFitted variant="enclosed">
-                <TabList mb="1em">
-                  <Tab>Akomodasi</Tab>
-                  <Tab>Tour</Tab>
-                  <Tab>Transport</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel px={0}>
-                    {days.map((day, index) => (
-                      <div
-                        key={index}
-                        style={{
-                          display: activeDayId === day.id ? "block" : "none",
-                        }}
-                      >
-                        <AkomodasiTabContent dayIndex={index} />
-                      </div>
-                    ))}
-                  </TabPanel>
-                  <TabPanel px={0}>
-                    {days.map((day, index) => (
-                      <div
-                        key={index}
-                        style={{
-                          display: activeDayId === day.id ? "block" : "none",
-                        }}
-                      >
-                        <TourTabContent dayIndex={index} />
-                      </div>
-                    ))}
-                  </TabPanel>
-                  <TabPanel px={0}>
-                    {days.map((day, index) => (
-                      <div
-                        key={index}
-                        style={{
-                          display: activeDayId === day.id ? "block" : "none",
-                        }}
-                      >
-                        <TransportTabContent dayIndex={index} />
-                      </div>
-                    ))}
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
+              <TravelerGroupProvider
+                value={{
+                  activeTravelerKey,
+                  isAdultActive: activeTravelerKey === "adult",
+                }}
+              >
+                <Tabs isFitted variant="enclosed">
+                  <TabList mb="1em">
+                    <Tab>Akomodasi</Tab>
+                    <Tab>Tour</Tab>
+                    <Tab>Transport</Tab>
+                  </TabList>
+                  <TabPanels>
+                    <TabPanel px={0}>
+                      {days.map((day, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: activeDayId === day.id ? "block" : "none",
+                          }}
+                        >
+                          <AkomodasiTabContent dayIndex={index} />
+                        </div>
+                      ))}
+                    </TabPanel>
+                    <TabPanel px={0}>
+                      {days.map((day, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: activeDayId === day.id ? "block" : "none",
+                          }}
+                        >
+                          <TourTabContent dayIndex={index} />
+                        </div>
+                      ))}
+                    </TabPanel>
+                    <TabPanel px={0}>
+                      {days.map((day, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            display: activeDayId === day.id ? "block" : "none",
+                          }}
+                        >
+                          <TransportTabContent dayIndex={index} />
+                        </div>
+                      ))}
+                    </TabPanel>
+                  </TabPanels>
+                </Tabs>
+              </TravelerGroupProvider>
             </Box>
           </Box>
         </Box>
-
-        {/* {children} */}
       </Container>
 
       {/* Grand Total Box */}
@@ -462,11 +617,7 @@ const CalculatorFixPage = () => {
             >
               <HStack justify="space-between">
                 <Text fontWeight="bold">
-                  Grand Total: Rp{" "}
-                  {[akomodasiTotal, tourTotal, transportTotal]
-                    .flat()
-                    .reduce((sum, num) => sum + num, 0)
-                    .toLocaleString("id-ID")}
+                  Grand Total: {formatGrandTotal(grandTotal)}
                 </Text>
                 <HStack spacing={3}>
                   <Button

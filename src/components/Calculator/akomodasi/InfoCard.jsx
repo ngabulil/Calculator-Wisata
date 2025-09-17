@@ -1,3 +1,4 @@
+// InfoCard.jsx
 import {
   Box,
   HStack,
@@ -15,12 +16,16 @@ import {
 } from "../../../services/akomodasiService";
 import { MainSelectCreatableWithDelete } from "../../MainSelect";
 import { usePackageContext } from "../../../context/PackageContext";
+// NEW
+import { useTravelerGroup } from "../../../context/TravelerGroupContext";
 
 const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
   const { additional, setAdditional } = useAkomodasiContext();
   const { selectedPackage } = usePackageContext();
-  const { totalPaxAdult: jumlahAdult, totalPaxChildren: jumlahChild } =
-    selectedPackage;
+  const { totalPaxAdult, childGroups = [] } = selectedPackage;
+
+  // NEW
+  const { isAdultActive, activeTravelerKey } = useTravelerGroup();
 
   const infoOptions = useMemo(
     () =>
@@ -78,23 +83,13 @@ const InfoCard = ({ index, onDelete, data, onChange, dayIndex }) => {
     }
   }, [data.selectedInfo, data.id_additional, infoOptions, dayIndex]);
 
-  // Auto-set harga jika belum ada saat selectedInfo tersedia
+  // NEW: auto set jumlah sesuai traveler aktif
   useEffect(() => {
-    if (
-      selectedInfo &&
-      data.id_additional &&
-      (data.harga === undefined || data.harga === 0)
-    ) {
-      handleUpdate({
-        harga: selectedInfo.defaultPrice || 0,
-      });
-    }
-  }, [selectedInfo, dayIndex]);
-
-  useEffect(() => {
-    const totalPax = (jumlahAdult || 0) + (jumlahChild || 0);
-    handleUpdate({ jumlah: totalPax });
-  }, [jumlahAdult, jumlahChild]);
+    const childTotal =
+      childGroups.find((c) => c.id === activeTravelerKey)?.total || 0;
+    const autoJumlah = isAdultActive ? totalPaxAdult || 0 : childTotal;
+    handleUpdate({ jumlah: autoJumlah });
+  }, [isAdultActive, activeTravelerKey, totalPaxAdult, childGroups]);
 
   const handleCreate = async (inputValue) => {
     try {
