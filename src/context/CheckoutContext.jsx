@@ -63,50 +63,71 @@ const calculateAkomodasiTotal = (days = selectedPackage?.days || []) => {
   return days.reduce((sum, day) => {
     const hotelTotal = calculateHotelTotal(day.hotels);
     const villaTotal = calculateVillaTotal(day.villas);
-    const additionalAkomodasi = (day.akomodasi_additionals || []).reduce((acc, item) => {
-      return acc + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
-    }, 0);
-    let groupAdditionalTotal = 0;
+
+   let groupAdditionalTotal = 0;
     if (day.akomodasi_additionalsByTraveler && typeof day.akomodasi_additionalsByTraveler === "object") {
-      groupAdditionalTotal = Object.values(day.akomodasi_additionalsByTraveler)
-        .flat() 
-        .reduce((sum, item) => {
-          // eslint-disable-next-line no-prototype-builtins
-          if (item && item.hasOwnProperty('harga')) {
-            return sum + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
-          }
-          return sum;
-        }, 0);
+      Object.keys(day.akomodasi_additionalsByTraveler).forEach(travelerType => {
+        const akomodasiArr = day.akomodasi_additionalsByTraveler[travelerType];
+        if (Array.isArray(akomodasiArr)) {
+          groupAdditionalTotal += akomodasiArr.reduce((acc, item) => {
+            return acc + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
+          }, 0);
+        }
+      });
     }
-    return sum + hotelTotal + villaTotal + groupAdditionalTotal + additionalAkomodasi;
+    return sum + hotelTotal + villaTotal + groupAdditionalTotal ;
   }, 0);
 };
 
-  const calculateAdditionalTotal = (additionals = []) => {
-    return additionals.reduce((sum, item) => {
-      return sum + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
-    }, 0);
-  };
+const calculateAdditionalTotal = (day) => {
+  let akomodasiAdditionalTotal = 0;
+  let transportAdditionalTotal = 0;
 
-  const calculateTransportTotal = (day) => {
-    const mobilTotal = (day.mobils || []).reduce((sum, mobil) => {
-      return sum + (Number(mobil.harga) || 0);
-    }, 0);
+  if (day.akomodasi_additionalsByTraveler && typeof day.akomodasi_additionalsByTraveler === "object") {
+    Object.keys(day.akomodasi_additionalsByTraveler).forEach(travelerType => {
+      const akomodasiArr = day.akomodasi_additionalsByTraveler[travelerType];
+      if (Array.isArray(akomodasiArr)) {
+        akomodasiAdditionalTotal += akomodasiArr.reduce((acc, item) => {
+          return acc + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
+        }, 0);
+      }
+    });
+  }
 
-    const additionalTransportTotal = (day.transport_additionals || []).reduce((sum, item) => {
-      return sum + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
-    }, 0);
+  if (day.transport_additionals_by_group && typeof day.transport_additionals_by_group === "object") {
+    Object.keys(day.transport_additionals_by_group).forEach(travelerType => {
+      const transportArr = day.transport_additionals_by_group[travelerType];
+      if (Array.isArray(transportArr)) {
+        transportAdditionalTotal += transportArr.reduce((acc, item) => {
+          return acc + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
+        }, 0);
+      }
+    });
+  }
 
-    let groupAdditionalTotal = 0;
-    if (day.transport_additionals_by_group && typeof day.transport_additionals_by_group === "object") {
-      groupAdditionalTotal = Object.values(day.transport_additionals_by_group)
-        .filter(arr => Array.isArray(arr) && arr.length === 2)
-        .flat()
-        .reduce((sum, item) => sum + (Number(item.harga) || 0) * (Number(item.jumlah) || 1), 0);
-    }
 
-    return mobilTotal + additionalTransportTotal + groupAdditionalTotal;
-  };
+  return akomodasiAdditionalTotal + transportAdditionalTotal;
+};
+
+const calculateTransportTotal = (day) => {
+  const mobilTotal = (day.mobils || []).reduce((sum, mobil) => {
+    return sum + (Number(mobil.harga) || 0);
+  }, 0);
+
+  let groupAdditionalTotal = 0;
+  if (day.transport_additionals_by_group && typeof day.transport_additionals_by_group === "object") {
+    Object.keys(day.transport_additionals_by_group).forEach(travelerType => {
+      const transportArr = day.transport_additionals_by_group[travelerType];
+      if (Array.isArray(transportArr)) {
+        groupAdditionalTotal += transportArr.reduce((acc, item) => {
+          return acc + (Number(item.harga) || 0) * (Number(item.jumlah) || 1);
+        }, 0);
+      }
+    });
+  }
+
+  return mobilTotal + groupAdditionalTotal;
+};
 
   const calculateTourTotal = (day) => {
     const tours = day.tours || day.tour || [];
@@ -160,7 +181,6 @@ const calculateAkomodasiTotal = (days = selectedPackage?.days || []) => {
     setChildMarkup({ type, value: numericValue });
   };
 
-  // useEffect yang sudah disederhanakan
   useEffect(() => {
     if (!selectedPackage?.days) {
       setBreakdown({ hotels: 0, villas: 0, additionals: 0, transports: 0, tours: 0, markup: 0 });
@@ -180,7 +200,7 @@ const calculateAkomodasiTotal = (days = selectedPackage?.days || []) => {
     selectedPackage.days.forEach((day, index) => {
       const dayHotels = calculateHotelTotal(day.hotels);
       const dayVillas = calculateVillaTotal(day.villas);
-      const dayAdditionals = calculateAdditionalTotal(day.akomodasi_additionals);
+      const dayAdditionals = calculateAdditionalTotal(day);
       const dayTransports = calculateTransportTotal(day);
       const dayTours = calculateTourTotal(day);
 
@@ -255,7 +275,6 @@ const calculateAkomodasiTotal = (days = selectedPackage?.days || []) => {
     child9Total,
     calculateHotelTotal,
     calculateVillaTotal,
-    calculateAdditionalTotal,
     calculateTransportTotal,
     calculateTourTotal,
   };

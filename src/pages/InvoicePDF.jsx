@@ -227,21 +227,21 @@ const InvoicePDF = forwardRef((props, ref) => {
             });
           });
 
-          const processAdditionalItems = (items, dayIndex) => {
-            return (
-              items?.map((item) => {
-                const price = parseInt(item.harga) || 0;
-                const quantity = parseInt(item.jumlah) || 1;
-                return {
-                  day: `Day ${dayIndex + 1}`,
-                  name: item.displayName,
-                  quantity: quantity,
-                  price: price,
-                  total: price * quantity,
-                };
-              }) || []
-            );
-          };
+          // const processAdditionalItems = (items, dayIndex) => {
+          //   return (
+          //     items?.map((item) => {
+          //       const price = parseInt(item.harga) || 0;
+          //       const quantity = parseInt(item.jumlah) || 1;
+          //       return {
+          //         day: `Day ${dayIndex + 1}`,
+          //         name: item.displayName,
+          //         quantity: quantity,
+          //         price: price,
+          //         total: price * quantity,
+          //       };
+          //     }) || []
+          //   );
+          // };
 
           const processGroupedAdditionalItems = (groupedItems, dayIndex) => {
             if (!groupedItems) return [];
@@ -270,8 +270,6 @@ const InvoicePDF = forwardRef((props, ref) => {
           };
 
           additionals.push(
-            ...processAdditionalItems(day.akomodasi_additionals, dayIndex),
-            ...processAdditionalItems(day.transport_additionals, dayIndex),
             ...processGroupedAdditionalItems(day.akomodasi_additionalsByTraveler, dayIndex),
             ...processGroupedAdditionalItems(day.transport_additionals_by_group, dayIndex)
           );
