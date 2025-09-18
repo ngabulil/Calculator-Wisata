@@ -8,7 +8,7 @@ const useExportPdf = () => {
     }
 
     const input = componentRef.current;
-    const canvas = await html2canvas(input, { scale: 2 });
+    const canvas = await html2canvas(input, { scale: 1 });
     const imgData = canvas.toDataURL("image/png");
 
     const imgWidth = 210;

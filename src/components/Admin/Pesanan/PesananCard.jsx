@@ -1,6 +1,6 @@
 import { Box, Text, Button, Link, Stack, useColorModeValue, Badge, Flex } from '@chakra-ui/react';
 
-const PesananCard = ({ pesanan }) => {
+const PesananCard = ({ pesanan, onDelete }) => {
   const cardBg = useColorModeValue('white', 'gray.700');
   const textColor = useColorModeValue('gray.800', 'white');
 
@@ -72,6 +72,15 @@ const PesananCard = ({ pesanan }) => {
             Tidak ada dokumen PDF tersedia.
           </Text>
         )}
+        <Button
+          colorScheme="red"
+          variant="solid"
+          size="sm"
+          width="full"
+          onClick={() => onDelete?.(pesanan)}
+        >
+          Hapus Pesanan
+        </Button>
       </Stack>
     </Box>
   );

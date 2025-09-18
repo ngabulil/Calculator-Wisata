@@ -171,7 +171,6 @@ const CalculatePaxProvider = ({ children }) => {
     const akomodasiTotal = calculateAkomodasi(selectedPackage?.days || []);
     const extrabedTotal = calculateExtrabedAdultTotal(selectedPackage?.days || []);
     const additionalAdultTotal = calculateAdditionalAdultTotal(selectedPackage?.days || []);
-    console.log("add ADult",additionalAdultTotal)
     const transportTotal = calculateTransport(selectedPackage?.days || []);
 
     const adultSubtotal = (tourAdult + akomodasiTotal + extrabedTotal + additionalAdultTotal + transportTotal) / (selectedPackage?.totalPaxAdult || 1);
