@@ -117,14 +117,13 @@ const formatCurrencyWithCode = (value) => {
                   "Unknown Hotel",
                 stars: hotel?.bintang || hotel?.star || hotel?.stars || "",
                 roomType: hotel?.namaTipeKamar || "",
-                // Perhitungan harga kamar saja
                 price: (hotel?.jumlahKamar || 1) * (hotel?.hargaPerKamar || 0),
-                // Perhitungan harga extrabed terpisah
                 extrabedPrice: hotel?.useExtrabed
                   ? (hotel?.jumlahExtrabed || 0) * (hotel?.hargaExtrabed || 0)
                   : 0,
                 type: "Hotel",
                 originalData: hotel,
+                jumlahKamar: hotel?.jumlahKamar || 0,
               })) || []
           );
         }
@@ -142,14 +141,13 @@ const formatCurrencyWithCode = (value) => {
                 stars:
                   villa?.bintang || villa?.star_rating || villa?.star || "",
                 roomType: villa?.namaTipeKamar || "",
-                // Perhitungan harga kamar saja
                 price: (villa?.jumlahKamar || 1) * (villa?.hargaPerKamar || 0),
-                // Perhitungan harga extrabed terpisah
                 extrabedPrice: villa?.useExtrabed
                   ? (villa?.jumlahExtrabed || 0) * (villa?.hargaExtrabed || 0)
                   : 0,
                 type: "Villa",
                 originalData: villa,
+                jumlahKamar: villa?.jumlahKamar || 0,
               })) || []
           );
         }
@@ -293,6 +291,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
               roomType: String(roomType),
               hasExtrabed: hasExtrabed,
               extrabedCount: extrabedCount,
+              jumlahKamar: hotel?.jumlahKamar || 0,
             });
             hasAccommodation = true;
           });
@@ -323,6 +322,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
               roomType: String(roomType),
               hasExtrabed: hasExtrabed,
               extrabedCount: extrabedCount,
+              jumlahKamar: villa?.jumlahKamar || 0,
             });
             hasAccommodation = true;
           });
@@ -355,6 +355,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
         roomType: String(hotel.roomType),
         hasExtrabed: hotel.originalData?.useExtrabed || false,
         extrabedCount: hotel.originalData?.jumlahExtrabed || 0,
+        jumlahKamar: hotel.originalData?.jumlahKamar || 0
       })),
       ...parsedExpensesData.villas.map((villa, index) => ({
         no: parsedExpensesData.hotels.length + index + 2,
@@ -366,6 +367,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
         roomType: String(villa.roomType),
         hasExtrabed: villa.originalData?.useExtrabed || false,
         extrabedCount: villa.originalData?.jumlahExtrabed || 0,
+        jumlahKamar: villa.originalData?.jumlahKamar || 0
       })),
     ].slice(0, 5);
 
@@ -485,7 +487,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
                     {item.stars ? ` (${item.stars}*)` : ""}
                   </Text>
                   <Text fontSize="sm" color="gray.600">
-                    ({item.roomType ? `${item.roomType}` : ""}
+                    ({item.jumlahKamar} x {item.roomType ? `${item.roomType}` : ""}
                     {item.hasExtrabed && item.extrabedCount > 0
                       ? ` + ${item.extrabedCount} Extrabed`
                       : ""}
