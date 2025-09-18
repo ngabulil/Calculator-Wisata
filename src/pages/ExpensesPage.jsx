@@ -11,6 +11,7 @@ import {
   HStack,
   VStack,
   Select,
+  Spinner
 } from "@chakra-ui/react";
 import { AddIcon, DownloadIcon, ViewIcon } from "@chakra-ui/icons";
 import DayCard from "../components/Expenses/DayCard";
@@ -21,6 +22,7 @@ import { apiPostPesanan } from "../services/pesanan";
 import HotelCard from "../components/Calculator/akomodasi/HotelCard";
 import VillaCard from "../components/Calculator/akomodasi/VillaCard";
 import { useAkomodasiContext } from "../context/AkomodasiContext";
+import { usePackageContext } from "../context/PackageContext";
 
 const ExpensesPage = () => {
   const {
@@ -48,9 +50,11 @@ const ExpensesPage = () => {
     updateVillaItem,
     removeVillaItem,
   } = useExpensesContext();
+
+  const { selectedPackage } = usePackageContext();
   
   const { getHotels, getVillas } = useAkomodasiContext();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const toast = useToast();
   const bg = useColorModeValue("gray.700", "gray.800");
@@ -77,46 +81,51 @@ const ExpensesPage = () => {
   const invoiceRef = useRef();
   const itineraryRef = useRef();
 
-  const handleCreateOrder = async () => {
-    if (!invoiceRef.current || !itineraryRef.current) {
-      toast({
-        title: "Error",
-        description: "PDF components are not ready.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
+const handleCreateOrder = async () => {
+  if (!invoiceRef.current || !itineraryRef.current) {
+    toast({
+      title: "Error",
+      description: "PDF components are not ready.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+    return;
+  }
 
-    try {
-      const invoiceBlob = await invoiceRef.current.exportAsBlob();
-      const itineraryBlob = await itineraryRef.current.exportAsBlob();
+  setIsLoading(true);
+  try {
+    const invoiceBlob = await invoiceRef.current.exportAsBlob();
+    const itineraryBlob = await itineraryRef.current.exportAsBlob();
+    const namaPaket = selectedPackage.name;
 
-      const formData = new FormData();
-      formData.append("invoice", invoiceBlob, `invoice.pdf`);
-      formData.append("itinerary", itineraryBlob, `itinerary.pdf`);
+    const formData = new FormData();
+    formData.append("kode_pesanan", namaPaket);
+    formData.append("invoice", invoiceBlob, `invoice.pdf`);
+    formData.append("itinerary", itineraryBlob, `itinerary.pdf`);
 
-      const result = await apiPostPesanan(formData);
-      console.log("Order created successfully:", result);
+    const result = await apiPostPesanan(formData);
+    console.log("Order created successfully:", result);
 
-      toast({
-        title: "Pesanan berhasil dikirim",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error("Error creating order:", error);
-      toast({
-        title: "Gagal mengirim pesanan",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
+    toast({
+      title: "Pesanan berhasil dikirim",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  } catch (error) {
+    console.error("Error creating order:", error);
+    toast({
+      title: "Gagal mengirim pesanan",
+      description: error.message,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });
+  } finally {
+    setIsLoading(false); 
+  }
+};
 
   const handleViewPdf = () => {
     window.history.pushState({}, "", "/pdf-invoice");
@@ -391,6 +400,8 @@ const ExpensesPage = () => {
           maxW="400px"
           fontSize="lg"
           py={6}
+          isLoading={isLoading}
+          loadingText="Membuat Pesanan..."
         >
           Buat Pesanan
         </Button>

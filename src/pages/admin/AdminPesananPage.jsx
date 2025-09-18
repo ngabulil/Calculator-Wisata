@@ -7,10 +7,10 @@ import {
   Flex,
   Spinner,
   useToast,
-  Select, // 1. Import komponen Select
+  Select, 
 } from '@chakra-ui/react';
 import OrderCard from '../../components/Admin/Pesanan/PesananCard';
-import { apiGetPesanan } from '../../services/pesanan';
+import { apiGetPesanan, apiDeletePesanan } from '../../services/pesanan';
 import ReactPaginate from "react-paginate";
 
 const ITEMS_PER_PAGE = 12;
@@ -29,6 +29,31 @@ const AdminPesananPage = () => {
   const handleSortChange = (e) => {
     setSortOrder(e.target.value);
     setCurrentPage(0); 
+  };
+
+  const handleDeleteOrder = async (order) => {
+    if (!order?.id) return;
+
+    try {
+      await apiDeletePesanan(order.id);
+      setOrders((prev) => prev.filter((o) => o.id !== order.id)); 
+
+      toast({
+        title: "Pesanan berhasil dihapus",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      toast({
+        title: "Gagal menghapus pesanan",
+        description: error.message || "Terjadi kesalahan",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   useEffect(() => {
@@ -104,6 +129,7 @@ const AdminPesananPage = () => {
                 <OrderCard
                   key={order.id}
                   pesanan={order}
+                  onDelete={handleDeleteOrder}
                 />
               ))
             ) : (

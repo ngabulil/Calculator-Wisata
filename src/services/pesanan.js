@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "./api";
+import { apiGet, apiPost, apiDelete } from "./api";
 import Cookies from 'js-cookie';
 
 
@@ -20,6 +20,17 @@ export const apiGetPesanan = async () => {
         return response;
     } catch (error) {
         console.error("Error fetching pesanan:", error);
+        throw error;
+    }
+}
+
+export const apiDeletePesanan = async (id) => {
+    const token = Cookies.get("token");
+    try {
+        const response = await apiDelete(`/pesanan/${id}`, token);
+        return response;
+    } catch (error) {
+        console.error(error);
         throw error;
     }
 }
