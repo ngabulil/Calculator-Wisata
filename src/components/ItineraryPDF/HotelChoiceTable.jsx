@@ -487,7 +487,7 @@ const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
                     {item.stars ? ` (${item.stars}*)` : ""}
                   </Text>
                   <Text fontSize="sm" color="gray.600">
-                    ({item.jumlahKamar} x {item.roomType ? `${item.roomType}` : ""}
+                    ({item.jumlahKamar} {item.roomType ? `${item.roomType}` : ""}
                     {item.hasExtrabed && item.extrabedCount > 0
                       ? ` + ${item.extrabedCount} Extrabed`
                       : ""}

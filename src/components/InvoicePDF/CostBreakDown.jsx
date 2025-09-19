@@ -143,12 +143,12 @@ const CostBreakDown = ({
         <Divider mb={2} borderColor="white" />
         <Box overflowX="auto">
           <Table variant="simple" size="sm" border="1px solid #e0e0e0" width="100%">
-            <Thead>
+           <Thead>
               <Tr>
-                <Th style={{ ...tableHeaderStyle, width: "70px" }}>Day</Th>
-                <Th style={{ ...tableHeaderStyle, width: "180px" }}>Name</Th>
-                <Th style={{ ...tableHeaderStyle, width: "70px" }}>Rooms</Th>
-                <Th style={{ ...tableHeaderStyle, width: "120px" }}>
+                <Th style={{ ...tableHeaderStyle, width: "50px" }}>Day</Th>
+                <Th style={{ ...tableHeaderStyle, width: "150px" }}>Name</Th>
+                <Th style={{ ...tableHeaderStyle, width: "150px" }}>Rooms</Th>
+                <Th style={{ ...tableHeaderStyle, width: "90px" }}>
                   Price/Room
                 </Th>
                 {hasExtrabed && (
@@ -156,7 +156,7 @@ const CostBreakDown = ({
                     Extrabed
                   </Th>
                 )}
-                <Th style={{ ...tableHeaderStyle, width: "120px" }}>TOTAL</Th>
+                <Th style={{ ...tableHeaderStyle, width: "90px" }}>TOTAL</Th>
               </Tr>
             </Thead>
             <Tbody color={"#222"}>
@@ -168,7 +168,7 @@ const CostBreakDown = ({
                   <Tr key={index}>
                     <Td style={narrowColumnStyle}>{item.day}</Td>
                     <Td style={wideColumnStyle}>{item.name}</Td>
-                    <Td style={narrowColumnStyle}>{item.rooms}</Td>
+                    <Td style={narrowColumnStyle}>{item.rooms} {item.roomType}</Td>
                     <Td style={mediumColumnStyle}>
                       {formatCurrency(item.pricePerNight)}
                     </Td>

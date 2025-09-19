@@ -195,6 +195,7 @@ const InvoicePDF = forwardRef((props, ref) => {
               day: `Day ${dayIndex + 1}`,
               name: hotel.displayName,
               rooms: hotel.jumlahKamar || 1,
+              roomType: hotel.namaTipeKamar,
               extrabedByTraveler: hotel.extrabedByTraveler || 0,
               pricePerNight: hotel.hargaPerKamar || 0,
               extrabedPrice: hotel.hargaExtrabed || 0,
