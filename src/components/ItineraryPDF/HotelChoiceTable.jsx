@@ -229,14 +229,17 @@ const formatCurrencyWithCode = (value) => {
 const calculateAlternativePrices = (accommodationPrice, extrabedPrice) => {
   const days = selectedPackage?.days || [];
   const totalAdult = selectedPackage?.totalPaxAdult || 0;
-  console.log(totalAdult)
   const childGroups = selectedPackage?.childGroups || [];
 
   const tourAdult = calculateTourAdultTotal(days);
   const additionalAdult = calculateAdditionalAdultTotal(days);
   const transportTotal = calculateTransport(days);
+  const accommodationNights = days.filter(day => 
+    (day.hotels && day.hotels.length > 0) || (day.villas && day.villas.length > 0)
+  ).length;
+  const akomodasiTotal = accommodationPrice * accommodationNights;
 
-  const adultBase = (tourAdult + additionalAdult + transportTotal + accommodationPrice + extrabedPrice) / totalAdult;
+  const adultBase = (tourAdult + additionalAdult + transportTotal + akomodasiTotal + extrabedPrice) / totalAdult;
 
   const tourChildTotals = calculateTourChildTotals(days, childGroups);
   const additionalChildTotals = calculateAdditionalChildTotals(days, childGroups);
