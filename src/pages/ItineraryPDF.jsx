@@ -13,10 +13,22 @@ import ItineraryTable from "../components/ItineraryPDF/ItineraryTable";
 import InclusionExclusion from "../components/ItineraryPDF/InclusionExclusion";
 import { usePackageContext } from "../context/PackageContext";
 import { useExpensesContext } from "../context/ExpensesContext";
+import { useCalculatePaxContext } from "../context/CalculatePaxContext";
+import { useCurrencyContext } from "../context/CurrencyContext";
 import { parseAndMergeDays } from "../utils/parseAndMergeDays";
 import useExportPdf from "../hooks/useExportPdf";
 import useItineraryEditor from "../hooks/useItineraryEditor";
 import { useCheckoutContext } from "../context/CheckoutContext";
+import { generateItineraryBlob } from "./ItineraryDocx";
+import { formatCurrencyWithCode } from "../utils/currencyUtills";
+import { 
+  parseExpensesAccommodation,
+  getAccommodationNights,
+  calculateFirstRowPrices,
+  calculateAlternativePrices,
+  mergeAllAccommodations,
+  hasAccommodationItems
+} from "../utils/accomodationProcessor";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -28,19 +40,46 @@ const formatCurrency = (amount) => {
 
 const ItineraryPDF = forwardRef((props, ref) => {
   const { selectedPackage } = usePackageContext();
-  const { days: expenseDays } = useExpensesContext();
+  const { currency } = useCurrencyContext();
+  const { days: expenseDays, hotelItems, villaItems } = useExpensesContext();
   
   const [itineraryState, setItineraryState] = useState({
     mergedDays: [],
     itineraryData: [],
     isDataProcessed: false,
   });
+
+const [accommodationState, setAccommodationState] = useState({
+    parsedExpensesData: { hotels: [], villas: [] },
+    allAccommodations: [],
+    accommodationNights: 0,
+    firstRowPrices: null,
+    hasItems: false,
+    isLoading: true,
+  });
   
   const [isEditingInclusion, setIsEditingInclusion] = useState(false);
   const { exportAsBlob, downloadPdf } = useExportPdf();
   const toast = useToast();
   const componentRef = useRef();
-  const { childTotal, adultPriceTotal, childPriceTotal} = useCheckoutContext();
+  const { 
+    childTotal, 
+    adultPriceTotal, 
+    childPriceTotal,
+    userMarkupAmount,
+    childMarkupAmount
+  } = useCheckoutContext();
+
+    const {
+    calculateTourAdultTotal,
+    calculateAdditionalAdultTotal,
+    calculateTransport,
+    calculateTourChildTotals,
+    calculateAdditionalChildTotals,
+    calculateExtrabedChildTotals,
+    adultSubtotal,
+    childSubtotal
+  } = useCalculatePaxContext();
 
   const packageId = useMemo(() => 
     selectedPackage?.id || selectedPackage?._id
@@ -107,7 +146,6 @@ const ItineraryPDF = forwardRef((props, ref) => {
                 kidExpense: childPrice > 0 && childQty > 0 
                   ? formatCurrency(childPrice * childQty) 
                   : "-",
-                // Tambahan data untuk keperluan lain
                 adultPrice,
                 childPrice,
                 adultQty,
@@ -201,6 +239,132 @@ const ItineraryPDF = forwardRef((props, ref) => {
     };
   }, [selectedPackage?.days, expenseDays, updateDays]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    const processAccommodationData = async () => {
+      try {
+        // Parse data expenses accommodation
+        const parsedExpensesData = await parseExpensesAccommodation(hotelItems, villaItems);
+        
+        if (!isMounted) return;
+
+        // Hitung data lainnya
+        const accommodationNights = getAccommodationNights(selectedPackage?.days);
+        
+        const firstRowPrices = calculateFirstRowPrices(
+          selectedPackage,
+          adultSubtotal,
+          childSubtotal,
+          userMarkupAmount,
+          childMarkupAmount
+        );
+
+        const allAccommodations = mergeAllAccommodations(
+          itineraryState.mergedDays,
+          parsedExpensesData,
+          selectedPackage
+        );
+
+        const hasItems = hasAccommodationItems(
+          itineraryState.mergedDays,
+          parsedExpensesData,
+          allAccommodations,
+          selectedPackage
+        );
+
+        setAccommodationState({
+          parsedExpensesData,
+          allAccommodations,
+          accommodationNights,
+          firstRowPrices,
+          hasItems,
+          isLoading: false,
+        });
+
+      } catch (error) {
+        console.error("Error processing accommodation data:", error);
+        if (isMounted) {
+          setAccommodationState(prev => ({
+            ...prev,
+            isLoading: false,
+          }));
+        }
+      }
+    };
+
+    if (hotelItems.length > 0 || villaItems.length > 0 || itineraryState.mergedDays.length > 0) {
+      processAccommodationData();
+    } else {
+      setAccommodationState({
+        parsedExpensesData: { hotels: [], villas: [] },
+        allAccommodations: [],
+        accommodationNights: 0,
+        firstRowPrices: null,
+        hasItems: false,
+        isLoading: false,
+      });
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [
+    hotelItems, 
+    villaItems, 
+    itineraryState.mergedDays, 
+    selectedPackage,
+    adultSubtotal,
+    childSubtotal,
+    userMarkupAmount,
+    childMarkupAmount
+  ]);
+  
+  const formatCurrencyWithContext = (amount) => formatCurrencyWithCode(amount, currency);
+  const handleDownloadDocx = async () => {
+  try {
+    const blob = await generateItineraryBlob({
+      packageName: selectedPackage?.name,
+      mergedDays: itineraryState.mergedDays,
+      reorderedDays: Array.isArray(reorderedDays) ? reorderedDays : [],
+      inclusionExclusionData: JSON.parse(localStorage.getItem("inclusionExclusionData") || "{}"),
+      accommodationData: accommodationState,
+      selectedPackage: selectedPackage,
+      childTotal: childTotal,
+      adultPriceTotal,
+      childPriceTotal,
+      transportType: "6 Seater",
+      getAlternativePrices: getAlternativePrices,
+      currency: currency,
+      formatCurrency: formatCurrencyWithContext
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${selectedPackage?.title || "Itinerary"}_Plan.docx`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Berhasil",
+      description: "Itinerary berhasil diunduh dalam format DOCX",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  } catch (error) {
+    console.error("Error downloading DOCX:", error);
+    toast({
+      title: "Gagal mengunduh DOCX",
+      description: error.message,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });
+  }
+};
+
   const handleSaveInclusion = useCallback(() => {
     toast({
       title: "Data Tersimpan",
@@ -216,7 +380,6 @@ const ItineraryPDF = forwardRef((props, ref) => {
     setIsEditingInclusion(false);
   }, []);
 
-  // Memoized reorder handlers - sama seperti InvoicePDF
   const handleSaveReorder = useCallback(() => {
     const success = saveOrder();
     if (success) {
@@ -259,12 +422,32 @@ const ItineraryPDF = forwardRef((props, ref) => {
     });
   }, [clearSavedOrder, toast]);
 
-  // Memoize untuk cek apakah order berbeda dari original
   const hasOrderChanged = useMemo(() => {
     return JSON.stringify(reorderedDays) !== JSON.stringify(originalDays);
   }, [reorderedDays, originalDays]);
 
-  // Show loading jika data belum selesai diproses
+  const getAlternativePrices = useCallback((accommodationPrice, extrabedPrice) => {
+    return calculateAlternativePrices(
+      accommodationPrice,
+      extrabedPrice,
+      selectedPackage,
+      calculateTourAdultTotal,
+      calculateAdditionalAdultTotal,
+      calculateTransport,
+      calculateTourChildTotals,
+      calculateAdditionalChildTotals,
+      calculateExtrabedChildTotals
+    );
+  }, [
+    selectedPackage,
+    calculateTourAdultTotal,
+    calculateAdditionalAdultTotal,
+    calculateTransport,
+    calculateTourChildTotals,
+    calculateAdditionalChildTotals,
+    calculateExtrabedChildTotals
+  ]);
+
   if (!itineraryState.isDataProcessed) {
     return (
       <Box maxW="900px" mx="auto" py={8}>
@@ -295,6 +478,14 @@ const ItineraryPDF = forwardRef((props, ref) => {
           <Box>
             {!isReordering ? (
               <Flex gap={2}>
+                <Button
+                  size="sm"
+                  colorScheme="green"
+                  onClick={handleDownloadDocx}
+                  isDisabled={!itineraryState.isDataProcessed}
+                >
+                  Download Word
+                </Button>
                 <Button 
                   size="sm" 
                   colorScheme="orange" 
@@ -427,10 +618,17 @@ const ItineraryPDF = forwardRef((props, ref) => {
         <Divider mb={6} borderColor="#FFA726" />
 
         <HotelChoiceTable 
-          akomodasiDays={itineraryState.mergedDays}
-          calculatedTotalChild={childPriceTotal}
-          calculatedTotalPerPax={adultPriceTotal}
-          childTotal={childTotal}  />
+          accommodationData={{
+            allAccommodations: accommodationState.allAccommodations,
+            accommodationNights: accommodationState.accommodationNights,
+            firstRowPrices: accommodationState.firstRowPrices,
+            hasItems: accommodationState.hasItems,
+            parsedExpensesData: accommodationState.parsedExpensesData,
+          }}
+          getAlternativePrices={getAlternativePrices}
+          selectedPackage={selectedPackage}
+          childTotal={childTotal}
+        />
           
 
         <Divider my={6} borderColor="#FFA726" />

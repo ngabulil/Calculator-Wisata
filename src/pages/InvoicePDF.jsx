@@ -21,6 +21,7 @@ import Cookies from "js-cookie";
 import useExportPdf from "../hooks/useExportPdf";
 import useItineraryEditor from "../hooks/useItineraryEditor";
 import { roundPrice } from "../utils/roundPrice";
+import { generateInvoiceBlob } from "./InvoiceDocx";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -182,7 +183,6 @@ const InvoicePDF = forwardRef((props, ref) => {
 
         if (!isMounted) return;
 
-        // Process semua data sekaligus untuk mengurangi state updates
         const hotels = [];
         const villas = [];
         const transports = [];
@@ -463,7 +463,6 @@ const InvoicePDF = forwardRef((props, ref) => {
     });
   }, [clearSavedOrder, toast]);
 
-  // Memoize exchange rate handlers
   const handleSaveExchangeRate = useCallback(() => {
     localStorage.setItem("invoiceExchangeRate", exchangeRate.toString());
     setIsEditingExchange(false);
@@ -481,12 +480,56 @@ const InvoicePDF = forwardRef((props, ref) => {
     setIsEditingExchange(false);
   }, []);
 
-  // Memoize untuk cek apakah order berbeda dari original
   const hasOrderChanged = useMemo(() => {
     return JSON.stringify(reorderedDays) !== JSON.stringify(originalDays);
   }, [reorderedDays, originalDays]);
 
-  // Show loading jika data belum selesai diproses
+  const handleDownloadDocx = async () => {
+  try {
+    const blob = await generateInvoiceBlob({
+      packageName: selectedPackage?.name,
+      totalAdult: calculatedValues.totalAdult,
+      totalChild: calculatedValues.childGroups.reduce(
+        (sum, g) => sum + (g.total || 0),
+        0
+      ),
+      adminName,
+      days: Array.isArray(reorderedDays) ? reorderedDays : [],
+      hotelData: invoiceData.hotelData,
+      transportData: invoiceData.transportData,
+      additionalData: invoiceData.additionalData,
+      grandTotal: calculatedValues.adjustedGrandTotal,
+      markup: totalMarkup + totalMarkupChild,
+      selling: calculatedValues.adultPriceTotal,
+      childGroupsWithPricing: childGroupsWithPricing,
+      exchangeRate,
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${selectedPackage?.title || "Invoice"}_Quotation.docx`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    toast({
+      title: "Berhasil",
+      description: "Invoice berhasil diunduh dalam format DOCX",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  } catch (error) {
+    toast({
+      title: "Gagal mengunduh DOCX",
+      description: error.message,
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+    });
+  }
+};
+
   if (!invoiceData.isDataProcessed) {
     return (
       <Box maxW="900px" mx="auto" py={8}>
@@ -495,7 +538,6 @@ const InvoicePDF = forwardRef((props, ref) => {
     );
   }
 
-  // Prepare child groups with pricing for CostBreakDown
   const childGroupsWithPricing = calculatedValues.childGroups.map((group) => ({
     id: group.id,
     label: `Child(${group.age} thn)`,
@@ -521,47 +563,55 @@ const InvoicePDF = forwardRef((props, ref) => {
         </Text>
 
         <Flex gap={2} flexWrap="wrap" alignItems="center">
+          {/* DOCX Download Button - moved to first position */}
+          <Button
+            size="sm"
+            colorScheme="green"
+            onClick={handleDownloadDocx}
+            isDisabled={!invoiceData.isDataProcessed}
+          >
+            Download Word
+          </Button>
+
           {/* Reorder Controls */}
-          <Box>
-            {!isReordering ? (
-              <Flex gap={2}>
-                <Button
-                  size="sm"
-                  colorScheme="orange"
-                  onClick={toggleReordering}
-                >
-                  Edit Urutan Itinerary
-                </Button>
-                {hasOrderChanged && (
-                  <Button
-                    size="sm"
-                    colorScheme="red"
-                    variant="outline"
-                    onClick={handleResetToOriginal}
-                  >
-                    Reset ke Urutan Asli
-                  </Button>
-                )}
-              </Flex>
-            ) : (
-              <Flex gap={2}>
-                <Button
-                  size="sm"
-                  colorScheme="green"
-                  onClick={handleSaveReorder}
-                >
-                  Simpan Urutan
-                </Button>
+          {!isReordering ? (
+            <Flex gap={2}>
+              <Button
+                size="sm"
+                colorScheme="orange"
+                onClick={toggleReordering}
+              >
+                Edit Urutan Itinerary
+              </Button>
+              {hasOrderChanged && (
                 <Button
                   size="sm"
                   colorScheme="red"
-                  onClick={handleCancelReorder}
+                  variant="outline"
+                  onClick={handleResetToOriginal}
                 >
-                  Batal
+                  Reset ke Urutan Asli
                 </Button>
-              </Flex>
-            )}
-          </Box>
+              )}
+            </Flex>
+          ) : (
+            <Flex gap={2}>
+              <Button
+                size="sm"
+                colorScheme="green"
+                onClick={handleSaveReorder}
+              >
+                Simpan Urutan
+              </Button>
+              <Button
+                size="sm"
+                colorScheme="red"
+                onClick={handleCancelReorder}
+              >
+                Batal
+              </Button>
+            </Flex>
+          )}
 
           {/* Exchange Rate Controls */}
           {!isEditingExchange ? (
