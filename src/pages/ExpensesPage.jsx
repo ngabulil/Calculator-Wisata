@@ -98,9 +98,12 @@ const handleCreateOrder = async () => {
     const invoiceBlob = await invoiceRef.current.exportAsBlob();
     const itineraryBlob = await itineraryRef.current.exportAsBlob();
     const namaPaket = selectedPackage.name;
+    const formattedDate = new Date().toLocaleString("sv-SE").replace(/[-T: ]/g, "");
+
+    const kodePesanan = `${namaPaket}-${formattedDate}`;
 
     const formData = new FormData();
-    formData.append("kode_pesanan", namaPaket);
+    formData.append("kode_pesanan", kodePesanan);
     formData.append("invoice", invoiceBlob, `invoice.pdf`);
     formData.append("itinerary", itineraryBlob, `itinerary.pdf`);
 
