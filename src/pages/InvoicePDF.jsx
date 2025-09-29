@@ -393,6 +393,7 @@ const InvoicePDF = forwardRef((props, ref) => {
           adminName: adminName,
           isDataProcessed: true,
         });
+        props.onReady?.();
 
         updateDays(itinerary);
       } catch (err) {

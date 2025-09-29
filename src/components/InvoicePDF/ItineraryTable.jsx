@@ -134,17 +134,35 @@ const ItineraryTable = ({
     setEditValues({ title: "", description: "" });
   }, [editingItem, editValues, onEditItemTitle, onEditItemDescription, toast]);
 
+
   const calculateItemPrice = (item) => {
+    const totalAdult = selectedPackage?.totalPaxAdult || 0;
+    const totalChild = Array.isArray(selectedPackage?.childGroups)
+      ? selectedPackage.childGroups.reduce((sum, group) => sum + (Number(group.total) || 0), 0)
+      : 0;
+
     const quantities = item.quantities || {};
     const hargaAdult = Number(item.hargaAdult) || 0;
     const hargaChild = Number(item.hargaChild) || 0;
 
-    const adultQty = Number(quantities.adult || 0);
-    const adultExpense = adultQty * hargaAdult;
+    let adultExpense = 0;
+    if (item.type === "expense") {
+      adultExpense = hargaAdult * totalAdult;
+    } else {
+      const adultQty = Number(quantities.adult || 0);
+      adultExpense = adultQty * hargaAdult;
+    }
 
     const childExpenses = childGroups.map((child) => {
-      const qty = Number(quantities[child.id] || 0);
-      return qty * hargaChild;
+      if (item.type === "expense") {
+        const childPerGroup = Math.floor(totalChild / childGroups.length);
+        const remainder = totalChild % childGroups.length;
+        const childQty = childPerGroup + (childGroups.indexOf(child) < remainder ? 1 : 0);
+        return childQty * hargaChild;
+      } else {
+        const qty = Number(quantities[child.id] || 0);
+        return qty * hargaChild;
+      }
     });
 
     const childTotal = childExpenses.reduce((sum, expense) => sum + expense, 0);
