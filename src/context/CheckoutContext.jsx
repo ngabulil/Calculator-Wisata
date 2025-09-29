@@ -161,11 +161,11 @@ const calculateTransportTotal = (day) => {
     }
   };
 
-  const calculateChildMarkup = (subtotalChild) => {
+  const calculateChildMarkup = (subtotal) => {
     if (!childMarkup.value || childMarkup.value <= 0) return 0;
 
     if (childMarkup.type === "percent") {
-      return (subtotalChild * childMarkup.value) / 100;
+      return (subtotal * childMarkup.value) / 100;
     } else {
       return childMarkup.value;
     }
@@ -243,7 +243,7 @@ const calculateTransportTotal = (day) => {
 
   const userMarkupAmount = calculateUserMarkup(subtotalBeforeUserMarkup);
   const totalMarkup = userMarkupAmount * totalAdult;
-  const childMarkupAmount = calculateChildMarkup(childTotal);
+  const childMarkupAmount = calculateChildMarkup(subtotalBeforeUserMarkup);
   const totalMarkupChild = childMarkupAmount * totalChildren;
   const grandTotal = subtotalBeforeUserMarkup + totalMarkup + totalMarkupChild;
 
