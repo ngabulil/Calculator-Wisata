@@ -33,25 +33,25 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <CalculatorProvider>
         <CurrencyContextProvider>
           <PackageContextProvider>
-            <CalculatePaxContextProvider>
-            <GrandTotalContextProvider>
-              <CheckoutContextProvider>
-                <AkomodasiContextProvider>
-                  <TourContextProvider>
-                    <TransportContextProvider>
-                      <ExpensesContextProvider>
-                        <AdminProviderContext>
-                          <BrowserRouter>
-                            <App />
-                          </BrowserRouter>
-                        </AdminProviderContext>
-                      </ExpensesContextProvider>
-                    </TransportContextProvider>
-                  </TourContextProvider>
-                </AkomodasiContextProvider>
-              </CheckoutContextProvider>
-            </GrandTotalContextProvider>
-            </CalculatePaxContextProvider>
+            <ExpensesContextProvider>
+              <CalculatePaxContextProvider>
+                <GrandTotalContextProvider>
+                  <CheckoutContextProvider>
+                    <AkomodasiContextProvider>
+                      <TourContextProvider>
+                        <TransportContextProvider>
+                            <AdminProviderContext>
+                              <BrowserRouter>
+                                <App />
+                              </BrowserRouter>
+                            </AdminProviderContext>
+                        </TransportContextProvider>
+                      </TourContextProvider>
+                    </AkomodasiContextProvider>
+                  </CheckoutContextProvider>
+                </GrandTotalContextProvider>
+              </CalculatePaxContextProvider>
+            </ExpensesContextProvider>
           </PackageContextProvider>
         </CurrencyContextProvider>
       </CalculatorProvider>

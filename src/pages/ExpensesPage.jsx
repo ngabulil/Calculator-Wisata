@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   Box,
   Flex,
@@ -56,6 +56,7 @@ const ExpensesPage = () => {
   const { getHotels, getVillas } = useAkomodasiContext();
   const [isLoading, setIsLoading] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [pdfReadiness, setPdfReadiness] = useState({ invoice: false, itinerary: false });
   const toast = useToast();
   const bg = useColorModeValue("gray.700", "gray.800");
 
@@ -81,7 +82,23 @@ const ExpensesPage = () => {
   const invoiceRef = useRef();
   const itineraryRef = useRef();
 
+const handlePdfReady = useCallback((type) => {
+  setPdfReadiness((prev) => ({ ...prev, [type]: true }));
+}, []);
+
+const allPdfsReady = pdfReadiness.invoice && pdfReadiness.itinerary;
+
 const handleCreateOrder = async () => {
+  if (!allPdfsReady) {
+    toast({
+      title: "PDFs are not ready",
+      description: "Please wait for both PDFs to be generated.",
+      status: "warning",
+      duration: 3000,
+      isClosable: true,
+    });
+    return;
+  }
   if (!invoiceRef.current || !itineraryRef.current) {
     toast({
       title: "Error",
@@ -307,8 +324,8 @@ const handleCreateOrder = async () => {
 
       {/* Komponen PDF disembunyikan dan direferensikan */}
       <Box style={{ position: "absolute", left: "-9999px", top: "-9999px" }}>
-        <InvoicePDF ref={invoiceRef} />
-        <ItineraryPDF ref={itineraryRef} />
+        <InvoicePDF ref={invoiceRef} onReady={() => handlePdfReady('invoice')} />
+        <ItineraryPDF ref={itineraryRef} onReady={() => handlePdfReady('itinerary')} />
       </Box>
 
       <Box mt={8} spacing={6}>
@@ -404,9 +421,10 @@ const handleCreateOrder = async () => {
           fontSize="lg"
           py={6}
           isLoading={isLoading}
+          isDisabled={!allPdfsReady}
           loadingText="Membuat Pesanan..."
         >
-          Buat Pesanan
+          {allPdfsReady ? 'Buat Pesanan' : 'Menunggu PDF Siap...'}
         </Button>
       </Flex>
     </Box>

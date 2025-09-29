@@ -218,6 +218,8 @@ const [accommodationState, setAccommodationState] = useState({
           isDataProcessed: true,
         });
 
+        props.onReady?.();
+
         updateDays(itinerary);
 
       } catch (err) {

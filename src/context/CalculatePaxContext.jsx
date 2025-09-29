@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import { usePackageContext } from "./PackageContext";
+import { useExpensesContext } from "./ExpensesContext";
 
 
 const CalculatePaxContext = createContext();
@@ -9,6 +10,8 @@ export const useCalculatePaxContext = () => {
 
 const CalculatePaxProvider = ({ children }) => {
     const { selectedPackage } = usePackageContext();
+    const { days: expenseDays } = useExpensesContext();
+
 
     const calculateTourAdultTotal = (days = selectedPackage?.days || []) => {
         return days.reduce((sum, day) => {
@@ -167,13 +170,25 @@ const CalculatePaxProvider = ({ children }) => {
         return result;
     };
 
+    const expenseAdultOnly = expenseDays.reduce((sum, day) => {
+        return sum + (day?.totals || []).reduce((acc, item) => {
+            return acc + (Number(item.adultPrice) || 0);
+        }, 0);
+    }, 0);
+
+    const expenseChildOnly = expenseDays.reduce((sum, day) => {
+    return sum + (day?.totals || []).reduce((acc, item) => {
+      return acc + (Number(item.childPrice) || 0); // hanya harga child
+        }, 0);
+    }, 0);
+
     const tourAdult = calculateTourAdultTotal(selectedPackage?.days || []);
     const akomodasiTotal = calculateAkomodasi(selectedPackage?.days || []);
     const extrabedTotal = calculateExtrabedAdultTotal(selectedPackage?.days || []);
     const additionalAdultTotal = calculateAdditionalAdultTotal(selectedPackage?.days || []);
     const transportTotal = calculateTransport(selectedPackage?.days || []);
 
-    const adultSubtotal = (tourAdult + akomodasiTotal + extrabedTotal + additionalAdultTotal + transportTotal) / (selectedPackage?.totalPaxAdult || 1);
+    const adultSubtotal = (tourAdult + akomodasiTotal + extrabedTotal + additionalAdultTotal + transportTotal + expenseAdultOnly) / (selectedPackage?.totalPaxAdult || 1);
 
     const tourChild = calculateTourChildTotals(selectedPackage?.days || [], selectedPackage?.childGroups || []);
     const extrabedChild = calculateExtrabedChildTotals(selectedPackage?.days || [], selectedPackage?.childGroups || []);
@@ -183,7 +198,7 @@ const CalculatePaxProvider = ({ children }) => {
     (selectedPackage?.childGroups || []).forEach((group) => {
         const id = group.id;
         const totalChildren = Number(group.total) || 1; 
-        const groupTotal = tourChild[id] + extrabedChild[id] + additionalChild[id];
+        const groupTotal = tourChild[id] + extrabedChild[id] + additionalChild[id] + expenseChildOnly;
 
         childSubtotal[id] = groupTotal / totalChildren;
     });
