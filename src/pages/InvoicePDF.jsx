@@ -217,6 +217,7 @@ const InvoicePDF = forwardRef((props, ref) => {
 
           day.mobils?.forEach((mobil) => {
             const price = parseInt(mobil.harga) || 0;
+            const quantity = parseInt(mobil.jumlah) || 1;
             transports.push({
               day: `Day ${dayIndex + 1}`,
               description:
@@ -224,7 +225,9 @@ const InvoicePDF = forwardRef((props, ref) => {
                 mobil.label ||
                 mobil.displayName ||
                 mobil.name,
+              quantity: quantity,
               price: price,
+              total: price * quantity,
             });
           });
 

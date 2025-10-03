@@ -86,7 +86,7 @@ const CalculatePaxProvider = ({ children }) => {
     const calculateTransport = (days = selectedPackage?.days || []) => {
         return days.reduce((sum, day) => {
             return sum + (day.mobils || []).reduce((acc, mobil) => {
-                return acc + (Number(mobil.harga) || 0);
+                return acc + (Number(mobil.jumlah) || 0) * (Number(mobil.harga) || 0);
             }, 0);
         }, 0);
     };

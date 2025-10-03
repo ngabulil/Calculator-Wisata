@@ -111,7 +111,8 @@ const calculateAdditionalTotal = (day) => {
 
 const calculateTransportTotal = (day) => {
   const mobilTotal = (day.mobils || []).reduce((sum, mobil) => {
-    return sum + (Number(mobil.harga) || 0);
+    const totalTransport = (Number(mobil.jumlah) || 0) * (Number(mobil.harga) || 0);
+    return sum + totalTransport;
   }, 0);
 
   let groupAdditionalTotal = 0;
