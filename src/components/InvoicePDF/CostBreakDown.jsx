@@ -51,7 +51,7 @@ const wideColumnStyle = {
   ...tableCellStyle,
   minWidth: "180px",
   maxWidth: "220px",
-  textAlign: "left",
+  textAlign: "center",
   wordWrap: "break-word",
   overflow: "hidden",
 };
@@ -119,7 +119,7 @@ const CostBreakDown = ({
 
   const hotelTotal = sortedHotelData.reduce((sum, i) => sum + i.total, 0);
   const transportTotal = sortedTransportData.reduce(
-    (sum, i) => sum + i.price,
+    (sum, i) => sum + (i.total || i.price),
     0
   );
   const additionalTotal = sortedAdditionalData.reduce(
@@ -224,24 +224,30 @@ const CostBreakDown = ({
             <Thead>
               <Tr>
                 <Th style={{ ...tableHeaderStyle, width: "70px" }}>Day</Th>
-                <Th style={{ ...tableHeaderStyle, width: "300px" }}>
+                <Th style={{ ...tableHeaderStyle, width: "250px" }}>
                   Description
                 </Th>
+                <Th style={{ ...tableHeaderStyle, width: "70px" }}>Qty</Th>
                 <Th style={{ ...tableHeaderStyle, width: "120px" }}>Price</Th>
+                <Th style={{ ...tableHeaderStyle, width: "120px" }}>Total</Th>
               </Tr>
             </Thead>
             <Tbody color={"#222"}>
               {sortedTransportData.map((item, index) => (
                 <Tr key={index}>
                   <Td style={narrowColumnStyle}>{item.day}</Td>
-                  <Td style={{ ...wideColumnStyle, width: "300px" }}>{item.description}</Td>
+                  <Td style={{ ...wideColumnStyle, width: "250px" }}>{item.description}</Td>
+                  <Td style={narrowColumnStyle}>{item.quantity || 1}</Td>
                   <Td style={mediumColumnStyle}>
                     {formatCurrency(item.price)}
+                  </Td>
+                  <Td style={mediumColumnStyle}>
+                    {formatCurrency(item.total)}
                   </Td>
                 </Tr>
               ))}
               <Tr>
-                <Td colSpan={2} style={tableTotalStyle}>
+                <Td colSpan={4} style={tableTotalStyle}>
                   Total Transport
                 </Td>
                 <Td style={{ ...tableTotalStyle, textAlign: "left" }}>
@@ -250,7 +256,7 @@ const CostBreakDown = ({
               </Tr>
               <Tr>
                 <Td
-                  colSpan={2}
+                  colSpan={4}
                   style={{ ...tableTotalStyle, textAlign: "right" }}
                 >
                   Grand Total
