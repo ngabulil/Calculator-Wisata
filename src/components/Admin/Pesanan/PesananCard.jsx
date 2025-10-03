@@ -1,9 +1,7 @@
-import { Box, Text, Button, Link, Stack, useColorModeValue, Badge, Flex } from '@chakra-ui/react';
+import { Box, Text, Button, Link, Stack, Badge, Flex, Icon } from '@chakra-ui/react';
+import { Icon as Iconify } from '@iconify/react';
 
-const PesananCard = ({ pesanan, onDelete }) => {
-  const cardBg = useColorModeValue('white', 'gray.700');
-  const textColor = useColorModeValue('gray.800', 'white');
-
+const PesananCard = ({ pesanan, onDelete, bgIcon }) => {
   if (!pesanan) {
     return (
       <Box
@@ -11,68 +9,140 @@ const PesananCard = ({ pesanan, onDelete }) => {
         borderRadius="lg"
         overflow="hidden"
         p={5}
-        bg={cardBg}
+        bg="gray.800"
         shadow="md"
+        w="full"
       >
         <Text color="red.500">Data pesanan tidak tersedia</Text>
       </Box>
     );
   }
 
-  const formattedDate = pesanan.createdAt ? new Date(pesanan.createdAt).toLocaleDateString('id-ID', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }) : 'N/A';
+  const formattedDate = pesanan.createdAt 
+    ? new Date(pesanan.createdAt).toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) 
+    : 'N/A';
 
   return (
     <Box
-      borderWidth="1px" 
-      borderRadius="lg" 
+      borderWidth="1px"
+      borderRadius="lg"
       overflow="hidden"
       p={5}
-      bg={cardBg}
-      shadow="md"
-      transition="all 0.2s ease-in-out"
+      bg="gray.800"
+      shadow="lg"
+      transition="all 0.3s ease"
+      _hover={{
+        transform: 'translateY(-4px)',
+        shadow: 'xl',
+        borderColor: bgIcon || 'teal.500',
+      }}
+      w="full"
+      position="relative"
     >
-      <Text fontSize="lg" fontWeight="bold" color={textColor} mb={1}>
-        Kode Pesanan: {pesanan.kode_pesanan || 'N/A'}
-      </Text>
-      <Text fontSize="sm" color="gray.500" mb={2}>
-        Dibuat pada: {formattedDate}
-      </Text>
+      {/* Accent bar */}
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        h="4px"
+        bg={bgIcon || 'teal.500'}
+        borderTopRadius="lg"
+      />
 
-      {/* Admin Information */}
-      <Flex align="center" mb={3}>
-        <Text fontSize="sm" color="gray.600" mr={2}>
+      {/* Header dengan icon */}
+      <Flex align="center" gap={3} mb={3} mt={2}>
+        <Flex
+          bg={bgIcon || 'teal.500'}
+          p={2}
+          borderRadius="md"
+          align="center"
+          justify="center"
+        >
+          <Iconify
+            icon="mdi:file-document-outline"
+            width="24"
+            height="24"
+            color="white"
+          />
+        </Flex>
+        <Box flex={1}>
+          <Text fontSize="md" fontWeight="bold" color="white" noOfLines={1}>
+            {pesanan.kode_pesanan || 'N/A'}
+          </Text>
+          <Text fontSize="xs" color="gray.400">
+            {formattedDate}
+          </Text>
+        </Box>
+      </Flex>
+
+      {/* Admin badge */}
+      <Flex align="center" mb={4} gap={2}>
+        <Iconify
+          icon="mdi:account"
+          width="16"
+          height="16"
+          color="gray"
+        />
+        <Text fontSize="xs" color="gray.400">
           Dibuat oleh:
         </Text>
-        <Badge colorScheme="green" variant="subtle">
+        <Badge colorScheme="green" variant="subtle" fontSize="xs">
           {pesanan.admin?.name || 'N/A'}
         </Badge>
       </Flex>
 
+      {/* Action buttons */}
       <Stack spacing={2}>
         {pesanan.invoice_pdf && (
           <Link href={pesanan.invoice_pdf} isExternal style={{ textDecoration: 'none' }}>
-            <Button colorScheme="blue" variant="outline" size="sm" width="full">
-              Lihat Quotation PDF
+            <Button
+              leftIcon={<Iconify icon="mdi:file-pdf-box" width="18" height="18" />}
+              colorScheme="blue"
+              variant="solid"
+              size="sm"
+              width="full"
+            >
+              Quotation PDF
             </Button>
           </Link>
         )}
         {pesanan.itinerary_pdf && (
           <Link href={pesanan.itinerary_pdf} isExternal style={{ textDecoration: 'none' }}>
-            <Button colorScheme="purple" variant="outline" size="sm" width="full">
-              Lihat Itinerary PDF
+            <Button
+              leftIcon={<Iconify icon="mdi:map-marker-path" width="18" height="18" />}
+              colorScheme="purple"
+              variant="solid"
+              size="sm"
+              width="full"
+            >
+              Itinerary PDF
             </Button>
           </Link>
         )}
         {(!pesanan.invoice_pdf && !pesanan.itinerary_pdf) && (
-          <Text color="gray.500" fontSize="sm" textAlign="center">
-            Tidak ada dokumen PDF tersedia.
-          </Text>
+          <Flex
+            align="center"
+            justify="center"
+            p={3}
+            bg="gray.700"
+            borderRadius="md"
+            gap={2}
+          >
+            <Iconify icon="mdi:alert-circle-outline" width="20" height="20" color="gray" />
+            <Text color="gray.400" fontSize="sm">
+              Tidak ada dokumen PDF
+            </Text>
+          </Flex>
         )}
         <Button
+          leftIcon={<Iconify icon="mdi:delete" width="18" height="18" />}
           colorScheme="red"
           variant="solid"
           size="sm"
