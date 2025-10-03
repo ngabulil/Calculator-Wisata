@@ -163,24 +163,37 @@ export const buildCostBreakDown = (params) => {
     new TableRow({
       children: [
         makeCell("DAY", { bold: true, width: 800, shading: headerShading }),
-        makeCell("DESCRIPTION", { bold: true, width: 8000, shading: headerShading }),
-        makeCell("PRICE", { bold: true, align: AlignmentType.RIGHT, width: 2200, shading: headerShading }),
+        makeCell("DESCRIPTION", { bold: true, width: 6000, shading: headerShading }),
+        makeCell("QTY", { bold: true, align: AlignmentType.CENTER, width: 1500, shading: headerShading }),
+        makeCell("PRICE", { bold: true, align: AlignmentType.RIGHT, width: 1800, shading: headerShading }),
+        makeCell("TOTAL", { bold: true, align: AlignmentType.RIGHT, width: 1800, shading: headerShading }),
       ],
     }),
   ];
 
   let transportGrandTotal = 0;
   transportData.forEach((t) => {
+    const displayQuantity = t.quantity || 1;
+    const parsedQuantity = Number(t.quantity);
+    const quantityValue = Number.isFinite(parsedQuantity) && parsedQuantity > 0 ? parsedQuantity : 1;
+    const parsedPrice = Number(t.price);
+    const priceValue = Number.isFinite(parsedPrice) ? parsedPrice : 0;
+    const hasExplicitTotal = t.total !== undefined && t.total !== null && t.total !== '';
+    const parsedTotal = Number(t.total);
+    const totalValue = hasExplicitTotal && Number.isFinite(parsedTotal) ? parsedTotal : priceValue * quantityValue;
+
     transportRows.push(
       new TableRow({
         children: [
           makeCell(t.day || "-", { width: 800 }),
-          makeCell(t.description || "-", { width: 8000 }),
-          makeCell(t.price ? `Rp ${t.price.toLocaleString("id-ID")}` : "Rp 0", { align: AlignmentType.RIGHT, width: 2200 }),
+          makeCell(t.description || "-", { width: 6000 }),
+          makeCell(displayQuantity, { align: AlignmentType.CENTER, width: 1500 }),
+          makeCell(`Rp ${priceValue.toLocaleString("id-ID")}`, { align: AlignmentType.RIGHT, width: 1800 }),
+          makeCell(`Rp ${totalValue.toLocaleString("id-ID")}`, { align: AlignmentType.RIGHT, width: 1800 }),
         ],
       })
     );
-    transportGrandTotal += t.price || 0;
+    transportGrandTotal += totalValue;
   });
 
   transportRows.push(
@@ -188,14 +201,14 @@ export const buildCostBreakDown = (params) => {
       children: [
         makeCell("Total Transport", { 
           bold: true, 
-          colspan: 2, 
-          width: 8800, 
+          colspan: 4, 
+          width: 10100, 
           shading: totalShading 
         }),
         makeCell(`Rp ${transportGrandTotal.toLocaleString("id-ID")}`, { 
           bold: true, 
           align: AlignmentType.RIGHT, 
-          width: 2200, 
+          width: 1800, 
           shading: totalShading 
         }),
       ],
@@ -207,15 +220,15 @@ export const buildCostBreakDown = (params) => {
       children: [
         makeCell("Grand Total", { 
           bold: true, 
-          colspan: 2, 
+          colspan: 4, 
           align: AlignmentType.RIGHT,
-          width: 8800, 
+          width: 10100, 
           shading: grandTotalShading 
         }),
         makeCell(`Rp ${transportGrandTotal.toLocaleString("id-ID")}`, { 
           bold: true, 
           align: AlignmentType.RIGHT, 
-          width: 2200, 
+          width: 1800, 
           shading: grandTotalShading 
         }),
       ],
