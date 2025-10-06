@@ -55,6 +55,13 @@ const CalculatorFixPage = () => {
 
   const isCheckoutPage = location.pathname === "/checkout";
 
+  const paketIdFromState = useMemo(() => {
+    return location.state?.paketId || null;
+  }, [location.state]);
+
+  const [hasAppliedPrefill, setHasAppliedPrefill] = useState(false);
+
+
   const { packagesData, getPackages, selectedPackage, setSelectedPackage } =
     usePackageContext();
 
@@ -98,6 +105,56 @@ const CalculatorFixPage = () => {
   useEffect(() => {
     getPackages();
   }, []);
+
+  useEffect(() => {
+  if (!paketIdFromState) return;
+  if (!packagesData.length) return;
+  if (hasAppliedPrefill) return;
+
+  const numericId = Number(paketIdFromState);
+  const targetId = Number.isNaN(numericId) ? paketIdFromState : numericId;
+
+  const matchedPackage = packagesData.find(
+    (pkg) => pkg.id === targetId || pkg.id?.toString() === paketIdFromState
+  );
+
+  if (matchedPackage) {
+    setSelectedPackage({
+      ...matchedPackage,
+      title: matchedPackage.name,
+      name: matchedPackage.name,
+      totalPaxAdult: matchedPackage?.totalPaxAdult ?? 0,
+      childGroups: Array.isArray(matchedPackage?.childGroups)
+        ? matchedPackage.childGroups.map((g, i) => ({
+            id: g.id ?? `ch_${makeId()}`,
+            label: g.label ?? `Child ${i + 1}`,
+            total:
+              typeof g.total === "number"
+                ? g.total
+                : Array.isArray(g.ages)
+                ? g.ages.length
+                : 0,
+            age: g.age ?? "",
+          }))
+        : [],
+      totalPaxChildren: matchedPackage?.totalPaxChildren || 0,
+      addAdditionalChild: false,
+      addExtrabedChild: false,
+      days: matchedPackage.days || [],
+      childrenAges: [],
+    });
+
+    const len = (matchedPackage.days || []).length;
+    setAkomodasiTotal(Array(len).fill(0));
+    setTourTotal(Array(len).fill(0));
+    setTransportTotal(Array(len).fill(0));
+    setActiveDayId(matchedPackage?.days?.[0]?.id ?? 1);
+    setActiveTravelerKey("adult");
+
+    setHasAppliedPrefill(true);
+  }
+}, [paketIdFromState, packagesData, hasAppliedPrefill, setSelectedPackage, setAkomodasiTotal, setTourTotal, setTransportTotal]);
+
 
   // pastikan childGroups ter-inisialisasi (pakai age & total) & set default active traveler
   useEffect(() => {

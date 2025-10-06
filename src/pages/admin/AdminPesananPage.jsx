@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+﻿import { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   Heading,
@@ -17,6 +17,7 @@ import ReactPaginate from 'react-paginate';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@iconify/react';
 import colorPallete from '../../utils/colorPallete';
+import { useNavigate } from 'react-router-dom';   // ⬅️ Tambahan
 
 const ITEMS_PER_PAGE = 4;
 const ORDERS_PER_GROUP_PAGE = 6;
@@ -96,7 +97,7 @@ const groupOrdersByAdmin = (orders, sortOrder) => {
   return sortedGroups;
 };
 
-const AdminOrderTree = ({ data, color, onDeleteOrder }) => {
+const AdminOrderTree = ({ data, color, onDeleteOrder, onEditOrder }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const resolvedColor = resolveColor(color);
@@ -191,6 +192,7 @@ const AdminOrderTree = ({ data, color, onDeleteOrder }) => {
                   <OrderCard
                     pesanan={order}
                     onDelete={onDeleteOrder}
+                    onEdit={onEditOrder}
                     bgIcon={resolvedColor}
                   />
                 </Flex>
@@ -232,6 +234,7 @@ const AdminPesananPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortOrder, setSortOrder] = useState('desc');
   const toast = useToast();
+  const navigate = useNavigate();   // ⬅️ Tambahan
 
   const handlePageChange = (selectedItem) => {
     setCurrentPage(selectedItem.selected);
@@ -266,6 +269,28 @@ const AdminPesananPage = () => {
       });
     }
   };
+
+const handleEditOrder = (order) => {
+  const paketId = order?.paket?.id;
+
+  if (!paketId) {
+    toast({
+      title: "Paket tidak ditemukan",
+      description: "Pesanan ini belum memiliki paket untuk diedit.",
+      status: "warning",
+      duration: 4000,
+      isClosable: true,
+    });
+    return;
+  }
+  
+  navigate('/calculator', { 
+    state: { 
+      paketId: paketId,
+      orderData: order 
+    } 
+  });
+};
 
   useEffect(() => {
     const getOrders = async () => {
@@ -339,6 +364,7 @@ const AdminPesananPage = () => {
                   data={group}
                   color={colorPallete[index % colorPallete.length]}
                   onDeleteOrder={handleDeleteOrder}
+                  onEditOrder={handleEditOrder}
                 />
               ))}
             </Flex>

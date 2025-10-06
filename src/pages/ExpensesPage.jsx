@@ -118,9 +118,11 @@ const handleCreateOrder = async () => {
     const formattedDate = new Date().toLocaleString("sv-SE").replace(/[-T: ]/g, "");
 
     const kodePesanan = `${namaPaket}-${formattedDate}`;
+    const id_paket = selectedPackage.id;
 
     const formData = new FormData();
     formData.append("kode_pesanan", kodePesanan);
+    formData.append("id_paket", id_paket);
     formData.append("invoice", invoiceBlob, `invoice.pdf`);
     formData.append("itinerary", itineraryBlob, `itinerary.pdf`);
 
