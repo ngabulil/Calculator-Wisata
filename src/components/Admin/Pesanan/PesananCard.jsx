@@ -1,7 +1,7 @@
-import { Box, Text, Button, Link, Stack, Badge, Flex, Icon } from '@chakra-ui/react';
+﻿import { Box, Text, Button, Link, Stack, Badge, Flex, Icon } from '@chakra-ui/react';
 import { Icon as Iconify } from '@iconify/react';
 
-const PesananCard = ({ pesanan, onDelete, bgIcon }) => {
+const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
   if (!pesanan) {
     return (
       <Box
@@ -140,6 +140,18 @@ const PesananCard = ({ pesanan, onDelete, bgIcon }) => {
               Tidak ada dokumen PDF
             </Text>
           </Flex>
+        )}
+        {typeof pesanan?.paket?.id !== "undefined" && (
+          <Button
+            leftIcon={<Iconify icon="mdi:pencil-outline" width="18" height="18" />}
+            colorScheme="teal"
+            variant="outline"
+            size="sm"
+            width="full"
+            onClick={() => onEdit?.(pesanan)}
+          >
+            Edit Ulang Pesanan
+          </Button>
         )}
         <Button
           leftIcon={<Iconify icon="mdi:delete" width="18" height="18" />}
