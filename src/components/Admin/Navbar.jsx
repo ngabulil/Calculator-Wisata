@@ -41,7 +41,7 @@ const Navbar = () => {
             Destinasi
           </NavLink>
           <NavLink to="/admin/pesanan" style={linkStyle}>
-            Pesanan
+            History
           </NavLink>
           {userData.role === "super_admin" && (
             <NavLink to="/admin/manage" style={linkStyle}>

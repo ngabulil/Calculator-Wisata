@@ -152,8 +152,9 @@ const CalculatorFixPage = () => {
     setActiveTravelerKey("adult");
 
     setHasAppliedPrefill(true);
+    navigate(location.pathname, { replace: true, state: {} });
   }
-}, [paketIdFromState, packagesData, hasAppliedPrefill, setSelectedPackage, setAkomodasiTotal, setTourTotal, setTransportTotal]);
+}, [paketIdFromState, packagesData, hasAppliedPrefill, setSelectedPackage, setAkomodasiTotal, setTourTotal, setTransportTotal, location.pathname]);
 
 
   // pastikan childGroups ter-inisialisasi (pakai age & total) & set default active traveler

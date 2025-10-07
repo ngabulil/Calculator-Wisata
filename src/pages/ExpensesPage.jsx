@@ -118,16 +118,16 @@ const handleCreateOrder = async () => {
     const formattedDate = new Date().toLocaleString("sv-SE").replace(/[-T: ]/g, "");
 
     const kodePesanan = `${namaPaket}-${formattedDate}`;
-    const id_paket = selectedPackage.id;
 
     const formData = new FormData();
     formData.append("kode_pesanan", kodePesanan);
-    formData.append("id_paket", id_paket);
+    if (selectedPackage?.id) {
+      formData.append("id_paket", selectedPackage.id)
+    }
     formData.append("invoice", invoiceBlob, `invoice.pdf`);
     formData.append("itinerary", itineraryBlob, `itinerary.pdf`);
 
-    const result = await apiPostPesanan(formData);
-    console.log("Order created successfully:", result);
+    await apiPostPesanan(formData);
 
     toast({
       title: "Pesanan berhasil dikirim",

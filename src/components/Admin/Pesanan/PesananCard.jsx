@@ -1,7 +1,12 @@
-﻿import { Box, Text, Button, Link, Stack, Badge, Flex, Icon } from '@chakra-ui/react';
+﻿import { useAdminAuthContext } from '../../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { Box, Text, Button, Link, Stack, Badge, Flex, Tooltip } from '@chakra-ui/react';
 import { Icon as Iconify } from '@iconify/react';
 
 const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
+  const { userData } = useAdminAuthContext();
+  const navigate = useNavigate();
+
   if (!pesanan) {
     return (
       <Box
@@ -27,6 +32,10 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
         minute: '2-digit'
       }) 
     : 'N/A';
+
+  const paketAdminId = pesanan?.paket?.creator?.id;
+  const isOwner = userData?.id && paketAdminId && userData.id === paketAdminId;
+  const hasPaket = typeof pesanan?.paket?.id !== "undefined" && pesanan?.paket?.id !== null;
 
   return (
     <Box
@@ -141,7 +150,7 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
             </Text>
           </Flex>
         )}
-        {typeof pesanan?.paket?.id !== "undefined" && (
+        {hasPaket ? (
           <Button
             leftIcon={<Iconify icon="mdi:pencil-outline" width="18" height="18" />}
             colorScheme="teal"
@@ -152,6 +161,65 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
           >
             Edit Ulang Pesanan
           </Button>
+        ) : (
+          <Tooltip 
+            label="Pesanan ini tidak memiliki paket, tidak bisa diedit ulang" 
+            placement="top"
+            hasArrow
+          >
+            <Button
+              leftIcon={<Iconify icon="mdi:lock" width="18" height="18" />}
+              colorScheme="gray"
+              variant="outline"
+              size="sm"
+              width="full"
+              isDisabled
+              cursor="not-allowed"
+            >
+              Tidak Bisa Edit Pesanan
+            </Button>
+          </Tooltip>
+        )}
+
+        {/* Button Edit Paket */}
+        {(
+          isOwner ? (
+            <Button
+              leftIcon={<Iconify icon="mdi:package-variant" width="18" height="18" />}
+              colorScheme="orange"
+              variant="outline"
+              size="sm"
+              width="full"
+              onClick={() => {
+              navigate("/admin/paket", {
+                state: { 
+                  editPaket: pesanan.paket, 
+                  openEditForm: true 
+                }
+              });
+            }}
+            >
+              Edit Paket
+            </Button>
+          ) : (
+            <Tooltip 
+              label="Hanya pemilik paket yang dapat mengedit paket" 
+              placement="top"
+              hasArrow
+            >
+              <Button
+                leftIcon={<Iconify icon="mdi:lock" width="18" height="18" />}
+                colorScheme="gray"
+                variant="outline"
+                size="sm"
+                width="full"
+                isDisabled
+                cursor="not-allowed"
+              >
+                Tidak Bisa Edit Paket
+              </Button>
+            </Tooltip>
+          )
         )}
         <Button
           leftIcon={<Iconify icon="mdi:delete" width="18" height="18" />}
