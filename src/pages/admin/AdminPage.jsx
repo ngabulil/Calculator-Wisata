@@ -17,7 +17,7 @@ import SearchBar from "../../components/searchBar";
 import { useAdminPackageContext } from "../../context/Admin/AdminPackageContext";
 import toastConfig from "../../utils/toastConfig";
 import { apiDeletePackageFull } from "../../services/packageService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { apiPostPackageFull } from "../../services/packageService";
 import ReactPaginate from "react-paginate";
 import colorPallete from "../../utils/colorPallete";
@@ -32,6 +32,7 @@ const ITEMS_PER_PAGE = 4;
 
 const AdminPage = () => {
   const toast = useToast();
+  const location = useLocation();
   const navigate = useNavigate();
   const [formActive, setFormActive] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,12 +51,25 @@ const AdminPage = () => {
   const [packages, setPackages] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [recentPackages, setRecentPackages] = useState([]);
+  const [handledEdit, setHandledEdit] = useState(false);
 
   const currentPackages = useMemo(() => {
     const offset = currentPage * ITEMS_PER_PAGE;
     return packages.slice(offset, offset + ITEMS_PER_PAGE);
   }, [currentPage, packages]);
   const pageCount = Math.ceil(packages.length / ITEMS_PER_PAGE);
+
+
+useEffect(() => {
+  if (!handledEdit && location.state?.editPaket && location.state?.openEditForm) {
+    setFormActive(true);
+    updateHeadline(location.state.editPaket.name, location.state.editPaket.description);
+    updatePackageFull(location.state.editPaket);
+
+    setHandledEdit(true);
+    navigate("/admin/paket/edit", { replace: true });
+  }
+}, [handledEdit, location.state, navigate, updateHeadline, updatePackageFull]);
 
   const handlePageChange = (selectedItem) => {
     setCurrentPage(selectedItem.selected);
