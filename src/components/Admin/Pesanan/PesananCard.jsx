@@ -35,7 +35,7 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
 
   const paketAdminId = pesanan?.paket?.creator?.id;
   const isOwner = userData?.id && paketAdminId && userData.id === paketAdminId;
-  const hasPaket = typeof pesanan?.paket?.id !== "undefined";
+  const hasPaket = typeof pesanan?.paket?.id !== "undefined" && pesanan?.paket?.id !== null;
 
   return (
     <Box
@@ -150,7 +150,7 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
             </Text>
           </Flex>
         )}
-        {hasPaket && (
+        {hasPaket ? (
           <Button
             leftIcon={<Iconify icon="mdi:pencil-outline" width="18" height="18" />}
             colorScheme="teal"
@@ -161,9 +161,28 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
           >
             Edit Ulang Pesanan
           </Button>
+        ) : (
+          <Tooltip 
+            label="Pesanan ini tidak memiliki paket, tidak bisa diedit ulang" 
+            placement="top"
+            hasArrow
+          >
+            <Button
+              leftIcon={<Iconify icon="mdi:lock" width="18" height="18" />}
+              colorScheme="gray"
+              variant="outline"
+              size="sm"
+              width="full"
+              isDisabled
+              cursor="not-allowed"
+            >
+              Tidak Bisa Edit Pesanan
+            </Button>
+          </Tooltip>
         )}
+
         {/* Button Edit Paket */}
-        {hasPaket && (
+        {(
           isOwner ? (
             <Button
               leftIcon={<Iconify icon="mdi:package-variant" width="18" height="18" />}
