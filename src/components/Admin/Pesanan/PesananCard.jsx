@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Text, Button, Link, Stack, Badge, Flex, Tooltip } from '@chakra-ui/react';
 import { Icon as Iconify } from '@iconify/react';
 
-const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
+const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon, onDownloadWord }) => {
   const { userData } = useAdminAuthContext();
   const navigate = useNavigate();
 
@@ -150,7 +150,7 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
             </Text>
           </Flex>
         )}
-        {pesanan.itinerary_word ? (
+               {pesanan.itinerary_word ? (
           <Button
             leftIcon={<Iconify icon="mdi:file-word-box" width="18" height="18" />}
             colorScheme="blue"
@@ -158,13 +158,15 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
             size="sm"
             width="full"
             onClick={() => {
-              const link = document.createElement("a");
-              link.href = pesanan.itinerary_word;
-              link.download = `${pesanan.kode_pesanan || "itinerary"}.docx`;
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }}
+            if (onDownloadWord) {
+              onDownloadWord(
+                pesanan.itinerary_word,
+                `${pesanan.kode_pesanan || "itinerary"}.docx`
+              );
+            } else {
+              window.open(pesanan.itinerary_word, "_blank");
+            }
+          }}
           >
             Itinerary DOCX
           </Button>

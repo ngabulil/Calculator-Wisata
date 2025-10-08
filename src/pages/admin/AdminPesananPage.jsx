@@ -270,6 +270,41 @@ const AdminPesananPage = () => {
     }
   };
 
+   const handleDownloadWord = (fileUrl) => {
+    try {
+      if (!fileUrl) {
+        toast({
+          title: "File tidak ditemukan",
+          description: "Link dokumen Word tidak tersedia",
+          status: "warning",
+          duration: 4000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      // Buka langsung di tab baru
+      window.open(fileUrl, "_blank");
+
+      toast({
+        title: "Download dimulai",
+        description: "File Word dibuka di tab baru",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error opening Word file:", error);
+      toast({
+        title: "Gagal membuka file",
+        description: "Terjadi kesalahan saat membuka file Word",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
 const handleEditOrder = (order) => {
   const paketId = order?.paket?.id;
 
@@ -364,6 +399,7 @@ const handleEditOrder = (order) => {
                   data={group}
                   color={colorPallete[index % colorPallete.length]}
                   onDeleteOrder={handleDeleteOrder}
+                  onDownloadWord={handleDownloadWord}
                   onEditOrder={handleEditOrder}
                 />
               ))}
