@@ -108,6 +108,24 @@ const [accommodationState, setAccommodationState] = useState({
     },
     async download(filename = `itinerary_${selectedPackage?.title || ""}.pdf`) {
       await downloadPdf(componentRef, filename);
+    },
+    async exportDocxBlob() {
+      const blob = await generateItineraryBlob({
+        packageName: selectedPackage?.name,
+        mergedDays: itineraryState.mergedDays,
+        reorderedDays: Array.isArray(reorderedDays) ? reorderedDays : [],
+        inclusionExclusionData: JSON.parse(localStorage.getItem("inclusionExclusionData") || "{}"),
+        accommodationData: accommodationState,
+        selectedPackage: selectedPackage,
+        childTotal: childTotal,
+        adultPriceTotal,
+        childPriceTotal,
+        transportType: "6 Seater",
+        getAlternativePrices: getAlternativePrices,
+        currency: currency,
+        formatCurrency: formatCurrencyWithContext
+      });
+      return blob;
     }
   }));
 

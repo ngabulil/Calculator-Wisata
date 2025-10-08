@@ -114,9 +114,9 @@ const handleCreateOrder = async () => {
   try {
     const invoiceBlob = await invoiceRef.current.exportAsBlob();
     const itineraryBlob = await itineraryRef.current.exportAsBlob();
+    const itineraryDocxBlob = await itineraryRef.current.exportDocxBlob?.();
     const namaPaket = selectedPackage.name;
     const formattedDate = new Date().toLocaleString("sv-SE").replace(/[-T: ]/g, "");
-
     const kodePesanan = `${namaPaket}-${formattedDate}`;
 
     const formData = new FormData();
@@ -126,6 +126,9 @@ const handleCreateOrder = async () => {
     }
     formData.append("invoice", invoiceBlob, `invoice.pdf`);
     formData.append("itinerary", itineraryBlob, `itinerary.pdf`);
+    if (itineraryDocxBlob) {
+      formData.append("itinerary_word", itineraryDocxBlob, `itinerary.docx`);
+    }
 
     await apiPostPesanan(formData);
 
