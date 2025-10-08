@@ -150,6 +150,33 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
             </Text>
           </Flex>
         )}
+        {pesanan.itinerary_word ? (
+          <Link href={pesanan.itinerary_word} isExternal style={{ textDecoration: 'none' }}>
+            <Button
+              leftIcon={<Iconify icon="mdi:file-word-box" width="18" height="18" />}
+              colorScheme="blue"
+              variant="solid"
+              size="sm"
+              width="full"
+            >
+              Itinerary Word
+            </Button>
+          </Link>
+        ) : (
+          <Flex
+            align="center"
+            justify="center"
+            p={3}
+            bg="gray.700"
+            borderRadius="md"
+            gap={2}
+          >
+            <Iconify icon="mdi:alert-circle-outline" width="20" height="20" color="gray" />
+            <Text color="gray.400" fontSize="sm">
+              Tidak ada dokumen Word
+            </Text>
+          </Flex>
+        )}
         {hasPaket ? (
           <Button
             leftIcon={<Iconify icon="mdi:pencil-outline" width="18" height="18" />}
