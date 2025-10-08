@@ -283,8 +283,8 @@ const AdminPesananPage = () => {
         return;
       }
 
-      // Buka langsung di tab baru
-      window.open(fileUrl, "_blank");
+      const secureUrl = fileUrl.replace(/^http:\/\//i, 'https://');
+      window.open(secureUrl, "_blank");
 
       toast({
         title: "Download dimulai",
