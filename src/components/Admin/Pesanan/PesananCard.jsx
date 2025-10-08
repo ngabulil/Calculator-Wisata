@@ -151,17 +151,23 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon }) => {
           </Flex>
         )}
         {pesanan.itinerary_word ? (
-          <Link href={pesanan.itinerary_word} isExternal style={{ textDecoration: 'none' }}>
-            <Button
-              leftIcon={<Iconify icon="mdi:file-word-box" width="18" height="18" />}
-              colorScheme="blue"
-              variant="solid"
-              size="sm"
-              width="full"
-            >
-              Itinerary Word
-            </Button>
-          </Link>
+          <Button
+            leftIcon={<Iconify icon="mdi:file-word-box" width="18" height="18" />}
+            colorScheme="blue"
+            variant="solid"
+            size="sm"
+            width="full"
+            onClick={() => {
+              const link = document.createElement("a");
+              link.href = pesanan.itinerary_word;
+              link.download = `${pesanan.kode_pesanan || "itinerary"}.docx`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+          >
+            Itinerary DOCX
+          </Button>
         ) : (
           <Flex
             align="center"
