@@ -47,6 +47,27 @@ const enrich = (items, parsedItems, nameKey, fallbackPrefix, extraFields = []) =
       };
     });
 
+  const parseAdditionalByGroup = (rawItems, parsedItems) => {
+  if (!rawItems) return { adult: [], child: [] };
+
+  const adultItems = Array.isArray(rawItems.adult) ? rawItems.adult : [];
+  const parsedAdultItems = parsedItems?.adult || [];
+
+  const mapAdditional = (items, parsed, prefix) =>
+    items.map((item, i) => {
+      const parsedItem = parsed[i] || {};
+      return {
+        ...item,
+        displayName: parsedItem.name || item.name || item.nama || item.displayName || `${prefix} ${i + 1}`,
+        description: parsedItem.description || item.description || "",
+      };
+    });
+
+  return {
+    adult: mapAdditional(adultItems, parsedAdultItems,),
+  };
+};
+
   const merged = rawDays.map((rawDay, index) => {
     const parsedDay = parsedDays[index] || {};
 
@@ -64,7 +85,15 @@ const enrich = (items, parsedItems, nameKey, fallbackPrefix, extraFields = []) =
       tours: enrichTourItems(
         rawDay.tours || rawDay.tour, 
         parsedDay.tours || parsedDay.tour
-      )
+      ),
+      transport_additionals_by_group: parseAdditionalByGroup(
+        rawDay.transport_additionals_by_group,
+        parsedDay.transport_additionals_by_group,
+      ),
+      akomodasi_additionals_by_group: parseAdditionalByGroup(
+        rawDay.akomodasi_additionals_by_group,
+        parsedDay.akomodasi_additionals_by_group,
+      ),
     };
   });
   

@@ -150,7 +150,7 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon, onDownloadWord }) => {
             </Text>
           </Flex>
         )}
-               {pesanan.itinerary_word ? (
+        {pesanan.itinerary_word ? (
           <Button
             leftIcon={<Iconify icon="mdi:file-word-box" width="18" height="18" />}
             colorScheme="blue"
@@ -170,6 +170,7 @@ const PesananCard = ({ pesanan, onDelete, onEdit, bgIcon, onDownloadWord }) => {
           >
             Itinerary DOCX
           </Button>
+          
         ) : (
           <Flex
             align="center"

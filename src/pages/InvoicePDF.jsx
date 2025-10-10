@@ -231,54 +231,59 @@ const InvoicePDF = forwardRef((props, ref) => {
             });
           });
 
-          // const processAdditionalItems = (items, dayIndex) => {
-          //   return (
-          //     items?.map((item) => {
-          //       const price = parseInt(item.harga) || 0;
-          //       const quantity = parseInt(item.jumlah) || 1;
-          //       return {
-          //         day: `Day ${dayIndex + 1}`,
-          //         name: item.displayName,
-          //         quantity: quantity,
-          //         price: price,
-          //         total: price * quantity,
-          //       };
-          //     }) || []
-          //   );
-          // };
+          const processAdditionalItems = (items, dayIndex) => {
+            return (
+              items?.map((item) => {
+                const price = parseInt(item.harga) || parseInt(item.price) || 0;
+                const quantity = parseInt(item.jumlah) || parseInt(item.qty) || 1;
+                const display = item.displayName || item.nama || item.name || "Additional";
+                return {
+                  day: `Day ${dayIndex + 1}`,
+                  name: display,
+                  displayName: display,
+                  quantity: quantity,
+                  price: price,
+                  total: price * quantity,
+                };
+              }) || []
+            );
+          };
 
           const processGroupedAdditionalItems = (groupedItems, dayIndex) => {
             if (!groupedItems) return [];
 
+            if (Array.isArray(groupedItems)) {
+              return processAdditionalItems(groupedItems, dayIndex);
+            }
+
             const allItems = [];
-            Object.values(groupedItems).forEach(groupArray => {
+            Object.values(groupedItems).forEach((groupArray) => {
               if (Array.isArray(groupArray)) {
-                const processed = groupArray
-                  // eslint-disable-next-line no-prototype-builtins
-                  .filter(item => item.hasOwnProperty('harga') && item.hasOwnProperty('nama'))
-                  .map(item => {
-                    const price = parseInt(item.harga) || 0;
-                    const quantity = parseInt(item.jumlah) || 1;
-                    return {
-                      day: `Day ${dayIndex + 1}`,
-                      name: item.displayName || item.nama,
-                      quantity: quantity,
-                      price: price,
-                      total: price * quantity,
-                    };
-                  });
+                const processed = groupArray.map((item) => {
+                  const price = parseInt(item.harga) || parseInt(item.price) || 0;
+                  const quantity = parseInt(item.jumlah) || parseInt(item.qty) || 1;
+                  const display = item.displayName || item.nama || item.name || "Additional";
+                  return {
+                    day: `Day ${dayIndex + 1}`,
+                    name: display,
+                    displayName: display,
+                    quantity: quantity,
+                    price: price,
+                    total: price * quantity,
+                  };
+                });
                 allItems.push(...processed);
               }
             });
             return allItems;
           };
 
+
           additionals.push(
-            ...processGroupedAdditionalItems(day.akomodasi_additionalsByTraveler, dayIndex),
-            ...processGroupedAdditionalItems(day.transport_additionals_by_group, dayIndex)
+            ...processGroupedAdditionalItems(day.akomodasi_additionals_by_group, dayIndex),
+            ...processGroupedAdditionalItems(day.transport_additionals_by_group, dayIndex),
           );
 
-          // Itinerary processing dengan helper function
           const processActivities = (items, type) => {
             return (
               items?.map((item) => {
@@ -321,7 +326,6 @@ const InvoicePDF = forwardRef((props, ref) => {
             ? processActivities(day.tours, "Tour Item")
             : [];
 
-          // Process expense items dari context
           const processExpenseItems = (expenseItems) => {
             return (
               expenseItems?.map((item) => {
@@ -336,7 +340,7 @@ const InvoicePDF = forwardRef((props, ref) => {
                   childPrice: item.childPrice || null,
                   adultQuantity: item.adultQuantity || 1,
                   childQuantity: item.childQuantity || 1,
-                  // Calculate display values
+
                   expense: (() => {
                     let total = 0;
                     if (item.adultPrice !== null || item.childPrice !== null) {
@@ -367,11 +371,9 @@ const InvoicePDF = forwardRef((props, ref) => {
               ]),
           ];
 
-          // Get expense items dari context
           const expenseDay = expenseDays[dayIndex];
           const expenseItems = processExpenseItems(expenseDay?.totals || []);
 
-          // Gabungkan activities dan expense items menjadi satu array
           const unifiedItems = [...activities, ...expenseItems];
 
           itinerary.push({
@@ -385,7 +387,6 @@ const InvoicePDF = forwardRef((props, ref) => {
           });
         });
 
-        // Update semua state sekaligus
         setInvoiceData({
           hotelData: hotels.concat(villas),
           villaData: villas,

@@ -72,6 +72,28 @@ export const parseData = async (days) => {
         })
       );
 
+      parsedDay.transport_additionals_by_group = {
+        adult: await Promise.all(
+          (day.transport_additionals_by_group?.adult || []).map(async (item) => {
+            const data = await apiGetAdditionalMobilById(item.id_additional);
+            return {
+              ...(data.result || null),
+            };
+          })
+        ),
+      };
+
+      parsedDay.akomodasi_additionals_by_group = {
+        adult: await Promise.all(
+          (day.akomodasi_additionals_by_group?.adult || []).map(async (item) => {
+            const data = await apiGetAdditionalAkomodasiById(item.id_additional);
+            return {
+              ...(data.result || null),
+            };
+          })
+        ),
+      };
+
       return parsedDay;
     })
   );
