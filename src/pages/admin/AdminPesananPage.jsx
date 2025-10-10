@@ -270,7 +270,7 @@ const AdminPesananPage = () => {
     }
   };
 
-   const handleDownloadWord = async (fileUrl, fileName) => {
+   const handleDownloadWord = (fileUrl) => {
     try {
       if (!fileUrl) {
         toast({
@@ -284,64 +284,24 @@ const AdminPesananPage = () => {
       }
 
       const secureUrl = fileUrl.replace(/^http:\/\//i, 'https://');
-      const defaultFileName = fileName || `itinerary-${Date.now()}.docx`;
+      window.open(secureUrl, "_blank");
 
       toast({
-        title: "Memproses download...",
-        description: "Mohon tunggu sebentar",
-        status: "info",
-        duration: 2000,
-        isClosable: true,
-      });
-      
-      const response = await fetch(secureUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Gagal mengunduh file');
-      }
-
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      link.download = defaultFileName;
-      link.style.display = 'none';
-      
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      setTimeout(() => {
-        window.URL.revokeObjectURL(blobUrl);
-      }, 100);
-
-      toast({
-        title: "Download berhasil",
-        description: "File Word telah didownload",
+        title: "Download dimulai",
+        description: "File Word dibuka di tab baru",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
-
     } catch (error) {
-      console.error("Error downloading Word file:", error);
-      
+      console.error("Error opening Word file:", error);
       toast({
-        title: "Download gagal",
-        description: "Coba buka file di tab baru dan download manual",
+        title: "Gagal membuka file",
+        description: "Terjadi kesalahan saat membuka file Word",
         status: "error",
-        duration: 4000,
+        duration: 5000,
         isClosable: true,
       });
- 
-      const secureUrl = fileUrl.replace(/^http:\/\//i, 'https://');
-      window.open(secureUrl, "_blank");
     }
   };
 

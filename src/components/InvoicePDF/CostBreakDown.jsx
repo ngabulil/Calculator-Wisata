@@ -295,7 +295,7 @@ const CostBreakDown = ({
                   {sortedAdditionalData.map((item, index) => (
                     <Tr key={index}>
                       <Td style={narrowColumnStyle}>{item.day}</Td>
-                      <Td style={wideColumnStyle}>{item.name}</Td>
+                      <Td style={wideColumnStyle}>{item.displayName||item.name}</Td>
                       <Td style={narrowColumnStyle}>{item.quantity}</Td>
                       <Td style={mediumColumnStyle}>
                         {formatCurrency(item.price)}
