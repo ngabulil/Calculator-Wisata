@@ -6,26 +6,44 @@ import {
   Text,
   HStack,
   IconButton,
+  useToast,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useCheckoutContext } from "../context/CheckoutContext";
-import { useExpensesContext } from "../context/ExpensesContext";
+import { usePackageContext } from "../context/PackageContext";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 import { CloseIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { useGrandTotalContext } from "../context/GrandTotalContext";
+import toastConfig from "../utils/toastConfig";
 
 const Layout = ({ children }) => {
   const bg = useColorModeValue("gray.50", "gray.900");
+  const toast = useToast();
   const location = useLocation();
   const navigate = useNavigate();
-  // Mengambil grandTotal dari useCheckoutContext
-  const { grandTotal } = useCheckoutContext();
-  const { calculateGrandTotal } = useExpensesContext();
+  const { selectedPackage } = usePackageContext();
   const { akomodasiTotal, tourTotal, transportTotal } = useGrandTotalContext();
   const [isVisible, setIsVisible] = useState(true);
 
   const isCalculatorPage = location.pathname === "/calculator";
+
+  const handleCheckout = () => {
+    const totalAdult = Number(selectedPackage?.totalPaxAdult) || 0;
+    const hasChildPax = (selectedPackage?.childGroups || []).some(
+      (group) => (Number(group?.total) || 0) > 0
+    );
+    if (totalAdult < 1 && !hasChildPax) {
+      toast(
+        toastConfig(
+          "Jumlah Pax Belum Diisi",
+          "Isi minimal salah satu jumlah pax: Adult atau Child sebelum lanjut ke checkout.",
+          "error"
+        )
+      );
+      return;
+    }
+    navigate("/checkout");
+  };
 
   return (
     <Box minH="100vh" bg={bg} position="relative">
@@ -63,7 +81,7 @@ const Layout = ({ children }) => {
                 <HStack spacing={3}>
                   <Button
                     colorScheme="teal"
-                    onClick={() => navigate("/checkout")}
+                    onClick={handleCheckout}
                   >
                     Checkout
                   </Button>

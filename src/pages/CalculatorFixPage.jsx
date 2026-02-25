@@ -10,6 +10,7 @@ import {
   FormLabel,
   Input,
   Textarea,
+  useToast,
   Tabs,
   TabList,
   Tab,
@@ -34,12 +35,14 @@ import MainSelect from "../components/MainSelect";
 import AkomodasiTabContent from "../components/Calculator/tab-content/AkomodasiTabContent";
 import { useCurrencyContext } from "../context/CurrencyContext";
 import { TravelerGroupProvider } from "../context/TravelerGroupContext";
+import toastConfig from "../utils/toastConfig";
 
 // helper id sederhana
 const makeId = () => Math.random().toString(36).slice(2, 9);
 
 const CalculatorFixPage = () => {
   const bg = useColorModeValue("gray.50", "gray.900");
+  const toast = useToast();
   const location = useLocation();
   const navigate = useNavigate();
   const {
@@ -323,6 +326,24 @@ const CalculatorFixPage = () => {
     setTourTotal((prev) => fit(prev));
     setTransportTotal((prev) => fit(prev));
   }, [days.length, setAkomodasiTotal, setTourTotal, setTransportTotal]);
+
+  const handleCheckout = () => {
+    const totalAdult = Number(totalPaxAdult) || 0;
+    const hasChildPax = (childGroups || []).some(
+      (group) => (Number(group?.total) || 0) > 0
+    );
+    if (totalAdult < 1 && !hasChildPax) {
+      toast(
+        toastConfig(
+          "Validasi Gagal",
+          "Isi minimal salah satu jumlah pax: Adult atau Child sebelum lanjut ke checkout.",
+          "error"
+        )
+      );
+      return;
+    }
+    navigate("/checkout");
+  };
 
   return (
     <Box minH="100vh" bg={bg} position="relative">
@@ -680,7 +701,7 @@ const CalculatorFixPage = () => {
                 <HStack spacing={3}>
                   <Button
                     colorScheme="teal"
-                    onClick={() => navigate("/checkout")}
+                    onClick={handleCheckout}
                   >
                     Checkout
                   </Button>
